@@ -13,6 +13,7 @@ import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/section_label.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 /// Lists the merchant's store (business profile) and its card machines.
 class StoresScreen extends ConsumerWidget {
@@ -20,15 +21,16 @@ class StoresScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final profile = ref.watch(merchantProfileProvider);
     final terminals = ref.watch(terminalsProvider);
     final user = ref.watch(authControllerProvider).user;
     final fallbackName = user?.tenants.isNotEmpty == true
-        ? (user!.tenants.first.name ?? 'Your store')
-        : 'Your store';
+        ? (user!.tenants.first.name ?? l10n.storeDefaultName)
+        : l10n.storeDefaultName;
 
     return BackScaffold(
-      title: 'Stores',
+      title: l10n.storesTitle,
       child: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(merchantProfileProvider);
@@ -54,61 +56,75 @@ class StoresScreen extends ConsumerWidget {
                   m['state'],
                   m['country'],
                 ].where((e) => e != null && e.toString().isNotEmpty).join(', ');
-                final active = (m['approved'] as bool? ?? false) ||
+                final active =
+                    (m['approved'] as bool? ?? false) ||
                     (m['status'] ?? '').toString().toUpperCase() == 'ACTIVE';
-                return ListCard(children: [
-                  ListRow(
-                    leading: InitialsTile(
-                      text: initialsOf(name.isEmpty ? fallbackName : name),
-                      size: 48,
-                      background:
-                          active ? AppColors.canvas : AppColors.surfaceAlt,
-                      foreground:
-                          active ? AppColors.navy : AppColors.textTertiary,
-                      fontSize: 13,
+                return ListCard(
+                  children: [
+                    ListRow(
+                      leading: InitialsTile(
+                        text: initialsOf(name.isEmpty ? fallbackName : name),
+                        size: 48,
+                        background: active
+                            ? AppColors.canvas
+                            : AppColors.surfaceAlt,
+                        foreground: active
+                            ? AppColors.navy
+                            : AppColors.textTertiary,
+                        fontSize: 13,
+                      ),
+                      title: name.isEmpty ? fallbackName : name,
+                      subtitle: address.isEmpty
+                          ? l10n.storesNoAddress
+                          : address,
+                      titleColor: active
+                          ? AppColors.navy
+                          : AppColors.textTertiary,
+                      onTap: () => context.push(AppRoutes.businessDetails),
                     ),
-                    title: name.isEmpty ? fallbackName : name,
-                    subtitle: address.isEmpty ? 'No address on file' : address,
-                    titleColor: active ? AppColors.navy : AppColors.textTertiary,
-                    onTap: () => context.push(AppRoutes.businessDetails),
-                  ),
-                ]);
+                  ],
+                );
               },
             ),
             const SizedBox(height: 24),
-            const SectionLabel('Card machines', uppercase: true),
+            SectionLabel(l10n.storesCardMachines, uppercase: true),
             AsyncSlot<List<String>>(
               value: terminals,
               loadingHeight: 120,
               onRetry: () => ref.invalidate(terminalsProvider),
               data: (tids) {
                 if (tids.isEmpty) {
-                  return const EmptyState(
+                  return EmptyState(
                     icon: LucideIcons.printer,
-                    title: 'No card machines yet',
-                    subtitle: 'Terminals assigned to you will appear here.',
+                    title: l10n.storesNoTerminals,
+                    subtitle: l10n.storesNoTerminalsHint,
                   );
                 }
-                return ListCard(children: [
-                  for (final tid in tids)
-                    ListRow(
-                      leading: Container(
-                        width: 44,
-                        height: 44,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: AppColors.canvas,
-                          borderRadius: BorderRadius.circular(12),
+                return ListCard(
+                  children: [
+                    for (final tid in tids)
+                      ListRow(
+                        leading: Container(
+                          width: 44,
+                          height: 44,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: AppColors.canvas,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            LucideIcons.printer,
+                            size: 20,
+                            color: AppColors.textBody,
+                          ),
                         ),
-                        child: const Icon(LucideIcons.printer,
-                            size: 20, color: AppColors.textBody),
+                        title: l10n.storesTerminal,
+                        subtitle: l10n.tidLabel(tid),
+                        trailing: _StatusPill(l10n.statusActive),
+                        chevron: false,
                       ),
-                      title: 'Terminal',
-                      subtitle: 'TID $tid',
-                      trailing: const _StatusPill('Active'),
-                      chevron: false,
-                    ),
-                ]);
+                  ],
+                );
               },
             ),
           ],

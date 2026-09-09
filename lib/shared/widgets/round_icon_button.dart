@@ -8,6 +8,7 @@ class RoundIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     required this.onTap,
+    required this.semanticLabel,
     this.size = 40,
     this.iconSize = 20,
     this.background = AppColors.surface,
@@ -18,6 +19,9 @@ class RoundIconButton extends StatelessWidget {
 
   final IconData icon;
   final VoidCallback onTap;
+
+  /// Read by screen readers; the button has no visible text.
+  final String semanticLabel;
   final double size;
   final double iconSize;
   final Color background;
@@ -27,45 +31,54 @@ class RoundIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        customBorder: const CircleBorder(),
-        child: Ink(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            color: background,
-            shape: BoxShape.circle,
-            boxShadow: shadow
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 3,
-                      offset: const Offset(0, 1),
+    // Keep the visual at [size] but guarantee a 44pt touch target.
+    final hitPad = size < 44 ? (44 - size) / 2 : 0.0;
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const CircleBorder(),
+          child: Padding(
+            padding: EdgeInsets.all(hitPad),
+            child: Ink(
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                color: background,
+                shape: BoxShape.circle,
+                boxShadow: shadow
+                    ? [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 3,
+                          offset: const Offset(0, 1),
+                        ),
+                      ]
+                    : null,
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Icon(icon, size: iconSize, color: iconColor),
+                  if (badge)
+                    Positioned(
+                      top: size * 0.17,
+                      right: size * 0.17,
+                      child: Container(
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: iconColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
                     ),
-                  ]
-                : null,
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Icon(icon, size: iconSize, color: iconColor),
-              if (badge)
-                Positioned(
-                  top: size * 0.17,
-                  right: size * 0.17,
-                  child: Container(
-                    width: 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      color: iconColor,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-            ],
+                ],
+              ),
+            ),
           ),
         ),
       ),

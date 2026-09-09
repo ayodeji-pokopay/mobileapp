@@ -37,14 +37,13 @@ class AuthState {
     String? selectedTenantId,
     String? discoveredMid,
     String? error,
-  }) =>
-      AuthState(
-        status: status ?? this.status,
-        user: user ?? this.user,
-        selectedTenantId: selectedTenantId ?? this.selectedTenantId,
-        discoveredMid: discoveredMid ?? this.discoveredMid,
-        error: error,
-      );
+  }) => AuthState(
+    status: status ?? this.status,
+    user: user ?? this.user,
+    selectedTenantId: selectedTenantId ?? this.selectedTenantId,
+    discoveredMid: discoveredMid ?? this.discoveredMid,
+    error: error,
+  );
 }
 
 class AuthController extends Notifier<AuthState> {
@@ -63,16 +62,18 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> _bootstrap() async {
     try {
-      final token = await _storage
-          .readAccessToken()
-          .timeout(const Duration(seconds: 3), onTimeout: () => null);
+      final token = await _storage.readAccessToken().timeout(
+        const Duration(seconds: 3),
+        onTimeout: () => null,
+      );
       if (token == null || token.isEmpty) {
         state = const AuthState(status: AuthStatus.unauthenticated);
         return;
       }
-      final user = await _repo
-          .me()
-          .timeout(const Duration(seconds: 8), onTimeout: () => null);
+      final user = await _repo.me().timeout(
+        const Duration(seconds: 8),
+        onTimeout: () => null,
+      );
       if (user == null) {
         state = const AuthState(status: AuthStatus.unauthenticated);
         return;
@@ -130,10 +131,7 @@ class AuthController extends Notifier<AuthState> {
       }
       return true;
     } on AuthException catch (e) {
-      state = AuthState(
-        status: AuthStatus.unauthenticated,
-        error: e.message,
-      );
+      state = AuthState(status: AuthStatus.unauthenticated, error: e.message);
       return false;
     }
   }
@@ -161,5 +159,6 @@ class AuthController extends Notifier<AuthState> {
   }
 }
 
-final authControllerProvider =
-    NotifierProvider<AuthController, AuthState>(AuthController.new);
+final authControllerProvider = NotifierProvider<AuthController, AuthState>(
+  AuthController.new,
+);

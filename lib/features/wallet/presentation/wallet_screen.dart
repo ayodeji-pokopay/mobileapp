@@ -13,8 +13,10 @@ import '../../../shared/widgets/back_scaffold.dart';
 import '../../../shared/widgets/bottom_nav.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
+import '../../../shared/widgets/offline_banner.dart';
 import '../../../shared/widgets/pill_tabs.dart';
 import '../../merchant/presentation/merchant_providers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WalletScreen extends ConsumerStatefulWidget {
   const WalletScreen({super.key});
@@ -28,11 +30,12 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final summary = ref.watch(summaryProvider);
     final settlements = ref.watch(settlementsProvider);
 
     return BackScaffold(
-      title: 'Wallet',
+      title: l10n.walletTitle,
       bottomNav: const PokoBottomNav(active: NavTab.money),
       child: RefreshIndicator(
         onRefresh: () async {
@@ -47,6 +50,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
           children: [
+            const OfflineBanner(),
             AsyncSlot<MerchantSettlementSummary>(
               value: summary,
               loadingHeight: 240,
@@ -55,11 +59,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                 summary: s,
                 onWithdraw: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Payouts are settled automatically to your bank.',
-                      ),
-                    ),
+                    SnackBar(content: Text(l10n.walletWithdrawHint)),
                   );
                 },
                 onStatement: () => context.push(AppRoutes.settlements),
@@ -70,9 +70,11 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
               value: settlements,
               loadingHeight: 76,
               data: (page) {
-                final next = page.content
-                        .where((s) =>
-                            (s.status ?? '').toUpperCase() != 'COMPLETED')
+                final next =
+                    page.content
+                        .where(
+                          (s) => (s.status ?? '').toUpperCase() != 'COMPLETED',
+                        )
                         .firstOrNull ??
                     page.content.firstOrNull;
                 if (next == null) return const SizedBox.shrink();
@@ -85,10 +87,14 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
             const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.only(left: 2, bottom: 12),
-              child: Text('Transaction history', style: AppText.money(size: 16)),
+              child: Text(l10n.walletHistory, style: AppText.money(size: 16)),
             ),
             PillTabs(
-              items: const ['All', 'Payouts', 'Fees'],
+              items: [
+                l10n.walletTabAll,
+                l10n.walletTabPayouts,
+                l10n.walletTabFees,
+              ],
               selected: _tab,
               onChanged: (i) => setState(() => _tab = i),
             ),
@@ -100,10 +106,10 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
               data: (page) {
                 final entries = _entriesFor(page.content, _tab);
                 if (entries.isEmpty) {
-                  return const EmptyState(
+                  return EmptyState(
                     icon: LucideIcons.wallet,
-                    title: 'No transactions yet',
-                    subtitle: 'Payouts and fees will show up here.',
+                    title: l10n.walletEmpty,
+                    subtitle: l10n.walletEmptyHint,
                   );
                 }
                 return ListCard(
@@ -118,25 +124,32 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
   }
 
   List<_Entry> _entriesFor(List<SettlementResponse> list, int tab) {
+    final l10n = AppLocalizations.of(context);
     final out = <_Entry>[];
     for (final s in list) {
       final failed = (s.status ?? '').toUpperCase() == 'FAILED';
       if (tab != 2) {
-        out.add(_Entry(
-          inbound: true,
-          title: failed ? 'Settlement failed' : 'Daily settlement',
-          date: formatDayLabel(s.settlementDate),
-          amount: s.netAmount,
-          failed: failed,
-        ));
+        out.add(
+          _Entry(
+            inbound: true,
+            title: failed
+                ? l10n.activitySettlementFailed
+                : l10n.walletDailySettlement,
+            date: formatDayLabel(s.settlementDate),
+            amount: s.netAmount,
+            failed: failed,
+          ),
+        );
       }
       if (tab != 1 && (s.settlementFee ?? 0) > 0) {
-        out.add(_Entry(
-          inbound: false,
-          title: 'Processing fee',
-          date: formatDayLabel(s.settlementDate),
-          amount: s.settlementFee,
-        ));
+        out.add(
+          _Entry(
+            inbound: false,
+            title: l10n.walletProcessingFee,
+            date: formatDayLabel(s.settlementDate),
+            amount: s.settlementFee,
+          ),
+        );
       }
     }
     return out;
@@ -171,6 +184,7 @@ class _BalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -181,7 +195,7 @@ class _BalanceCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Available balance',
+            l10n.dashboardAvailableBalance,
             style: AppText.body(
               size: 13,
               color: Colors.white.withValues(alpha: 0.6),
@@ -203,7 +217,7 @@ class _BalanceCard extends StatelessWidget {
                 child: _StatTile(
                   icon: LucideIcons.trendingUp,
                   iconColor: AppColors.primaryBright,
-                  label: 'Settlements',
+                  label: l10n.walletSettlements,
                   value: formatNumber(summary.totalSettlements),
                 ),
               ),
@@ -212,7 +226,7 @@ class _BalanceCard extends StatelessWidget {
                 child: _StatTile(
                   icon: LucideIcons.clock,
                   iconColor: Colors.white.withValues(alpha: 0.6),
-                  label: 'Pending',
+                  label: l10n.walletPending,
                   value: formatMoneyCompact(summary.pendingAmount),
                 ),
               ),
@@ -224,7 +238,7 @@ class _BalanceCard extends StatelessWidget {
               Expanded(
                 child: _DarkButton(
                   icon: LucideIcons.send,
-                  label: 'Withdraw',
+                  label: l10n.walletWithdraw,
                   color: AppColors.primary,
                   onTap: onWithdraw,
                 ),
@@ -233,7 +247,7 @@ class _BalanceCard extends StatelessWidget {
               Expanded(
                 child: _DarkButton(
                   icon: LucideIcons.download,
-                  label: 'Statement',
+                  label: l10n.walletStatement,
                   color: Colors.white.withValues(alpha: 0.1),
                   onTap: onStatement,
                 ),
@@ -340,6 +354,7 @@ class _NextPayoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final status = (s.status ?? 'PENDING').toLowerCase();
     final pending = status != 'completed';
     return SurfaceCard(
@@ -355,8 +370,11 @@ class _NextPayoutCard extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: const Icon(LucideIcons.clock,
-                size: 20, color: AppColors.primary),
+            child: const Icon(
+              LucideIcons.clock,
+              size: 20,
+              color: AppColors.primary,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -364,7 +382,7 @@ class _NextPayoutCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  pending ? 'Next payout' : 'Latest payout',
+                  pending ? l10n.walletNextPayout : l10n.walletLatestPayout,
                   style: AppText.body(size: 13, color: AppColors.textTertiary),
                 ),
                 const SizedBox(height: 2),
@@ -378,8 +396,11 @@ class _NextPayoutCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(LucideIcons.chevronRight,
-              size: 20, color: AppColors.textDisabled),
+          const Icon(
+            LucideIcons.chevronRight,
+            size: 20,
+            color: AppColors.textDisabled,
+          ),
         ],
       ),
     );

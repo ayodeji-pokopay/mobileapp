@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 /// Renders loading / error / data for an [AsyncValue] with the design's
 /// white card treatment.
@@ -52,8 +53,11 @@ class AsyncSlot<T> extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(LucideIcons.triangleAlert,
-                size: 20, color: AppColors.danger),
+            const Icon(
+              LucideIcons.triangleAlert,
+              size: 20,
+              color: AppColors.danger,
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
@@ -70,7 +74,7 @@ class AsyncSlot<T> extends StatelessWidget {
                   minimumSize: const Size(0, 0),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: const Text('Retry'),
+                child: Text(AppLocalizations.of(context).commonRetry),
               ),
             ],
           ],

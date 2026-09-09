@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_text.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 /// Full wordmark image asset.
 class PokopayLogo extends StatelessWidget {
@@ -69,6 +70,9 @@ class PokopayTagline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('FINANCE MADE EASY', style: AppText.tagline(size: size));
+    return Text(
+      AppLocalizations.of(context).tagline,
+      style: AppText.tagline(size: size),
+    );
   }
 }

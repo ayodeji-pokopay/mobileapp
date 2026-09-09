@@ -99,8 +99,11 @@ class PillChip extends StatelessWidget {
               ),
               if (dropdown) ...[
                 const SizedBox(width: 4),
-                Icon(LucideIcons.chevronDown,
-                    size: 14, color: fg.withValues(alpha: 0.6)),
+                Icon(
+                  LucideIcons.chevronDown,
+                  size: 14,
+                  color: fg.withValues(alpha: 0.6),
+                ),
               ],
             ],
           ),
@@ -142,7 +145,9 @@ class SegmentedControl extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: i == selected ? AppColors.surface : Colors.transparent,
+                    color: i == selected
+                        ? AppColors.surface
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(999),
                     boxShadow: i == selected
                         ? [
@@ -158,8 +163,7 @@ class SegmentedControl extends StatelessWidget {
                     items[i],
                     style: AppText.body(
                       size: 15,
-                      weight:
-                          i == selected ? FontWeight.w600 : FontWeight.w400,
+                      weight: i == selected ? FontWeight.w600 : FontWeight.w400,
                       color: i == selected
                           ? AppColors.navy
                           : AppColors.textSecondary,

@@ -8,6 +8,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../shared/widgets/pokopay_logo.dart';
 import 'auth_controller.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -39,8 +40,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _checkSavedCredentials() async {
-    final has =
-        await ref.read(secureStorageProvider).hasBiometricCredentials();
+    final has = await ref.read(secureStorageProvider).hasBiometricCredentials();
     if (!mounted) return;
     setState(() => _hasSavedCredentials = has);
   }
@@ -55,7 +55,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!_formKey.currentState!.validate()) return;
     FocusScope.of(context).unfocus();
     setState(() => _submitting = true);
-    final ok = await ref.read(authControllerProvider.notifier).login(
+    final ok = await ref
+        .read(authControllerProvider.notifier)
+        .login(
           _emailCtrl.text.trim(),
           _passwordCtrl.text,
           enableBiometric: _enableBiometric,
@@ -63,14 +65,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!mounted) return;
     setState(() => _submitting = false);
     if (!ok) {
-      _showError(ref.read(authControllerProvider).error ?? 'Login failed');
+      _showError(
+        ref.read(authControllerProvider).error ??
+            AppLocalizations.of(context).loginFailed,
+      );
     }
   }
 
   Future<void> _biometricLogin() async {
     final ok = await ref
         .read(biometricServiceProvider)
-        .authenticate(reason: 'Sign in to Pokopay');
+        .authenticate(
+          reason: AppLocalizations.of(context).loginBiometricReason,
+        );
     if (!ok || !mounted) return;
     setState(() => _submitting = true);
     final success = await ref
@@ -80,13 +87,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     setState(() => _submitting = false);
     if (!success) {
       _showError(
-        ref.read(authControllerProvider).error ?? 'Biometric login failed',
+        ref.read(authControllerProvider).error ??
+            AppLocalizations.of(context).loginBiometricFailed,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final bioAvailable =
         ref.watch(biometricAvailableProvider).asData?.value ?? false;
     final showBiometricButton = bioAvailable && _hasSavedCredentials;
@@ -109,17 +118,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         const SizedBox(height: 32),
                         const Center(child: PokopayMark()),
                         const SizedBox(height: 44),
-                        Text('Welcome back', style: AppText.display()),
+                        Text(l10n.loginWelcome, style: AppText.display()),
                         const SizedBox(height: 8),
                         Text(
-                          'Sign in to your merchant account',
+                          l10n.loginSubtitle,
                           style: AppText.body(
                             size: 16,
                             color: AppColors.textSecondary,
                           ),
                         ),
                         const SizedBox(height: 36),
-                        const _FieldLabel('Email address'),
+                        _FieldLabel(l10n.loginEmailLabel),
                         const SizedBox(height: 8),
                         TextFormField(
                           controller: _emailCtrl,
@@ -127,14 +136,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           autocorrect: false,
                           textInputAction: TextInputAction.next,
                           style: AppText.body(size: 16),
-                          decoration: const InputDecoration(
-                            hintText: 'you@company.com',
+                          decoration: InputDecoration(
+                            hintText: l10n.loginEmailHint,
                           ),
                           validator: (v) {
                             if (v == null || v.trim().isEmpty) {
-                              return 'Email required';
+                              return l10n.validationEmailRequired;
                             }
-                            if (!v.contains('@')) return 'Enter a valid email';
+                            if (!v.contains('@'))
+                              return l10n.validationEmailInvalid;
                             return null;
                           },
                         ),
@@ -142,24 +152,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const _FieldLabel('Password'),
+                            _FieldLabel(l10n.loginPasswordLabel),
                             TextButton(
                               onPressed: () {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Contact support to reset your password.',
-                                    ),
-                                  ),
+                                  SnackBar(content: Text(l10n.loginForgotHint)),
                                 );
                               },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 minimumSize: const Size(0, 0),
-                                tapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
-                              child: const Text('Forgot?'),
+                              child: Text(l10n.loginForgot),
                             ),
                           ],
                         ),
@@ -174,6 +179,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             hintText: '••••••••',
                             suffixIcon: IconButton(
                               splashRadius: 20,
+                              tooltip: _obscure
+                                  ? l10n.showPassword
+                                  : l10n.hidePassword,
                               icon: Icon(
                                 _obscure ? LucideIcons.eye : LucideIcons.eyeOff,
                                 size: 20,
@@ -184,14 +192,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                           ),
                           validator: (v) => (v == null || v.isEmpty)
-                              ? 'Password required'
+                              ? l10n.validationPasswordRequired
                               : null,
                         ),
                         if (bioAvailable) ...[
                           const SizedBox(height: 14),
                           GestureDetector(
                             onTap: () => setState(
-                                () => _enableBiometric = !_enableBiometric),
+                              () => _enableBiometric = !_enableBiometric,
+                            ),
                             behavior: HitTestBehavior.opaque,
                             child: Row(
                               children: [
@@ -201,12 +210,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   child: Checkbox(
                                     value: _enableBiometric,
                                     onChanged: (v) => setState(
-                                        () => _enableBiometric = v ?? false),
+                                      () => _enableBiometric = v ?? false,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
-                                  'Enable biometric sign-in on this device',
+                                  l10n.loginEnableBiometric,
                                   style: AppText.body(
                                     size: 14,
                                     color: AppColors.textSecondary,
@@ -229,12 +239,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
                                         valueColor: AlwaysStoppedAnimation(
-                                            Colors.white),
+                                          Colors.white,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 10),
                                     Text(
-                                      'Signing in...',
+                                      l10n.loginSigningIn,
                                       style: AppText.body(
                                         size: 16,
                                         weight: FontWeight.w700,
@@ -243,7 +254,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     ),
                                   ],
                                 )
-                              : const Text('Sign in'),
+                              : Text(l10n.loginButton),
                         ),
                         if (showBiometricButton) ...[
                           const SizedBox(height: 28),
@@ -253,10 +264,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 child: Divider(color: AppColors.hairline),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
                                 child: Text(
-                                  'or',
+                                  l10n.loginOr,
                                   style: AppText.body(
                                     size: 14,
                                     color: AppColors.textTertiary,
@@ -271,9 +283,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           const SizedBox(height: 28),
                           OutlinedButton.icon(
                             onPressed: _submitting ? null : _biometricLogin,
-                            icon: const Icon(LucideIcons.fingerprintPattern,
-                                size: 24, color: AppColors.primary),
-                            label: const Text('Continue with biometrics'),
+                            icon: const Icon(
+                              LucideIcons.fingerprintPattern,
+                              size: 24,
+                              color: AppColors.primary,
+                            ),
+                            label: Text(l10n.loginBiometricButton),
                           ),
                         ],
                         const Spacer(),
@@ -282,11 +297,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(LucideIcons.shieldCheck,
-                                  size: 16, color: AppColors.textTertiary),
+                              const Icon(
+                                LucideIcons.shieldCheck,
+                                size: 16,
+                                color: AppColors.textTertiary,
+                              ),
                               const SizedBox(width: 6),
                               Text(
-                                'Bank-grade security',
+                                l10n.loginSecurityFooter,
                                 style: AppText.body(
                                   size: 12,
                                   color: AppColors.textTertiary,

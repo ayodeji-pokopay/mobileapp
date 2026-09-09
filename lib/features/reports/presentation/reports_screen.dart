@@ -10,9 +10,11 @@ import '../../../shared/widgets/async_slot.dart';
 import '../../../shared/widgets/bottom_nav.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
+import '../../../shared/widgets/offline_banner.dart';
 import '../../../shared/widgets/pill_tabs.dart';
 import '../../../shared/widgets/section_label.dart';
 import '../../merchant/presentation/merchant_providers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ReportsScreen extends ConsumerStatefulWidget {
   const ReportsScreen({super.key});
@@ -22,26 +24,33 @@ class ReportsScreen extends ConsumerStatefulWidget {
 }
 
 class _ReportsScreenState extends ConsumerState<ReportsScreen> {
-  static const _periods = [
-    ('Today', 'DAILY'),
-    ('Last week', 'WEEKLY'),
-    ('Last month', 'MONTHLY'),
-    ('Last year', 'YEARLY'),
-  ];
+  static const _periods = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'];
 
   int _tab = 0;
   String _search = '';
 
   void _notYet(String what) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('$what is coming soon.')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.of(context).commonFeatureComingSoon(what),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final period = ref.watch(salesPeriodProvider);
     final sales = ref.watch(salesReportProvider);
-    final periodIndex = _periods.indexWhere((p) => p.$2 == period);
+    final periodIndex = _periods.indexOf(period);
+    final periodLabels = [
+      l10n.periodToday,
+      l10n.periodLastWeek,
+      l10n.periodLastMonth,
+      l10n.periodLastYear,
+    ];
 
     return Scaffold(
       backgroundColor: AppColors.canvas,
@@ -59,16 +68,23 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Sales', style: AppText.display(size: 32)),
+                      Text(l10n.salesTitle, style: AppText.display(size: 32)),
                       _PlusMenu(
-                        onNewSale: () => _notYet('New sale'),
-                        onNewLink: () => _notYet('Payment links'),
+                        tooltip: l10n.salesAdd,
+                        newSale: l10n.salesNewSale,
+                        newLink: l10n.salesNewPaymentLink,
+                        onNewSale: () => _notYet(l10n.salesNewSale),
+                        onNewLink: () => _notYet(l10n.salesPaymentLinks),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   UnderlineTabs(
-                    items: const ['Overview', 'Transactions', 'Payment links'],
+                    items: [
+                      l10n.salesTabOverview,
+                      l10n.salesTabTransactions,
+                      l10n.salesTabPaymentLinks,
+                    ],
                     selected: _tab,
                     onChanged: (i) => setState(() => _tab = i),
                   ),
@@ -78,26 +94,25 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
             Expanded(
               child: switch (_tab) {
                 0 => _Overview(
-                    sales: sales,
-                    periodIndex: periodIndex < 0 ? 1 : periodIndex,
-                    periods: _periods,
-                    onPeriod: (i) => ref
-                        .read(salesPeriodProvider.notifier)
-                        .set(_periods[i].$2),
-                    onRefresh: () async {
-                      ref.invalidate(salesReportProvider);
-                      await ref.read(salesReportProvider.future);
-                    },
-                    onRetry: () => ref.invalidate(salesReportProvider),
-                    onGoTransactions: () => setState(() => _tab = 1),
-                    onExport: () => _notYet('Export'),
-                  ),
+                  sales: sales,
+                  periodIndex: periodIndex < 0 ? 1 : periodIndex,
+                  periodLabels: periodLabels,
+                  onPeriod: (i) =>
+                      ref.read(salesPeriodProvider.notifier).set(_periods[i]),
+                  onRefresh: () async {
+                    ref.invalidate(salesReportProvider);
+                    await ref.read(salesReportProvider.future);
+                  },
+                  onRetry: () => ref.invalidate(salesReportProvider),
+                  onGoTransactions: () => setState(() => _tab = 1),
+                  onExport: () => _notYet(l10n.salesExportFeature),
+                ),
                 1 => _Transactions(
-                    sales: sales,
-                    search: _search,
-                    onSearch: (v) => setState(() => _search = v.trim()),
-                    onRetry: () => ref.invalidate(salesReportProvider),
-                  ),
+                  sales: sales,
+                  search: _search,
+                  onSearch: (v) => setState(() => _search = v.trim()),
+                  onRetry: () => ref.invalidate(salesReportProvider),
+                ),
                 _ => const _PaymentLinks(),
               },
             ),
@@ -109,13 +124,23 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
 }
 
 class _PlusMenu extends StatelessWidget {
-  const _PlusMenu({required this.onNewSale, required this.onNewLink});
+  const _PlusMenu({
+    required this.tooltip,
+    required this.newSale,
+    required this.newLink,
+    required this.onNewSale,
+    required this.onNewLink,
+  });
+  final String tooltip;
+  final String newSale;
+  final String newLink;
   final VoidCallback onNewSale;
   final VoidCallback onNewLink;
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<int>(
+      tooltip: tooltip,
       offset: const Offset(0, 56),
       color: AppColors.surface,
       elevation: 8,
@@ -124,11 +149,11 @@ class _PlusMenu extends StatelessWidget {
       itemBuilder: (_) => [
         PopupMenuItem(
           value: 0,
-          child: _MenuRow(icon: LucideIcons.printer, label: 'New Sale'),
+          child: _MenuRow(icon: LucideIcons.printer, label: newSale),
         ),
         PopupMenuItem(
           value: 1,
-          child: _MenuRow(icon: LucideIcons.link, label: 'New payment link'),
+          child: _MenuRow(icon: LucideIcons.link, label: newLink),
         ),
       ],
       child: Container(
@@ -174,7 +199,7 @@ class _Overview extends StatelessWidget {
   const _Overview({
     required this.sales,
     required this.periodIndex,
-    required this.periods,
+    required this.periodLabels,
     required this.onPeriod,
     required this.onRefresh,
     required this.onRetry,
@@ -184,7 +209,7 @@ class _Overview extends StatelessWidget {
 
   final AsyncValue<MerchantSalesReportResponse> sales;
   final int periodIndex;
-  final List<(String, String)> periods;
+  final List<String> periodLabels;
   final ValueChanged<int> onPeriod;
   final Future<void> Function() onRefresh;
   final VoidCallback onRetry;
@@ -193,18 +218,20 @@ class _Overview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
         children: [
+          const OfflineBanner(),
           PillTabs(
             scrollable: true,
             dropdown: true,
             inactiveColor: AppColors.surface,
             inactiveTextColor: AppColors.textBody,
-            items: [for (final p in periods) p.$1],
+            items: periodLabels,
             selected: periodIndex,
             onChanged: onPeriod,
           ),
@@ -222,7 +249,7 @@ class _Overview extends StatelessWidget {
             onTap: onGoTransactions,
             child: Center(
               child: Text(
-                'Go to Sales Transactions',
+                l10n.salesGoToTransactions,
                 style: AppText.body(size: 15, weight: FontWeight.w600),
               ),
             ),
@@ -257,11 +284,16 @@ class _GrossSalesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final count = r.totalTransactionCount ?? 0;
-    final range = [
-      if ((r.startDate ?? '').isNotEmpty) 'From ${formatDateShort(r.startDate)}',
-      if ((r.endDate ?? '').isNotEmpty) 'to ${formatDateShort(r.endDate)}',
-    ].join(' ');
+    final hasRange =
+        (r.startDate ?? '').isNotEmpty && (r.endDate ?? '').isNotEmpty;
+    final range = hasRange
+        ? l10n.salesRange(
+            formatDateShort(r.startDate),
+            formatDateShort(r.endDate),
+          )
+        : '';
     return SurfaceCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,9 +301,9 @@ class _GrossSalesCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('GROSS SALES', style: AppText.label()),
+              Text(l10n.salesGross.toUpperCase(), style: AppText.label()),
               Text(
-                '${formatNumber(count)} ${count == 1 ? 'transaction' : 'transactions'}',
+                l10n.salesTransactionsCount(count),
                 style: AppText.body(size: 13, color: AppColors.textTertiary),
               ),
             ],
@@ -293,9 +325,12 @@ class _GrossSalesCard extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: [
-              _MiniStat(label: 'Net ›', value: formatMoney(r.netAmount)),
+              _MiniStat(label: l10n.salesNet, value: formatMoney(r.netAmount)),
               const SizedBox(width: 24),
-              _MiniStat(label: 'Fees ›', value: formatMoney(r.totalFees)),
+              _MiniStat(
+                label: l10n.salesFeesShort,
+                value: formatMoney(r.totalFees),
+              ),
             ],
           ),
           if (r.dailyBreakdown.isNotEmpty) ...[
@@ -339,6 +374,7 @@ class _BarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final values = rows.map((d) => (d.totalAmount ?? 0).toDouble()).toList();
     final max = values.fold<double>(0, (a, b) => a > b ? a : b);
     final maxIndex = values.indexOf(max);
@@ -363,7 +399,7 @@ class _BarChart extends StatelessWidget {
                       Text(
                         formatMoneyCompact(v),
                         style: AppText.body(
-                          size: 9,
+                          size: 12,
                           color: AppColors.textTertiary,
                         ),
                       ),
@@ -412,7 +448,7 @@ class _BarChart extends StatelessWidget {
                         Text(
                           xLabel(i),
                           style: AppText.body(
-                            size: 9,
+                            size: 12,
                             color: AppColors.textTertiary,
                           ),
                         ),
@@ -426,9 +462,9 @@ class _BarChart extends StatelessWidget {
         const SizedBox(height: 10),
         Row(
           children: [
-            _Legend(color: AppColors.navy, label: 'Daily sales'),
+            _Legend(color: AppColors.navy, label: l10n.salesDailySales),
             const SizedBox(width: 16),
-            _Legend(color: AppColors.primary, label: 'Best day'),
+            _Legend(color: AppColors.primary, label: l10n.salesBestDay),
           ],
         ),
       ],
@@ -454,7 +490,10 @@ class _Legend extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 6),
-        Text(label, style: AppText.body(size: 11, color: AppColors.textTertiary)),
+        Text(
+          label,
+          style: AppText.body(size: 12, color: AppColors.textTertiary),
+        ),
       ],
     );
   }
@@ -466,27 +505,28 @@ class _FeesNetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final count = r.totalTransactionCount ?? 0;
     return SurfaceCard(
       child: Row(
         children: [
           Expanded(
             child: _BigStat(
-              label: 'FEES',
+              label: l10n.salesFees.toUpperCase(),
               value: (r.totalFees ?? 0) > 0
                   ? '-${formatMoney(r.totalFees)}'
                   : formatMoney(0),
               color: (r.totalFees ?? 0) > 0 ? AppColors.danger : AppColors.navy,
-              sub: '${formatNumber(count)} transactions',
+              sub: l10n.salesTransactionsCount(count),
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: _BigStat(
-              label: 'NET AMOUNT',
+              label: l10n.salesNetAmount.toUpperCase(),
               value: formatMoney(r.netAmount),
               color: AppColors.navy,
-              sub: 'After fees',
+              sub: l10n.salesAfterFees,
             ),
           ),
         ],
@@ -535,6 +575,7 @@ class _BreakdownCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final total = (r.totalSales ?? 0).toDouble();
     final ranked = [...r.cardSchemeBreakdown]
       ..sort((a, b) => (b.totalAmount ?? 0).compareTo(a.totalAmount ?? 0));
@@ -542,10 +583,10 @@ class _BreakdownCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('SALES BREAKDOWN', style: AppText.label()),
+          Text(l10n.salesBreakdown.toUpperCase(), style: AppText.label()),
           const SizedBox(height: 14),
           PillChip(
-            label: 'Card brands',
+            label: l10n.salesCardBrands,
             selected: true,
             onTap: () {},
             activeColor: AppColors.primary,
@@ -555,7 +596,7 @@ class _BreakdownCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Text(
-                'No card transactions in this period.',
+                l10n.salesNoCardTransactions,
                 style: AppText.body(size: 14, color: AppColors.textTertiary),
               ),
             )
@@ -580,7 +621,7 @@ class _BreakdownCard extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        _titleCase(ranked[i].cardScheme ?? 'Other'),
+                        _titleCase(ranked[i].cardScheme ?? l10n.salesOther),
                         style: AppText.body(size: 15, weight: FontWeight.w500),
                       ),
                     ),
@@ -593,7 +634,9 @@ class _BreakdownCard extends StatelessWidget {
                         ),
                         Text(
                           total == 0
-                              ? '${formatNumber(ranked[i].transactionCount)} txns'
+                              ? l10n.settlementTxns(
+                                  ranked[i].transactionCount ?? 0,
+                                )
                               : '${((ranked[i].totalAmount ?? 0) / total * 100).toStringAsFixed(1)}%',
                           style: AppText.body(
                             size: 13,
@@ -639,12 +682,13 @@ class _ExportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SurfaceCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Report summary',
+            l10n.salesReportSummary,
             style: AppText.body(size: 15, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
@@ -654,7 +698,7 @@ class _ExportCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Net settled · ${r.businessName ?? r.merchantName ?? ''}'.trim(),
+            l10n.salesNetSettled(r.businessName ?? r.merchantName ?? ''),
             style: AppText.body(size: 13, color: AppColors.textTertiary),
           ),
           const SizedBox(height: 20),
@@ -669,11 +713,14 @@ class _ExportCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(LucideIcons.download,
-                        size: 16, color: AppColors.textBody),
+                    const Icon(
+                      LucideIcons.download,
+                      size: 16,
+                      color: AppColors.textBody,
+                    ),
                     const SizedBox(width: 8),
                     Text(
-                      'Export for accountant',
+                      l10n.salesExport,
                       style: AppText.body(size: 15, weight: FontWeight.w600),
                     ),
                   ],
@@ -704,6 +751,7 @@ class _Transactions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
       children: [
@@ -711,12 +759,17 @@ class _Transactions extends StatelessWidget {
           onChanged: onSearch,
           style: AppText.body(size: 15),
           decoration: InputDecoration(
-            hintText: 'Search by date',
+            hintText: l10n.salesSearchByDate,
             hintStyle: AppText.body(size: 15, color: AppColors.textTertiary),
-            prefixIcon: const Icon(LucideIcons.search,
-                size: 16, color: AppColors.textTertiary),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            prefixIcon: const Icon(
+              LucideIcons.search,
+              size: 16,
+              color: AppColors.textTertiary,
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(999),
               borderSide: BorderSide.none,
@@ -742,13 +795,12 @@ class _Transactions extends StatelessWidget {
               final q = search.toLowerCase();
               return formatDayLabel(d.date).toLowerCase().contains(q) ||
                   (d.date ?? '').contains(q);
-            }).toList()
-              ..sort((a, b) => (b.date ?? '').compareTo(a.date ?? ''));
+            }).toList()..sort((a, b) => (b.date ?? '').compareTo(a.date ?? ''));
             if (days.isEmpty) {
-              return const EmptyState(
+              return EmptyState(
                 icon: LucideIcons.receipt,
-                title: 'No transactions',
-                subtitle: 'Nothing recorded for this period.',
+                title: l10n.salesNoTransactions,
+                subtitle: l10n.salesNoTransactionsHint,
               );
             }
             return Column(
@@ -774,6 +826,7 @@ class _DayRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final count = d.transactionCount ?? 0;
     return ListRow(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -789,8 +842,11 @@ class _DayRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: const Color(0xFFEBEBEA)),
             ),
-            child: const Icon(LucideIcons.creditCard,
-                size: 18, color: AppColors.textBody),
+            child: const Icon(
+              LucideIcons.creditCard,
+              size: 18,
+              color: AppColors.textBody,
+            ),
           ),
           Positioned(
             right: -4,
@@ -802,14 +858,24 @@ class _DayRow extends StatelessWidget {
                 color: AppColors.primary,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(LucideIcons.check, size: 9, color: Colors.white),
+              child: const Icon(
+                LucideIcons.check,
+                size: 9,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
       ),
-      title: '$count card ${count == 1 ? 'sale' : 'sales'}',
-      subtitle: 'Fees ${formatMoney(d.totalFees)} · Net ${formatMoney(d.netAmount)}',
-      trailing: Text(formatMoney(d.totalAmount), style: AppText.money(size: 15)),
+      title: l10n.salesCardSales(count),
+      subtitle: l10n.salesFeesNet(
+        formatMoney(d.totalFees),
+        formatMoney(d.netAmount),
+      ),
+      trailing: Text(
+        formatMoney(d.totalAmount),
+        style: AppText.money(size: 15),
+      ),
     );
   }
 }
@@ -821,13 +887,14 @@ class _PaymentLinks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 40),
-      children: const [
+      children: [
         EmptyState(
           icon: LucideIcons.link,
-          title: 'No payment links yet',
-          subtitle: 'Payment links are coming soon to Pokopay.',
+          title: l10n.salesNoPaymentLinks,
+          subtitle: l10n.salesNoPaymentLinksHint,
         ),
       ],
     );

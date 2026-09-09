@@ -10,9 +10,11 @@ import '../../../shared/widgets/async_slot.dart';
 import '../../../shared/widgets/back_scaffold.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
+import '../../../shared/widgets/offline_banner.dart';
 import '../../../shared/widgets/pill_tabs.dart';
 import '../../../shared/widgets/section_label.dart';
 import '../../merchant/presentation/merchant_providers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class SettlementsScreen extends ConsumerStatefulWidget {
   const SettlementsScreen({super.key});
@@ -28,10 +30,11 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final data = ref.watch(settlementsProvider);
 
     return BackScaffold(
-      title: 'Statements\nand Billing',
+      title: l10n.settlementsTitle,
       titleSize: 38,
       child: RefreshIndicator(
         onRefresh: () async {
@@ -43,24 +46,30 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
           children: [
+            const OfflineBanner(),
             SegmentedControl(
-              items: const ['Settlements', 'Invoices'],
+              items: [l10n.settlementsTab, l10n.invoicesTab],
               selected: _segment,
               onChanged: (i) => setState(() => _segment = i),
             ),
             const SizedBox(height: 20),
             if (_segment == 1)
-              const EmptyState(
+              EmptyState(
                 icon: LucideIcons.receipt,
-                title: 'No invoices yet',
-                subtitle: 'Your Pokopay invoices will be listed here.',
+                title: l10n.invoicesEmpty,
+                subtitle: l10n.invoicesEmptyHint,
               )
             else ...[
               PillTabs(
                 scrollable: true,
                 inactiveColor: AppColors.surface,
                 inactiveTextColor: AppColors.textBody,
-                items: const ['All', 'Completed', 'Pending', 'Failed'],
+                items: [
+                  l10n.filterAll,
+                  l10n.filterCompleted,
+                  l10n.filterPending,
+                  l10n.filterFailed,
+                ],
                 selected: _status,
                 onChanged: (i) => setState(() => _status = i),
               ),
@@ -72,20 +81,23 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
                 data: (page) {
                   final filter = _statuses[_status];
                   final items = page.content
-                      .where((s) =>
-                          filter == 'ALL' ||
-                          (s.status ?? 'PENDING').toUpperCase() == filter)
+                      .where(
+                        (s) =>
+                            filter == 'ALL' ||
+                            (s.status ?? 'PENDING').toUpperCase() == filter,
+                      )
                       .toList();
                   if (items.isEmpty) {
-                    return const EmptyState(
+                    return EmptyState(
                       icon: LucideIcons.fileText,
-                      title: 'No settlements',
-                      subtitle: 'Nothing matches this filter yet.',
+                      title: l10n.settlementsEmpty,
+                      subtitle: l10n.settlementsEmptyHint,
                     );
                   }
                   final groups = <int, List<SettlementResponse>>{};
                   for (final s in items) {
-                    groups.putIfAbsent(yearOf(s.settlementDate) ?? 0, () => [])
+                    groups
+                        .putIfAbsent(yearOf(s.settlementDate) ?? 0, () => [])
                         .add(s);
                   }
                   final years = groups.keys.toList()
@@ -94,7 +106,7 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       for (final y in years) ...[
-                        SectionLabel(y == 0 ? 'Undated' : '$y'),
+                        SectionLabel(y == 0 ? l10n.commonUndated : '$y'),
                         ListCard(
                           children: [
                             for (final s in groups[y]!)
@@ -126,14 +138,30 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
   }
 }
 
-(IconData, Color, Color, String) _statusStyle(String? status) {
+(IconData, Color, Color, String) _statusStyle(
+  String? status,
+  AppLocalizations l10n,
+) {
   final st = (status ?? 'PENDING').toUpperCase();
   return switch (st) {
-    'COMPLETED' =>
-      (LucideIcons.circleCheck, AppColors.primary, AppColors.primaryLight, 'Completed'),
-    'FAILED' =>
-      (LucideIcons.circleX, AppColors.danger, AppColors.dangerBg, 'Failed'),
-    _ => (LucideIcons.clock, AppColors.warning, AppColors.warningBg, 'Pending'),
+    'COMPLETED' => (
+      LucideIcons.circleCheck,
+      AppColors.primary,
+      AppColors.primaryLight,
+      l10n.statusCompleted,
+    ),
+    'FAILED' => (
+      LucideIcons.circleX,
+      AppColors.danger,
+      AppColors.dangerBg,
+      l10n.statusFailed,
+    ),
+    _ => (
+      LucideIcons.clock,
+      AppColors.warning,
+      AppColors.warningBg,
+      l10n.statusPending,
+    ),
   };
 }
 
@@ -144,7 +172,8 @@ class _SettlementRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (icon, fg, bg, _) = _statusStyle(s.status);
+    final l10n = AppLocalizations.of(context);
+    final (icon, fg, bg, _) = _statusStyle(s.status, l10n);
     final count = s.transactionCount ?? 0;
     return ListRow(
       onTap: onTap,
@@ -160,7 +189,7 @@ class _SettlementRow extends StatelessWidget {
       title: formatDateShort(s.settlementDate),
       subtitle: [
         if ((s.settlementReference ?? '').isNotEmpty) s.settlementReference!,
-        '$count ${count == 1 ? 'txn' : 'txns'}',
+        l10n.settlementTxns(count),
       ].join(' · '),
       trailing: Text(formatMoney(s.netAmount), style: AppText.money(size: 15)),
       chevron: true,
@@ -174,34 +203,35 @@ class _SettlementSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (icon, fg, bg, label) = _statusStyle(s.status);
+    final l10n = AppLocalizations.of(context);
+    final (icon, fg, bg, label) = _statusStyle(s.status, l10n);
     final bottom = MediaQuery.paddingOf(context).bottom;
     Widget row(String k, String? v, {bool mono = false}) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 130,
-                child: Text(
-                  k,
-                  style: AppText.body(size: 14, color: AppColors.textTertiary),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  (v ?? '').isEmpty ? '—' : v!,
-                  textAlign: TextAlign.right,
-                  style: AppText.body(
-                    size: 14,
-                    weight: FontWeight.w500,
-                    letterSpacing: mono ? 0.3 : null,
-                  ),
-                ),
-              ),
-            ],
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 130,
+            child: Text(
+              k,
+              style: AppText.body(size: 14, color: AppColors.textTertiary),
+            ),
           ),
-        );
+          Expanded(
+            child: Text(
+              (v ?? '').isEmpty ? '—' : v!,
+              textAlign: TextAlign.right,
+              style: AppText.body(
+                size: 14,
+                weight: FontWeight.w500,
+                letterSpacing: mono ? 0.3 : null,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
 
     return Padding(
       padding: EdgeInsets.fromLTRB(24, 12, 24, 24 + bottom),
@@ -236,7 +266,10 @@ class _SettlementSheet extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Settlement', style: AppText.money(size: 17)),
+                    Text(
+                      l10n.settlementDetailTitle,
+                      style: AppText.money(size: 17),
+                    ),
                     Text(
                       '$label · ${formatDateShort(s.settlementDate)}',
                       style: AppText.body(size: 13, color: fg),
@@ -249,17 +282,23 @@ class _SettlementSheet extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const Divider(),
-          row('Reference', s.settlementReference, mono: true),
-          row('Batch', s.batchReference, mono: true),
-          row('Transactions', formatNumber(s.transactionCount)),
-          row('Gross amount', formatMoney(s.grossAmount ?? s.totalTransactionAmount)),
-          row('Transaction fees', formatMoney(s.totalTransactionFees)),
-          row('Settlement fee', formatMoney(s.settlementFee)),
-          row('Net amount', formatMoney(s.netAmount)),
+          row(l10n.settlementReference, s.settlementReference, mono: true),
+          row(l10n.settlementBatch, s.batchReference, mono: true),
+          row(l10n.settlementTransactions, formatNumber(s.transactionCount)),
+          row(
+            l10n.settlementGross,
+            formatMoney(s.grossAmount ?? s.totalTransactionAmount),
+          ),
+          row(
+            l10n.settlementTransactionFees,
+            formatMoney(s.totalTransactionFees),
+          ),
+          row(l10n.settlementFee, formatMoney(s.settlementFee)),
+          row(l10n.settlementNet, formatMoney(s.netAmount)),
           const Divider(),
-          row('Bank', s.bankName),
-          row('Account name', s.accountName),
-          row('Account number', s.accountNumber, mono: true),
+          row(l10n.settlementBank, s.bankName),
+          row(l10n.settlementAccountName, s.accountName),
+          row(l10n.settlementAccountNumber, s.accountNumber, mono: true),
         ],
       ),
     );

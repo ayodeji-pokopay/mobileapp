@@ -146,8 +146,11 @@ class ListRow extends StatelessWidget {
           if (trailing != null) ...[const SizedBox(width: 12), trailing!],
           if (showChevron) ...[
             const SizedBox(width: 8),
-            const Icon(LucideIcons.chevronRight,
-                size: 20, color: AppColors.textDisabled),
+            const Icon(
+              LucideIcons.chevronRight,
+              size: 20,
+              color: AppColors.textDisabled,
+            ),
           ],
         ],
       ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../core/config/app_config_provider.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
@@ -12,8 +13,7 @@ import '../format.dart';
 import 'empty_state.dart';
 import 'list_card.dart';
 import 'round_icon_button.dart';
-
-const appVersionLabel = 'pokopay Merchant v1.0.0';
+import '../../l10n/generated/app_localizations.dart';
 
 /// Account drawer opened from the dashboard hero card.
 class AppDrawer extends ConsumerWidget {
@@ -21,6 +21,7 @@ class AppDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final auth = ref.watch(authControllerProvider);
     final user = auth.user;
     final terminals = ref.watch(terminalsProvider);
@@ -28,6 +29,7 @@ class AppDrawer extends ConsumerWidget {
     final displayName = ref.watch(businessNameProvider);
     final role = _titleCase(user?.role ?? 'Merchant');
     final canSwitch = auth.canSwitchMerchant;
+    final version = ref.watch(packageInfoProvider).asData?.value.version ?? '';
 
     void go(String route) {
       Navigator.of(context).pop();
@@ -38,8 +40,9 @@ class AppDrawer extends ConsumerWidget {
 
     void notYet() {
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Coming soon.')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.commonComingSoon)));
     }
 
     return Drawer(
@@ -54,6 +57,7 @@ class AppDrawer extends ConsumerWidget {
               alignment: Alignment.centerLeft,
               child: RoundIconButton(
                 icon: LucideIcons.x,
+                semanticLabel: l10n.commonClose,
                 onTap: () => Navigator.of(context).pop(),
               ),
             ),
@@ -93,15 +97,18 @@ class AppDrawer extends ConsumerWidget {
                       ),
                       if (canSwitch) ...[
                         const SizedBox(width: 4),
-                        const Icon(LucideIcons.chevronDown,
-                            size: 16, color: AppColors.textTertiary),
+                        const Icon(
+                          LucideIcons.chevronDown,
+                          size: 16,
+                          color: AppColors.textTertiary,
+                        ),
                       ],
                     ],
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '$role · Merchant',
+                  l10n.drawerRoleMerchant(role),
                   style: AppText.body(size: 14, color: AppColors.textTertiary),
                 ),
                 if (canSwitch) ...[
@@ -110,12 +117,14 @@ class AppDrawer extends ConsumerWidget {
                     onPressed: () => _pickMerchant(context),
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       minimumSize: const Size(0, 0),
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     icon: const Icon(LucideIcons.arrowLeftRight, size: 14),
-                    label: const Text('Switch merchant'),
+                    label: Text(l10n.drawerSwitchMerchant),
                   ),
                 ],
               ],
@@ -126,11 +135,11 @@ class AppDrawer extends ConsumerWidget {
                 Expanded(
                   child: _FeatureTile(
                     icon: LucideIcons.printer,
-                    label: 'Terminals',
+                    label: l10n.drawerTerminals,
                     sub: terminals.when(
-                      data: (t) => '${t.length} active',
+                      data: (t) => l10n.drawerTerminalsActive(t.length),
                       loading: () => '…',
-                      error: (_, _) => 'Unavailable',
+                      error: (_, _) => l10n.commonUnavailable,
                     ),
                     onTap: () => go(AppRoutes.stores),
                   ),
@@ -139,11 +148,11 @@ class AppDrawer extends ConsumerWidget {
                 Expanded(
                   child: _FeatureTile(
                     icon: LucideIcons.landmark,
-                    label: 'Settled',
+                    label: l10n.drawerSettled,
                     sub: summary.when(
                       data: (s) => formatMoneyCompact(s.totalSettledAmount),
                       loading: () => '…',
-                      error: (_, _) => 'Unavailable',
+                      error: (_, _) => l10n.commonUnavailable,
                     ),
                     onTap: () => go(AppRoutes.settlements),
                   ),
@@ -151,52 +160,71 @@ class AppDrawer extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 12),
-            ListCard(children: [
-              ListRow(
-                leading: const Icon(LucideIcons.store,
-                    size: 20, color: AppColors.textSecondary),
-                title: 'Stores',
-                onTap: () => go(AppRoutes.stores),
-              ),
-              ListRow(
-                leading: const Icon(LucideIcons.fileText,
-                    size: 20, color: AppColors.textSecondary),
-                title: 'Statements and Billing',
-                onTap: () => go(AppRoutes.settlements),
-              ),
-            ]),
+            ListCard(
+              children: [
+                ListRow(
+                  leading: const Icon(
+                    LucideIcons.store,
+                    size: 20,
+                    color: AppColors.textSecondary,
+                  ),
+                  title: l10n.drawerStores,
+                  onTap: () => go(AppRoutes.stores),
+                ),
+                ListRow(
+                  leading: const Icon(
+                    LucideIcons.fileText,
+                    size: 20,
+                    color: AppColors.textSecondary,
+                  ),
+                  title: l10n.drawerStatements,
+                  onTap: () => go(AppRoutes.settlements),
+                ),
+              ],
+            ),
             const SizedBox(height: 12),
-            ListCard(children: [
-              ListRow(
-                leading: const Icon(LucideIcons.settings,
-                    size: 20, color: AppColors.textSecondary),
-                title: 'Settings',
-                chevron: false,
-                onTap: () => go(AppRoutes.settings),
-              ),
-              ListRow(
-                leading: const Icon(LucideIcons.circleQuestionMark,
-                    size: 20, color: AppColors.textSecondary),
-                title: 'Help',
-                chevron: false,
-                onTap: notYet,
-              ),
-              ListRow(
-                leading: const Icon(LucideIcons.logOut,
-                    size: 20, color: AppColors.danger),
-                title: 'Log out',
-                titleColor: AppColors.danger,
-                chevron: false,
-                onTap: () async {
-                  Navigator.of(context).pop();
-                  await ref.read(authControllerProvider.notifier).logout();
-                },
-              ),
-            ]),
+            ListCard(
+              children: [
+                ListRow(
+                  leading: const Icon(
+                    LucideIcons.settings,
+                    size: 20,
+                    color: AppColors.textSecondary,
+                  ),
+                  title: l10n.drawerSettings,
+                  chevron: false,
+                  onTap: () => go(AppRoutes.settings),
+                ),
+                ListRow(
+                  leading: const Icon(
+                    LucideIcons.circleQuestionMark,
+                    size: 20,
+                    color: AppColors.textSecondary,
+                  ),
+                  title: l10n.drawerHelp,
+                  chevron: false,
+                  onTap: notYet,
+                ),
+                ListRow(
+                  leading: const Icon(
+                    LucideIcons.logOut,
+                    size: 20,
+                    color: AppColors.danger,
+                  ),
+                  title: l10n.drawerLogout,
+                  titleColor: AppColors.danger,
+                  chevron: false,
+                  onTap: () async {
+                    Navigator.of(context).pop();
+                    await ref.read(authControllerProvider.notifier).logout();
+                  },
+                ),
+              ],
+            ),
             const SizedBox(height: 24),
             Center(
               child: Text(
-                appVersionLabel,
+                l10n.appVersionLabel(version),
                 style: AppText.body(size: 12, color: AppColors.textTertiary),
               ),
             ),
@@ -247,7 +275,10 @@ class _FeatureTile extends StatelessWidget {
           Icon(icon, size: 24, color: AppColors.navy),
           const SizedBox(height: 10),
           Text(label, style: AppText.body(size: 15, weight: FontWeight.w600)),
-          Text(sub, style: AppText.body(size: 13, color: AppColors.textTertiary)),
+          Text(
+            sub,
+            style: AppText.body(size: 13, color: AppColors.textTertiary),
+          ),
         ],
       ),
     );
@@ -268,6 +299,7 @@ class _MerchantPickerSheetState extends ConsumerState<MerchantPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final list = ref.watch(merchantListProvider(_query));
     final currentMid = ref.watch(authControllerProvider).mid;
     final height = MediaQuery.sizeOf(context).height * 0.75;
@@ -290,10 +322,10 @@ class _MerchantPickerSheetState extends ConsumerState<MerchantPickerSheet> {
               ),
             ),
             const SizedBox(height: 20),
-            Text('Switch merchant', style: AppText.money(size: 17)),
+            Text(l10n.drawerSwitchMerchant, style: AppText.money(size: 17)),
             const SizedBox(height: 4),
             Text(
-              'Choose which business to view.',
+              l10n.drawerSwitchMerchantHint,
               style: AppText.body(size: 13, color: AppColors.textTertiary),
             ),
             const SizedBox(height: 16),
@@ -301,12 +333,17 @@ class _MerchantPickerSheetState extends ConsumerState<MerchantPickerSheet> {
               onChanged: (v) => setState(() => _query = v.trim()),
               style: AppText.body(size: 15),
               decoration: InputDecoration(
-                hintText: 'Search by name or email',
+                hintText: l10n.drawerSearchMerchants,
                 fillColor: AppColors.canvas,
-                prefixIcon: const Icon(LucideIcons.search,
-                    size: 16, color: AppColors.textTertiary),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                prefixIcon: const Icon(
+                  LucideIcons.search,
+                  size: 16,
+                  color: AppColors.textTertiary,
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(999),
                   borderSide: BorderSide.none,
@@ -333,14 +370,14 @@ class _MerchantPickerSheetState extends ConsumerState<MerchantPickerSheet> {
                 ),
                 error: (e, _) => EmptyState(
                   icon: LucideIcons.triangleAlert,
-                  title: 'Could not load merchants',
+                  title: l10n.drawerLoadMerchantsFailed,
                   subtitle: e.toString(),
                 ),
                 data: (merchants) {
                   if (merchants.isEmpty) {
-                    return const EmptyState(
+                    return EmptyState(
                       icon: LucideIcons.store,
-                      title: 'No merchants found',
+                      title: l10n.drawerNoMerchants,
                     );
                   }
                   return ListView.separated(
@@ -351,24 +388,30 @@ class _MerchantPickerSheetState extends ConsumerState<MerchantPickerSheet> {
                       final selected = m.mid == currentMid;
                       return ListRow(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 4, vertical: 12),
+                          horizontal: 4,
+                          vertical: 12,
+                        ),
                         leading: InitialsTile(
                           text: initialsOf(m.name),
                           background: selected
                               ? AppColors.primaryLight
                               : AppColors.canvas,
-                          foreground:
-                              selected ? AppColors.primary : AppColors.navy,
+                          foreground: selected
+                              ? AppColors.primary
+                              : AppColors.navy,
                         ),
                         title: m.name.isEmpty ? m.mid : m.name,
                         subtitle: [
                           if (m.email.isNotEmpty) m.email,
-                          'MID ${m.mid}',
+                          l10n.midLabel(m.mid),
                         ].join(' · '),
                         chevron: false,
                         trailing: selected
-                            ? const Icon(LucideIcons.circleCheck,
-                                size: 20, color: AppColors.primary)
+                            ? const Icon(
+                                LucideIcons.circleCheck,
+                                size: 20,
+                                color: AppColors.primary,
+                              )
                             : null,
                         onTap: () {
                           ref

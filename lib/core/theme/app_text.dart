@@ -61,7 +61,7 @@ class AppText {
   /// Small uppercase section label, e.g. "ACCOUNT ACTIVITY".
   static TextStyle label({Color color = AppColors.textTertiary}) {
     return GoogleFonts.dmSans(
-      fontSize: 11,
+      fontSize: 12,
       fontWeight: FontWeight.w600,
       color: color,
       letterSpacing: 0.7,

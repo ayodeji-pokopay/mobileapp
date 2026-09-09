@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../shared/widgets/back_scaffold.dart';
 import '../data/auth_repository.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -16,8 +17,7 @@ class ChangePasswordScreen extends ConsumerStatefulWidget {
       _ChangePasswordScreenState();
 }
 
-class _ChangePasswordScreenState
-    extends ConsumerState<ChangePasswordScreen> {
+class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _currentCtrl = TextEditingController();
   final _newCtrl = TextEditingController();
@@ -38,14 +38,16 @@ class _ChangePasswordScreenState
     if (!_formKey.currentState!.validate()) return;
     setState(() => _submitting = true);
     try {
-      await ref.read(authRepositoryProvider).changePassword(
+      await ref
+          .read(authRepositoryProvider)
+          .changePassword(
             currentPassword: _currentCtrl.text,
             newPassword: _newCtrl.text,
           );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password updated'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context).changePasswordUpdated),
           backgroundColor: AppColors.primary,
         ),
       );
@@ -53,10 +55,7 @@ class _ChangePasswordScreenState
     } on AuthException catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.message),
-          backgroundColor: AppColors.danger,
-        ),
+        SnackBar(content: Text(e.message), backgroundColor: AppColors.danger),
       );
     } finally {
       if (mounted) setState(() => _submitting = false);
@@ -65,16 +64,17 @@ class _ChangePasswordScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return BackScaffold(
-      title: 'Change\npassword',
+      title: l10n.changePasswordTitle,
       titleSize: 36,
-      subtitle: 'Use a strong, unique password.',
+      subtitle: l10n.changePasswordSubtitle,
       child: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
           children: [
-            _Label('Current password'),
+            _Label(l10n.changePasswordCurrent),
             const SizedBox(height: 8),
             TextFormField(
               controller: _currentCtrl,
@@ -88,50 +88,53 @@ class _ChangePasswordScreenState
                     size: 20,
                     color: AppColors.textTertiary,
                   ),
-                  onPressed: () => setState(
-                      () => _obscureCurrent = !_obscureCurrent),
+                  onPressed: () =>
+                      setState(() => _obscureCurrent = !_obscureCurrent),
                 ),
               ),
               validator: (v) => (v == null || v.isEmpty)
-                  ? 'Current password required'
+                  ? l10n.validationCurrentPasswordRequired
                   : null,
             ),
             const SizedBox(height: 16),
-            _Label('New password'),
+            _Label(l10n.changePasswordNew),
             const SizedBox(height: 8),
             TextFormField(
               controller: _newCtrl,
               obscureText: _obscureNew,
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(
-                hintText: 'At least 8 characters',
+                hintText: l10n.changePasswordNewHint,
                 suffixIcon: IconButton(
                   icon: Icon(
                     _obscureNew ? LucideIcons.eye : LucideIcons.eyeOff,
                     size: 20,
                     color: AppColors.textTertiary,
                   ),
-                  onPressed: () =>
-                      setState(() => _obscureNew = !_obscureNew),
+                  onPressed: () => setState(() => _obscureNew = !_obscureNew),
                 ),
               ),
               validator: (v) {
-                if (v == null || v.isEmpty) return 'New password required';
-                if (v.length < 8) return 'At least 8 characters';
+                if (v == null || v.isEmpty) {
+                  return l10n.validationNewPasswordRequired;
+                }
+                if (v.length < 8) return l10n.validationPasswordLength;
                 return null;
               },
             ),
             const SizedBox(height: 16),
-            _Label('Confirm new password'),
+            _Label(l10n.changePasswordConfirm),
             const SizedBox(height: 8),
             TextFormField(
               controller: _confirmCtrl,
               obscureText: _obscureNew,
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) => _submit(),
-              decoration: const InputDecoration(hintText: 'Re-enter password'),
+              decoration: InputDecoration(
+                hintText: l10n.changePasswordConfirmHint,
+              ),
               validator: (v) =>
-                  v == _newCtrl.text ? null : 'Passwords don\'t match',
+                  v == _newCtrl.text ? null : l10n.validationPasswordsMismatch,
             ),
             const SizedBox(height: 24),
             ElevatedButton(
@@ -142,11 +145,10 @@ class _ChangePasswordScreenState
                       width: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.4,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     )
-                  : const Text('Update password'),
+                  : Text(l10n.changePasswordButton),
             ),
           ],
         ),

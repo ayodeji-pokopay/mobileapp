@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 /// Label-over-value row for detail screens, with optional copy action.
 class InfoRow extends StatelessWidget {
@@ -53,11 +54,18 @@ class InfoRow extends StatelessWidget {
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: v));
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('$label copied')),
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context).commonCopied(label),
+                    ),
+                  ),
                 );
               },
-              icon: const Icon(LucideIcons.copy,
-                  size: 18, color: AppColors.primary),
+              icon: const Icon(
+                LucideIcons.copy,
+                size: 18,
+                color: AppColors.primary,
+              ),
             ),
         ],
       ),

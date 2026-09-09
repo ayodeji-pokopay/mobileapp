@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../core/config/app_config_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../shared/widgets/async_slot.dart';
@@ -12,18 +13,23 @@ import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/section_label.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class BusinessDetailsScreen extends ConsumerWidget {
   const BusinessDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final auth = ref.watch(authControllerProvider);
     final profile = ref.watch(merchantProfileProvider);
     final mid = auth.mid;
+    final supportEmail =
+        ref.watch(appConfigProvider).asData?.value.support.email ??
+        'support@pokopayng.com';
 
     return BackScaffold(
-      title: 'Store\ninformation',
+      title: l10n.storeInfoTitle,
       titleSize: 36,
       child: RefreshIndicator(
         onRefresh: () async {
@@ -35,10 +41,10 @@ class BusinessDetailsScreen extends ConsumerWidget {
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
           children: [
             if ((mid ?? '').isEmpty)
-              const EmptyState(
+              EmptyState(
                 icon: LucideIcons.triangleAlert,
-                title: 'No merchant context yet',
-                subtitle: 'Sign in again or contact support.',
+                title: l10n.commonNoMerchantContext,
+                subtitle: l10n.commonSignInAgain,
               )
             else
               AsyncSlot<Map<String, dynamic>>(
@@ -52,7 +58,7 @@ class BusinessDetailsScreen extends ConsumerWidget {
               child: Column(
                 children: [
                   Text(
-                    'Need to update your store address, MCC, or other information?',
+                    l10n.storeUpdatePrompt,
                     textAlign: TextAlign.center,
                     style: AppText.body(
                       size: 14,
@@ -64,13 +70,13 @@ class BusinessDetailsScreen extends ConsumerWidget {
                   TextButton(
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Reach us at support@pokopayng.com'),
+                        SnackBar(
+                          content: Text(l10n.storeReachUs(supportEmail)),
                         ),
                       );
                     },
                     child: Text(
-                      'Contact us',
+                      l10n.storeContactUs,
                       style: AppText.body(
                         size: 16,
                         weight: FontWeight.w600,
@@ -102,8 +108,10 @@ class _Details extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final status = _s('status');
-    final approved = (m['approved'] as bool? ?? false) ||
+    final approved =
+        (m['approved'] as bool? ?? false) ||
         (status ?? '').toUpperCase() == 'ACTIVE' ||
         (status ?? '').toUpperCase() == 'APPROVED';
     return Column(
@@ -113,38 +121,55 @@ class _Details extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                _s('merchantName') ?? 'Your store',
+                _s('merchantName') ?? l10n.storeDefaultName,
                 style: AppText.money(size: 18),
               ),
             ),
-            _StatusChip(label: status ?? (approved ? 'Active' : 'Pending'), ok: approved),
+            _StatusChip(
+              label:
+                  status ?? (approved ? l10n.statusActive : l10n.statusPending),
+              ok: approved,
+            ),
           ],
         ),
         const SizedBox(height: 20),
-        const SectionLabel('Details', uppercase: true),
-        ListCard(children: [
-          InfoRow(label: 'Name', value: _s('merchantName')),
-          InfoRow(label: 'Merchant ID', value: _s('mid'), mono: true, copyable: true),
-          InfoRow(label: 'Account code', value: _s('accountCode'), mono: true),
-          InfoRow(label: 'Business activity (MCC)', value: _s('mcc')),
-          InfoRow(
-            label: 'Address',
-            value: [
-              _s('merchantAddress'),
-              _s('lga'),
-              _s('state'),
-              _s('country'),
-            ].whereType<String>().join(', '),
-          ),
-        ]),
+        SectionLabel(l10n.storeDetails, uppercase: true),
+        ListCard(
+          children: [
+            InfoRow(label: l10n.storeName, value: _s('merchantName')),
+            InfoRow(
+              label: l10n.storeMerchantId,
+              value: _s('mid'),
+              mono: true,
+              copyable: true,
+            ),
+            InfoRow(
+              label: l10n.storeAccountCode,
+              value: _s('accountCode'),
+              mono: true,
+            ),
+            InfoRow(label: l10n.storeMcc, value: _s('mcc')),
+            InfoRow(
+              label: l10n.storeAddress,
+              value: [
+                _s('merchantAddress'),
+                _s('lga'),
+                _s('state'),
+                _s('country'),
+              ].whereType<String>().join(', '),
+            ),
+          ],
+        ),
         const SizedBox(height: 24),
-        const SectionLabel('Contact', uppercase: true),
-        ListCard(children: [
-          InfoRow(label: 'Contact name', value: _s('contactName')),
-          InfoRow(label: 'E-mail', value: _s('email')),
-          InfoRow(label: 'Phone number', value: _s('contactPhone')),
-          InfoRow(label: 'User type', value: _s('userType')),
-        ]),
+        SectionLabel(l10n.storeContact, uppercase: true),
+        ListCard(
+          children: [
+            InfoRow(label: l10n.storeContactName, value: _s('contactName')),
+            InfoRow(label: l10n.personalEmail, value: _s('email')),
+            InfoRow(label: l10n.storePhone, value: _s('contactPhone')),
+            InfoRow(label: l10n.storeUserType, value: _s('userType')),
+          ],
+        ),
       ],
     );
   }

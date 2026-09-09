@@ -26,8 +26,9 @@ class SalesPeriodNotifier extends Notifier<String> {
   void set(String value) => state = value;
 }
 
-final salesPeriodProvider =
-    NotifierProvider<SalesPeriodNotifier, String>(SalesPeriodNotifier.new);
+final salesPeriodProvider = NotifierProvider<SalesPeriodNotifier, String>(
+  SalesPeriodNotifier.new,
+);
 
 final salesReportProvider = FutureProvider<MerchantSalesReportResponse>((ref) {
   final mid = ref.watch(_midProvider);
@@ -91,8 +92,10 @@ final terminalsProvider = FutureProvider<List<String>>((ref) {
 /// Merchants the user may switch to, filtered by [query].
 final merchantListProvider =
     FutureProvider.family<List<MerchantSummaryItem>, String>((ref, query) {
-  return ref.watch(merchantRepositoryProvider).searchMerchants(search: query);
-});
+      return ref
+          .watch(merchantRepositoryProvider)
+          .searchMerchants(search: query);
+    });
 
 /// Display name for the active business: merchant profile name first,
 /// then the user's tenant, then the user's own name.
@@ -108,7 +111,9 @@ final businessNameProvider = Provider<String>((ref) {
       ? (user!.tenants.first.name ?? '')
       : '';
   if (tenant.isNotEmpty) return tenant;
-  final full =
-      [user?.firstName, user?.lastName].whereType<String>().join(' ').trim();
+  final full = [
+    user?.firstName,
+    user?.lastName,
+  ].whereType<String>().join(' ').trim();
   return full.isEmpty ? 'Your business' : full;
 });

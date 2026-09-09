@@ -30,7 +30,9 @@ class AppTheme {
           displayColor: AppColors.textPrimary,
         );
 
-    final pill = RoundedRectangleBorder(borderRadius: BorderRadius.circular(999));
+    final pill = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(999),
+    );
     InputBorder inputBorder([Color? color, double width = 0]) =>
         OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -65,15 +67,19 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surface,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         hintStyle: AppText.body(size: 16, color: AppColors.textTertiary),
         labelStyle: AppText.body(size: 14, color: AppColors.textBody),
         errorStyle: AppText.body(size: 12, color: AppColors.danger),
         border: inputBorder(),
         enabledBorder: inputBorder(),
-        focusedBorder:
-            inputBorder(AppColors.primary.withValues(alpha: 0.35), 2),
+        focusedBorder: inputBorder(
+          AppColors.primary.withValues(alpha: 0.35),
+          2,
+        ),
         errorBorder: inputBorder(AppColors.danger, 1),
         focusedErrorBorder: inputBorder(AppColors.danger, 1.5),
       ),
@@ -141,8 +147,9 @@ class AppTheme {
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
       ),
-      progressIndicatorTheme:
-          const ProgressIndicatorThemeData(color: AppColors.primary),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppColors.primary,
+      ),
     );
   }
 }

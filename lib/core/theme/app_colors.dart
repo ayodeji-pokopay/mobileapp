@@ -31,7 +31,12 @@ class AppColors {
   static const Color textPrimary = navy;
   static const Color textBody = Color(0xFF374151);
   static const Color textSecondary = Color(0xFF6B7280);
-  static const Color textTertiary = Color(0xFF9CA3AF);
+
+  /// Darkened from the design's #9CA3AF so small text passes WCAG AA (4.5:1).
+  static const Color textTertiary = Color(0xFF6F7887);
+
+  /// Decorative-only grey (icons, dividers), not for text.
+  static const Color iconMuted = Color(0xFF9CA3AF);
   static const Color textDisabled = Color(0xFFD1D5DB);
 
   // Status

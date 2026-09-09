@@ -13,8 +13,10 @@ import '../../../shared/widgets/async_slot.dart';
 import '../../../shared/widgets/bottom_nav.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
+import '../../../shared/widgets/offline_banner.dart';
 import '../../../shared/widgets/section_label.dart';
 import '../../merchant/presentation/merchant_providers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -29,6 +31,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final summary = ref.watch(summaryProvider);
     final settlements = ref.watch(settlementsProvider);
     final weekly = ref.watch(weeklySalesProvider);
@@ -54,6 +57,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
             children: [
+              const OfflineBanner(),
               _HeroCard(
                 businessName: businessName,
                 balance: summary.asData?.value.totalSettledAmount,
@@ -93,7 +97,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
               ],
               const SizedBox(height: 24),
-              const SectionLabel('Account activity', uppercase: true),
+              SectionLabel(l10n.dashboardActivity, uppercase: true),
               AsyncSlot<PageSettlementResponse>(
                 value: settlements,
                 loadingHeight: 200,
@@ -101,10 +105,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 data: (page) {
                   final items = page.content.take(8).toList();
                   if (items.isEmpty) {
-                    return const EmptyState(
+                    return EmptyState(
                       icon: LucideIcons.receipt,
-                      title: 'No activity yet',
-                      subtitle: 'Settlements will appear here once processed.',
+                      title: l10n.dashboardNoActivity,
+                      subtitle: l10n.dashboardNoActivityHint,
                     );
                   }
                   return ListCard(
@@ -151,11 +155,12 @@ class _HeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final amount = hidden
         ? '₦ ••••••'
         : loading || unavailable
-            ? '₦ —'
-            : formatMoney(balance, compact: true).replaceFirst('₦', '₦ ');
+        ? '₦ —'
+        : formatMoney(balance, compact: true).replaceFirst('₦', '₦ ');
 
     return Container(
       clipBehavior: Clip.antiAlias,
@@ -212,16 +217,20 @@ class _HeroCard extends StatelessWidget {
                       children: [
                         _GlassButton(
                           icon: hidden ? LucideIcons.eyeOff : LucideIcons.eye,
+                          label: hidden
+                              ? l10n.dashboardShowBalance
+                              : l10n.dashboardHideBalance,
                           onTap: onToggleHidden,
                         ),
                         const SizedBox(width: 8),
                         _GlassButton(
                           icon: LucideIcons.bell,
+                          label: l10n.commonNotifications,
                           badge: true,
                           onTap: () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('No new notifications.'),
+                              SnackBar(
+                                content: Text(l10n.commonNoNewNotifications),
                               ),
                             );
                           },
@@ -232,7 +241,7 @@ class _HeroCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Available balance',
+                  l10n.dashboardAvailableBalance,
                   style: AppText.body(
                     size: 14,
                     color: Colors.white.withValues(alpha: 0.75),
@@ -259,15 +268,20 @@ class _HeroCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(999),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(LucideIcons.arrowUpRight,
-                                  size: 16, color: AppColors.navy),
+                              const Icon(
+                                LucideIcons.arrowUpRight,
+                                size: 16,
+                                color: AppColors.navy,
+                              ),
                               const SizedBox(width: 8),
                               Text(
-                                'Pay',
+                                l10n.dashboardPay,
                                 style: AppText.body(
                                   size: 15,
                                   weight: FontWeight.w700,
@@ -288,8 +302,11 @@ class _HeroCard extends StatelessWidget {
                         child: const SizedBox(
                           width: 40,
                           height: 40,
-                          child: Icon(LucideIcons.plus,
-                              size: 20, color: AppColors.navy),
+                          child: Icon(
+                            LucideIcons.plus,
+                            size: 20,
+                            color: AppColors.navy,
+                          ),
                         ),
                       ),
                     ),
@@ -311,49 +328,57 @@ class _AccountPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white.withValues(alpha: 0.18),
-      borderRadius: BorderRadius.circular(999),
-      child: InkWell(
-        onTap: onTap,
+    final l10n = AppLocalizations.of(context);
+    return Semantics(
+      button: true,
+      label: l10n.dashboardOpenAccount,
+      child: Material(
+        color: Colors.white.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(999),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(6, 6, 12, 6),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.25),
-                  shape: BoxShape.circle,
-                ),
-                child: Text(
-                  initialsOf(name),
-                  style: AppText.money(size: 11, color: Colors.white),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Flexible(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 140),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(999),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(6, 6, 12, 6),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.25),
+                    shape: BoxShape.circle,
+                  ),
                   child: Text(
-                    name,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppText.body(
-                      size: 14,
-                      weight: FontWeight.w600,
-                      color: Colors.white,
+                    initialsOf(name),
+                    style: AppText.money(size: 12, color: Colors.white),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Flexible(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 140),
+                    child: Text(
+                      name,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.body(
+                        size: 14,
+                        weight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 6),
-              Icon(LucideIcons.chevronRight,
-                  size: 16, color: Colors.white.withValues(alpha: 0.7)),
-            ],
+                const SizedBox(width: 6),
+                Icon(
+                  LucideIcons.chevronRight,
+                  size: 16,
+                  color: Colors.white.withValues(alpha: 0.7),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -364,42 +389,48 @@ class _AccountPill extends StatelessWidget {
 class _GlassButton extends StatelessWidget {
   const _GlassButton({
     required this.icon,
+    required this.label,
     required this.onTap,
     this.badge = false,
   });
   final IconData icon;
+  final String label;
   final VoidCallback onTap;
   final bool badge;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white.withValues(alpha: 0.18),
-      shape: const CircleBorder(),
-      child: InkWell(
-        onTap: onTap,
-        customBorder: const CircleBorder(),
-        child: SizedBox(
-          width: 36,
-          height: 36,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Icon(icon, size: 18, color: Colors.white),
-              if (badge)
-                Positioned(
-                  top: 7,
-                  right: 7,
-                  child: Container(
-                    width: 6,
-                    height: 6,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
+    return Semantics(
+      button: true,
+      label: label,
+      child: Material(
+        color: Colors.white.withValues(alpha: 0.18),
+        shape: const CircleBorder(),
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const CircleBorder(),
+          child: SizedBox(
+            width: 36,
+            height: 36,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Icon(icon, size: 18, color: Colors.white),
+                if (badge)
+                  Positioned(
+                    top: 7,
+                    right: 7,
+                    child: Container(
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -420,8 +451,10 @@ class _GrossSalesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final s = summary.asData?.value;
-    final bars = weekly.asData?.value.dailyBreakdown
+    final bars =
+        weekly.asData?.value.dailyBreakdown
             .map((d) => (d.totalAmount ?? 0).toDouble())
             .toList() ??
         const <double>[];
@@ -435,7 +468,7 @@ class _GrossSalesCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Gross sales today',
+            l10n.dashboardGrossSalesToday,
             style: AppText.body(size: 13, color: AppColors.textTertiary),
           ),
           const SizedBox(height: 6),
@@ -448,8 +481,8 @@ class _GrossSalesCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             txns == 0
-                ? 'Ready for your first sale'
-                : '$txns ${txns == 1 ? 'transaction' : 'transactions'}',
+                ? l10n.dashboardFirstSale
+                : l10n.dashboardTransactionsToday(txns),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: AppText.body(size: 12, color: AppColors.primary),
@@ -471,8 +504,8 @@ class _Sparkline extends StatelessWidget {
     final data = values.length > 10
         ? values.sublist(values.length - 10)
         : values.isEmpty
-            ? List<double>.filled(10, 0)
-            : values;
+        ? List<double>.filled(10, 0)
+        : values;
     final max = data.fold<double>(0, (a, b) => a > b ? a : b);
     return SizedBox(
       height: 28,
@@ -484,8 +517,9 @@ class _Sparkline extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 1),
                 child: FractionallySizedBox(
-                  heightFactor:
-                      max == 0 ? 0.08 : (data[i] / max).clamp(0.08, 1.0),
+                  heightFactor: max == 0
+                      ? 0.08
+                      : (data[i] / max).clamp(0.08, 1.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: i == data.length - 1
@@ -511,6 +545,7 @@ class _SettlementsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final s = summary.asData?.value;
     final pending = (s?.pendingAmount ?? 0) > 0;
     return SurfaceCard(
@@ -521,7 +556,7 @@ class _SettlementsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Today's settlements",
+            l10n.dashboardTodaysSettlements,
             style: AppText.body(size: 13, color: AppColors.textTertiary),
           ),
           const SizedBox(height: 6),
@@ -533,7 +568,7 @@ class _SettlementsCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            pending ? 'Pending' : 'Settled',
+            pending ? l10n.dashboardPending : l10n.dashboardSettled,
             style: AppText.body(
               size: 12,
               color: pending ? AppColors.warning : AppColors.primary,
@@ -546,7 +581,7 @@ class _SettlementsCard extends StatelessWidget {
               const SizedBox(width: 4),
               Expanded(
                 child: Text(
-                  '${formatNumber(s?.totalSettlements)} settlements',
+                  l10n.dashboardSettlementsCount(s?.totalSettlements ?? 0),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppText.body(size: 12, color: AppColors.textBody),
@@ -555,7 +590,7 @@ class _SettlementsCard extends StatelessWidget {
             ],
           ),
           Text(
-            'Total to date',
+            l10n.dashboardTotalToDate,
             style: AppText.body(size: 12, color: AppColors.textTertiary),
           ),
           const SizedBox(height: 10),
@@ -563,11 +598,14 @@ class _SettlementsCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'More details',
+                l10n.dashboardMoreDetails,
                 style: AppText.body(size: 12, weight: FontWeight.w600),
               ),
-              const Icon(LucideIcons.chevronRight,
-                  size: 14, color: AppColors.textDisabled),
+              const Icon(
+                LucideIcons.chevronRight,
+                size: 14,
+                color: AppColors.textDisabled,
+              ),
             ],
           ),
         ],
@@ -582,6 +620,7 @@ class _FeedbackBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SurfaceCard(
       radius: 16,
       padding: const EdgeInsets.all(16),
@@ -596,8 +635,11 @@ class _FeedbackBanner extends StatelessWidget {
               color: AppColors.canvas,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(LucideIcons.star,
-                size: 24, color: AppColors.warning),
+            child: const Icon(
+              LucideIcons.star,
+              size: 24,
+              color: AppColors.warning,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -605,12 +647,12 @@ class _FeedbackBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "How's the new pokopay app?",
+                  l10n.feedbackTitle,
                   style: AppText.body(size: 15, weight: FontWeight.w600),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Tell us what's working well and what could be better.",
+                  l10n.feedbackBody,
                   style: AppText.body(
                     size: 13,
                     color: AppColors.textSecondary,
@@ -621,11 +663,11 @@ class _FeedbackBanner extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Thanks! Coming soon.')),
+                      SnackBar(content: Text(l10n.feedbackThanks)),
                     );
                   },
                   child: Text(
-                    'Share feedback ›',
+                    l10n.feedbackAction,
                     style: AppText.body(
                       size: 13,
                       weight: FontWeight.w600,
@@ -636,12 +678,20 @@ class _FeedbackBanner extends StatelessWidget {
               ],
             ),
           ),
-          GestureDetector(
-            onTap: onDismiss,
-            child: const Padding(
-              padding: EdgeInsets.only(top: 2),
-              child: Icon(LucideIcons.x,
-                  size: 16, color: AppColors.textTertiary),
+          Semantics(
+            button: true,
+            label: l10n.feedbackDismiss,
+            child: GestureDetector(
+              onTap: onDismiss,
+              behavior: HitTestBehavior.opaque,
+              child: const Padding(
+                padding: EdgeInsets.all(8),
+                child: Icon(
+                  LucideIcons.x,
+                  size: 16,
+                  color: AppColors.textTertiary,
+                ),
+              ),
             ),
           ),
         ],
@@ -657,12 +707,24 @@ class _ActivityRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final status = (s.status ?? 'PENDING').toUpperCase();
     final (title, bg, fg) = switch (status) {
-      'COMPLETED' =>
-        ('Settlement received', AppColors.primaryTint, AppColors.primary),
-      'FAILED' => ('Settlement failed', AppColors.dangerBg, AppColors.danger),
-      _ => ('Settlement pending', AppColors.warningBg, AppColors.warningText),
+      'COMPLETED' => (
+        l10n.activitySettlementReceived,
+        AppColors.primaryTint,
+        AppColors.primary,
+      ),
+      'FAILED' => (
+        l10n.activitySettlementFailed,
+        AppColors.dangerBg,
+        AppColors.danger,
+      ),
+      _ => (
+        l10n.activitySettlementPending,
+        AppColors.warningBg,
+        AppColors.warningText,
+      ),
     };
     final ref = s.settlementReference ?? '';
     return ListRow(
@@ -680,8 +742,10 @@ class _ActivityRow extends StatelessWidget {
         ],
       ),
       title: title,
-      subtitle: [formatDayLabel(s.settlementDate), if (ref.isNotEmpty) ref]
-          .join(' · '),
+      subtitle: [
+        formatDayLabel(s.settlementDate),
+        if (ref.isNotEmpty) ref,
+      ].join(' · '),
       trailing: Text(
         '+${formatMoney(s.netAmount)}',
         style: AppText.money(

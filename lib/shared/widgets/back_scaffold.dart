@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
 import 'round_icon_button.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 /// Page chrome from the design: round white back button, oversized
 /// Montserrat title, warm off-white canvas.
@@ -32,6 +33,7 @@ class BackScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.canvas,
       bottomNavigationBar: bottomNav,
@@ -52,6 +54,7 @@ class BackScaffold extends StatelessWidget {
                         if (showBack)
                           RoundIconButton(
                             icon: LucideIcons.arrowLeft,
+                            semanticLabel: l10n.commonBack,
                             onTap: () => context.canPop()
                                 ? context.pop()
                                 : context.go(fallbackRoute),
