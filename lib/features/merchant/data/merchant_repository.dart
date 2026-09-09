@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/models/merchant_models.dart';
+import '../../../core/cache/cache_store.dart';
+import '../../../core/connectivity/offline_status.dart';
 
 /// Lightweight merchant row from the platform merchant list.
 class MerchantSummaryItem {
@@ -18,17 +22,72 @@ class MerchantSummaryItem {
   final String status;
 }
 
+typedef CacheMiss = void Function(DateTime savedAt);
+typedef VoidCallback = void Function();
+
 class MerchantRepository {
-  MerchantRepository(this._api);
+  MerchantRepository(
+    this._api, {
+    CacheStore? cache,
+    this.onServedFromCache,
+    this.onFresh,
+  }) : _cache = cache;
 
   final ApiClient _api;
+  final CacheStore? _cache;
+  final CacheMiss? onServedFromCache;
+  final VoidCallback? onFresh;
 
-  Future<MerchantSettlementSummary> fetchSummary({String? mid}) async {
-    final res = await _api.dio.get<Map<String, dynamic>>(
-      '/api/v1/merchant/reports/summary',
-      queryParameters: {if (mid != null) 'mid': mid},
+  /// Runs [fetch]; on success caches the JSON under [key]. If the network is
+  /// unreachable and a cached copy exists, returns that instead and reports
+  /// it through [onServedFromCache].
+  Future<T> _cached<T>(
+    String key,
+    Future<Map<String, dynamic>> Function() fetch,
+    T Function(Map<String, dynamic> json) parse,
+  ) async {
+    try {
+      final json = await fetch();
+      await _cache?.write(key, json);
+      onFresh?.call();
+      return parse(json);
+    } on DioException catch (e) {
+      if (_cache != null && isOffline(e)) {
+        final entry = await _cache.read(key);
+        if (entry != null) {
+          onServedFromCache?.call(entry.savedAt);
+          return parse(entry.json);
+        }
+      }
+      rethrow;
+    }
+  }
+
+  static bool isOffline(DioException e) {
+    switch (e.type) {
+      case DioExceptionType.connectionError:
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.receiveTimeout:
+      case DioExceptionType.sendTimeout:
+        return true;
+      case DioExceptionType.unknown:
+        return e.error is SocketException;
+      default:
+        return false;
+    }
+  }
+
+  Future<MerchantSettlementSummary> fetchSummary({String? mid}) {
+    return _cached(
+      'summary:$mid',
+      () async =>
+          (await _api.dio.get<Map<String, dynamic>>(
+            '/api/v1/merchant/reports/summary',
+            queryParameters: {if (mid != null) 'mid': mid},
+          )).data ??
+          const {},
+      MerchantSettlementSummary.fromJson,
     );
-    return MerchantSettlementSummary.fromJson(res.data ?? const {});
   }
 
   Future<MerchantSalesReportResponse> fetchSales({
@@ -37,18 +96,27 @@ class MerchantRepository {
     String period = 'WEEKLY',
     DateTime? startDate,
     DateTime? endDate,
-  }) async {
-    final res = await _api.dio.get<Map<String, dynamic>>(
-      '/api/v1/merchant/reports/sales',
-      queryParameters: {
-        if (mid != null) 'mid': mid,
-        if (tid != null) 'tid': tid,
-        'period': period,
-        if (startDate != null) 'startDate': _formatDate(startDate),
-        if (endDate != null) 'endDate': _formatDate(endDate),
-      },
+  }) {
+    final key =
+        'sales:$mid:$tid:$period:'
+        '${startDate == null ? '' : _formatDate(startDate)}:'
+        '${endDate == null ? '' : _formatDate(endDate)}';
+    return _cached(
+      key,
+      () async =>
+          (await _api.dio.get<Map<String, dynamic>>(
+            '/api/v1/merchant/reports/sales',
+            queryParameters: {
+              if (mid != null) 'mid': mid,
+              if (tid != null) 'tid': tid,
+              'period': period,
+              if (startDate != null) 'startDate': _formatDate(startDate),
+              if (endDate != null) 'endDate': _formatDate(endDate),
+            },
+          )).data ??
+          const {},
+      MerchantSalesReportResponse.fromJson,
     );
-    return MerchantSalesReportResponse.fromJson(res.data ?? const {});
   }
 
   Future<PageSettlementResponse> fetchSettlements({
@@ -57,18 +125,27 @@ class MerchantRepository {
     DateTime? endDate,
     int page = 0,
     int size = 20,
-  }) async {
-    final res = await _api.dio.get<Map<String, dynamic>>(
-      '/api/v1/merchant/reports/settlements',
-      queryParameters: {
-        if (mid != null) 'mid': mid,
-        if (startDate != null) 'startDate': _formatDate(startDate),
-        if (endDate != null) 'endDate': _formatDate(endDate),
-        'page': page,
-        'size': size,
-      },
+  }) {
+    final key =
+        'settlements:$mid:$page:$size:'
+        '${startDate == null ? '' : _formatDate(startDate)}:'
+        '${endDate == null ? '' : _formatDate(endDate)}';
+    return _cached(
+      key,
+      () async =>
+          (await _api.dio.get<Map<String, dynamic>>(
+            '/api/v1/merchant/reports/settlements',
+            queryParameters: {
+              if (mid != null) 'mid': mid,
+              if (startDate != null) 'startDate': _formatDate(startDate),
+              if (endDate != null) 'endDate': _formatDate(endDate),
+              'page': page,
+              'size': size,
+            },
+          )).data ??
+          const {},
+      PageSettlementResponse.fromJson,
     );
-    return PageSettlementResponse.fromJson(res.data ?? const {});
   }
 
   Future<SettlementResponse> fetchSettlement(String reference) async {
@@ -78,12 +155,21 @@ class MerchantRepository {
     return SettlementResponse.fromJson(res.data ?? const {});
   }
 
-  Future<List<String>> fetchTerminals({String? mid}) async {
-    final res = await _api.dio.get<List<dynamic>>(
-      '/api/v1/merchant/reports/terminals',
-      queryParameters: {if (mid != null) 'mid': mid},
+  Future<List<String>> fetchTerminals({String? mid}) {
+    return _cached(
+      'terminals:$mid',
+      () async => {
+        'items':
+            (await _api.dio.get<List<dynamic>>(
+              '/api/v1/merchant/reports/terminals',
+              queryParameters: {if (mid != null) 'mid': mid},
+            )).data ??
+            const [],
+      },
+      (json) => ((json['items'] as List?) ?? const [])
+          .map((e) => e.toString())
+          .toList(),
     );
-    return (res.data ?? const []).map((e) => e.toString()).toList();
   }
 
   /// Merchants visible to the signed-in user (admins see all).
@@ -114,11 +200,16 @@ class MerchantRepository {
     ].where((m) => m.mid.isNotEmpty).toList();
   }
 
-  Future<Map<String, dynamic>> fetchMerchantByMid(String mid) async {
-    final res = await _api.dio.get<Map<String, dynamic>>(
-      '/api/v1/merchants/mid/$mid',
+  Future<Map<String, dynamic>> fetchMerchantByMid(String mid) {
+    return _cached(
+      'merchant:$mid',
+      () async =>
+          (await _api.dio.get<Map<String, dynamic>>(
+            '/api/v1/merchants/mid/$mid',
+          )).data ??
+          const {},
+      (json) => json,
     );
-    return res.data ?? const {};
   }
 
   String _formatDate(DateTime d) =>
@@ -128,7 +219,13 @@ class MerchantRepository {
 }
 
 final merchantRepositoryProvider = Provider<MerchantRepository>((ref) {
-  return MerchantRepository(ref.watch(apiClientProvider));
+  return MerchantRepository(
+    ref.watch(apiClientProvider),
+    cache: ref.watch(cacheStoreProvider),
+    onServedFromCache: (savedAt) =>
+        ref.read(offlineStatusProvider.notifier).servedFromCache(savedAt),
+    onFresh: () => ref.read(offlineStatusProvider.notifier).online(),
+  );
 });
 
 class ApiError implements Exception {

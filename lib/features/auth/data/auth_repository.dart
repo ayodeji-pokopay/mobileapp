@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/models/auth_models.dart';
+import '../../../core/cache/cache_store.dart';
 import '../../../core/storage/secure_storage.dart';
 
 class AuthException implements Exception {
@@ -13,10 +14,12 @@ class AuthException implements Exception {
 }
 
 class AuthRepository {
-  AuthRepository(this._api, this._storage);
+  AuthRepository(this._api, this._storage, {CacheStore? cache})
+    : _cache = cache;
 
   final ApiClient _api;
   final SecureStorage _storage;
+  final CacheStore? _cache;
 
   Future<AuthResponse> login({
     required String email,
@@ -44,8 +47,7 @@ class AuthRepository {
 
   Future<UserInfoResponse?> me() async {
     try {
-      final res =
-          await _api.dio.get<Map<String, dynamic>>('/api/v1/auth/me');
+      final res = await _api.dio.get<Map<String, dynamic>>('/api/v1/auth/me');
       if (res.data == null) return null;
       return UserInfoResponse.fromJson(res.data!);
     } on DioException {
@@ -120,6 +122,7 @@ class AuthRepository {
       // ignore network errors on logout
     } finally {
       await _storage.clear();
+      await _cache?.clear();
     }
   }
 
@@ -138,5 +141,6 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(
     ref.watch(apiClientProvider),
     ref.watch(secureStorageProvider),
+    cache: ref.watch(cacheStoreProvider),
   );
 });

@@ -33,6 +33,7 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) async {
+        if (options.extra['skipAuth'] == true) return handler.next(options);
         final token = await storage.readAccessToken();
         if (token != null && token.isNotEmpty) {
           options.headers['Authorization'] = 'Bearer $token';

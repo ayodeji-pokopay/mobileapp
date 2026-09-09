@@ -1,29 +1,70 @@
 import 'package:intl/intl.dart';
 
-const _naira = '\u20A6';
+/// Currency settings applied to every money string in the app. Defaults to
+/// Nigerian Naira; `appConfigProvider` overrides them from remote config.
+class MoneyFormat {
+  MoneyFormat._();
 
-final _currency = NumberFormat.currency(symbol: _naira, decimalDigits: 2);
-final _currencyCompact =
-    NumberFormat.currency(symbol: _naira, decimalDigits: 0);
-final _number = NumberFormat.decimalPattern();
+  static String symbol = '\u20A6';
+  static String code = 'NGN';
+  static String locale = 'en_NG';
+
+  static NumberFormat _currency = NumberFormat.currency(
+    symbol: symbol,
+    decimalDigits: 2,
+    locale: 'en',
+  );
+  static NumberFormat _whole = NumberFormat.currency(
+    symbol: symbol,
+    decimalDigits: 0,
+    locale: 'en',
+  );
+  static NumberFormat _number = NumberFormat.decimalPattern('en');
+
+  static void configure({String? symbol, String? code, String? locale}) {
+    MoneyFormat.symbol = symbol ?? MoneyFormat.symbol;
+    MoneyFormat.code = code ?? MoneyFormat.code;
+    MoneyFormat.locale = locale ?? MoneyFormat.locale;
+    // intl only knows locales it has data for; fall back to plain English
+    // digits/grouping for anything unusual.
+    final loc = _supported(MoneyFormat.locale);
+    _currency = NumberFormat.currency(
+      symbol: MoneyFormat.symbol,
+      decimalDigits: 2,
+      locale: loc,
+    );
+    _whole = NumberFormat.currency(
+      symbol: MoneyFormat.symbol,
+      decimalDigits: 0,
+      locale: loc,
+    );
+    _number = NumberFormat.decimalPattern(loc);
+  }
+
+  static String _supported(String locale) {
+    try {
+      NumberFormat.decimalPattern(locale);
+      return locale;
+    } catch (_) {
+      return 'en';
+    }
+  }
+}
 
 String formatMoney(num? v, {bool compact = false}) {
-  if (v == null) return '${_naira}0';
-  return (compact ? _currencyCompact : _currency).format(v);
+  if (v == null) return '${MoneyFormat.symbol}0';
+  return (compact ? MoneyFormat._whole : MoneyFormat._currency).format(v);
 }
 
 String formatMoneyCompact(num? v) {
-  if (v == null) return '${_naira}0';
-  if (v.abs() >= 1000000) {
-    return '$_naira${(v / 1000000).toStringAsFixed(1)}M';
-  }
-  if (v.abs() >= 1000) {
-    return '$_naira${(v / 1000).toStringAsFixed(1)}K';
-  }
-  return '$_naira${v.toStringAsFixed(0)}';
+  final s = MoneyFormat.symbol;
+  if (v == null) return '${s}0';
+  if (v.abs() >= 1000000) return '$s${(v / 1000000).toStringAsFixed(1)}M';
+  if (v.abs() >= 1000) return '$s${(v / 1000).toStringAsFixed(1)}K';
+  return '$s${v.toStringAsFixed(0)}';
 }
 
-String formatNumber(num? v) => v == null ? '0' : _number.format(v);
+String formatNumber(num? v) => v == null ? '0' : MoneyFormat._number.format(v);
 
 String formatPercentDelta(num? v) {
   if (v == null) return '0%';
@@ -86,4 +127,13 @@ String formatDayMonth(String? iso) {
 int? yearOf(String? iso) {
   if (iso == null || iso.isEmpty) return null;
   return DateTime.tryParse(iso)?.year;
+}
+
+/// "just now", "12 min ago", "3 h ago", "2 days ago".
+String formatRelativeTime(DateTime t, {DateTime? now}) {
+  final diff = (now ?? DateTime.now()).difference(t);
+  if (diff.inMinutes < 1) return 'just now';
+  if (diff.inMinutes < 60) return '${diff.inMinutes} min ago';
+  if (diff.inHours < 24) return '${diff.inHours} h ago';
+  return '${diff.inDays} ${diff.inDays == 1 ? 'day' : 'days'} ago';
 }
