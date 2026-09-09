@@ -27,13 +27,22 @@ flutter pub get
 flutter run
 ```
 
-The app talks to `https://api.pokopayng.com` by default. To point it at another backend (staging, a local server, a tunnel), pass a compile-time define:
+The app talks to `https://api.pokopayng.com` by default. Everything environment-specific is a compile-time define; there is no `.env` file.
+
+| Define | Purpose | Default |
+|---|---|---|
+| `API_BASE_URL` | Backend base URL (staging, local, tunnel) | `https://api.pokopayng.com` |
+| `SENTRY_DSN` | Enables crash reporting when set | empty (reporting off) |
+| `APP_ENV` | Environment tag on Sentry events | `development` |
+| `START_ROUTE` | Screen to open right after sign-in, for screenshots | empty (dashboard) |
 
 ```bash
-flutter run --dart-define=API_BASE_URL=https://staging.api.example.com
+flutter run --dart-define=API_BASE_URL=https://staging.api.example.com \
+            --dart-define=SENTRY_DSN=https://...@sentry.io/... \
+            --dart-define=APP_ENV=staging
 ```
 
-The same flag works with `flutter build`. There is no `.env` file; the base URL is resolved in [api_client.dart](lib/core/api/api_client.dart).
+The same flags work with `flutter build`.
 
 To open the app on a specific screen right after sign-in (handy for screenshots), pass `--dart-define=START_ROUTE=/wallet`.
 
@@ -43,8 +52,11 @@ To open the app on a specific screen right after sign-in (handy for screenshots)
 # Static analysis (flutter_lints)
 flutter analyze
 
-# Tests (the test/ directory is currently empty)
+# Tests (unit + widget)
 flutter test
+
+# Regenerate localizations after editing lib/l10n/app_en.arb
+flutter gen-l10n
 
 # Regenerate freezed / json_serializable code after editing a model
 dart run build_runner build --delete-conflicting-outputs
@@ -63,12 +75,15 @@ flutter build ipa --release
 
 ```
 lib/
-├── main.dart                     # ProviderScope + MaterialApp.router
+├── main.dart                     # Sentry init, ProviderScope, MaterialApp.router, AppGate
 ├── core/
 │   ├── api/
 │   │   ├── api_client.dart       # Dio setup, base URL, auth interceptor
 │   │   └── models/               # freezed request/response models (+ generated *.g.dart / *.freezed.dart)
 │   ├── biometric/                # local_auth wrapper
+│   ├── cache/cache_store.dart    # JSON cache on shared_preferences for offline reads
+│   ├── config/                   # AppConfig (remote), AppGate (force update / maintenance)
+│   ├── connectivity/             # Offline status + connectivity stream
 │   ├── router/app_router.dart    # Route table + auth redirect logic
 │   ├── storage/secure_storage.dart
 │   └── theme/                    # AppColors (design tokens), AppText (Montserrat / DM Sans), AppTheme
@@ -82,9 +97,16 @@ lib/
 │   ├── splash/
 │   ├── stores/                   # Store profile + card machines (terminals)
 │   └── wallet/                   # Balance card, next payout, payouts/fees history
+├── l10n/
+│   ├── app_en.arb                # All user-facing strings (source of truth)
+│   └── generated/                # flutter gen-l10n output, git-ignored
 └── shared/
-    ├── format.dart               # formatMoney, formatDate, formatDayLabel, ...
+    ├── format.dart               # MoneyFormat + formatMoney, formatDate, formatDayLabel, ...
     └── widgets/                  # See "Design system" below
+test/
+├── helpers/fakes.dart            # FakeAdapter (Dio), FakeSecureStorage
+├── shared/, core/, features/     # Unit tests
+└── widget/                       # Widget tests (login)
 ```
 
 Each feature follows a light `data/` (repositories, talk to the API) and `presentation/` (screens, controllers, providers) split. Repositories are exposed as Riverpod providers and injected via `ref`.
@@ -118,6 +140,22 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 5. Logout calls `POST /api/v1/auth/logout` (errors ignored) and clears all stored tokens and biometric credentials.
 
 **Biometric sign-in.** When the user opts in at login, the email and password are saved in platform secure storage. "Use Biometrics" prompts with `local_auth`, and on success replays a normal password login with the saved credentials. Note that this is credential replay, not a device-bound token; keep that in mind if the backend later offers refresh tokens or device keys.
+
+## Operations
+
+**Crash reporting.** Sentry, enabled only when `SENTRY_DSN` is passed at build time. Request bodies are stripped before sending and PII is off. Create a free Sentry project, copy its DSN, and pass it in your release build command.
+
+**Force update and maintenance.** On launch the app fetches `GET /api/v1/app/config` (see the backend brief). If the installed version is below `minSupportedVersion` or `forceUpdate` is true, a blocking update screen replaces the app. If `maintenance.enabled` is true, a strip appears above every screen. Until the endpoint exists the app falls back to the last cached config, then to permissive defaults.
+
+**Offline.** Every merchant read (summary, sales, settlements, terminals, profile) stores its last successful JSON in `CacheStore`. When the network is unreachable, the cached copy is served and an "Offline · showing data saved…" banner appears on the data screens. When connectivity returns, providers refetch automatically. Cache is cleared on logout.
+
+**Localisation.** Strings live in `lib/l10n/app_en.arb`. To add a language, copy it to `app_<code>.arb`, translate, and run `flutter gen-l10n`. Currency symbol, code, and locale come from remote config (`currency`) via `MoneyFormat.configure`, defaulting to Naira.
+
+**Accessibility.** Icon-only buttons carry semantic labels, touch targets are at least 44 pt, body text never drops below 12 pt, and tertiary text uses a grey that passes WCAG AA on white.
+
+**CI.** `.github/workflows/ci.yml` runs analyze, tests, and a debug APK build on every push and PR, plus an unsigned iOS build on `main`.
+
+**Store assets.** Listing copy, privacy policy, data-safety answers, and screenshots are in `store/`.
 
 ## Backend endpoints used
 
@@ -181,8 +219,10 @@ Reusable pieces in `lib/shared/widgets/`:
 
 ## Known gaps
 
-- No automated tests yet.
+- Release signing is not set up (still in development). See `store/README.md`.
+- Data-layer error messages (for example "Invalid email or password") are English-only; UI strings are localised.
 - Export, payment links, "New sale", withdraw, preferences, and report recipients show a "Coming soon" or informational message; there are no backend endpoints for them yet.
 - Wallet fee rows are derived from each settlement's `settlementFee`; there is no separate fee ledger endpoint.
 - Report e-mail toggles on the Settings screen are stored locally with `shared_preferences` and are not yet synced to the backend.
+- The remote config, transactions, wallet, and other endpoints in the backend brief do not exist yet; the app degrades gracefully without them.
 - Refresh tokens are stored but not yet used to renew an expired session; a `401` simply logs the user out.
