@@ -132,7 +132,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         const SizedBox(height: 32),
                         const Center(child: PokopayMark()),
                         const SizedBox(height: 44),
-                        Text(l10n.loginWelcome, style: AppText.display()),
+                        Text(
+                          l10n.loginWelcome,
+                          style: AppText.display(size: 34),
+                        ),
                         const SizedBox(height: 8),
                         Text(
                           l10n.loginSubtitle,

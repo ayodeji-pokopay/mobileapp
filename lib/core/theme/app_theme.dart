@@ -89,7 +89,7 @@ class AppTheme {
           foregroundColor: Colors.white,
           disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.6),
           disabledForegroundColor: Colors.white,
-          minimumSize: const Size.fromHeight(54),
+          minimumSize: const Size.fromHeight(50),
           elevation: 0,
           shadowColor: Colors.transparent,
           textStyle: AppText.body(size: 16, weight: FontWeight.w700),
@@ -100,7 +100,7 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           backgroundColor: AppColors.surface,
           foregroundColor: AppColors.navy,
-          minimumSize: const Size.fromHeight(54),
+          minimumSize: const Size.fromHeight(50),
           side: BorderSide.none,
           shape: pill,
           textStyle: AppText.body(size: 16, weight: FontWeight.w600),

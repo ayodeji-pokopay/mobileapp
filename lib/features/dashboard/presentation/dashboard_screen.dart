@@ -70,7 +70,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 onPay: () => context.go(AppRoutes.wallet),
                 onAdd: () => context.push(AppRoutes.settlements),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -81,7 +81,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       onTap: () => context.go(AppRoutes.reports),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: _SettlementsCard(
                       summary: summary,
@@ -91,12 +91,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ],
               ),
               if (_showFeedback) ...[
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 _FeedbackBanner(
                   onDismiss: () => setState(() => _showFeedback = false),
                 ),
               ],
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               SectionLabel(l10n.dashboardActivity, uppercase: true),
               AsyncSlot<PageSettlementResponse>(
                 value: settlements,
@@ -165,7 +165,7 @@ class _HeroCard extends StatelessWidget {
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -197,7 +197,7 @@ class _HeroCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -239,25 +239,25 @@ class _HeroCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 14),
                 Text(
                   l10n.dashboardAvailableBalance,
                   style: AppText.body(
-                    size: 14,
+                    size: 13,
                     color: Colors.white.withValues(alpha: 0.75),
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 Text(
                   amount,
                   style: AppText.display(
-                    size: 42,
+                    size: 32,
                     color: Colors.white,
-                    letterSpacing: -1.3,
+                    letterSpacing: -1,
                     height: 1,
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     Material(
@@ -268,14 +268,14 @@ class _HeroCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(999),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10,
+                            horizontal: 16,
+                            vertical: 8,
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Icon(
-                                LucideIcons.arrowUpRight,
+                                LucideIcons.wallet,
                                 size: 16,
                                 color: AppColors.navy,
                               ),
@@ -283,7 +283,7 @@ class _HeroCard extends StatelessWidget {
                               Text(
                                 l10n.dashboardPay,
                                 style: AppText.body(
-                                  size: 15,
+                                  size: 14,
                                   weight: FontWeight.w700,
                                 ),
                               ),
@@ -300,11 +300,11 @@ class _HeroCard extends StatelessWidget {
                         onTap: onAdd,
                         customBorder: const CircleBorder(),
                         child: const SizedBox(
-                          width: 40,
-                          height: 40,
+                          width: 36,
+                          height: 36,
                           child: Icon(
-                            LucideIcons.plus,
-                            size: 20,
+                            LucideIcons.arrowLeftRight,
+                            size: 18,
                             color: AppColors.navy,
                           ),
                         ),
@@ -344,8 +344,8 @@ class _AccountPill extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: 32,
-                  height: 32,
+                  width: 28,
+                  height: 28,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.25),
@@ -364,7 +364,7 @@ class _AccountPill extends StatelessWidget {
                       name,
                       overflow: TextOverflow.ellipsis,
                       style: AppText.body(
-                        size: 14,
+                        size: 13,
                         weight: FontWeight.w600,
                         color: Colors.white,
                       ),
@@ -410,12 +410,12 @@ class _GlassButton extends StatelessWidget {
           onTap: onTap,
           customBorder: const CircleBorder(),
           child: SizedBox(
-            width: 36,
-            height: 36,
+            width: 32,
+            height: 32,
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Icon(icon, size: 18, color: Colors.white),
+                Icon(icon, size: 16, color: Colors.white),
                 if (badge)
                   Positioned(
                     top: 7,
@@ -461,22 +461,22 @@ class _GrossSalesCard extends StatelessWidget {
     final txns = s?.todayTransactions ?? 0;
 
     return SurfaceCard(
-      radius: 16,
-      padding: const EdgeInsets.all(16),
+      radius: 14,
+      padding: const EdgeInsets.all(14),
       onTap: onTap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             l10n.dashboardGrossSalesToday,
-            style: AppText.body(size: 13, color: AppColors.textTertiary),
+            style: AppText.body(size: 12, color: AppColors.textTertiary),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(
             summary.hasValue ? formatMoney(s?.todaySales) : '—',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppText.money(size: 22),
+            style: AppText.money(size: 18),
           ),
           const SizedBox(height: 4),
           Text(
@@ -487,7 +487,7 @@ class _GrossSalesCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: AppText.body(size: 12, color: AppColors.primary),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           _Sparkline(values: bars),
         ],
       ),
@@ -508,7 +508,7 @@ class _Sparkline extends StatelessWidget {
         : values;
     final max = data.fold<double>(0, (a, b) => a > b ? a : b);
     return SizedBox(
-      height: 28,
+      height: 22,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -549,22 +549,22 @@ class _SettlementsCard extends StatelessWidget {
     final s = summary.asData?.value;
     final pending = (s?.pendingAmount ?? 0) > 0;
     return SurfaceCard(
-      radius: 16,
-      padding: const EdgeInsets.all(16),
+      radius: 14,
+      padding: const EdgeInsets.all(14),
       onTap: onTap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             l10n.dashboardTodaysSettlements,
-            style: AppText.body(size: 13, color: AppColors.textTertiary),
+            style: AppText.body(size: 12, color: AppColors.textTertiary),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(
             summary.hasValue ? formatMoney(s?.pendingAmount) : '—',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppText.money(size: 22),
+            style: AppText.money(size: 18),
           ),
           const SizedBox(height: 4),
           Text(
@@ -622,14 +622,14 @@ class _FeedbackBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return SurfaceCard(
-      radius: 16,
-      padding: const EdgeInsets.all(16),
+      radius: 14,
+      padding: const EdgeInsets.all(12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 56,
-            height: 56,
+            width: 40,
+            height: 40,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: AppColors.canvas,
@@ -648,13 +648,13 @@ class _FeedbackBanner extends StatelessWidget {
               children: [
                 Text(
                   l10n.feedbackTitle,
-                  style: AppText.body(size: 15, weight: FontWeight.w600),
+                  style: AppText.body(size: 14, weight: FontWeight.w600),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   l10n.feedbackBody,
                   style: AppText.body(
-                    size: 13,
+                    size: 12.5,
                     color: AppColors.textSecondary,
                     height: 1.4,
                   ),

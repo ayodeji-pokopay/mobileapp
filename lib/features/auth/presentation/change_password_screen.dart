@@ -67,12 +67,12 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     final l10n = AppLocalizations.of(context);
     return BackScaffold(
       title: l10n.changePasswordTitle,
-      titleSize: 36,
+      titleSize: 28,
       subtitle: l10n.changePasswordSubtitle,
       child: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
           children: [
             _Label(l10n.changePasswordCurrent),
             const SizedBox(height: 8),

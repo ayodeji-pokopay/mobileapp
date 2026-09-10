@@ -16,9 +16,9 @@ class PersonalInfoScreen extends ConsumerWidget {
     final user = ref.watch(authControllerProvider).user;
     return BackScaffold(
       title: l10n.personalTitle,
-      titleSize: 36,
+      titleSize: 28,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         children: [
           ListCard(
             children: [

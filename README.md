@@ -93,7 +93,7 @@ lib/
 │   ├── dashboard/                # Home screen: balance, latest payout, recent settlements
 │   ├── merchant/                 # MerchantRepository + Riverpod providers for reports/settlements
 │   ├── reports/                  # Sales report by period (daily/weekly/monthly)
-│   ├── settlements/              # "Statements and Billing": settlement history + detail sheet
+│   ├── settlements/              # Settlements: payout history + detail sheet
 │   ├── settings/                 # Profile, business details, report preferences
 │   ├── splash/
 │   ├── stores/                   # Store profile + card machines (terminals)
@@ -122,9 +122,9 @@ Defined in [app_router.dart](lib/core/router/app_router.dart) as `AppRoutes` con
 | `/login` | Login, with optional biometric sign-in |
 | `/dashboard` | Home |
 | `/reports` | Sales report |
-| `/settlements` | Settlement history |
+| `/settlements` | Settlements (payout history) |
 | `/wallet` | Wallet / balance |
-| `/stores` | Store profile and card machines |
+| `/stores` | My business: profile and POS terminals |
 | `/settings` | Settings hub |
 | `/settings/personal` | Personal info |
 | `/settings/business` | Business details |

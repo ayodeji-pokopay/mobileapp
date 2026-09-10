@@ -35,7 +35,7 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
 
     return BackScaffold(
       title: l10n.settlementsTitle,
-      titleSize: 38,
+      titleSize: 30,
       child: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(settlementsProvider);
@@ -44,7 +44,7 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
           children: [
             const OfflineBanner(),
             SegmentedControl(

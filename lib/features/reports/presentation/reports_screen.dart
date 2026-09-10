@@ -61,14 +61,14 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(l10n.salesTitle, style: AppText.display(size: 32)),
+                      Text(l10n.salesTitle, style: AppText.display(size: 28)),
                       _PlusMenu(
                         tooltip: l10n.salesAdd,
                         newSale: l10n.salesNewSale,
@@ -157,8 +157,8 @@ class _PlusMenu extends StatelessWidget {
         ),
       ],
       child: Container(
-        width: 48,
-        height: 48,
+        width: 42,
+        height: 42,
         decoration: BoxDecoration(
           color: AppColors.primary,
           shape: BoxShape.circle,
@@ -170,7 +170,7 @@ class _PlusMenu extends StatelessWidget {
             ),
           ],
         ),
-        child: const Icon(LucideIcons.plus, size: 24, color: Colors.white),
+        child: const Icon(LucideIcons.plus, size: 22, color: Colors.white),
       ),
     );
   }
@@ -223,7 +223,7 @@ class _Overview extends StatelessWidget {
       onRefresh: onRefresh,
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         children: [
           const OfflineBanner(),
           PillTabs(
@@ -244,8 +244,8 @@ class _Overview extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           SurfaceCard(
-            radius: 16,
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            radius: 14,
+            padding: const EdgeInsets.symmetric(vertical: 13),
             onTap: onGoTransactions,
             child: Center(
               child: Text(
@@ -314,7 +314,7 @@ class _GrossSalesCard extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               formatMoney(r.totalSales),
-              style: AppText.display(size: 36, height: 1),
+              style: AppText.display(size: 22, height: 1),
             ),
           ),
           const SizedBox(height: 5),
@@ -559,7 +559,7 @@ class _BigStat extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             value,
-            style: AppText.display(size: 24, color: color, height: 1),
+            style: AppText.display(size: 20, color: color, height: 1),
           ),
         ),
         const SizedBox(height: 8),
@@ -694,7 +694,7 @@ class _ExportCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             formatMoney(r.netAmount),
-            style: AppText.display(size: 28, height: 1),
+            style: AppText.display(size: 22, height: 1),
           ),
           const SizedBox(height: 4),
           Text(
@@ -753,7 +753,7 @@ class _Transactions extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return ListView(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
       children: [
         TextField(
           onChanged: onSearch,

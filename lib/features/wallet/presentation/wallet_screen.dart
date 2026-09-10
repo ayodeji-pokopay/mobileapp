@@ -48,7 +48,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
           children: [
             const OfflineBanner(),
             AsyncSlot<MerchantSettlementSummary>(
@@ -186,10 +186,10 @@ class _BalanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.navy,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,10 +207,10 @@ class _BalanceCard extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               formatMoney(summary.totalSettledAmount),
-              style: AppText.display(size: 38, color: Colors.white, height: 1),
+              style: AppText.display(size: 30, color: Colors.white, height: 1),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 14),
           Row(
             children: [
               Expanded(
@@ -232,7 +232,7 @@ class _BalanceCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -275,10 +275,10 @@ class _StatTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -297,7 +297,7 @@ class _StatTile extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          Text(value, style: AppText.money(size: 18, color: Colors.white)),
+          Text(value, style: AppText.money(size: 16, color: Colors.white)),
         ],
       ),
     );
@@ -325,7 +325,7 @@ class _DarkButton extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -358,8 +358,8 @@ class _NextPayoutCard extends StatelessWidget {
     final status = (s.status ?? 'PENDING').toLowerCase();
     final pending = status != 'completed';
     return SurfaceCard(
-      radius: 16,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      radius: 14,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       onTap: onTap,
       child: Row(
         children: [

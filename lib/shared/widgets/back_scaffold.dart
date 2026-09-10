@@ -16,7 +16,7 @@ class BackScaffold extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.bottomNav,
-    this.titleSize = 42,
+    this.titleSize = 32,
     this.showBack = true,
     this.fallbackRoute = '/dashboard',
     required this.child,
@@ -43,7 +43,7 @@ class BackScaffold extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -64,7 +64,7 @@ class BackScaffold extends StatelessWidget {
                         if (trailing != null) trailing!,
                       ],
                     ),
-                  SizedBox(height: showBack || trailing != null ? 20 : 4),
+                  SizedBox(height: showBack || trailing != null ? 14 : 4),
                   Text(title, style: AppText.display(size: titleSize)),
                   if (subtitle != null) ...[
                     const SizedBox(height: 6),

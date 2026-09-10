@@ -46,8 +46,8 @@ class SurfaceCard extends StatelessWidget {
   const SurfaceCard({
     super.key,
     required this.child,
-    this.padding = const EdgeInsets.all(20),
-    this.radius = 24,
+    this.padding = const EdgeInsets.all(16),
+    this.radius = 18,
     this.color = AppColors.surface,
     this.onTap,
   });
@@ -93,7 +93,7 @@ class ListRow extends StatelessWidget {
     this.onTap,
     this.titleColor = AppColors.navy,
     this.chevron,
-    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
   });
 
   final Widget? leading;
@@ -122,7 +122,7 @@ class ListRow extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppText.body(
-                    size: 15,
+                    size: 14.5,
                     weight: FontWeight.w600,
                     color: titleColor,
                   ),
@@ -134,7 +134,7 @@ class ListRow extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: AppText.body(
-                      size: 13,
+                      size: 12.5,
                       color: AppColors.textTertiary,
                       height: 1.35,
                     ),

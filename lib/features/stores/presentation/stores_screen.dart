@@ -42,7 +42,7 @@ class StoresScreen extends ConsumerWidget {
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
           children: [
             AsyncSlot<Map<String, dynamic>>(
               value: profile,
