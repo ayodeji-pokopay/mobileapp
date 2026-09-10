@@ -20,12 +20,14 @@ void main() {
     });
     final dio = Dio(options)..httpClientAdapter = adapter;
     final bare = Dio(options)..httpClientAdapter = adapter;
-    dio.interceptors.add(AuthInterceptor(
-      storage: storage,
-      refresher: TokenRefresher(dio: bare, storage: storage),
-      dio: dio,
-      onSessionExpired: () => expired++,
-    ));
+    dio.interceptors.add(
+      AuthInterceptor(
+        storage: storage,
+        refresher: TokenRefresher(dio: bare, storage: storage),
+        dio: dio,
+        onSessionExpired: () => expired++,
+      ),
+    );
     return dio;
   }
 
@@ -48,7 +50,11 @@ void main() {
     final dio = build((o) async {
       if (o.path == '/api/v1/auth/refresh') {
         expect(o.data, {'refreshToken': 'R1'});
-        return json({'accessToken': 'NEW', 'refreshToken': 'R2', 'expiresIn': 900});
+        return json({
+          'accessToken': 'NEW',
+          'refreshToken': 'R2',
+          'expiresIn': 900,
+        });
       }
       final auth = o.headers['Authorization'];
       return auth == 'Bearer NEW' ? json({'ok': true}) : json({}, status: 401);
@@ -102,8 +108,9 @@ void main() {
   test('refreshes proactively when the token is about to expire', () async {
     storage.data['access'] = 'OLD';
     storage.data['refresh'] = 'R1';
-    storage.data['expiry'] =
-        DateTime.now().add(const Duration(seconds: 10)).toIso8601String();
+    storage.data['expiry'] = DateTime.now()
+        .add(const Duration(seconds: 10))
+        .toIso8601String();
     final dio = build((o) async {
       if (o.path == '/api/v1/auth/refresh') {
         return json({'accessToken': 'NEW', 'expiresIn': 900});

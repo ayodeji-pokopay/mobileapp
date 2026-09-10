@@ -1149,6 +1149,281 @@ as int?,
 
 
 /// @nodoc
+mixin _$TerminalSummary {
+
+ String? get tid; String? get terminalLocation; num? get totalSales; int? get transactionCount; num? get fees;
+/// Create a copy of TerminalSummary
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TerminalSummaryCopyWith<TerminalSummary> get copyWith => _$TerminalSummaryCopyWithImpl<TerminalSummary>(this as TerminalSummary, _$identity);
+
+  /// Serializes this TerminalSummary to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TerminalSummary&&(identical(other.tid, tid) || other.tid == tid)&&(identical(other.terminalLocation, terminalLocation) || other.terminalLocation == terminalLocation)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.transactionCount, transactionCount) || other.transactionCount == transactionCount)&&(identical(other.fees, fees) || other.fees == fees));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,tid,terminalLocation,totalSales,transactionCount,fees);
+
+@override
+String toString() {
+  return 'TerminalSummary(tid: $tid, terminalLocation: $terminalLocation, totalSales: $totalSales, transactionCount: $transactionCount, fees: $fees)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $TerminalSummaryCopyWith<$Res>  {
+  factory $TerminalSummaryCopyWith(TerminalSummary value, $Res Function(TerminalSummary) _then) = _$TerminalSummaryCopyWithImpl;
+@useResult
+$Res call({
+ String? tid, String? terminalLocation, num? totalSales, int? transactionCount, num? fees
+});
+
+
+
+
+}
+/// @nodoc
+class _$TerminalSummaryCopyWithImpl<$Res>
+    implements $TerminalSummaryCopyWith<$Res> {
+  _$TerminalSummaryCopyWithImpl(this._self, this._then);
+
+  final TerminalSummary _self;
+  final $Res Function(TerminalSummary) _then;
+
+/// Create a copy of TerminalSummary
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? tid = freezed,Object? terminalLocation = freezed,Object? totalSales = freezed,Object? transactionCount = freezed,Object? fees = freezed,}) {
+  return _then(_self.copyWith(
+tid: freezed == tid ? _self.tid : tid // ignore: cast_nullable_to_non_nullable
+as String?,terminalLocation: freezed == terminalLocation ? _self.terminalLocation : terminalLocation // ignore: cast_nullable_to_non_nullable
+as String?,totalSales: freezed == totalSales ? _self.totalSales : totalSales // ignore: cast_nullable_to_non_nullable
+as num?,transactionCount: freezed == transactionCount ? _self.transactionCount : transactionCount // ignore: cast_nullable_to_non_nullable
+as int?,fees: freezed == fees ? _self.fees : fees // ignore: cast_nullable_to_non_nullable
+as num?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [TerminalSummary].
+extension TerminalSummaryPatterns on TerminalSummary {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TerminalSummary value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _TerminalSummary() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TerminalSummary value)  $default,){
+final _that = this;
+switch (_that) {
+case _TerminalSummary():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TerminalSummary value)?  $default,){
+final _that = this;
+switch (_that) {
+case _TerminalSummary() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? tid,  String? terminalLocation,  num? totalSales,  int? transactionCount,  num? fees)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _TerminalSummary() when $default != null:
+return $default(_that.tid,_that.terminalLocation,_that.totalSales,_that.transactionCount,_that.fees);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? tid,  String? terminalLocation,  num? totalSales,  int? transactionCount,  num? fees)  $default,) {final _that = this;
+switch (_that) {
+case _TerminalSummary():
+return $default(_that.tid,_that.terminalLocation,_that.totalSales,_that.transactionCount,_that.fees);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? tid,  String? terminalLocation,  num? totalSales,  int? transactionCount,  num? fees)?  $default,) {final _that = this;
+switch (_that) {
+case _TerminalSummary() when $default != null:
+return $default(_that.tid,_that.terminalLocation,_that.totalSales,_that.transactionCount,_that.fees);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _TerminalSummary implements TerminalSummary {
+  const _TerminalSummary({this.tid, this.terminalLocation, this.totalSales, this.transactionCount, this.fees});
+  factory _TerminalSummary.fromJson(Map<String, dynamic> json) => _$TerminalSummaryFromJson(json);
+
+@override final  String? tid;
+@override final  String? terminalLocation;
+@override final  num? totalSales;
+@override final  int? transactionCount;
+@override final  num? fees;
+
+/// Create a copy of TerminalSummary
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TerminalSummaryCopyWith<_TerminalSummary> get copyWith => __$TerminalSummaryCopyWithImpl<_TerminalSummary>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$TerminalSummaryToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TerminalSummary&&(identical(other.tid, tid) || other.tid == tid)&&(identical(other.terminalLocation, terminalLocation) || other.terminalLocation == terminalLocation)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.transactionCount, transactionCount) || other.transactionCount == transactionCount)&&(identical(other.fees, fees) || other.fees == fees));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,tid,terminalLocation,totalSales,transactionCount,fees);
+
+@override
+String toString() {
+  return 'TerminalSummary(tid: $tid, terminalLocation: $terminalLocation, totalSales: $totalSales, transactionCount: $transactionCount, fees: $fees)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$TerminalSummaryCopyWith<$Res> implements $TerminalSummaryCopyWith<$Res> {
+  factory _$TerminalSummaryCopyWith(_TerminalSummary value, $Res Function(_TerminalSummary) _then) = __$TerminalSummaryCopyWithImpl;
+@override @useResult
+$Res call({
+ String? tid, String? terminalLocation, num? totalSales, int? transactionCount, num? fees
+});
+
+
+
+
+}
+/// @nodoc
+class __$TerminalSummaryCopyWithImpl<$Res>
+    implements _$TerminalSummaryCopyWith<$Res> {
+  __$TerminalSummaryCopyWithImpl(this._self, this._then);
+
+  final _TerminalSummary _self;
+  final $Res Function(_TerminalSummary) _then;
+
+/// Create a copy of TerminalSummary
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? tid = freezed,Object? terminalLocation = freezed,Object? totalSales = freezed,Object? transactionCount = freezed,Object? fees = freezed,}) {
+  return _then(_TerminalSummary(
+tid: freezed == tid ? _self.tid : tid // ignore: cast_nullable_to_non_nullable
+as String?,terminalLocation: freezed == terminalLocation ? _self.terminalLocation : terminalLocation // ignore: cast_nullable_to_non_nullable
+as String?,totalSales: freezed == totalSales ? _self.totalSales : totalSales // ignore: cast_nullable_to_non_nullable
+as num?,transactionCount: freezed == transactionCount ? _self.transactionCount : transactionCount // ignore: cast_nullable_to_non_nullable
+as int?,fees: freezed == fees ? _self.fees : fees // ignore: cast_nullable_to_non_nullable
+as num?,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
 mixin _$CountAmount {
 
  int? get count; num? get amount;
@@ -1417,7 +1692,7 @@ as num?,
 /// @nodoc
 mixin _$CardSchemeSummary {
 
- String? get cardScheme; int? get transactionCount; num? get totalAmount; num? get totalFees; num? get netAmount;
+ String? get cardScheme; int? get transactionCount; num? get totalAmount; num? get totalSales; num? get totalFees; num? get fees; num? get netAmount; num? get averageTransactionValue;
 /// Create a copy of CardSchemeSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1430,16 +1705,16 @@ $CardSchemeSummaryCopyWith<CardSchemeSummary> get copyWith => _$CardSchemeSummar
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardSchemeSummary&&(identical(other.cardScheme, cardScheme) || other.cardScheme == cardScheme)&&(identical(other.transactionCount, transactionCount) || other.transactionCount == transactionCount)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.totalFees, totalFees) || other.totalFees == totalFees)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardSchemeSummary&&(identical(other.cardScheme, cardScheme) || other.cardScheme == cardScheme)&&(identical(other.transactionCount, transactionCount) || other.transactionCount == transactionCount)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.totalFees, totalFees) || other.totalFees == totalFees)&&(identical(other.fees, fees) || other.fees == fees)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&(identical(other.averageTransactionValue, averageTransactionValue) || other.averageTransactionValue == averageTransactionValue));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,cardScheme,transactionCount,totalAmount,totalFees,netAmount);
+int get hashCode => Object.hash(runtimeType,cardScheme,transactionCount,totalAmount,totalSales,totalFees,fees,netAmount,averageTransactionValue);
 
 @override
 String toString() {
-  return 'CardSchemeSummary(cardScheme: $cardScheme, transactionCount: $transactionCount, totalAmount: $totalAmount, totalFees: $totalFees, netAmount: $netAmount)';
+  return 'CardSchemeSummary(cardScheme: $cardScheme, transactionCount: $transactionCount, totalAmount: $totalAmount, totalSales: $totalSales, totalFees: $totalFees, fees: $fees, netAmount: $netAmount, averageTransactionValue: $averageTransactionValue)';
 }
 
 
@@ -1450,7 +1725,7 @@ abstract mixin class $CardSchemeSummaryCopyWith<$Res>  {
   factory $CardSchemeSummaryCopyWith(CardSchemeSummary value, $Res Function(CardSchemeSummary) _then) = _$CardSchemeSummaryCopyWithImpl;
 @useResult
 $Res call({
- String? cardScheme, int? transactionCount, num? totalAmount, num? totalFees, num? netAmount
+ String? cardScheme, int? transactionCount, num? totalAmount, num? totalSales, num? totalFees, num? fees, num? netAmount, num? averageTransactionValue
 });
 
 
@@ -1467,13 +1742,16 @@ class _$CardSchemeSummaryCopyWithImpl<$Res>
 
 /// Create a copy of CardSchemeSummary
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? cardScheme = freezed,Object? transactionCount = freezed,Object? totalAmount = freezed,Object? totalFees = freezed,Object? netAmount = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? cardScheme = freezed,Object? transactionCount = freezed,Object? totalAmount = freezed,Object? totalSales = freezed,Object? totalFees = freezed,Object? fees = freezed,Object? netAmount = freezed,Object? averageTransactionValue = freezed,}) {
   return _then(_self.copyWith(
 cardScheme: freezed == cardScheme ? _self.cardScheme : cardScheme // ignore: cast_nullable_to_non_nullable
 as String?,transactionCount: freezed == transactionCount ? _self.transactionCount : transactionCount // ignore: cast_nullable_to_non_nullable
 as int?,totalAmount: freezed == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
+as num?,totalSales: freezed == totalSales ? _self.totalSales : totalSales // ignore: cast_nullable_to_non_nullable
 as num?,totalFees: freezed == totalFees ? _self.totalFees : totalFees // ignore: cast_nullable_to_non_nullable
+as num?,fees: freezed == fees ? _self.fees : fees // ignore: cast_nullable_to_non_nullable
 as num?,netAmount: freezed == netAmount ? _self.netAmount : netAmount // ignore: cast_nullable_to_non_nullable
+as num?,averageTransactionValue: freezed == averageTransactionValue ? _self.averageTransactionValue : averageTransactionValue // ignore: cast_nullable_to_non_nullable
 as num?,
   ));
 }
@@ -1559,10 +1837,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? cardScheme,  int? transactionCount,  num? totalAmount,  num? totalFees,  num? netAmount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? cardScheme,  int? transactionCount,  num? totalAmount,  num? totalSales,  num? totalFees,  num? fees,  num? netAmount,  num? averageTransactionValue)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CardSchemeSummary() when $default != null:
-return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.totalFees,_that.netAmount);case _:
+return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.totalSales,_that.totalFees,_that.fees,_that.netAmount,_that.averageTransactionValue);case _:
   return orElse();
 
 }
@@ -1580,10 +1858,10 @@ return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? cardScheme,  int? transactionCount,  num? totalAmount,  num? totalFees,  num? netAmount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? cardScheme,  int? transactionCount,  num? totalAmount,  num? totalSales,  num? totalFees,  num? fees,  num? netAmount,  num? averageTransactionValue)  $default,) {final _that = this;
 switch (_that) {
 case _CardSchemeSummary():
-return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.totalFees,_that.netAmount);case _:
+return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.totalSales,_that.totalFees,_that.fees,_that.netAmount,_that.averageTransactionValue);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1600,10 +1878,10 @@ return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? cardScheme,  int? transactionCount,  num? totalAmount,  num? totalFees,  num? netAmount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? cardScheme,  int? transactionCount,  num? totalAmount,  num? totalSales,  num? totalFees,  num? fees,  num? netAmount,  num? averageTransactionValue)?  $default,) {final _that = this;
 switch (_that) {
 case _CardSchemeSummary() when $default != null:
-return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.totalFees,_that.netAmount);case _:
+return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.totalSales,_that.totalFees,_that.fees,_that.netAmount,_that.averageTransactionValue);case _:
   return null;
 
 }
@@ -1614,15 +1892,18 @@ return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.
 /// @nodoc
 @JsonSerializable()
 
-class _CardSchemeSummary implements CardSchemeSummary {
-  const _CardSchemeSummary({this.cardScheme, this.transactionCount, this.totalAmount, this.totalFees, this.netAmount});
+class _CardSchemeSummary extends CardSchemeSummary {
+  const _CardSchemeSummary({this.cardScheme, this.transactionCount, this.totalAmount, this.totalSales, this.totalFees, this.fees, this.netAmount, this.averageTransactionValue}): super._();
   factory _CardSchemeSummary.fromJson(Map<String, dynamic> json) => _$CardSchemeSummaryFromJson(json);
 
 @override final  String? cardScheme;
 @override final  int? transactionCount;
 @override final  num? totalAmount;
+@override final  num? totalSales;
 @override final  num? totalFees;
+@override final  num? fees;
 @override final  num? netAmount;
+@override final  num? averageTransactionValue;
 
 /// Create a copy of CardSchemeSummary
 /// with the given fields replaced by the non-null parameter values.
@@ -1637,16 +1918,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CardSchemeSummary&&(identical(other.cardScheme, cardScheme) || other.cardScheme == cardScheme)&&(identical(other.transactionCount, transactionCount) || other.transactionCount == transactionCount)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.totalFees, totalFees) || other.totalFees == totalFees)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CardSchemeSummary&&(identical(other.cardScheme, cardScheme) || other.cardScheme == cardScheme)&&(identical(other.transactionCount, transactionCount) || other.transactionCount == transactionCount)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.totalFees, totalFees) || other.totalFees == totalFees)&&(identical(other.fees, fees) || other.fees == fees)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&(identical(other.averageTransactionValue, averageTransactionValue) || other.averageTransactionValue == averageTransactionValue));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,cardScheme,transactionCount,totalAmount,totalFees,netAmount);
+int get hashCode => Object.hash(runtimeType,cardScheme,transactionCount,totalAmount,totalSales,totalFees,fees,netAmount,averageTransactionValue);
 
 @override
 String toString() {
-  return 'CardSchemeSummary(cardScheme: $cardScheme, transactionCount: $transactionCount, totalAmount: $totalAmount, totalFees: $totalFees, netAmount: $netAmount)';
+  return 'CardSchemeSummary(cardScheme: $cardScheme, transactionCount: $transactionCount, totalAmount: $totalAmount, totalSales: $totalSales, totalFees: $totalFees, fees: $fees, netAmount: $netAmount, averageTransactionValue: $averageTransactionValue)';
 }
 
 
@@ -1657,7 +1938,7 @@ abstract mixin class _$CardSchemeSummaryCopyWith<$Res> implements $CardSchemeSum
   factory _$CardSchemeSummaryCopyWith(_CardSchemeSummary value, $Res Function(_CardSchemeSummary) _then) = __$CardSchemeSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String? cardScheme, int? transactionCount, num? totalAmount, num? totalFees, num? netAmount
+ String? cardScheme, int? transactionCount, num? totalAmount, num? totalSales, num? totalFees, num? fees, num? netAmount, num? averageTransactionValue
 });
 
 
@@ -1674,13 +1955,16 @@ class __$CardSchemeSummaryCopyWithImpl<$Res>
 
 /// Create a copy of CardSchemeSummary
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? cardScheme = freezed,Object? transactionCount = freezed,Object? totalAmount = freezed,Object? totalFees = freezed,Object? netAmount = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? cardScheme = freezed,Object? transactionCount = freezed,Object? totalAmount = freezed,Object? totalSales = freezed,Object? totalFees = freezed,Object? fees = freezed,Object? netAmount = freezed,Object? averageTransactionValue = freezed,}) {
   return _then(_CardSchemeSummary(
 cardScheme: freezed == cardScheme ? _self.cardScheme : cardScheme // ignore: cast_nullable_to_non_nullable
 as String?,transactionCount: freezed == transactionCount ? _self.transactionCount : transactionCount // ignore: cast_nullable_to_non_nullable
 as int?,totalAmount: freezed == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
+as num?,totalSales: freezed == totalSales ? _self.totalSales : totalSales // ignore: cast_nullable_to_non_nullable
 as num?,totalFees: freezed == totalFees ? _self.totalFees : totalFees // ignore: cast_nullable_to_non_nullable
+as num?,fees: freezed == fees ? _self.fees : fees // ignore: cast_nullable_to_non_nullable
 as num?,netAmount: freezed == netAmount ? _self.netAmount : netAmount // ignore: cast_nullable_to_non_nullable
+as num?,averageTransactionValue: freezed == averageTransactionValue ? _self.averageTransactionValue : averageTransactionValue // ignore: cast_nullable_to_non_nullable
 as num?,
   ));
 }
@@ -1967,7 +2251,7 @@ as num?,
 /// @nodoc
 mixin _$MerchantSalesReportResponse {
 
- String? get mid; String? get merchantName; String? get businessName; String? get merchantAddress; String? get merchantPhone; String? get merchantEmail; String? get startDate; String? get endDate; String? get reportPeriod; num? get totalSales; int? get totalTransactionCount; num? get totalFees; num? get netAmount; List<CardSchemeSummary> get cardSchemeBreakdown; List<DailyBreakdown> get dailyBreakdown; PeriodTotals? get previousPeriod; List<ChannelSummary> get channelBreakdown; CountAmount? get refunds; CountAmount? get chargebacks;
+ String? get mid; String? get merchantName; String? get businessName; String? get merchantAddress; String? get merchantPhone; String? get merchantEmail; String? get startDate; String? get endDate; String? get reportPeriod; num? get totalSales; int? get totalTransactionCount; num? get totalFees; num? get netAmount; List<CardSchemeSummary> get cardSchemeBreakdown; List<DailyBreakdown> get dailyBreakdown; PeriodTotals? get previousPeriod; List<ChannelSummary> get channelBreakdown; List<TerminalSummary> get terminalBreakdown; CountAmount? get refunds; CountAmount? get chargebacks; num? get totalSettled; num? get pendingSettlement; int? get settlementCount; String? get generatedAt;
 /// Create a copy of MerchantSalesReportResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1980,16 +2264,16 @@ $MerchantSalesReportResponseCopyWith<MerchantSalesReportResponse> get copyWith =
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MerchantSalesReportResponse&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.merchantName, merchantName) || other.merchantName == merchantName)&&(identical(other.businessName, businessName) || other.businessName == businessName)&&(identical(other.merchantAddress, merchantAddress) || other.merchantAddress == merchantAddress)&&(identical(other.merchantPhone, merchantPhone) || other.merchantPhone == merchantPhone)&&(identical(other.merchantEmail, merchantEmail) || other.merchantEmail == merchantEmail)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.reportPeriod, reportPeriod) || other.reportPeriod == reportPeriod)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.totalTransactionCount, totalTransactionCount) || other.totalTransactionCount == totalTransactionCount)&&(identical(other.totalFees, totalFees) || other.totalFees == totalFees)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&const DeepCollectionEquality().equals(other.cardSchemeBreakdown, cardSchemeBreakdown)&&const DeepCollectionEquality().equals(other.dailyBreakdown, dailyBreakdown)&&(identical(other.previousPeriod, previousPeriod) || other.previousPeriod == previousPeriod)&&const DeepCollectionEquality().equals(other.channelBreakdown, channelBreakdown)&&(identical(other.refunds, refunds) || other.refunds == refunds)&&(identical(other.chargebacks, chargebacks) || other.chargebacks == chargebacks));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MerchantSalesReportResponse&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.merchantName, merchantName) || other.merchantName == merchantName)&&(identical(other.businessName, businessName) || other.businessName == businessName)&&(identical(other.merchantAddress, merchantAddress) || other.merchantAddress == merchantAddress)&&(identical(other.merchantPhone, merchantPhone) || other.merchantPhone == merchantPhone)&&(identical(other.merchantEmail, merchantEmail) || other.merchantEmail == merchantEmail)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.reportPeriod, reportPeriod) || other.reportPeriod == reportPeriod)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.totalTransactionCount, totalTransactionCount) || other.totalTransactionCount == totalTransactionCount)&&(identical(other.totalFees, totalFees) || other.totalFees == totalFees)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&const DeepCollectionEquality().equals(other.cardSchemeBreakdown, cardSchemeBreakdown)&&const DeepCollectionEquality().equals(other.dailyBreakdown, dailyBreakdown)&&(identical(other.previousPeriod, previousPeriod) || other.previousPeriod == previousPeriod)&&const DeepCollectionEquality().equals(other.channelBreakdown, channelBreakdown)&&const DeepCollectionEquality().equals(other.terminalBreakdown, terminalBreakdown)&&(identical(other.refunds, refunds) || other.refunds == refunds)&&(identical(other.chargebacks, chargebacks) || other.chargebacks == chargebacks)&&(identical(other.totalSettled, totalSettled) || other.totalSettled == totalSettled)&&(identical(other.pendingSettlement, pendingSettlement) || other.pendingSettlement == pendingSettlement)&&(identical(other.settlementCount, settlementCount) || other.settlementCount == settlementCount)&&(identical(other.generatedAt, generatedAt) || other.generatedAt == generatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,mid,merchantName,businessName,merchantAddress,merchantPhone,merchantEmail,startDate,endDate,reportPeriod,totalSales,totalTransactionCount,totalFees,netAmount,const DeepCollectionEquality().hash(cardSchemeBreakdown),const DeepCollectionEquality().hash(dailyBreakdown),previousPeriod,const DeepCollectionEquality().hash(channelBreakdown),refunds,chargebacks]);
+int get hashCode => Object.hashAll([runtimeType,mid,merchantName,businessName,merchantAddress,merchantPhone,merchantEmail,startDate,endDate,reportPeriod,totalSales,totalTransactionCount,totalFees,netAmount,const DeepCollectionEquality().hash(cardSchemeBreakdown),const DeepCollectionEquality().hash(dailyBreakdown),previousPeriod,const DeepCollectionEquality().hash(channelBreakdown),const DeepCollectionEquality().hash(terminalBreakdown),refunds,chargebacks,totalSettled,pendingSettlement,settlementCount,generatedAt]);
 
 @override
 String toString() {
-  return 'MerchantSalesReportResponse(mid: $mid, merchantName: $merchantName, businessName: $businessName, merchantAddress: $merchantAddress, merchantPhone: $merchantPhone, merchantEmail: $merchantEmail, startDate: $startDate, endDate: $endDate, reportPeriod: $reportPeriod, totalSales: $totalSales, totalTransactionCount: $totalTransactionCount, totalFees: $totalFees, netAmount: $netAmount, cardSchemeBreakdown: $cardSchemeBreakdown, dailyBreakdown: $dailyBreakdown, previousPeriod: $previousPeriod, channelBreakdown: $channelBreakdown, refunds: $refunds, chargebacks: $chargebacks)';
+  return 'MerchantSalesReportResponse(mid: $mid, merchantName: $merchantName, businessName: $businessName, merchantAddress: $merchantAddress, merchantPhone: $merchantPhone, merchantEmail: $merchantEmail, startDate: $startDate, endDate: $endDate, reportPeriod: $reportPeriod, totalSales: $totalSales, totalTransactionCount: $totalTransactionCount, totalFees: $totalFees, netAmount: $netAmount, cardSchemeBreakdown: $cardSchemeBreakdown, dailyBreakdown: $dailyBreakdown, previousPeriod: $previousPeriod, channelBreakdown: $channelBreakdown, terminalBreakdown: $terminalBreakdown, refunds: $refunds, chargebacks: $chargebacks, totalSettled: $totalSettled, pendingSettlement: $pendingSettlement, settlementCount: $settlementCount, generatedAt: $generatedAt)';
 }
 
 
@@ -2000,7 +2284,7 @@ abstract mixin class $MerchantSalesReportResponseCopyWith<$Res>  {
   factory $MerchantSalesReportResponseCopyWith(MerchantSalesReportResponse value, $Res Function(MerchantSalesReportResponse) _then) = _$MerchantSalesReportResponseCopyWithImpl;
 @useResult
 $Res call({
- String? mid, String? merchantName, String? businessName, String? merchantAddress, String? merchantPhone, String? merchantEmail, String? startDate, String? endDate, String? reportPeriod, num? totalSales, int? totalTransactionCount, num? totalFees, num? netAmount, List<CardSchemeSummary> cardSchemeBreakdown, List<DailyBreakdown> dailyBreakdown, PeriodTotals? previousPeriod, List<ChannelSummary> channelBreakdown, CountAmount? refunds, CountAmount? chargebacks
+ String? mid, String? merchantName, String? businessName, String? merchantAddress, String? merchantPhone, String? merchantEmail, String? startDate, String? endDate, String? reportPeriod, num? totalSales, int? totalTransactionCount, num? totalFees, num? netAmount, List<CardSchemeSummary> cardSchemeBreakdown, List<DailyBreakdown> dailyBreakdown, PeriodTotals? previousPeriod, List<ChannelSummary> channelBreakdown, List<TerminalSummary> terminalBreakdown, CountAmount? refunds, CountAmount? chargebacks, num? totalSettled, num? pendingSettlement, int? settlementCount, String? generatedAt
 });
 
 
@@ -2017,7 +2301,7 @@ class _$MerchantSalesReportResponseCopyWithImpl<$Res>
 
 /// Create a copy of MerchantSalesReportResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? mid = freezed,Object? merchantName = freezed,Object? businessName = freezed,Object? merchantAddress = freezed,Object? merchantPhone = freezed,Object? merchantEmail = freezed,Object? startDate = freezed,Object? endDate = freezed,Object? reportPeriod = freezed,Object? totalSales = freezed,Object? totalTransactionCount = freezed,Object? totalFees = freezed,Object? netAmount = freezed,Object? cardSchemeBreakdown = null,Object? dailyBreakdown = null,Object? previousPeriod = freezed,Object? channelBreakdown = null,Object? refunds = freezed,Object? chargebacks = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? mid = freezed,Object? merchantName = freezed,Object? businessName = freezed,Object? merchantAddress = freezed,Object? merchantPhone = freezed,Object? merchantEmail = freezed,Object? startDate = freezed,Object? endDate = freezed,Object? reportPeriod = freezed,Object? totalSales = freezed,Object? totalTransactionCount = freezed,Object? totalFees = freezed,Object? netAmount = freezed,Object? cardSchemeBreakdown = null,Object? dailyBreakdown = null,Object? previousPeriod = freezed,Object? channelBreakdown = null,Object? terminalBreakdown = null,Object? refunds = freezed,Object? chargebacks = freezed,Object? totalSettled = freezed,Object? pendingSettlement = freezed,Object? settlementCount = freezed,Object? generatedAt = freezed,}) {
   return _then(_self.copyWith(
 mid: freezed == mid ? _self.mid : mid // ignore: cast_nullable_to_non_nullable
 as String?,merchantName: freezed == merchantName ? _self.merchantName : merchantName // ignore: cast_nullable_to_non_nullable
@@ -2036,9 +2320,14 @@ as num?,cardSchemeBreakdown: null == cardSchemeBreakdown ? _self.cardSchemeBreak
 as List<CardSchemeSummary>,dailyBreakdown: null == dailyBreakdown ? _self.dailyBreakdown : dailyBreakdown // ignore: cast_nullable_to_non_nullable
 as List<DailyBreakdown>,previousPeriod: freezed == previousPeriod ? _self.previousPeriod : previousPeriod // ignore: cast_nullable_to_non_nullable
 as PeriodTotals?,channelBreakdown: null == channelBreakdown ? _self.channelBreakdown : channelBreakdown // ignore: cast_nullable_to_non_nullable
-as List<ChannelSummary>,refunds: freezed == refunds ? _self.refunds : refunds // ignore: cast_nullable_to_non_nullable
+as List<ChannelSummary>,terminalBreakdown: null == terminalBreakdown ? _self.terminalBreakdown : terminalBreakdown // ignore: cast_nullable_to_non_nullable
+as List<TerminalSummary>,refunds: freezed == refunds ? _self.refunds : refunds // ignore: cast_nullable_to_non_nullable
 as CountAmount?,chargebacks: freezed == chargebacks ? _self.chargebacks : chargebacks // ignore: cast_nullable_to_non_nullable
-as CountAmount?,
+as CountAmount?,totalSettled: freezed == totalSettled ? _self.totalSettled : totalSettled // ignore: cast_nullable_to_non_nullable
+as num?,pendingSettlement: freezed == pendingSettlement ? _self.pendingSettlement : pendingSettlement // ignore: cast_nullable_to_non_nullable
+as num?,settlementCount: freezed == settlementCount ? _self.settlementCount : settlementCount // ignore: cast_nullable_to_non_nullable
+as int?,generatedAt: freezed == generatedAt ? _self.generatedAt : generatedAt // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of MerchantSalesReportResponse
@@ -2159,10 +2448,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  CountAmount? refunds,  CountAmount? chargebacks)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  List<TerminalSummary> terminalBreakdown,  CountAmount? refunds,  CountAmount? chargebacks,  num? totalSettled,  num? pendingSettlement,  int? settlementCount,  String? generatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MerchantSalesReportResponse() when $default != null:
-return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAddress,_that.merchantPhone,_that.merchantEmail,_that.startDate,_that.endDate,_that.reportPeriod,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount,_that.cardSchemeBreakdown,_that.dailyBreakdown,_that.previousPeriod,_that.channelBreakdown,_that.refunds,_that.chargebacks);case _:
+return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAddress,_that.merchantPhone,_that.merchantEmail,_that.startDate,_that.endDate,_that.reportPeriod,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount,_that.cardSchemeBreakdown,_that.dailyBreakdown,_that.previousPeriod,_that.channelBreakdown,_that.terminalBreakdown,_that.refunds,_that.chargebacks,_that.totalSettled,_that.pendingSettlement,_that.settlementCount,_that.generatedAt);case _:
   return orElse();
 
 }
@@ -2180,10 +2469,10 @@ return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAd
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  CountAmount? refunds,  CountAmount? chargebacks)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  List<TerminalSummary> terminalBreakdown,  CountAmount? refunds,  CountAmount? chargebacks,  num? totalSettled,  num? pendingSettlement,  int? settlementCount,  String? generatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _MerchantSalesReportResponse():
-return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAddress,_that.merchantPhone,_that.merchantEmail,_that.startDate,_that.endDate,_that.reportPeriod,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount,_that.cardSchemeBreakdown,_that.dailyBreakdown,_that.previousPeriod,_that.channelBreakdown,_that.refunds,_that.chargebacks);case _:
+return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAddress,_that.merchantPhone,_that.merchantEmail,_that.startDate,_that.endDate,_that.reportPeriod,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount,_that.cardSchemeBreakdown,_that.dailyBreakdown,_that.previousPeriod,_that.channelBreakdown,_that.terminalBreakdown,_that.refunds,_that.chargebacks,_that.totalSettled,_that.pendingSettlement,_that.settlementCount,_that.generatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -2200,10 +2489,10 @@ return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAd
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  CountAmount? refunds,  CountAmount? chargebacks)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  List<TerminalSummary> terminalBreakdown,  CountAmount? refunds,  CountAmount? chargebacks,  num? totalSettled,  num? pendingSettlement,  int? settlementCount,  String? generatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _MerchantSalesReportResponse() when $default != null:
-return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAddress,_that.merchantPhone,_that.merchantEmail,_that.startDate,_that.endDate,_that.reportPeriod,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount,_that.cardSchemeBreakdown,_that.dailyBreakdown,_that.previousPeriod,_that.channelBreakdown,_that.refunds,_that.chargebacks);case _:
+return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAddress,_that.merchantPhone,_that.merchantEmail,_that.startDate,_that.endDate,_that.reportPeriod,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount,_that.cardSchemeBreakdown,_that.dailyBreakdown,_that.previousPeriod,_that.channelBreakdown,_that.terminalBreakdown,_that.refunds,_that.chargebacks,_that.totalSettled,_that.pendingSettlement,_that.settlementCount,_that.generatedAt);case _:
   return null;
 
 }
@@ -2215,7 +2504,7 @@ return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAd
 @JsonSerializable()
 
 class _MerchantSalesReportResponse implements MerchantSalesReportResponse {
-  const _MerchantSalesReportResponse({this.mid, this.merchantName, this.businessName, this.merchantAddress, this.merchantPhone, this.merchantEmail, this.startDate, this.endDate, this.reportPeriod, this.totalSales, this.totalTransactionCount, this.totalFees, this.netAmount, final  List<CardSchemeSummary> cardSchemeBreakdown = const <CardSchemeSummary>[], final  List<DailyBreakdown> dailyBreakdown = const <DailyBreakdown>[], this.previousPeriod, final  List<ChannelSummary> channelBreakdown = const <ChannelSummary>[], this.refunds, this.chargebacks}): _cardSchemeBreakdown = cardSchemeBreakdown,_dailyBreakdown = dailyBreakdown,_channelBreakdown = channelBreakdown;
+  const _MerchantSalesReportResponse({this.mid, this.merchantName, this.businessName, this.merchantAddress, this.merchantPhone, this.merchantEmail, this.startDate, this.endDate, this.reportPeriod, this.totalSales, this.totalTransactionCount, this.totalFees, this.netAmount, final  List<CardSchemeSummary> cardSchemeBreakdown = const <CardSchemeSummary>[], final  List<DailyBreakdown> dailyBreakdown = const <DailyBreakdown>[], this.previousPeriod, final  List<ChannelSummary> channelBreakdown = const <ChannelSummary>[], final  List<TerminalSummary> terminalBreakdown = const <TerminalSummary>[], this.refunds, this.chargebacks, this.totalSettled, this.pendingSettlement, this.settlementCount, this.generatedAt}): _cardSchemeBreakdown = cardSchemeBreakdown,_dailyBreakdown = dailyBreakdown,_channelBreakdown = channelBreakdown,_terminalBreakdown = terminalBreakdown;
   factory _MerchantSalesReportResponse.fromJson(Map<String, dynamic> json) => _$MerchantSalesReportResponseFromJson(json);
 
 @override final  String? mid;
@@ -2253,8 +2542,19 @@ class _MerchantSalesReportResponse implements MerchantSalesReportResponse {
   return EqualUnmodifiableListView(_channelBreakdown);
 }
 
+ final  List<TerminalSummary> _terminalBreakdown;
+@override@JsonKey() List<TerminalSummary> get terminalBreakdown {
+  if (_terminalBreakdown is EqualUnmodifiableListView) return _terminalBreakdown;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_terminalBreakdown);
+}
+
 @override final  CountAmount? refunds;
 @override final  CountAmount? chargebacks;
+@override final  num? totalSettled;
+@override final  num? pendingSettlement;
+@override final  int? settlementCount;
+@override final  String? generatedAt;
 
 /// Create a copy of MerchantSalesReportResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -2269,16 +2569,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MerchantSalesReportResponse&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.merchantName, merchantName) || other.merchantName == merchantName)&&(identical(other.businessName, businessName) || other.businessName == businessName)&&(identical(other.merchantAddress, merchantAddress) || other.merchantAddress == merchantAddress)&&(identical(other.merchantPhone, merchantPhone) || other.merchantPhone == merchantPhone)&&(identical(other.merchantEmail, merchantEmail) || other.merchantEmail == merchantEmail)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.reportPeriod, reportPeriod) || other.reportPeriod == reportPeriod)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.totalTransactionCount, totalTransactionCount) || other.totalTransactionCount == totalTransactionCount)&&(identical(other.totalFees, totalFees) || other.totalFees == totalFees)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&const DeepCollectionEquality().equals(other._cardSchemeBreakdown, _cardSchemeBreakdown)&&const DeepCollectionEquality().equals(other._dailyBreakdown, _dailyBreakdown)&&(identical(other.previousPeriod, previousPeriod) || other.previousPeriod == previousPeriod)&&const DeepCollectionEquality().equals(other._channelBreakdown, _channelBreakdown)&&(identical(other.refunds, refunds) || other.refunds == refunds)&&(identical(other.chargebacks, chargebacks) || other.chargebacks == chargebacks));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MerchantSalesReportResponse&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.merchantName, merchantName) || other.merchantName == merchantName)&&(identical(other.businessName, businessName) || other.businessName == businessName)&&(identical(other.merchantAddress, merchantAddress) || other.merchantAddress == merchantAddress)&&(identical(other.merchantPhone, merchantPhone) || other.merchantPhone == merchantPhone)&&(identical(other.merchantEmail, merchantEmail) || other.merchantEmail == merchantEmail)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.reportPeriod, reportPeriod) || other.reportPeriod == reportPeriod)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.totalTransactionCount, totalTransactionCount) || other.totalTransactionCount == totalTransactionCount)&&(identical(other.totalFees, totalFees) || other.totalFees == totalFees)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&const DeepCollectionEquality().equals(other._cardSchemeBreakdown, _cardSchemeBreakdown)&&const DeepCollectionEquality().equals(other._dailyBreakdown, _dailyBreakdown)&&(identical(other.previousPeriod, previousPeriod) || other.previousPeriod == previousPeriod)&&const DeepCollectionEquality().equals(other._channelBreakdown, _channelBreakdown)&&const DeepCollectionEquality().equals(other._terminalBreakdown, _terminalBreakdown)&&(identical(other.refunds, refunds) || other.refunds == refunds)&&(identical(other.chargebacks, chargebacks) || other.chargebacks == chargebacks)&&(identical(other.totalSettled, totalSettled) || other.totalSettled == totalSettled)&&(identical(other.pendingSettlement, pendingSettlement) || other.pendingSettlement == pendingSettlement)&&(identical(other.settlementCount, settlementCount) || other.settlementCount == settlementCount)&&(identical(other.generatedAt, generatedAt) || other.generatedAt == generatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,mid,merchantName,businessName,merchantAddress,merchantPhone,merchantEmail,startDate,endDate,reportPeriod,totalSales,totalTransactionCount,totalFees,netAmount,const DeepCollectionEquality().hash(_cardSchemeBreakdown),const DeepCollectionEquality().hash(_dailyBreakdown),previousPeriod,const DeepCollectionEquality().hash(_channelBreakdown),refunds,chargebacks]);
+int get hashCode => Object.hashAll([runtimeType,mid,merchantName,businessName,merchantAddress,merchantPhone,merchantEmail,startDate,endDate,reportPeriod,totalSales,totalTransactionCount,totalFees,netAmount,const DeepCollectionEquality().hash(_cardSchemeBreakdown),const DeepCollectionEquality().hash(_dailyBreakdown),previousPeriod,const DeepCollectionEquality().hash(_channelBreakdown),const DeepCollectionEquality().hash(_terminalBreakdown),refunds,chargebacks,totalSettled,pendingSettlement,settlementCount,generatedAt]);
 
 @override
 String toString() {
-  return 'MerchantSalesReportResponse(mid: $mid, merchantName: $merchantName, businessName: $businessName, merchantAddress: $merchantAddress, merchantPhone: $merchantPhone, merchantEmail: $merchantEmail, startDate: $startDate, endDate: $endDate, reportPeriod: $reportPeriod, totalSales: $totalSales, totalTransactionCount: $totalTransactionCount, totalFees: $totalFees, netAmount: $netAmount, cardSchemeBreakdown: $cardSchemeBreakdown, dailyBreakdown: $dailyBreakdown, previousPeriod: $previousPeriod, channelBreakdown: $channelBreakdown, refunds: $refunds, chargebacks: $chargebacks)';
+  return 'MerchantSalesReportResponse(mid: $mid, merchantName: $merchantName, businessName: $businessName, merchantAddress: $merchantAddress, merchantPhone: $merchantPhone, merchantEmail: $merchantEmail, startDate: $startDate, endDate: $endDate, reportPeriod: $reportPeriod, totalSales: $totalSales, totalTransactionCount: $totalTransactionCount, totalFees: $totalFees, netAmount: $netAmount, cardSchemeBreakdown: $cardSchemeBreakdown, dailyBreakdown: $dailyBreakdown, previousPeriod: $previousPeriod, channelBreakdown: $channelBreakdown, terminalBreakdown: $terminalBreakdown, refunds: $refunds, chargebacks: $chargebacks, totalSettled: $totalSettled, pendingSettlement: $pendingSettlement, settlementCount: $settlementCount, generatedAt: $generatedAt)';
 }
 
 
@@ -2289,7 +2589,7 @@ abstract mixin class _$MerchantSalesReportResponseCopyWith<$Res> implements $Mer
   factory _$MerchantSalesReportResponseCopyWith(_MerchantSalesReportResponse value, $Res Function(_MerchantSalesReportResponse) _then) = __$MerchantSalesReportResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? mid, String? merchantName, String? businessName, String? merchantAddress, String? merchantPhone, String? merchantEmail, String? startDate, String? endDate, String? reportPeriod, num? totalSales, int? totalTransactionCount, num? totalFees, num? netAmount, List<CardSchemeSummary> cardSchemeBreakdown, List<DailyBreakdown> dailyBreakdown, PeriodTotals? previousPeriod, List<ChannelSummary> channelBreakdown, CountAmount? refunds, CountAmount? chargebacks
+ String? mid, String? merchantName, String? businessName, String? merchantAddress, String? merchantPhone, String? merchantEmail, String? startDate, String? endDate, String? reportPeriod, num? totalSales, int? totalTransactionCount, num? totalFees, num? netAmount, List<CardSchemeSummary> cardSchemeBreakdown, List<DailyBreakdown> dailyBreakdown, PeriodTotals? previousPeriod, List<ChannelSummary> channelBreakdown, List<TerminalSummary> terminalBreakdown, CountAmount? refunds, CountAmount? chargebacks, num? totalSettled, num? pendingSettlement, int? settlementCount, String? generatedAt
 });
 
 
@@ -2306,7 +2606,7 @@ class __$MerchantSalesReportResponseCopyWithImpl<$Res>
 
 /// Create a copy of MerchantSalesReportResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? mid = freezed,Object? merchantName = freezed,Object? businessName = freezed,Object? merchantAddress = freezed,Object? merchantPhone = freezed,Object? merchantEmail = freezed,Object? startDate = freezed,Object? endDate = freezed,Object? reportPeriod = freezed,Object? totalSales = freezed,Object? totalTransactionCount = freezed,Object? totalFees = freezed,Object? netAmount = freezed,Object? cardSchemeBreakdown = null,Object? dailyBreakdown = null,Object? previousPeriod = freezed,Object? channelBreakdown = null,Object? refunds = freezed,Object? chargebacks = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? mid = freezed,Object? merchantName = freezed,Object? businessName = freezed,Object? merchantAddress = freezed,Object? merchantPhone = freezed,Object? merchantEmail = freezed,Object? startDate = freezed,Object? endDate = freezed,Object? reportPeriod = freezed,Object? totalSales = freezed,Object? totalTransactionCount = freezed,Object? totalFees = freezed,Object? netAmount = freezed,Object? cardSchemeBreakdown = null,Object? dailyBreakdown = null,Object? previousPeriod = freezed,Object? channelBreakdown = null,Object? terminalBreakdown = null,Object? refunds = freezed,Object? chargebacks = freezed,Object? totalSettled = freezed,Object? pendingSettlement = freezed,Object? settlementCount = freezed,Object? generatedAt = freezed,}) {
   return _then(_MerchantSalesReportResponse(
 mid: freezed == mid ? _self.mid : mid // ignore: cast_nullable_to_non_nullable
 as String?,merchantName: freezed == merchantName ? _self.merchantName : merchantName // ignore: cast_nullable_to_non_nullable
@@ -2325,9 +2625,14 @@ as num?,cardSchemeBreakdown: null == cardSchemeBreakdown ? _self._cardSchemeBrea
 as List<CardSchemeSummary>,dailyBreakdown: null == dailyBreakdown ? _self._dailyBreakdown : dailyBreakdown // ignore: cast_nullable_to_non_nullable
 as List<DailyBreakdown>,previousPeriod: freezed == previousPeriod ? _self.previousPeriod : previousPeriod // ignore: cast_nullable_to_non_nullable
 as PeriodTotals?,channelBreakdown: null == channelBreakdown ? _self._channelBreakdown : channelBreakdown // ignore: cast_nullable_to_non_nullable
-as List<ChannelSummary>,refunds: freezed == refunds ? _self.refunds : refunds // ignore: cast_nullable_to_non_nullable
+as List<ChannelSummary>,terminalBreakdown: null == terminalBreakdown ? _self._terminalBreakdown : terminalBreakdown // ignore: cast_nullable_to_non_nullable
+as List<TerminalSummary>,refunds: freezed == refunds ? _self.refunds : refunds // ignore: cast_nullable_to_non_nullable
 as CountAmount?,chargebacks: freezed == chargebacks ? _self.chargebacks : chargebacks // ignore: cast_nullable_to_non_nullable
-as CountAmount?,
+as CountAmount?,totalSettled: freezed == totalSettled ? _self.totalSettled : totalSettled // ignore: cast_nullable_to_non_nullable
+as num?,pendingSettlement: freezed == pendingSettlement ? _self.pendingSettlement : pendingSettlement // ignore: cast_nullable_to_non_nullable
+as num?,settlementCount: freezed == settlementCount ? _self.settlementCount : settlementCount // ignore: cast_nullable_to_non_nullable
+as int?,generatedAt: freezed == generatedAt ? _self.generatedAt : generatedAt // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

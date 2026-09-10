@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TransactionResponse {
 
- String? get reference; String? get rrn; String? get stan; String? get authCode; String? get mid; String? get tid; String? get storeName; String? get terminalSerial; String? get merchantAddress; String? get type; String? get status; String? get responseCode; num? get amount; num? get fee; num? get netAmount; String? get currency; String? get cardScheme; String? get cardType; String? get maskedPan; String? get channel; String? get transactionDate; String? get settlementReference; String? get settlementStatus; String? get originalReference; String? get receiptUrl;
+ String? get id; String? get transactionRef; String? get tid; String? get mid; String? get merchantEmail; String? get storeName; String? get transactionType; String? get panMasked; String? get cardScheme; String? get cardBank; String? get cardBrand; String? get cardType; String? get cardCountryCode; num? get amount; num? get feeAmount; String? get currencyCode; String? get status; String? get responseCode; String? get responseCodeDescription; String? get authCode; String? get processorHost; int? get durationMs; String? get errorMessage; String? get initiatedAt; String? get completedAt; String? get settlementReference; String? get settlementStatus; String? get originalReference; String? get receiptUrl;
 /// Create a copy of TransactionResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TransactionResponseCopyWith<TransactionResponse> get copyWith => _$TransactionR
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransactionResponse&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.rrn, rrn) || other.rrn == rrn)&&(identical(other.stan, stan) || other.stan == stan)&&(identical(other.authCode, authCode) || other.authCode == authCode)&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.tid, tid) || other.tid == tid)&&(identical(other.storeName, storeName) || other.storeName == storeName)&&(identical(other.terminalSerial, terminalSerial) || other.terminalSerial == terminalSerial)&&(identical(other.merchantAddress, merchantAddress) || other.merchantAddress == merchantAddress)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.responseCode, responseCode) || other.responseCode == responseCode)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.fee, fee) || other.fee == fee)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.cardScheme, cardScheme) || other.cardScheme == cardScheme)&&(identical(other.cardType, cardType) || other.cardType == cardType)&&(identical(other.maskedPan, maskedPan) || other.maskedPan == maskedPan)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.settlementReference, settlementReference) || other.settlementReference == settlementReference)&&(identical(other.settlementStatus, settlementStatus) || other.settlementStatus == settlementStatus)&&(identical(other.originalReference, originalReference) || other.originalReference == originalReference)&&(identical(other.receiptUrl, receiptUrl) || other.receiptUrl == receiptUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransactionResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.transactionRef, transactionRef) || other.transactionRef == transactionRef)&&(identical(other.tid, tid) || other.tid == tid)&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.merchantEmail, merchantEmail) || other.merchantEmail == merchantEmail)&&(identical(other.storeName, storeName) || other.storeName == storeName)&&(identical(other.transactionType, transactionType) || other.transactionType == transactionType)&&(identical(other.panMasked, panMasked) || other.panMasked == panMasked)&&(identical(other.cardScheme, cardScheme) || other.cardScheme == cardScheme)&&(identical(other.cardBank, cardBank) || other.cardBank == cardBank)&&(identical(other.cardBrand, cardBrand) || other.cardBrand == cardBrand)&&(identical(other.cardType, cardType) || other.cardType == cardType)&&(identical(other.cardCountryCode, cardCountryCode) || other.cardCountryCode == cardCountryCode)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.feeAmount, feeAmount) || other.feeAmount == feeAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.responseCode, responseCode) || other.responseCode == responseCode)&&(identical(other.responseCodeDescription, responseCodeDescription) || other.responseCodeDescription == responseCodeDescription)&&(identical(other.authCode, authCode) || other.authCode == authCode)&&(identical(other.processorHost, processorHost) || other.processorHost == processorHost)&&(identical(other.durationMs, durationMs) || other.durationMs == durationMs)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.initiatedAt, initiatedAt) || other.initiatedAt == initiatedAt)&&(identical(other.completedAt, completedAt) || other.completedAt == completedAt)&&(identical(other.settlementReference, settlementReference) || other.settlementReference == settlementReference)&&(identical(other.settlementStatus, settlementStatus) || other.settlementStatus == settlementStatus)&&(identical(other.originalReference, originalReference) || other.originalReference == originalReference)&&(identical(other.receiptUrl, receiptUrl) || other.receiptUrl == receiptUrl));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,reference,rrn,stan,authCode,mid,tid,storeName,terminalSerial,merchantAddress,type,status,responseCode,amount,fee,netAmount,currency,cardScheme,cardType,maskedPan,channel,transactionDate,settlementReference,settlementStatus,originalReference,receiptUrl]);
+int get hashCode => Object.hashAll([runtimeType,id,transactionRef,tid,mid,merchantEmail,storeName,transactionType,panMasked,cardScheme,cardBank,cardBrand,cardType,cardCountryCode,amount,feeAmount,currencyCode,status,responseCode,responseCodeDescription,authCode,processorHost,durationMs,errorMessage,initiatedAt,completedAt,settlementReference,settlementStatus,originalReference,receiptUrl]);
 
 @override
 String toString() {
-  return 'TransactionResponse(reference: $reference, rrn: $rrn, stan: $stan, authCode: $authCode, mid: $mid, tid: $tid, storeName: $storeName, terminalSerial: $terminalSerial, merchantAddress: $merchantAddress, type: $type, status: $status, responseCode: $responseCode, amount: $amount, fee: $fee, netAmount: $netAmount, currency: $currency, cardScheme: $cardScheme, cardType: $cardType, maskedPan: $maskedPan, channel: $channel, transactionDate: $transactionDate, settlementReference: $settlementReference, settlementStatus: $settlementStatus, originalReference: $originalReference, receiptUrl: $receiptUrl)';
+  return 'TransactionResponse(id: $id, transactionRef: $transactionRef, tid: $tid, mid: $mid, merchantEmail: $merchantEmail, storeName: $storeName, transactionType: $transactionType, panMasked: $panMasked, cardScheme: $cardScheme, cardBank: $cardBank, cardBrand: $cardBrand, cardType: $cardType, cardCountryCode: $cardCountryCode, amount: $amount, feeAmount: $feeAmount, currencyCode: $currencyCode, status: $status, responseCode: $responseCode, responseCodeDescription: $responseCodeDescription, authCode: $authCode, processorHost: $processorHost, durationMs: $durationMs, errorMessage: $errorMessage, initiatedAt: $initiatedAt, completedAt: $completedAt, settlementReference: $settlementReference, settlementStatus: $settlementStatus, originalReference: $originalReference, receiptUrl: $receiptUrl)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TransactionResponseCopyWith<$Res>  {
   factory $TransactionResponseCopyWith(TransactionResponse value, $Res Function(TransactionResponse) _then) = _$TransactionResponseCopyWithImpl;
 @useResult
 $Res call({
- String? reference, String? rrn, String? stan, String? authCode, String? mid, String? tid, String? storeName, String? terminalSerial, String? merchantAddress, String? type, String? status, String? responseCode, num? amount, num? fee, num? netAmount, String? currency, String? cardScheme, String? cardType, String? maskedPan, String? channel, String? transactionDate, String? settlementReference, String? settlementStatus, String? originalReference, String? receiptUrl
+ String? id, String? transactionRef, String? tid, String? mid, String? merchantEmail, String? storeName, String? transactionType, String? panMasked, String? cardScheme, String? cardBank, String? cardBrand, String? cardType, String? cardCountryCode, num? amount, num? feeAmount, String? currencyCode, String? status, String? responseCode, String? responseCodeDescription, String? authCode, String? processorHost, int? durationMs, String? errorMessage, String? initiatedAt, String? completedAt, String? settlementReference, String? settlementStatus, String? originalReference, String? receiptUrl
 });
 
 
@@ -65,29 +65,33 @@ class _$TransactionResponseCopyWithImpl<$Res>
 
 /// Create a copy of TransactionResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? reference = freezed,Object? rrn = freezed,Object? stan = freezed,Object? authCode = freezed,Object? mid = freezed,Object? tid = freezed,Object? storeName = freezed,Object? terminalSerial = freezed,Object? merchantAddress = freezed,Object? type = freezed,Object? status = freezed,Object? responseCode = freezed,Object? amount = freezed,Object? fee = freezed,Object? netAmount = freezed,Object? currency = freezed,Object? cardScheme = freezed,Object? cardType = freezed,Object? maskedPan = freezed,Object? channel = freezed,Object? transactionDate = freezed,Object? settlementReference = freezed,Object? settlementStatus = freezed,Object? originalReference = freezed,Object? receiptUrl = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? transactionRef = freezed,Object? tid = freezed,Object? mid = freezed,Object? merchantEmail = freezed,Object? storeName = freezed,Object? transactionType = freezed,Object? panMasked = freezed,Object? cardScheme = freezed,Object? cardBank = freezed,Object? cardBrand = freezed,Object? cardType = freezed,Object? cardCountryCode = freezed,Object? amount = freezed,Object? feeAmount = freezed,Object? currencyCode = freezed,Object? status = freezed,Object? responseCode = freezed,Object? responseCodeDescription = freezed,Object? authCode = freezed,Object? processorHost = freezed,Object? durationMs = freezed,Object? errorMessage = freezed,Object? initiatedAt = freezed,Object? completedAt = freezed,Object? settlementReference = freezed,Object? settlementStatus = freezed,Object? originalReference = freezed,Object? receiptUrl = freezed,}) {
   return _then(_self.copyWith(
-reference: freezed == reference ? _self.reference : reference // ignore: cast_nullable_to_non_nullable
-as String?,rrn: freezed == rrn ? _self.rrn : rrn // ignore: cast_nullable_to_non_nullable
-as String?,stan: freezed == stan ? _self.stan : stan // ignore: cast_nullable_to_non_nullable
-as String?,authCode: freezed == authCode ? _self.authCode : authCode // ignore: cast_nullable_to_non_nullable
-as String?,mid: freezed == mid ? _self.mid : mid // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,transactionRef: freezed == transactionRef ? _self.transactionRef : transactionRef // ignore: cast_nullable_to_non_nullable
 as String?,tid: freezed == tid ? _self.tid : tid // ignore: cast_nullable_to_non_nullable
+as String?,mid: freezed == mid ? _self.mid : mid // ignore: cast_nullable_to_non_nullable
+as String?,merchantEmail: freezed == merchantEmail ? _self.merchantEmail : merchantEmail // ignore: cast_nullable_to_non_nullable
 as String?,storeName: freezed == storeName ? _self.storeName : storeName // ignore: cast_nullable_to_non_nullable
-as String?,terminalSerial: freezed == terminalSerial ? _self.terminalSerial : terminalSerial // ignore: cast_nullable_to_non_nullable
-as String?,merchantAddress: freezed == merchantAddress ? _self.merchantAddress : merchantAddress // ignore: cast_nullable_to_non_nullable
-as String?,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,transactionType: freezed == transactionType ? _self.transactionType : transactionType // ignore: cast_nullable_to_non_nullable
+as String?,panMasked: freezed == panMasked ? _self.panMasked : panMasked // ignore: cast_nullable_to_non_nullable
+as String?,cardScheme: freezed == cardScheme ? _self.cardScheme : cardScheme // ignore: cast_nullable_to_non_nullable
+as String?,cardBank: freezed == cardBank ? _self.cardBank : cardBank // ignore: cast_nullable_to_non_nullable
+as String?,cardBrand: freezed == cardBrand ? _self.cardBrand : cardBrand // ignore: cast_nullable_to_non_nullable
+as String?,cardType: freezed == cardType ? _self.cardType : cardType // ignore: cast_nullable_to_non_nullable
+as String?,cardCountryCode: freezed == cardCountryCode ? _self.cardCountryCode : cardCountryCode // ignore: cast_nullable_to_non_nullable
+as String?,amount: freezed == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as num?,feeAmount: freezed == feeAmount ? _self.feeAmount : feeAmount // ignore: cast_nullable_to_non_nullable
+as num?,currencyCode: freezed == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
 as String?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String?,responseCode: freezed == responseCode ? _self.responseCode : responseCode // ignore: cast_nullable_to_non_nullable
-as String?,amount: freezed == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
-as num?,fee: freezed == fee ? _self.fee : fee // ignore: cast_nullable_to_non_nullable
-as num?,netAmount: freezed == netAmount ? _self.netAmount : netAmount // ignore: cast_nullable_to_non_nullable
-as num?,currency: freezed == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String?,cardScheme: freezed == cardScheme ? _self.cardScheme : cardScheme // ignore: cast_nullable_to_non_nullable
-as String?,cardType: freezed == cardType ? _self.cardType : cardType // ignore: cast_nullable_to_non_nullable
-as String?,maskedPan: freezed == maskedPan ? _self.maskedPan : maskedPan // ignore: cast_nullable_to_non_nullable
-as String?,channel: freezed == channel ? _self.channel : channel // ignore: cast_nullable_to_non_nullable
-as String?,transactionDate: freezed == transactionDate ? _self.transactionDate : transactionDate // ignore: cast_nullable_to_non_nullable
+as String?,responseCodeDescription: freezed == responseCodeDescription ? _self.responseCodeDescription : responseCodeDescription // ignore: cast_nullable_to_non_nullable
+as String?,authCode: freezed == authCode ? _self.authCode : authCode // ignore: cast_nullable_to_non_nullable
+as String?,processorHost: freezed == processorHost ? _self.processorHost : processorHost // ignore: cast_nullable_to_non_nullable
+as String?,durationMs: freezed == durationMs ? _self.durationMs : durationMs // ignore: cast_nullable_to_non_nullable
+as int?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,initiatedAt: freezed == initiatedAt ? _self.initiatedAt : initiatedAt // ignore: cast_nullable_to_non_nullable
+as String?,completedAt: freezed == completedAt ? _self.completedAt : completedAt // ignore: cast_nullable_to_non_nullable
 as String?,settlementReference: freezed == settlementReference ? _self.settlementReference : settlementReference // ignore: cast_nullable_to_non_nullable
 as String?,settlementStatus: freezed == settlementStatus ? _self.settlementStatus : settlementStatus // ignore: cast_nullable_to_non_nullable
 as String?,originalReference: freezed == originalReference ? _self.originalReference : originalReference // ignore: cast_nullable_to_non_nullable
@@ -177,10 +181,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? reference,  String? rrn,  String? stan,  String? authCode,  String? mid,  String? tid,  String? storeName,  String? terminalSerial,  String? merchantAddress,  String? type,  String? status,  String? responseCode,  num? amount,  num? fee,  num? netAmount,  String? currency,  String? cardScheme,  String? cardType,  String? maskedPan,  String? channel,  String? transactionDate,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? transactionRef,  String? tid,  String? mid,  String? merchantEmail,  String? storeName,  String? transactionType,  String? panMasked,  String? cardScheme,  String? cardBank,  String? cardBrand,  String? cardType,  String? cardCountryCode,  num? amount,  num? feeAmount,  String? currencyCode,  String? status,  String? responseCode,  String? responseCodeDescription,  String? authCode,  String? processorHost,  int? durationMs,  String? errorMessage,  String? initiatedAt,  String? completedAt,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TransactionResponse() when $default != null:
-return $default(_that.reference,_that.rrn,_that.stan,_that.authCode,_that.mid,_that.tid,_that.storeName,_that.terminalSerial,_that.merchantAddress,_that.type,_that.status,_that.responseCode,_that.amount,_that.fee,_that.netAmount,_that.currency,_that.cardScheme,_that.cardType,_that.maskedPan,_that.channel,_that.transactionDate,_that.settlementReference,_that.settlementStatus,_that.originalReference,_that.receiptUrl);case _:
+return $default(_that.id,_that.transactionRef,_that.tid,_that.mid,_that.merchantEmail,_that.storeName,_that.transactionType,_that.panMasked,_that.cardScheme,_that.cardBank,_that.cardBrand,_that.cardType,_that.cardCountryCode,_that.amount,_that.feeAmount,_that.currencyCode,_that.status,_that.responseCode,_that.responseCodeDescription,_that.authCode,_that.processorHost,_that.durationMs,_that.errorMessage,_that.initiatedAt,_that.completedAt,_that.settlementReference,_that.settlementStatus,_that.originalReference,_that.receiptUrl);case _:
   return orElse();
 
 }
@@ -198,10 +202,10 @@ return $default(_that.reference,_that.rrn,_that.stan,_that.authCode,_that.mid,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? reference,  String? rrn,  String? stan,  String? authCode,  String? mid,  String? tid,  String? storeName,  String? terminalSerial,  String? merchantAddress,  String? type,  String? status,  String? responseCode,  num? amount,  num? fee,  num? netAmount,  String? currency,  String? cardScheme,  String? cardType,  String? maskedPan,  String? channel,  String? transactionDate,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? transactionRef,  String? tid,  String? mid,  String? merchantEmail,  String? storeName,  String? transactionType,  String? panMasked,  String? cardScheme,  String? cardBank,  String? cardBrand,  String? cardType,  String? cardCountryCode,  num? amount,  num? feeAmount,  String? currencyCode,  String? status,  String? responseCode,  String? responseCodeDescription,  String? authCode,  String? processorHost,  int? durationMs,  String? errorMessage,  String? initiatedAt,  String? completedAt,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)  $default,) {final _that = this;
 switch (_that) {
 case _TransactionResponse():
-return $default(_that.reference,_that.rrn,_that.stan,_that.authCode,_that.mid,_that.tid,_that.storeName,_that.terminalSerial,_that.merchantAddress,_that.type,_that.status,_that.responseCode,_that.amount,_that.fee,_that.netAmount,_that.currency,_that.cardScheme,_that.cardType,_that.maskedPan,_that.channel,_that.transactionDate,_that.settlementReference,_that.settlementStatus,_that.originalReference,_that.receiptUrl);case _:
+return $default(_that.id,_that.transactionRef,_that.tid,_that.mid,_that.merchantEmail,_that.storeName,_that.transactionType,_that.panMasked,_that.cardScheme,_that.cardBank,_that.cardBrand,_that.cardType,_that.cardCountryCode,_that.amount,_that.feeAmount,_that.currencyCode,_that.status,_that.responseCode,_that.responseCodeDescription,_that.authCode,_that.processorHost,_that.durationMs,_that.errorMessage,_that.initiatedAt,_that.completedAt,_that.settlementReference,_that.settlementStatus,_that.originalReference,_that.receiptUrl);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -218,10 +222,10 @@ return $default(_that.reference,_that.rrn,_that.stan,_that.authCode,_that.mid,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? reference,  String? rrn,  String? stan,  String? authCode,  String? mid,  String? tid,  String? storeName,  String? terminalSerial,  String? merchantAddress,  String? type,  String? status,  String? responseCode,  num? amount,  num? fee,  num? netAmount,  String? currency,  String? cardScheme,  String? cardType,  String? maskedPan,  String? channel,  String? transactionDate,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? transactionRef,  String? tid,  String? mid,  String? merchantEmail,  String? storeName,  String? transactionType,  String? panMasked,  String? cardScheme,  String? cardBank,  String? cardBrand,  String? cardType,  String? cardCountryCode,  num? amount,  num? feeAmount,  String? currencyCode,  String? status,  String? responseCode,  String? responseCodeDescription,  String? authCode,  String? processorHost,  int? durationMs,  String? errorMessage,  String? initiatedAt,  String? completedAt,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _TransactionResponse() when $default != null:
-return $default(_that.reference,_that.rrn,_that.stan,_that.authCode,_that.mid,_that.tid,_that.storeName,_that.terminalSerial,_that.merchantAddress,_that.type,_that.status,_that.responseCode,_that.amount,_that.fee,_that.netAmount,_that.currency,_that.cardScheme,_that.cardType,_that.maskedPan,_that.channel,_that.transactionDate,_that.settlementReference,_that.settlementStatus,_that.originalReference,_that.receiptUrl);case _:
+return $default(_that.id,_that.transactionRef,_that.tid,_that.mid,_that.merchantEmail,_that.storeName,_that.transactionType,_that.panMasked,_that.cardScheme,_that.cardBank,_that.cardBrand,_that.cardType,_that.cardCountryCode,_that.amount,_that.feeAmount,_that.currencyCode,_that.status,_that.responseCode,_that.responseCodeDescription,_that.authCode,_that.processorHost,_that.durationMs,_that.errorMessage,_that.initiatedAt,_that.completedAt,_that.settlementReference,_that.settlementStatus,_that.originalReference,_that.receiptUrl);case _:
   return null;
 
 }
@@ -232,31 +236,35 @@ return $default(_that.reference,_that.rrn,_that.stan,_that.authCode,_that.mid,_t
 /// @nodoc
 @JsonSerializable()
 
-class _TransactionResponse implements TransactionResponse {
-  const _TransactionResponse({this.reference, this.rrn, this.stan, this.authCode, this.mid, this.tid, this.storeName, this.terminalSerial, this.merchantAddress, this.type, this.status, this.responseCode, this.amount, this.fee, this.netAmount, this.currency, this.cardScheme, this.cardType, this.maskedPan, this.channel, this.transactionDate, this.settlementReference, this.settlementStatus, this.originalReference, this.receiptUrl});
+class _TransactionResponse extends TransactionResponse {
+  const _TransactionResponse({this.id, this.transactionRef, this.tid, this.mid, this.merchantEmail, this.storeName, this.transactionType, this.panMasked, this.cardScheme, this.cardBank, this.cardBrand, this.cardType, this.cardCountryCode, this.amount, this.feeAmount, this.currencyCode, this.status, this.responseCode, this.responseCodeDescription, this.authCode, this.processorHost, this.durationMs, this.errorMessage, this.initiatedAt, this.completedAt, this.settlementReference, this.settlementStatus, this.originalReference, this.receiptUrl}): super._();
   factory _TransactionResponse.fromJson(Map<String, dynamic> json) => _$TransactionResponseFromJson(json);
 
-@override final  String? reference;
-@override final  String? rrn;
-@override final  String? stan;
-@override final  String? authCode;
-@override final  String? mid;
+@override final  String? id;
+@override final  String? transactionRef;
 @override final  String? tid;
+@override final  String? mid;
+@override final  String? merchantEmail;
 @override final  String? storeName;
-@override final  String? terminalSerial;
-@override final  String? merchantAddress;
-@override final  String? type;
+@override final  String? transactionType;
+@override final  String? panMasked;
+@override final  String? cardScheme;
+@override final  String? cardBank;
+@override final  String? cardBrand;
+@override final  String? cardType;
+@override final  String? cardCountryCode;
+@override final  num? amount;
+@override final  num? feeAmount;
+@override final  String? currencyCode;
 @override final  String? status;
 @override final  String? responseCode;
-@override final  num? amount;
-@override final  num? fee;
-@override final  num? netAmount;
-@override final  String? currency;
-@override final  String? cardScheme;
-@override final  String? cardType;
-@override final  String? maskedPan;
-@override final  String? channel;
-@override final  String? transactionDate;
+@override final  String? responseCodeDescription;
+@override final  String? authCode;
+@override final  String? processorHost;
+@override final  int? durationMs;
+@override final  String? errorMessage;
+@override final  String? initiatedAt;
+@override final  String? completedAt;
 @override final  String? settlementReference;
 @override final  String? settlementStatus;
 @override final  String? originalReference;
@@ -275,16 +283,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransactionResponse&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.rrn, rrn) || other.rrn == rrn)&&(identical(other.stan, stan) || other.stan == stan)&&(identical(other.authCode, authCode) || other.authCode == authCode)&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.tid, tid) || other.tid == tid)&&(identical(other.storeName, storeName) || other.storeName == storeName)&&(identical(other.terminalSerial, terminalSerial) || other.terminalSerial == terminalSerial)&&(identical(other.merchantAddress, merchantAddress) || other.merchantAddress == merchantAddress)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.responseCode, responseCode) || other.responseCode == responseCode)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.fee, fee) || other.fee == fee)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.cardScheme, cardScheme) || other.cardScheme == cardScheme)&&(identical(other.cardType, cardType) || other.cardType == cardType)&&(identical(other.maskedPan, maskedPan) || other.maskedPan == maskedPan)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.settlementReference, settlementReference) || other.settlementReference == settlementReference)&&(identical(other.settlementStatus, settlementStatus) || other.settlementStatus == settlementStatus)&&(identical(other.originalReference, originalReference) || other.originalReference == originalReference)&&(identical(other.receiptUrl, receiptUrl) || other.receiptUrl == receiptUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransactionResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.transactionRef, transactionRef) || other.transactionRef == transactionRef)&&(identical(other.tid, tid) || other.tid == tid)&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.merchantEmail, merchantEmail) || other.merchantEmail == merchantEmail)&&(identical(other.storeName, storeName) || other.storeName == storeName)&&(identical(other.transactionType, transactionType) || other.transactionType == transactionType)&&(identical(other.panMasked, panMasked) || other.panMasked == panMasked)&&(identical(other.cardScheme, cardScheme) || other.cardScheme == cardScheme)&&(identical(other.cardBank, cardBank) || other.cardBank == cardBank)&&(identical(other.cardBrand, cardBrand) || other.cardBrand == cardBrand)&&(identical(other.cardType, cardType) || other.cardType == cardType)&&(identical(other.cardCountryCode, cardCountryCode) || other.cardCountryCode == cardCountryCode)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.feeAmount, feeAmount) || other.feeAmount == feeAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.responseCode, responseCode) || other.responseCode == responseCode)&&(identical(other.responseCodeDescription, responseCodeDescription) || other.responseCodeDescription == responseCodeDescription)&&(identical(other.authCode, authCode) || other.authCode == authCode)&&(identical(other.processorHost, processorHost) || other.processorHost == processorHost)&&(identical(other.durationMs, durationMs) || other.durationMs == durationMs)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.initiatedAt, initiatedAt) || other.initiatedAt == initiatedAt)&&(identical(other.completedAt, completedAt) || other.completedAt == completedAt)&&(identical(other.settlementReference, settlementReference) || other.settlementReference == settlementReference)&&(identical(other.settlementStatus, settlementStatus) || other.settlementStatus == settlementStatus)&&(identical(other.originalReference, originalReference) || other.originalReference == originalReference)&&(identical(other.receiptUrl, receiptUrl) || other.receiptUrl == receiptUrl));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,reference,rrn,stan,authCode,mid,tid,storeName,terminalSerial,merchantAddress,type,status,responseCode,amount,fee,netAmount,currency,cardScheme,cardType,maskedPan,channel,transactionDate,settlementReference,settlementStatus,originalReference,receiptUrl]);
+int get hashCode => Object.hashAll([runtimeType,id,transactionRef,tid,mid,merchantEmail,storeName,transactionType,panMasked,cardScheme,cardBank,cardBrand,cardType,cardCountryCode,amount,feeAmount,currencyCode,status,responseCode,responseCodeDescription,authCode,processorHost,durationMs,errorMessage,initiatedAt,completedAt,settlementReference,settlementStatus,originalReference,receiptUrl]);
 
 @override
 String toString() {
-  return 'TransactionResponse(reference: $reference, rrn: $rrn, stan: $stan, authCode: $authCode, mid: $mid, tid: $tid, storeName: $storeName, terminalSerial: $terminalSerial, merchantAddress: $merchantAddress, type: $type, status: $status, responseCode: $responseCode, amount: $amount, fee: $fee, netAmount: $netAmount, currency: $currency, cardScheme: $cardScheme, cardType: $cardType, maskedPan: $maskedPan, channel: $channel, transactionDate: $transactionDate, settlementReference: $settlementReference, settlementStatus: $settlementStatus, originalReference: $originalReference, receiptUrl: $receiptUrl)';
+  return 'TransactionResponse(id: $id, transactionRef: $transactionRef, tid: $tid, mid: $mid, merchantEmail: $merchantEmail, storeName: $storeName, transactionType: $transactionType, panMasked: $panMasked, cardScheme: $cardScheme, cardBank: $cardBank, cardBrand: $cardBrand, cardType: $cardType, cardCountryCode: $cardCountryCode, amount: $amount, feeAmount: $feeAmount, currencyCode: $currencyCode, status: $status, responseCode: $responseCode, responseCodeDescription: $responseCodeDescription, authCode: $authCode, processorHost: $processorHost, durationMs: $durationMs, errorMessage: $errorMessage, initiatedAt: $initiatedAt, completedAt: $completedAt, settlementReference: $settlementReference, settlementStatus: $settlementStatus, originalReference: $originalReference, receiptUrl: $receiptUrl)';
 }
 
 
@@ -295,7 +303,7 @@ abstract mixin class _$TransactionResponseCopyWith<$Res> implements $Transaction
   factory _$TransactionResponseCopyWith(_TransactionResponse value, $Res Function(_TransactionResponse) _then) = __$TransactionResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? reference, String? rrn, String? stan, String? authCode, String? mid, String? tid, String? storeName, String? terminalSerial, String? merchantAddress, String? type, String? status, String? responseCode, num? amount, num? fee, num? netAmount, String? currency, String? cardScheme, String? cardType, String? maskedPan, String? channel, String? transactionDate, String? settlementReference, String? settlementStatus, String? originalReference, String? receiptUrl
+ String? id, String? transactionRef, String? tid, String? mid, String? merchantEmail, String? storeName, String? transactionType, String? panMasked, String? cardScheme, String? cardBank, String? cardBrand, String? cardType, String? cardCountryCode, num? amount, num? feeAmount, String? currencyCode, String? status, String? responseCode, String? responseCodeDescription, String? authCode, String? processorHost, int? durationMs, String? errorMessage, String? initiatedAt, String? completedAt, String? settlementReference, String? settlementStatus, String? originalReference, String? receiptUrl
 });
 
 
@@ -312,29 +320,33 @@ class __$TransactionResponseCopyWithImpl<$Res>
 
 /// Create a copy of TransactionResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? reference = freezed,Object? rrn = freezed,Object? stan = freezed,Object? authCode = freezed,Object? mid = freezed,Object? tid = freezed,Object? storeName = freezed,Object? terminalSerial = freezed,Object? merchantAddress = freezed,Object? type = freezed,Object? status = freezed,Object? responseCode = freezed,Object? amount = freezed,Object? fee = freezed,Object? netAmount = freezed,Object? currency = freezed,Object? cardScheme = freezed,Object? cardType = freezed,Object? maskedPan = freezed,Object? channel = freezed,Object? transactionDate = freezed,Object? settlementReference = freezed,Object? settlementStatus = freezed,Object? originalReference = freezed,Object? receiptUrl = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? transactionRef = freezed,Object? tid = freezed,Object? mid = freezed,Object? merchantEmail = freezed,Object? storeName = freezed,Object? transactionType = freezed,Object? panMasked = freezed,Object? cardScheme = freezed,Object? cardBank = freezed,Object? cardBrand = freezed,Object? cardType = freezed,Object? cardCountryCode = freezed,Object? amount = freezed,Object? feeAmount = freezed,Object? currencyCode = freezed,Object? status = freezed,Object? responseCode = freezed,Object? responseCodeDescription = freezed,Object? authCode = freezed,Object? processorHost = freezed,Object? durationMs = freezed,Object? errorMessage = freezed,Object? initiatedAt = freezed,Object? completedAt = freezed,Object? settlementReference = freezed,Object? settlementStatus = freezed,Object? originalReference = freezed,Object? receiptUrl = freezed,}) {
   return _then(_TransactionResponse(
-reference: freezed == reference ? _self.reference : reference // ignore: cast_nullable_to_non_nullable
-as String?,rrn: freezed == rrn ? _self.rrn : rrn // ignore: cast_nullable_to_non_nullable
-as String?,stan: freezed == stan ? _self.stan : stan // ignore: cast_nullable_to_non_nullable
-as String?,authCode: freezed == authCode ? _self.authCode : authCode // ignore: cast_nullable_to_non_nullable
-as String?,mid: freezed == mid ? _self.mid : mid // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,transactionRef: freezed == transactionRef ? _self.transactionRef : transactionRef // ignore: cast_nullable_to_non_nullable
 as String?,tid: freezed == tid ? _self.tid : tid // ignore: cast_nullable_to_non_nullable
+as String?,mid: freezed == mid ? _self.mid : mid // ignore: cast_nullable_to_non_nullable
+as String?,merchantEmail: freezed == merchantEmail ? _self.merchantEmail : merchantEmail // ignore: cast_nullable_to_non_nullable
 as String?,storeName: freezed == storeName ? _self.storeName : storeName // ignore: cast_nullable_to_non_nullable
-as String?,terminalSerial: freezed == terminalSerial ? _self.terminalSerial : terminalSerial // ignore: cast_nullable_to_non_nullable
-as String?,merchantAddress: freezed == merchantAddress ? _self.merchantAddress : merchantAddress // ignore: cast_nullable_to_non_nullable
-as String?,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,transactionType: freezed == transactionType ? _self.transactionType : transactionType // ignore: cast_nullable_to_non_nullable
+as String?,panMasked: freezed == panMasked ? _self.panMasked : panMasked // ignore: cast_nullable_to_non_nullable
+as String?,cardScheme: freezed == cardScheme ? _self.cardScheme : cardScheme // ignore: cast_nullable_to_non_nullable
+as String?,cardBank: freezed == cardBank ? _self.cardBank : cardBank // ignore: cast_nullable_to_non_nullable
+as String?,cardBrand: freezed == cardBrand ? _self.cardBrand : cardBrand // ignore: cast_nullable_to_non_nullable
+as String?,cardType: freezed == cardType ? _self.cardType : cardType // ignore: cast_nullable_to_non_nullable
+as String?,cardCountryCode: freezed == cardCountryCode ? _self.cardCountryCode : cardCountryCode // ignore: cast_nullable_to_non_nullable
+as String?,amount: freezed == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as num?,feeAmount: freezed == feeAmount ? _self.feeAmount : feeAmount // ignore: cast_nullable_to_non_nullable
+as num?,currencyCode: freezed == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
 as String?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String?,responseCode: freezed == responseCode ? _self.responseCode : responseCode // ignore: cast_nullable_to_non_nullable
-as String?,amount: freezed == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
-as num?,fee: freezed == fee ? _self.fee : fee // ignore: cast_nullable_to_non_nullable
-as num?,netAmount: freezed == netAmount ? _self.netAmount : netAmount // ignore: cast_nullable_to_non_nullable
-as num?,currency: freezed == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String?,cardScheme: freezed == cardScheme ? _self.cardScheme : cardScheme // ignore: cast_nullable_to_non_nullable
-as String?,cardType: freezed == cardType ? _self.cardType : cardType // ignore: cast_nullable_to_non_nullable
-as String?,maskedPan: freezed == maskedPan ? _self.maskedPan : maskedPan // ignore: cast_nullable_to_non_nullable
-as String?,channel: freezed == channel ? _self.channel : channel // ignore: cast_nullable_to_non_nullable
-as String?,transactionDate: freezed == transactionDate ? _self.transactionDate : transactionDate // ignore: cast_nullable_to_non_nullable
+as String?,responseCodeDescription: freezed == responseCodeDescription ? _self.responseCodeDescription : responseCodeDescription // ignore: cast_nullable_to_non_nullable
+as String?,authCode: freezed == authCode ? _self.authCode : authCode // ignore: cast_nullable_to_non_nullable
+as String?,processorHost: freezed == processorHost ? _self.processorHost : processorHost // ignore: cast_nullable_to_non_nullable
+as String?,durationMs: freezed == durationMs ? _self.durationMs : durationMs // ignore: cast_nullable_to_non_nullable
+as int?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,initiatedAt: freezed == initiatedAt ? _self.initiatedAt : initiatedAt // ignore: cast_nullable_to_non_nullable
+as String?,completedAt: freezed == completedAt ? _self.completedAt : completedAt // ignore: cast_nullable_to_non_nullable
 as String?,settlementReference: freezed == settlementReference ? _self.settlementReference : settlementReference // ignore: cast_nullable_to_non_nullable
 as String?,settlementStatus: freezed == settlementStatus ? _self.settlementStatus : settlementStatus // ignore: cast_nullable_to_non_nullable
 as String?,originalReference: freezed == originalReference ? _self.originalReference : originalReference // ignore: cast_nullable_to_non_nullable

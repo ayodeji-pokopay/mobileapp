@@ -64,6 +64,20 @@ abstract class ChannelSummary with _$ChannelSummary {
 }
 
 @freezed
+abstract class TerminalSummary with _$TerminalSummary {
+  const factory TerminalSummary({
+    String? tid,
+    String? terminalLocation,
+    num? totalSales,
+    int? transactionCount,
+    num? fees,
+  }) = _TerminalSummary;
+
+  factory TerminalSummary.fromJson(Map<String, dynamic> json) =>
+      _$TerminalSummaryFromJson(json);
+}
+
+@freezed
 abstract class CountAmount with _$CountAmount {
   const factory CountAmount({int? count, num? amount}) = _CountAmount;
 
@@ -73,13 +87,23 @@ abstract class CountAmount with _$CountAmount {
 
 @freezed
 abstract class CardSchemeSummary with _$CardSchemeSummary {
+  const CardSchemeSummary._();
+
   const factory CardSchemeSummary({
     String? cardScheme,
     int? transactionCount,
     num? totalAmount,
+    num? totalSales,
     num? totalFees,
+    num? fees,
     num? netAmount,
+    num? averageTransactionValue,
   }) = _CardSchemeSummary;
+
+  /// The backend sends `totalSales` / `fees`; older shapes used
+  /// `totalAmount` / `totalFees`.
+  num? get amount => totalAmount ?? totalSales;
+  num? get feeAmount => totalFees ?? fees;
 
   factory CardSchemeSummary.fromJson(Map<String, dynamic> json) =>
       _$CardSchemeSummaryFromJson(json);
@@ -119,8 +143,13 @@ abstract class MerchantSalesReportResponse with _$MerchantSalesReportResponse {
     @Default(<DailyBreakdown>[]) List<DailyBreakdown> dailyBreakdown,
     PeriodTotals? previousPeriod,
     @Default(<ChannelSummary>[]) List<ChannelSummary> channelBreakdown,
+    @Default(<TerminalSummary>[]) List<TerminalSummary> terminalBreakdown,
     CountAmount? refunds,
     CountAmount? chargebacks,
+    num? totalSettled,
+    num? pendingSettlement,
+    int? settlementCount,
+    String? generatedAt,
   }) = _MerchantSalesReportResponse;
 
   factory MerchantSalesReportResponse.fromJson(Map<String, dynamic> json) =>

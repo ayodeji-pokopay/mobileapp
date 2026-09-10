@@ -403,5 +403,26 @@
   "statusInactive": "Inactive",
   "statusSuspended": "Suspended",
   "statusDisabled": "Disabled",
-  "statusFrozen": "Frozen"
+  "statusFrozen": "Frozen",
+
+  "receiptBank": "Issuing bank",
+  "receiptProcessor": "Processor",
+  "receiptResponse": "Response",
+  "receiptDuration": "Processing time",
+  "receiptPoweredBy": "Powered by Pokopay",
+  "receiptImageFailed": "Could not create the receipt image.",
+  "settingsBiometric": "Biometric sign-in",
+  "settingsBiometricHint": "Use Face ID or your fingerprint to sign in",
+  "settingsBiometricEnrolled": "Biometric sign-in is on for this device",
+  "settingsBiometricOff": "Biometric sign-in turned off",
+  "salesByTerminal": "By terminal",
+  "salesTransactionsSummary": "{count, plural, =1{1 transaction} other{{count} transactions}} · {total}",
+  "@salesTransactionsSummary": {"placeholders": {"count": {"type": "int"}, "total": {"type": "String"}}},
+  "salesWindow7": "Last 7 days",
+  "salesWindow30": "Last 30 days",
+  "salesWindow90": "Last 90 days",
+  "terminalLabel": "Terminal {tid}",
+  "@terminalLabel": {"placeholders": {"tid": {"type": "String"}}},
+  "dayTotal": "{count, plural, =1{1 sale} other{{count} sales}} · {total}",
+  "@dayTotal": {"placeholders": {"count": {"type": "int"}, "total": {"type": "String"}}}
 }

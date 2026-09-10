@@ -40,7 +40,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final l10n = AppLocalizations.of(context);
     final summary = ref.watch(summaryProvider);
     final wallet = ref.watch(walletProvider);
-    final weekly = ref.watch(weeklySalesProvider);
+    final weekly = ref.watch(periodTransactionsProvider('WEEKLY'));
     final recent = ref.watch(recentTransactionsProvider);
     final unread =
         ref.watch(notificationsProvider).asData?.value.unreadCount ?? 0;
@@ -62,7 +62,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           onRefresh: () async {
             ref.invalidate(summaryProvider);
             ref.invalidate(walletProvider);
-            ref.invalidate(weeklySalesProvider);
+            ref.invalidate(periodTransactionsProvider('WEEKLY'));
             ref.invalidate(recentTransactionsProvider);
             ref.invalidate(notificationsProvider);
             await Future.wait([
@@ -208,16 +208,12 @@ class _HeroCard extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary,
-            AppColors.primaryBright,
-            AppColors.primaryDark,
-          ],
+          colors: [AppColors.navyMuted, AppColors.navy, AppColors.navyDark],
           stops: [0, 0.55, 1],
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.28),
+            color: AppColors.navy.withValues(alpha: 0.32),
             blurRadius: 28,
             offset: const Offset(0, 12),
           ),
@@ -240,7 +236,7 @@ class _HeroCard extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.10),
+                  color: AppColors.primaryBright.withValues(alpha: 0.22),
                   width: 1.5,
                 ),
               ),
@@ -308,7 +304,7 @@ class _HeroCard extends StatelessWidget {
                 const SizedBox(height: 18),
                 Row(
                   children: [
-                    _WhitePill(
+                    _GreenPill(
                       icon: LucideIcons.wallet,
                       label: l10n.dashboardPay,
                       onTap: onWallet,
@@ -369,8 +365,8 @@ class _Orb extends StatelessWidget {
   }
 }
 
-class _WhitePill extends StatelessWidget {
-  const _WhitePill({
+class _GreenPill extends StatelessWidget {
+  const _GreenPill({
     required this.icon,
     required this.label,
     required this.onTap,
@@ -509,9 +505,9 @@ class _GlassButton extends StatelessWidget {
                       width: 7,
                       height: 7,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFD166),
+                        color: AppColors.primaryBright,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.primary, width: 1),
+                        border: Border.all(color: AppColors.navy, width: 1),
                       ),
                     ),
                   ),
@@ -532,18 +528,16 @@ class _SalesTodayCard extends StatelessWidget {
   });
 
   final AsyncValue<MerchantSettlementSummary> summary;
-  final AsyncValue<MerchantSalesReportResponse> weekly;
+  final AsyncValue<PageTransactionResponse> weekly;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final s = summary.asData?.value;
-    final points =
-        weekly.asData?.value.dailyBreakdown
-            .map((d) => (d.totalAmount ?? 0).toDouble())
-            .toList() ??
-        const <double>[];
+    final points = weekly.asData == null
+        ? const <double>[]
+        : dailyTotals(weekly.asData!.value.content, 7);
     final today = (s?.todaySales ?? 0).toDouble();
     final yesterday = s?.yesterdaySales?.toDouble();
     final double? delta = yesterday == null
@@ -788,11 +782,13 @@ class _ActivityRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final style = transactionStyle(t, l10n);
+    final local = DateTime.tryParse(t.transactionDate ?? '')?.toLocal();
     final subtitle = [
-      formatDayLabel(t.transactionDate).split(' · ').first,
-      if ((t.storeName ?? '').isNotEmpty) t.storeName!,
+      if (local != null)
+        '${formatDayLabel(local.toIso8601String()).split(' · ').first} ${formatTime(local)}',
+      if ((t.tid ?? '').isNotEmpty) t.tid!,
       if ((t.maskedPan ?? '').length >= 4)
-        '···· ${t.maskedPan!.substring(t.maskedPan!.length - 4)}',
+        '${schemeName(t.scheme, l10n)} ···· ${t.last4}',
     ].join(' · ');
     return ListRow(
       onTap: onTap,

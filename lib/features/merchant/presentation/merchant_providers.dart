@@ -180,10 +180,63 @@ final recentTransactionsProvider = FutureProvider<PageTransactionResponse>((
 ) {
   final mid = ref.watch(_midProvider);
   if (mid == null || mid.isEmpty) return Future.error(_noMerchant());
+  // The backend defaults to "today" without dates; ask for the last 30 days.
+  final now = DateTime.now();
   return ref
       .watch(merchantRepositoryProvider)
-      .fetchTransactions(mid: mid, size: 8);
+      .fetchTransactions(
+        mid: mid,
+        startDate: now.subtract(const Duration(days: 30)),
+        endDate: now,
+        size: 8,
+      );
 });
+
+/// Days covered by a sales period code.
+int periodDays(String period) => switch (period) {
+  'DAILY' => 1,
+  'WEEKLY' => 7,
+  'MONTHLY' => 30,
+  'YEARLY' => 365,
+  _ => 7,
+};
+
+/// All transactions inside a sales period, used to draw the daily chart
+/// since the report itself has no daily breakdown.
+final periodTransactionsProvider =
+    FutureProvider.family<PageTransactionResponse, String>((ref, period) {
+      final mid = ref.watch(_midProvider);
+      if (mid == null || mid.isEmpty) return Future.error(_noMerchant());
+      final now = DateTime.now();
+      return ref
+          .watch(merchantRepositoryProvider)
+          .fetchTransactions(
+            mid: mid,
+            startDate: now.subtract(Duration(days: periodDays(period) - 1)),
+            endDate: now,
+            size: 500,
+          );
+    });
+
+/// Sum of approved amounts per calendar day over the last [days] days,
+/// oldest first. Days with no sales are zero.
+List<double> dailyTotals(List<TransactionResponse> txns, int days) {
+  final now = DateTime.now();
+  final start = DateTime(
+    now.year,
+    now.month,
+    now.day,
+  ).subtract(Duration(days: days - 1));
+  final totals = List<double>.filled(days, 0);
+  for (final t in txns) {
+    if ((t.status ?? '').toUpperCase() != 'APPROVED') continue;
+    final d = DateTime.tryParse(t.transactionDate ?? '')?.toLocal();
+    if (d == null) continue;
+    final i = DateTime(d.year, d.month, d.day).difference(start).inDays;
+    if (i >= 0 && i < days) totals[i] += (t.amount ?? 0).toDouble();
+  }
+  return totals;
+}
 
 final transactionDetailProvider =
     FutureProvider.family<TransactionResponse, String>((ref, reference) {

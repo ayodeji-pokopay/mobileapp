@@ -183,6 +183,16 @@ class AuthController extends Notifier<AuthState> {
     }
   }
 
+  /// Turn biometric sign-in on (enrol this device) or off (revoke it).
+  Future<void> setBiometricEnabled(bool enabled) async {
+    if (enabled) {
+      await _repo.enrolDevice();
+    } else {
+      await _repo.revokeDevice();
+    }
+    ref.invalidate(deviceEnrolledProvider);
+  }
+
   /// Point every merchant screen at [mid]. Only meaningful for users
   /// without a merchant of their own (see [AuthState.canSwitchMerchant]).
   void selectMerchant(String mid) {
@@ -199,3 +209,8 @@ class AuthController extends Notifier<AuthState> {
 final authControllerProvider = NotifierProvider<AuthController, AuthState>(
   AuthController.new,
 );
+
+/// Whether this install holds a device token for biometric sign-in.
+final deviceEnrolledProvider = FutureProvider<bool>((ref) {
+  return ref.watch(secureStorageProvider).hasDeviceToken();
+});

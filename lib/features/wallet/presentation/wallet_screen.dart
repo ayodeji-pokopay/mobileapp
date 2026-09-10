@@ -71,8 +71,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                     context.push('${AppRoutes.settlements}?tab=statements'),
               ),
             ),
-            if ((wallet.asData?.value.status ?? '').toUpperCase() ==
-                'FROZEN') ...[
+            if (wallet.asData?.value.isFrozen == true) ...[
               const SizedBox(height: 12),
               _FrozenBanner(text: l10n.walletFrozen),
             ],
@@ -81,7 +80,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
               value: wallet,
               loadingHeight: 76,
               data: (w) => _NextPayoutCard(
-                config: w.settlementConfig,
+                wallet: w,
                 onTap: () => context.push(AppRoutes.settlements),
               ),
             ),
@@ -89,9 +88,10 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
             AsyncSlot<WalletResponse>(
               value: wallet,
               loadingHeight: 76,
-              data: (w) => w.settlementAccount == null
+              data: (w) =>
+                  (w.bankName ?? '').isEmpty && (w.accountNumber ?? '').isEmpty
                   ? const SizedBox.shrink()
-                  : _AccountCard(account: w.settlementAccount!),
+                  : _AccountCard(wallet: w),
             ),
             const SizedBox(height: 24),
             Padding(
@@ -256,7 +256,7 @@ class _BalanceCard extends StatelessWidget {
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
             child: Text(
-              formatMoney(wallet.availableBalance),
+              formatMoney(wallet.availableNaira),
               style: AppText.display(size: 30, color: Colors.white, height: 1),
             ),
           ),
@@ -268,7 +268,7 @@ class _BalanceCard extends StatelessWidget {
                   icon: LucideIcons.clock,
                   iconColor: const Color(0xFFFFD166),
                   label: l10n.walletPending,
-                  value: formatMoneyCompact(wallet.pendingBalance),
+                  value: formatMoneyCompact(wallet.pendingNaira),
                 ),
               ),
               const SizedBox(width: 10),
@@ -439,26 +439,25 @@ String cycleLabel(String? cycle, AppLocalizations l10n) {
     'WEEKLY' => l10n.cycleWeekly,
     'INSTANT' => l10n.cycleInstant,
     'MANUAL' => l10n.cycleManual,
+    'T_PLUS_0' => l10n.cycleT0,
+    'T_PLUS_1' => l10n.cycleT1,
+    'T_PLUS_2' => l10n.cycleT2,
     _ => cycle ?? '',
   };
 }
 
 class _NextPayoutCard extends StatelessWidget {
-  const _NextPayoutCard({required this.config, required this.onTap});
-  final SettlementConfig? config;
+  const _NextPayoutCard({required this.wallet, required this.onTap});
+  final WalletResponse wallet;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final c = config;
+    final pending = wallet.pendingNaira ?? 0;
     final parts = <String>[
-      if ((c?.nextSettlementDate ?? '').isNotEmpty)
-        formatDayLabel(c!.nextSettlementDate).split(' · ').first,
-      if (c?.instantEnabled == true)
-        l10n.cycleInstant
-      else if ((c?.cycle ?? '').isNotEmpty)
-        cycleLabel(c!.cycle, l10n),
+      if ((wallet.cycle ?? '').isNotEmpty) cycleLabel(wallet.cycle, l10n),
+      if (wallet.autoSettlement == true) l10n.cycleInstant,
     ];
     return SurfaceCard(
       radius: 14,
@@ -478,9 +477,7 @@ class _NextPayoutCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  c?.nextSettlementAmount == null
-                      ? l10n.commonDash
-                      : formatMoney(c!.nextSettlementAmount),
+                  pending > 0 ? formatMoney(pending) : l10n.commonDash,
                   style: AppText.money(size: 18),
                 ),
                 const SizedBox(height: 2),
@@ -488,14 +485,6 @@ class _NextPayoutCard extends StatelessWidget {
                   parts.isEmpty ? l10n.walletSchedule : parts.join(' · '),
                   style: AppText.body(size: 12, color: AppColors.textSecondary),
                 ),
-                if ((c?.minimumAmount ?? 0) > 0)
-                  Text(
-                    l10n.walletMinimumPayout(formatMoney(c!.minimumAmount)),
-                    style: AppText.body(
-                      size: 12,
-                      color: AppColors.textTertiary,
-                    ),
-                  ),
               ],
             ),
           ),
@@ -511,13 +500,12 @@ class _NextPayoutCard extends StatelessWidget {
 }
 
 class _AccountCard extends StatelessWidget {
-  const _AccountCard({required this.account});
-  final SettlementAccount account;
+  const _AccountCard({required this.wallet});
+  final WalletResponse wallet;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final number = account.accountNumberMasked ?? _mask(account.accountNumber);
     return SurfaceCard(
       radius: 14,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -536,14 +524,14 @@ class _AccountCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   [
-                    account.bankName,
-                    number,
+                    wallet.bankName,
+                    wallet.accountNumber,
                   ].where((e) => (e ?? '').isNotEmpty).join(' · '),
                   style: AppText.body(size: 15, weight: FontWeight.w600),
                 ),
-                if ((account.accountName ?? '').isNotEmpty)
+                if ((wallet.accountName ?? '').isNotEmpty)
                   Text(
-                    account.accountName!,
+                    wallet.accountName!,
                     style: AppText.body(
                       size: 12,
                       color: AppColors.textSecondary,
@@ -555,11 +543,6 @@ class _AccountCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String? _mask(String? n) {
-    if (n == null || n.length < 4) return n;
-    return '****${n.substring(n.length - 4)}';
   }
 }
 

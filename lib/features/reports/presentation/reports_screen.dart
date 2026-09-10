@@ -10,18 +10,17 @@ import '../../../core/theme/app_text.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/error_text.dart';
 import '../../../shared/format.dart';
+import '../../../shared/pdf/pokopay_pdf.dart';
 import '../../../shared/pdf_share.dart';
 import '../../../shared/widgets/async_slot.dart';
 import '../../../shared/widgets/bottom_nav.dart';
+import '../../../shared/widgets/card_brand_logo.dart';
 import '../../../shared/widgets/charts.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/offline_banner.dart';
 import '../../../shared/widgets/pill_tabs.dart';
 import '../../../shared/widgets/pills.dart';
-import '../../../shared/widgets/section_label.dart';
-import '../../auth/presentation/auth_controller.dart';
-import '../../merchant/data/merchant_repository.dart';
 import '../../merchant/presentation/merchant_providers.dart';
 import 'receipt_sheet.dart';
 import 'transaction_style.dart';
@@ -51,16 +50,25 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
 
   Future<void> _export() async {
     final l10n = AppLocalizations.of(context);
-    final mid = ref.read(authControllerProvider).mid;
-    if (mid == null || _exporting) return;
+    final report = ref.read(salesReportProvider).asData?.value;
+    if (report == null || _exporting) return;
     setState(() => _exporting = true);
     final messenger = ScaffoldMessenger.of(context);
     messenger.showSnackBar(SnackBar(content: Text(l10n.salesDownloading)));
     try {
       final period = ref.read(salesPeriodProvider);
-      final bytes = await ref
-          .read(merchantRepositoryProvider)
-          .downloadSalesPdf(mid: mid, period: period);
+      final labels = {
+        'DAILY': l10n.periodToday,
+        'WEEKLY': l10n.periodLastWeek,
+        'MONTHLY': l10n.periodLastMonth,
+        'YEARLY': l10n.periodLastYear,
+      };
+      final bytes = await buildSalesReportPdf(
+        r: report,
+        business: ref.read(businessNameProvider),
+        l10n: l10n,
+        periodLabel: labels[period] ?? period,
+      );
       await sharePdf(
         bytes,
         fileName: 'pokopay-sales-${period.toLowerCase()}.pdf',
@@ -140,6 +148,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
               child: switch (tab) {
                 0 => _Overview(
                   sales: sales,
+                  period: period,
                   periodIndex: periodIndex < 0 ? 1 : periodIndex,
                   periodLabels: periodLabels,
                   onPeriod: (i) =>
@@ -236,9 +245,10 @@ class _MenuRow extends StatelessWidget {
 
 // ── Overview ────────────────────────────────────────────────────────────
 
-class _Overview extends StatelessWidget {
+class _Overview extends ConsumerWidget {
   const _Overview({
     required this.sales,
+    required this.period,
     required this.periodIndex,
     required this.periodLabels,
     required this.onPeriod,
@@ -249,6 +259,7 @@ class _Overview extends StatelessWidget {
   });
 
   final AsyncValue<MerchantSalesReportResponse> sales;
+  final String period;
   final int periodIndex;
   final List<String> periodLabels;
   final ValueChanged<int> onPeriod;
@@ -258,8 +269,13 @@ class _Overview extends StatelessWidget {
   final VoidCallback? onExport;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final txns = ref.watch(periodTransactionsProvider(period));
+    final days = periodDays(period);
+    final series = txns.asData == null
+        ? const <double>[]
+        : dailyTotals(txns.asData!.value.content, days);
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView(
@@ -281,7 +297,7 @@ class _Overview extends StatelessWidget {
             value: sales,
             loadingHeight: 300,
             onRetry: onRetry,
-            data: (r) => _GrossSalesCard(r: r),
+            data: (r) => _GrossSalesCard(r: r, series: series, days: days),
           ),
           const SizedBox(height: 12),
           SurfaceCard(
@@ -336,8 +352,14 @@ class _Overview extends StatelessWidget {
 }
 
 class _GrossSalesCard extends StatelessWidget {
-  const _GrossSalesCard({required this.r});
+  const _GrossSalesCard({
+    required this.r,
+    required this.series,
+    required this.days,
+  });
   final MerchantSalesReportResponse r;
+  final List<double> series;
+  final int days;
 
   @override
   Widget build(BuildContext context) {
@@ -352,9 +374,12 @@ class _GrossSalesCard extends StatelessWidget {
           )
         : '';
     final delta = percentDelta(r.totalSales, r.previousPeriod?.totalSales);
-    final rows = r.dailyBreakdown;
-    final values = rows.map((d) => (d.totalAmount ?? 0).toDouble()).toList();
-    String xLabel(int i) => formatDayMonth(rows[i].date).split(', ').last;
+    final values = series;
+    final today = DateTime.now();
+    String xLabel(int i) {
+      final d = today.subtract(Duration(days: days - 1 - i));
+      return formatDayMonth(d.toIso8601String()).split(', ').last;
+    }
 
     return SurfaceCard(
       radius: 18,
@@ -403,14 +428,14 @@ class _GrossSalesCard extends StatelessWidget {
               ),
             ],
           ),
-          if (rows.isNotEmpty) ...[
+          if (values.length > 1) ...[
             const SizedBox(height: 20),
             BarChart(
               values: values,
               xLabels: [
                 xLabel(0),
-                if (rows.length > 2) xLabel(rows.length ~/ 2),
-                if (rows.length > 1) xLabel(rows.length - 1),
+                if (values.length > 2) xLabel(values.length ~/ 2),
+                xLabel(values.length - 1),
               ],
               yFormat: formatMoneyCompact,
             ),
@@ -604,28 +629,52 @@ class _BreakdownCardState extends State<_BreakdownCard> {
     final r = widget.r;
     final total = (r.totalSales ?? 0).toDouble();
     final channels = r.channelBreakdown;
-    final showChannels = channels.length > 1;
-    final mode = showChannels ? _mode : 0;
+    final terminals = r.terminalBreakdown;
+    final modes = <String>[
+      l10n.salesCardBrands,
+      if (terminals.isNotEmpty) l10n.salesByTerminal,
+      if (channels.length > 1) l10n.salesChannels,
+    ];
+    final mode = _mode.clamp(0, modes.length - 1);
+    final modeLabel = modes[mode];
 
-    final rows = mode == 0
-        ? ([...r.cardSchemeBreakdown]..sort(
-                (a, b) => (b.totalAmount ?? 0).compareTo(a.totalAmount ?? 0),
+    final List<
+      ({
+        String? scheme,
+        String abbr,
+        String name,
+        num? amount,
+        int? count,
+        Color color,
+      })
+    >
+    rows;
+    if (modeLabel == l10n.salesByTerminal) {
+      rows =
+          ([...terminals]..sort(
+                (a, b) => (b.totalSales ?? 0).compareTo(a.totalSales ?? 0),
               ))
               .map(
-                (c) => (
-                  abbr: schemeAbbr(c.cardScheme),
-                  name: schemeName(c.cardScheme, l10n),
-                  amount: c.totalAmount,
-                  count: c.transactionCount,
-                  color: _brandColor(c.cardScheme),
+                (t) => (
+                  scheme: null,
+                  abbr: 'POS',
+                  name: (t.terminalLocation ?? '').isNotEmpty
+                      ? '${t.terminalLocation} · ${t.tid}'
+                      : l10n.terminalLabel(t.tid ?? ''),
+                  amount: t.totalSales,
+                  count: t.transactionCount,
+                  color: AppColors.navy,
                 ),
               )
-              .toList()
-        : ([...channels]..sort(
+              .toList();
+    } else if (modeLabel == l10n.salesChannels) {
+      rows =
+          ([...channels]..sort(
                 (a, b) => (b.totalAmount ?? 0).compareTo(a.totalAmount ?? 0),
               ))
               .map(
                 (c) => (
+                  scheme: null,
                   abbr: _channelAbbr(c.channel),
                   name: _channelName(c.channel, l10n),
                   amount: c.totalAmount,
@@ -634,6 +683,22 @@ class _BreakdownCardState extends State<_BreakdownCard> {
                 ),
               )
               .toList();
+    } else {
+      rows =
+          ([...r.cardSchemeBreakdown]
+                ..sort((a, b) => (b.amount ?? 0).compareTo(a.amount ?? 0)))
+              .map(
+                (c) => (
+                  scheme: c.cardScheme,
+                  abbr: schemeAbbr(c.cardScheme),
+                  name: schemeName(c.cardScheme, l10n),
+                  amount: c.amount,
+                  count: c.transactionCount,
+                  color: _brandColor(c.cardScheme),
+                ),
+              )
+              .toList();
+    }
 
     return SurfaceCard(
       radius: 18,
@@ -644,7 +709,8 @@ class _BreakdownCardState extends State<_BreakdownCard> {
           Text(l10n.salesBreakdown.toUpperCase(), style: AppText.label()),
           const SizedBox(height: 12),
           PillTabs(
-            items: [l10n.salesCardBrands, if (showChannels) l10n.salesChannels],
+            scrollable: true,
+            items: modes,
             selected: mode,
             onChanged: (i) => setState(() => _mode = i),
             activeColor: AppColors.primary,
@@ -666,11 +732,14 @@ class _BreakdownCardState extends State<_BreakdownCard> {
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   children: [
-                    InitialsTile(
-                      text: rows[i].abbr,
-                      foreground: rows[i].color,
-                      fontSize: 11,
-                    ),
+                    if (rows[i].scheme != null)
+                      CardBrandLogo(scheme: rows[i].scheme, size: 40)
+                    else
+                      InitialsTile(
+                        text: rows[i].abbr,
+                        foreground: rows[i].color,
+                        fontSize: 11,
+                      ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -832,14 +901,10 @@ class _Transactions extends ConsumerStatefulWidget {
 }
 
 class _TransactionsState extends ConsumerState<_Transactions> {
-  static const _statuses = [
-    null,
-    'APPROVED',
-    'DECLINED',
-    'REVERSED',
-    'REFUNDED',
-  ];
+  static const _statuses = [null, 'APPROVED', 'FAILED', 'REVERSED', 'REFUNDED'];
+  static const _windows = [7, 30, 90];
   int _status = 0;
+  int _window = 0;
   String _search = '';
 
   @override
@@ -849,7 +914,7 @@ class _TransactionsState extends ConsumerState<_Transactions> {
     final query = (
       status: _statuses[_status],
       last4: digits ? _search : null,
-      days: 90,
+      days: _windows[_window],
     );
     final txns = ref.watch(transactionsProvider(query));
 
@@ -892,7 +957,17 @@ class _TransactionsState extends ConsumerState<_Transactions> {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
+          PillTabs(
+            scrollable: true,
+            dropdown: true,
+            inactiveColor: AppColors.surface,
+            inactiveTextColor: AppColors.textBody,
+            items: [l10n.salesWindow7, l10n.salesWindow30, l10n.salesWindow90],
+            selected: _window,
+            onChanged: (i) => setState(() => _window = i),
+          ),
+          const SizedBox(height: 8),
           PillTabs(
             scrollable: true,
             inactiveColor: AppColors.surface,
@@ -933,15 +1008,62 @@ class _TransactionsState extends ConsumerState<_Transactions> {
               }
               final groups = <String, List<TransactionResponse>>{};
               for (final t in items) {
-                final day = (t.transactionDate ?? '').split('T').first;
+                final local = DateTime.tryParse(
+                  t.transactionDate ?? '',
+                )?.toLocal();
+                final day = local == null
+                    ? ''
+                    : local.toIso8601String().split('T').first;
                 groups.putIfAbsent(day, () => []).add(t);
               }
               final days = groups.keys.toList()..sort((a, b) => b.compareTo(a));
+              num approvedTotal(List<TransactionResponse> list) => list
+                  .where((t) => (t.status ?? '').toUpperCase() == 'APPROVED')
+                  .fold<num>(0, (a, t) => a + (t.amount ?? 0));
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4, bottom: 14),
+                    child: Text(
+                      l10n.salesTransactionsSummary(
+                        items.length,
+                        formatMoney(approvedTotal(items)),
+                      ),
+                      style: AppText.body(
+                        size: 13,
+                        weight: FontWeight.w600,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ),
                   for (final d in days) ...[
-                    SectionLabel(formatDayLabel(d)),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4, bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            formatDayLabel(d),
+                            style: AppText.body(
+                              size: 13,
+                              weight: FontWeight.w600,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          Text(
+                            l10n.dayTotal(
+                              groups[d]!.length,
+                              formatMoney(approvedTotal(groups[d]!)),
+                            ),
+                            style: AppText.body(
+                              size: 12,
+                              color: AppColors.textTertiary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     ListCard(
                       children: [
                         for (final t in groups[d]!)
@@ -974,39 +1096,21 @@ class _TxnRow extends StatelessWidget {
     final style = transactionStyle(t, l10n);
     final d = DateTime.tryParse(t.transactionDate ?? '');
     final title = (t.maskedPan ?? '').isNotEmpty
-        ? l10n.cardLabel(schemeName(t.cardScheme, l10n), last4(t.maskedPan))
+        ? l10n.cardLabel(cardDescription(t, l10n), last4(t.maskedPan))
         : style.title;
     final subtitle = [
       if (d != null) formatTime(d),
-      if ((t.storeName ?? '').isNotEmpty) t.storeName!,
-      if (style.tone != PillTone.success) style.statusLabel,
+      if ((t.tid ?? '').isNotEmpty) l10n.tidLabel(t.tid!),
+      if ((t.cardBank ?? '').isNotEmpty) t.cardBank!,
     ].join(' · ');
     return ListRow(
       onTap: onTap,
       chevron: false,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       leading: Stack(
         clipBehavior: Clip.none,
         children: [
-          Container(
-            width: 42,
-            height: 42,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppColors.surfacePressed,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFEBEBEA)),
-            ),
-            child: Text(
-              schemeAbbr(t.cardScheme),
-              style: AppText.body(
-                size: 11,
-                weight: FontWeight.w800,
-                color: _brandColor(t.cardScheme),
-                letterSpacing: 0.3,
-              ),
-            ),
-          ),
+          CardBrandLogo(scheme: t.scheme, size: 44),
           Positioned(
             right: -4,
             bottom: -4,
@@ -1033,23 +1137,24 @@ class _TxnRow extends StatelessWidget {
       ),
       title: title,
       subtitle: subtitle,
-      trailing: Text(
-        formatMoney(t.amount),
-        style: AppText.money(
-          size: 15,
-          color: style.muted ? AppColors.textTertiary : AppColors.navy,
-          decoration: style.muted ? TextDecoration.lineThrough : null,
-        ),
+      trailing: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            formatMoney(t.amount),
+            style: AppText.money(
+              size: 15,
+              color: style.muted ? AppColors.textTertiary : AppColors.navy,
+              decoration: style.muted ? TextDecoration.lineThrough : null,
+            ),
+          ),
+          if (style.tone != PillTone.success) ...[
+            const SizedBox(height: 4),
+            StatusPill(label: style.statusLabel, tone: style.tone),
+          ],
+        ],
       ),
     );
-  }
-
-  Color _brandColor(String? scheme) {
-    final s = (scheme ?? '').toUpperCase();
-    if (s.startsWith('MASTER')) return AppColors.mastercard;
-    if (s.startsWith('VISA')) return AppColors.visa;
-    if (s.startsWith('VERVE')) return AppColors.primary;
-    return AppColors.textBody;
   }
 }
 

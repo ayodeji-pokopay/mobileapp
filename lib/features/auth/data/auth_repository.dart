@@ -192,9 +192,11 @@ class AuthRepository {
     }
   }
 
+  /// Signs out but keeps the device enrolment so the merchant can come
+  /// back with biometrics. [revokeDevice] is only called when the user
+  /// turns biometric sign-in off.
   Future<void> logout() async {
     try {
-      await revokeDevice();
       await _api.dio.post<void>('/api/v1/auth/logout');
     } on DioException {
       // ignore network errors on logout

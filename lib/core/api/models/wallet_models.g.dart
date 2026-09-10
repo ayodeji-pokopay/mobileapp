@@ -8,68 +8,44 @@ part of 'wallet_models.dart';
 
 _WalletResponse _$WalletResponseFromJson(Map<String, dynamic> json) =>
     _WalletResponse(
+      id: json['id'] as String?,
       walletId: json['walletId'] as String?,
-      mid: json['mid'] as String?,
-      currency: json['currency'] as String?,
-      availableBalance: json['availableBalance'] as num?,
-      pendingBalance: json['pendingBalance'] as num?,
+      accountNumber: json['accountNumber'] as String?,
+      accountName: json['accountName'] as String?,
+      bankCode: json['bankCode'] as String?,
+      bankName: json['bankName'] as String?,
       status: json['status'] as String?,
-      settlementAccount: json['settlementAccount'] == null
-          ? null
-          : SettlementAccount.fromJson(
-              json['settlementAccount'] as Map<String, dynamic>,
-            ),
-      settlementConfig: json['settlementConfig'] == null
-          ? null
-          : SettlementConfig.fromJson(
-              json['settlementConfig'] as Map<String, dynamic>,
-            ),
+      settlementType: json['settlementType'] as String?,
+      autoSettlement: json['autoSettlement'] as bool?,
+      availableBalance: json['availableBalance'] as num?,
+      ledgerBalance: json['ledgerBalance'] as num?,
+      pendingSettlement: json['pendingSettlement'] as num?,
+      frozen: json['frozen'] as bool?,
+      merchantMid: json['merchantMid'] as String?,
+      merchantName: json['merchantName'] as String?,
+      currency: json['currency'] as String?,
+      createdAt: json['createdAt'] as String?,
       updatedAt: json['updatedAt'] as String?,
     );
 
 Map<String, dynamic> _$WalletResponseToJson(_WalletResponse instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'walletId': instance.walletId,
-      'mid': instance.mid,
-      'currency': instance.currency,
-      'availableBalance': instance.availableBalance,
-      'pendingBalance': instance.pendingBalance,
-      'status': instance.status,
-      'settlementAccount': instance.settlementAccount,
-      'settlementConfig': instance.settlementConfig,
-      'updatedAt': instance.updatedAt,
-    };
-
-_SettlementAccount _$SettlementAccountFromJson(Map<String, dynamic> json) =>
-    _SettlementAccount(
-      bankName: json['bankName'] as String?,
-      accountName: json['accountName'] as String?,
-      accountNumberMasked: json['accountNumberMasked'] as String?,
-      accountNumber: json['accountNumber'] as String?,
-    );
-
-Map<String, dynamic> _$SettlementAccountToJson(_SettlementAccount instance) =>
-    <String, dynamic>{
-      'bankName': instance.bankName,
-      'accountName': instance.accountName,
-      'accountNumberMasked': instance.accountNumberMasked,
       'accountNumber': instance.accountNumber,
-    };
-
-_SettlementConfig _$SettlementConfigFromJson(Map<String, dynamic> json) =>
-    _SettlementConfig(
-      cycle: json['cycle'] as String?,
-      instantEnabled: json['instantEnabled'] as bool?,
-      minimumAmount: json['minimumAmount'] as num?,
-      nextSettlementDate: json['nextSettlementDate'] as String?,
-      nextSettlementAmount: json['nextSettlementAmount'] as num?,
-    );
-
-Map<String, dynamic> _$SettlementConfigToJson(_SettlementConfig instance) =>
-    <String, dynamic>{
-      'cycle': instance.cycle,
-      'instantEnabled': instance.instantEnabled,
-      'minimumAmount': instance.minimumAmount,
-      'nextSettlementDate': instance.nextSettlementDate,
-      'nextSettlementAmount': instance.nextSettlementAmount,
+      'accountName': instance.accountName,
+      'bankCode': instance.bankCode,
+      'bankName': instance.bankName,
+      'status': instance.status,
+      'settlementType': instance.settlementType,
+      'autoSettlement': instance.autoSettlement,
+      'availableBalance': instance.availableBalance,
+      'ledgerBalance': instance.ledgerBalance,
+      'pendingSettlement': instance.pendingSettlement,
+      'frozen': instance.frozen,
+      'merchantMid': instance.merchantMid,
+      'merchantName': instance.merchantName,
+      'currency': instance.currency,
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
     };

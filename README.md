@@ -141,7 +141,11 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 4. Every request carries `Authorization: Bearer <token>`. The `AuthInterceptor` in [api_client.dart](lib/core/api/api_client.dart) refreshes the token via `POST /auth/refresh` shortly before it expires, and retries a request once after a `401`. When the refresh token itself is rejected the session is cleared, `SessionEvents` fires, and the router returns to `/login` with a "session expired" notice. A refresh that fails because the device is offline does not sign the user out.
 5. Logout revokes the device enrolment, calls `POST /api/v1/auth/logout` (errors ignored), and clears tokens and the offline cache.
 
-**Biometric sign-in.** No password is stored. Ticking "Enable biometric sign-in" after a password login calls `POST /auth/devices` and keeps the returned device token in the Keychain or Keystore. "Continue with biometrics" runs the OS prompt, then exchanges the device token via `POST /auth/devices/login`. A `401` there clears the token and asks the user to sign in with their password and re-enrol.
+**Wallet amounts.** `GET /wallets/mid/{mid}` returns balances in kobo while every other endpoint uses naira. `WalletResponse.availableNaira` and `pendingNaira` divide by 100; flip `WalletResponse.balancesInMinorUnits` once the backend aligns it.
+
+**PDFs.** The sales report and receipts are generated on the device with the `pdf` package (`lib/shared/pdf/pokopay_pdf.dart`) using the Pokopay logo, navy and green, and embedded Montserrat and DM Sans subsets from `assets/fonts/`. The backend's `/reports/sales/pdf` is no longer used for the export. Montserrat provides the ₦ glyph as a fallback for DM Sans.
+
+**Biometric sign-in.** No password is stored. Ticking "Enable biometric sign-in" after a password login calls `POST /auth/devices` and keeps the returned device token in the Keychain or Keystore. Signing out keeps the enrolment so the merchant can come back with Face ID; the Settings toggle "Biometric sign-in" enrols or revokes the device explicitly. "Continue with biometrics" runs the OS prompt, then exchanges the device token via `POST /auth/devices/login`. A `401` there clears the token and asks the user to sign in with their password and re-enrol.
 
 **Standard errors.** `/merchant/**` and app endpoints return `{ status, code, message, fieldErrors[] }`. `ApiError.from` parses it (and tolerates the legacy `/auth/*` shape), and `describeError` maps each `code` to localised copy. Validation errors surface field messages inline, for example on the report recipients sheet.
 
@@ -179,8 +183,7 @@ All paths are relative to `API_BASE_URL`.
 | GET | `/api/v1/wallets/mid/{mid}` | Dashboard balance, Wallet, next payout, settlement account |
 | GET | `/api/v1/merchant/reports/summary?mid=` | Dashboard tiles (today vs yesterday, today's settlement) |
 | GET | `/api/v1/merchant/reports/sales?mid=&period=&compare=true` | Sales overview, previous-period delta, channels, refunds |
-| GET | `/api/v1/merchant/reports/sales/pdf?mid=&period=` | "Download report" share sheet |
-| GET | `/api/v1/merchant/transactions?mid=&status=&last4=&startDate=&endDate=&page=&size=` | Sales › Transactions, dashboard activity |
+| GET | `/api/v1/merchant/transactions?mid=&status=&last4=&startDate=&endDate=&page=&size=` | Sales › Transactions, dashboard activity and sparkline, sales chart (the report has no daily breakdown, so days are summed client-side). Dates are required; without them the backend returns today only |
 | GET | `/api/v1/merchant/transactions/{reference}?mid=` | Receipt sheet |
 | GET | `/api/v1/merchant/reports/settlements?mid=&status=&page=&size=` | Settlements › History |
 | GET | `/api/v1/merchant/statements?mid=&year=` and `/{id}/pdf` | Settlements › Statements, PDF download |

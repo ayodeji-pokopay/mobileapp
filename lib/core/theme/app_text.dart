@@ -14,6 +14,7 @@ class AppText {
     Color color = AppColors.navy,
     double? letterSpacing,
     double height = 1.05,
+    TextDecoration? decoration,
   }) {
     return GoogleFonts.montserrat(
       fontSize: size,
@@ -21,6 +22,8 @@ class AppText {
       color: color,
       letterSpacing: letterSpacing ?? -size * 0.025,
       height: height,
+      decoration: decoration,
+      decorationColor: color,
     );
   }
 

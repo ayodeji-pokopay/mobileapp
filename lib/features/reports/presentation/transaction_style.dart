@@ -45,7 +45,7 @@ TransactionStyle transactionStyle(
       muted: true,
     );
   }
-  if (status == 'DECLINED') {
+  if (status == 'DECLINED' || status == 'FAILED' || status == 'ERROR') {
     return TransactionStyle(
       title: l10n.activityDeclined,
       statusLabel: l10n.txnDeclined,
@@ -104,4 +104,11 @@ String schemeName(String? scheme, AppLocalizations l10n) {
 String last4(String? maskedPan) {
   final p = maskedPan ?? '';
   return p.length >= 4 ? p.substring(p.length - 4) : p;
+}
+
+/// "Mastercard debit" / "Visa" from scheme + card type.
+String cardDescription(TransactionResponse t, AppLocalizations l10n) {
+  final name = schemeName(t.scheme, l10n);
+  final type = (t.cardType ?? '').toLowerCase();
+  return type.isEmpty ? name : '$name $type';
 }

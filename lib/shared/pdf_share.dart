@@ -16,3 +16,20 @@ Future<void> sharePdf(Uint8List bytes, {required String fileName}) async {
 
 Future<void> shareText(String text) =>
     SharePlus.instance.share(ShareParams(text: text));
+
+/// Writes PNG [bytes] to a temp file and opens the OS share sheet.
+Future<void> shareImage(
+  Uint8List bytes, {
+  required String fileName,
+  String? text,
+}) async {
+  final dir = await getTemporaryDirectory();
+  final file = File('${dir.path}/$fileName');
+  await file.writeAsBytes(bytes, flush: true);
+  await SharePlus.instance.share(
+    ShareParams(
+      files: [XFile(file.path, mimeType: 'image/png')],
+      text: text,
+    ),
+  );
+}

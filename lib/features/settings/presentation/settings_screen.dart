@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../core/api/models/business_models.dart';
+import '../../../core/biometric/biometric_service.dart';
 import '../../../core/config/app_config_provider.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
@@ -51,6 +52,9 @@ class SettingsScreen extends ConsumerWidget {
     final p = prefs.asData?.value;
     final unread =
         ref.watch(notificationsProvider).asData?.value.unreadCount ?? 0;
+    final bioAvailable =
+        ref.watch(biometricAvailableProvider).asData?.value ?? false;
+    final enrolled = ref.watch(deviceEnrolledProvider);
 
     void notYet() {
       ScaffoldMessenger.of(
@@ -133,6 +137,33 @@ class SettingsScreen extends ConsumerWidget {
                 subtitle: l10n.settingsSecurityHint,
                 onTap: () => context.push(AppRoutes.changePassword),
               ),
+              if (bioAvailable)
+                ListRow(
+                  leading: const _RowIcon(LucideIcons.fingerprintPattern),
+                  title: l10n.settingsBiometric,
+                  subtitle: l10n.settingsBiometricHint,
+                  chevron: false,
+                  trailing: enrolled.isLoading
+                      ? const Skeleton(height: 28, width: 48, radius: 14)
+                      : Switch(
+                          value: enrolled.asData?.value ?? false,
+                          onChanged: (v) => _save(context, ref, () async {
+                            await ref
+                                .read(authControllerProvider.notifier)
+                                .setBiometricEnabled(v);
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  v
+                                      ? l10n.settingsBiometricEnrolled
+                                      : l10n.settingsBiometricOff,
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                ),
               ListRow(
                 leading: const _RowIcon(LucideIcons.globe),
                 title: l10n.settingsPreferences,
