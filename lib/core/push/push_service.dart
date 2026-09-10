@@ -43,22 +43,49 @@ class PushService {
       badge: true,
       sound: true,
     );
-    if (settings.authorizationStatus == AuthorizationStatus.denied) return;
+    if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      debugPrint('push: permission denied');
+      return;
+    }
     final token = await m.getToken();
-    if (token == null || token.isEmpty) return;
-    await registerToken(mid: mid, token: token);
+    if (token == null || token.isEmpty) {
+      debugPrint('push: no FCM token yet');
+      return;
+    }
+    try {
+      await registerToken(mid: mid, token: token);
+      debugPrint(
+        'push: registered token …${token.substring(token.length - 8)} for $mid',
+      );
+    } catch (e) {
+      debugPrint('push: registration failed: $e');
+      rethrow;
+    }
     _refreshSub ??= m.onTokenRefresh.listen(
       (t) => registerToken(mid: mid, token: t),
     );
   }
 
+  Future<void>? _inFlight;
+
   @visibleForTesting
-  Future<void> registerToken({
+  Future<void> registerToken({required String mid, required String token}) {
+    final key = '$mid:$token';
+    if (key == _lastRegisteredKey) return Future.value();
+    // Coalesce concurrent callers (auth + preferences both rebuild the
+    // registrar on start-up) into one request.
+    return _inFlight ??= _post(
+      mid: mid,
+      token: token,
+      key: key,
+    ).whenComplete(() => _inFlight = null);
+  }
+
+  Future<void> _post({
     required String mid,
     required String token,
+    required String key,
   }) async {
-    final key = '$mid:$token';
-    if (key == _lastRegisteredKey) return;
     final deviceId = await _storage.ensureDeviceId();
     await _api.dio.post<void>(
       '/api/v1/devices/push',
