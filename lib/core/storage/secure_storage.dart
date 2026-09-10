@@ -37,8 +37,7 @@ class SecureStorage {
     await _storage.write(key: _biometricPasswordKey, value: password);
   }
 
-  Future<({String email, String password})?>
-      readBiometricCredentials() async {
+  Future<({String email, String password})?> readBiometricCredentials() async {
     final email = await _storage.read(key: _biometricEmailKey);
     final password = await _storage.read(key: _biometricPasswordKey);
     if (email == null || password == null) return null;

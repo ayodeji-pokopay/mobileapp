@@ -16,9 +16,8 @@ abstract class LoginRequest with _$LoginRequest {
 
 @freezed
 abstract class SelectTenantRequest with _$SelectTenantRequest {
-  const factory SelectTenantRequest({
-    required String tenantId,
-  }) = _SelectTenantRequest;
+  const factory SelectTenantRequest({required String tenantId}) =
+      _SelectTenantRequest;
 
   factory SelectTenantRequest.fromJson(Map<String, dynamic> json) =>
       _$SelectTenantRequestFromJson(json);

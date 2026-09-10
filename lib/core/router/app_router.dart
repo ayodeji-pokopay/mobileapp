@@ -47,21 +47,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isAuthed = auth.status == AuthStatus.authenticated;
 
       if (isUnauthed && loc != AppRoutes.login) return AppRoutes.login;
-      if (isAuthed &&
-          (loc == AppRoutes.login || loc == AppRoutes.splash)) {
+      if (isAuthed && (loc == AppRoutes.login || loc == AppRoutes.splash)) {
         return _startRoute.isNotEmpty ? _startRoute : AppRoutes.dashboard;
       }
       return null;
     },
     routes: [
-      GoRoute(
-        path: AppRoutes.splash,
-        builder: (_, _) => const SplashScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.login,
-        builder: (_, _) => const LoginScreen(),
-      ),
+      GoRoute(path: AppRoutes.splash, builder: (_, _) => const SplashScreen()),
+      GoRoute(path: AppRoutes.login, builder: (_, _) => const LoginScreen()),
       GoRoute(
         path: AppRoutes.dashboard,
         builder: (_, _) => const DashboardScreen(),
@@ -74,14 +67,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.settlements,
         builder: (_, _) => const SettlementsScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.wallet,
-        builder: (_, _) => const WalletScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.stores,
-        builder: (_, _) => const StoresScreen(),
-      ),
+      GoRoute(path: AppRoutes.wallet, builder: (_, _) => const WalletScreen()),
+      GoRoute(path: AppRoutes.stores, builder: (_, _) => const StoresScreen()),
       GoRoute(
         path: AppRoutes.settings,
         builder: (_, _) => const SettingsScreen(),

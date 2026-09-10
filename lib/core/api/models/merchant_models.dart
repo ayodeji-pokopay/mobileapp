@@ -62,8 +62,7 @@ abstract class MerchantSalesReportResponse with _$MerchantSalesReportResponse {
     int? totalTransactionCount,
     num? totalFees,
     num? netAmount,
-    @Default(<CardSchemeSummary>[])
-    List<CardSchemeSummary> cardSchemeBreakdown,
+    @Default(<CardSchemeSummary>[]) List<CardSchemeSummary> cardSchemeBreakdown,
     @Default(<DailyBreakdown>[]) List<DailyBreakdown> dailyBreakdown,
   }) = _MerchantSalesReportResponse;
 
