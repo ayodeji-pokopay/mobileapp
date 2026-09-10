@@ -3,19 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../core/api/models/business_models.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/format.dart';
 import '../../../shared/widgets/async_slot.dart';
 import '../../../shared/widgets/back_scaffold.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
+import '../../../shared/widgets/offline_banner.dart';
+import '../../../shared/widgets/pills.dart';
 import '../../../shared/widgets/section_label.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
-import '../../../l10n/generated/app_localizations.dart';
 
-/// Lists the merchant's store (business profile) and its card machines.
+/// Lists the merchant's business and its POS terminals.
 class StoresScreen extends ConsumerWidget {
   const StoresScreen({super.key});
 
@@ -25,9 +28,11 @@ class StoresScreen extends ConsumerWidget {
     final profile = ref.watch(merchantProfileProvider);
     final terminals = ref.watch(terminalsProvider);
     final user = ref.watch(authControllerProvider).user;
-    final fallbackName = user?.tenants.isNotEmpty == true
-        ? (user!.tenants.first.name ?? l10n.storeDefaultName)
-        : l10n.storeDefaultName;
+    final fallbackName =
+        user?.merchantName ??
+        (user?.tenants.isNotEmpty == true
+            ? (user!.tenants.first.name ?? l10n.storeDefaultName)
+            : l10n.storeDefaultName);
 
     return BackScaffold(
       title: l10n.storesTitle,
@@ -44,6 +49,7 @@ class StoresScreen extends ConsumerWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
           children: [
+            const OfflineBanner(),
             AsyncSlot<Map<String, dynamic>>(
               value: profile,
               loadingHeight: 88,
@@ -66,10 +72,10 @@ class StoresScreen extends ConsumerWidget {
                         text: initialsOf(name.isEmpty ? fallbackName : name),
                         size: 48,
                         background: active
-                            ? AppColors.canvas
+                            ? AppColors.primaryLight
                             : AppColors.surfaceAlt,
                         foreground: active
-                            ? AppColors.navy
+                            ? AppColors.primary
                             : AppColors.textTertiary,
                         fontSize: 13,
                       ),
@@ -86,14 +92,14 @@ class StoresScreen extends ConsumerWidget {
                 );
               },
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 22),
             SectionLabel(l10n.storesCardMachines, uppercase: true),
-            AsyncSlot<List<String>>(
+            AsyncSlot<List<TerminalResponse>>(
               value: terminals,
               loadingHeight: 120,
               onRetry: () => ref.invalidate(terminalsProvider),
-              data: (tids) {
-                if (tids.isEmpty) {
+              data: (list) {
+                if (list.isEmpty) {
                   return EmptyState(
                     icon: LucideIcons.printer,
                     title: l10n.storesNoTerminals,
@@ -101,29 +107,7 @@ class StoresScreen extends ConsumerWidget {
                   );
                 }
                 return ListCard(
-                  children: [
-                    for (final tid in tids)
-                      ListRow(
-                        leading: Container(
-                          width: 44,
-                          height: 44,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: AppColors.canvas,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            LucideIcons.printer,
-                            size: 20,
-                            color: AppColors.textBody,
-                          ),
-                        ),
-                        title: l10n.storesTerminal,
-                        subtitle: l10n.tidLabel(tid),
-                        trailing: _StatusPill(l10n.statusActive),
-                        chevron: false,
-                      ),
-                  ],
+                  children: [for (final t in list) _TerminalRow(t: t)],
                 );
               },
             ),
@@ -134,40 +118,44 @@ class StoresScreen extends ConsumerWidget {
   }
 }
 
-class _StatusPill extends StatelessWidget {
-  const _StatusPill(this.label);
-  final String label;
+class _TerminalRow extends StatelessWidget {
+  const _TerminalRow({required this.t});
+  final TerminalResponse t;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.primaryLight,
-        borderRadius: BorderRadius.circular(999),
+    final l10n = AppLocalizations.of(context);
+    final status = (t.status ?? '').toUpperCase();
+    final (tone, label) = switch (status) {
+      'ACTIVE' => (PillTone.success, l10n.statusActive),
+      'SUSPENDED' => (PillTone.warning, l10n.statusSuspended),
+      'DISABLED' => (PillTone.danger, l10n.statusDisabled),
+      'INACTIVE' => (PillTone.neutral, l10n.statusInactive),
+      _ => (PillTone.neutral, status.isEmpty ? l10n.statusActive : status),
+    };
+    final seen = DateTime.tryParse(t.lastHeartbeat ?? '');
+    final title = (t.label ?? '').isNotEmpty
+        ? t.label!
+        : (t.model ?? '').isNotEmpty
+        ? t.model!
+        : l10n.storesTerminal;
+    return ListRow(
+      leading: IconBubble(
+        icon: LucideIcons.printer,
+        tone: status == 'ACTIVE' ? PillTone.success : PillTone.neutral,
+        size: 44,
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: AppText.body(
-              size: 12,
-              weight: FontWeight.w500,
-              color: AppColors.primary,
-            ),
-          ),
-        ],
-      ),
+      title: title,
+      subtitle: [
+        if ((t.tid ?? '').isNotEmpty) l10n.tidLabel(t.tid!),
+        if ((t.serialNumber ?? '').isNotEmpty)
+          l10n.terminalSerial(t.serialNumber!),
+        seen == null
+            ? l10n.terminalNeverSeen
+            : l10n.terminalLastSeen(formatRelativeTime(seen)),
+      ].join(' · '),
+      trailing: StatusPill(label: label, tone: tone),
+      chevron: false,
     );
   }
 }

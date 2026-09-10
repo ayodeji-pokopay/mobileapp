@@ -15,6 +15,16 @@ _MerchantSettlementSummary _$MerchantSettlementSummaryFromJson(
   pendingAmount: json['pendingAmount'] as num?,
   todayTransactions: (json['todayTransactions'] as num?)?.toInt(),
   todaySales: json['todaySales'] as num?,
+  yesterdaySales: json['yesterdaySales'] as num?,
+  yesterdayTransactions: (json['yesterdayTransactions'] as num?)?.toInt(),
+  monthToDateSales: json['monthToDateSales'] as num?,
+  todaySettlement: json['todaySettlement'] == null
+      ? null
+      : TodaySettlement.fromJson(
+          json['todaySettlement'] as Map<String, dynamic>,
+        ),
+  activeTerminals: (json['activeTerminals'] as num?)?.toInt(),
+  instantTerminals: (json['instantTerminals'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$MerchantSettlementSummaryToJson(
@@ -26,7 +36,69 @@ Map<String, dynamic> _$MerchantSettlementSummaryToJson(
   'pendingAmount': instance.pendingAmount,
   'todayTransactions': instance.todayTransactions,
   'todaySales': instance.todaySales,
+  'yesterdaySales': instance.yesterdaySales,
+  'yesterdayTransactions': instance.yesterdayTransactions,
+  'monthToDateSales': instance.monthToDateSales,
+  'todaySettlement': instance.todaySettlement,
+  'activeTerminals': instance.activeTerminals,
+  'instantTerminals': instance.instantTerminals,
 };
+
+_TodaySettlement _$TodaySettlementFromJson(Map<String, dynamic> json) =>
+    _TodaySettlement(
+      amount: json['amount'] as num?,
+      status: json['status'] as String?,
+      expectedDate: json['expectedDate'] as String?,
+    );
+
+Map<String, dynamic> _$TodaySettlementToJson(_TodaySettlement instance) =>
+    <String, dynamic>{
+      'amount': instance.amount,
+      'status': instance.status,
+      'expectedDate': instance.expectedDate,
+    };
+
+_PeriodTotals _$PeriodTotalsFromJson(Map<String, dynamic> json) =>
+    _PeriodTotals(
+      startDate: json['startDate'] as String?,
+      endDate: json['endDate'] as String?,
+      totalSales: json['totalSales'] as num?,
+      totalTransactionCount: (json['totalTransactionCount'] as num?)?.toInt(),
+      totalFees: json['totalFees'] as num?,
+      netAmount: json['netAmount'] as num?,
+    );
+
+Map<String, dynamic> _$PeriodTotalsToJson(_PeriodTotals instance) =>
+    <String, dynamic>{
+      'startDate': instance.startDate,
+      'endDate': instance.endDate,
+      'totalSales': instance.totalSales,
+      'totalTransactionCount': instance.totalTransactionCount,
+      'totalFees': instance.totalFees,
+      'netAmount': instance.netAmount,
+    };
+
+_ChannelSummary _$ChannelSummaryFromJson(Map<String, dynamic> json) =>
+    _ChannelSummary(
+      channel: json['channel'] as String?,
+      totalAmount: json['totalAmount'] as num?,
+      transactionCount: (json['transactionCount'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$ChannelSummaryToJson(_ChannelSummary instance) =>
+    <String, dynamic>{
+      'channel': instance.channel,
+      'totalAmount': instance.totalAmount,
+      'transactionCount': instance.transactionCount,
+    };
+
+_CountAmount _$CountAmountFromJson(Map<String, dynamic> json) => _CountAmount(
+  count: (json['count'] as num?)?.toInt(),
+  amount: json['amount'] as num?,
+);
+
+Map<String, dynamic> _$CountAmountToJson(_CountAmount instance) =>
+    <String, dynamic>{'count': instance.count, 'amount': instance.amount};
 
 _CardSchemeSummary _$CardSchemeSummaryFromJson(Map<String, dynamic> json) =>
     _CardSchemeSummary(
@@ -90,6 +162,20 @@ _MerchantSalesReportResponse _$MerchantSalesReportResponseFromJson(
           ?.map((e) => DailyBreakdown.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const <DailyBreakdown>[],
+  previousPeriod: json['previousPeriod'] == null
+      ? null
+      : PeriodTotals.fromJson(json['previousPeriod'] as Map<String, dynamic>),
+  channelBreakdown:
+      (json['channelBreakdown'] as List<dynamic>?)
+          ?.map((e) => ChannelSummary.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const <ChannelSummary>[],
+  refunds: json['refunds'] == null
+      ? null
+      : CountAmount.fromJson(json['refunds'] as Map<String, dynamic>),
+  chargebacks: json['chargebacks'] == null
+      ? null
+      : CountAmount.fromJson(json['chargebacks'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$MerchantSalesReportResponseToJson(
@@ -110,6 +196,10 @@ Map<String, dynamic> _$MerchantSalesReportResponseToJson(
   'netAmount': instance.netAmount,
   'cardSchemeBreakdown': instance.cardSchemeBreakdown,
   'dailyBreakdown': instance.dailyBreakdown,
+  'previousPeriod': instance.previousPeriod,
+  'channelBreakdown': instance.channelBreakdown,
+  'refunds': instance.refunds,
+  'chargebacks': instance.chargebacks,
 };
 
 _SettlementResponse _$SettlementResponseFromJson(Map<String, dynamic> json) =>
@@ -130,6 +220,9 @@ _SettlementResponse _$SettlementResponseFromJson(Map<String, dynamic> json) =>
       accountName: json['accountName'] as String?,
       bankName: json['bankName'] as String?,
       status: json['status'] as String?,
+      settledAt: json['settledAt'] as String?,
+      failureReason: json['failureReason'] as String?,
+      cycle: json['cycle'] as String?,
     );
 
 Map<String, dynamic> _$SettlementResponseToJson(_SettlementResponse instance) =>
@@ -150,6 +243,9 @@ Map<String, dynamic> _$SettlementResponseToJson(_SettlementResponse instance) =>
       'accountName': instance.accountName,
       'bankName': instance.bankName,
       'status': instance.status,
+      'settledAt': instance.settledAt,
+      'failureReason': instance.failureReason,
+      'cycle': instance.cycle,
     };
 
 _PageSettlementResponse _$PageSettlementResponseFromJson(

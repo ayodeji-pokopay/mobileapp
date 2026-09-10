@@ -34,9 +34,11 @@ void main() {
     test('formatDayLabel marks today and yesterday', () {
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day).toIso8601String();
-      final yesterday = DateTime(now.year, now.month, now.day)
-          .subtract(const Duration(days: 1))
-          .toIso8601String();
+      final yesterday = DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ).subtract(const Duration(days: 1)).toIso8601String();
       expect(formatDayLabel(today), startsWith('Today · '));
       expect(formatDayLabel(yesterday), startsWith('Yesterday · '));
     });
@@ -57,10 +59,22 @@ void main() {
     final now = DateTime(2026, 9, 10, 12);
     test('buckets by minute, hour, day', () {
       expect(formatRelativeTime(now, now: now), 'just now');
-      expect(formatRelativeTime(now.subtract(const Duration(minutes: 12)), now: now), '12 min ago');
-      expect(formatRelativeTime(now.subtract(const Duration(hours: 3)), now: now), '3 h ago');
-      expect(formatRelativeTime(now.subtract(const Duration(days: 1)), now: now), '1 day ago');
-      expect(formatRelativeTime(now.subtract(const Duration(days: 4)), now: now), '4 days ago');
+      expect(
+        formatRelativeTime(now.subtract(const Duration(minutes: 12)), now: now),
+        '12 min ago',
+      );
+      expect(
+        formatRelativeTime(now.subtract(const Duration(hours: 3)), now: now),
+        '3 h ago',
+      );
+      expect(
+        formatRelativeTime(now.subtract(const Duration(days: 1)), now: now),
+        '1 day ago',
+      );
+      expect(
+        formatRelativeTime(now.subtract(const Duration(days: 4)), now: now),
+        '4 days ago',
+      );
     });
   });
 }

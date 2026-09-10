@@ -4,6 +4,21 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
 
+/// Layered shadow shared by every card: a crisp contact shadow plus a
+/// wide, faint ambient one.
+List<BoxShadow> get cardShadow => [
+  BoxShadow(
+    color: AppColors.navy.withValues(alpha: 0.04),
+    blurRadius: 2,
+    offset: const Offset(0, 1),
+  ),
+  BoxShadow(
+    color: AppColors.navy.withValues(alpha: 0.05),
+    blurRadius: 20,
+    offset: const Offset(0, 8),
+  ),
+];
+
 /// White rounded container that separates its children with hairline
 /// dividers, the primary list surface in the design.
 class ListCard extends StatelessWidget {
@@ -26,6 +41,7 @@ class ListCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(radius),
+        boxShadow: cardShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -65,6 +81,7 @@ class SurfaceCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(radius),
+        boxShadow: color == AppColors.surface ? cardShadow : null,
       ),
       child: child,
     );

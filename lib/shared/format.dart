@@ -137,3 +137,19 @@ String formatRelativeTime(DateTime t, {DateTime? now}) {
   if (diff.inHours < 24) return '${diff.inHours} h ago';
   return '${diff.inDays} ${diff.inDays == 1 ? 'day' : 'days'} ago';
 }
+
+String formatTime(DateTime d) => DateFormat('HH:mm').format(d.toLocal());
+
+/// "August 2026" from "2026-08".
+String formatPeriod(String? period) {
+  if (period == null || period.isEmpty) return '';
+  final d = DateTime.tryParse('$period-01');
+  return d == null ? period : DateFormat('MMMM yyyy').format(d);
+}
+
+/// Percentage change from [previous] to [current]; null when undefined.
+double? percentDelta(num? current, num? previous) {
+  if (current == null || previous == null) return null;
+  if (previous == 0) return current == 0 ? 0 : null;
+  return (current - previous) / previous * 100;
+}

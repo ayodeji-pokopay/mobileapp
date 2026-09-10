@@ -99,6 +99,13 @@ _UserInfoResponse _$UserInfoResponseFromJson(Map<String, dynamic> json) =>
       emailVerified: json['emailVerified'] as bool?,
       primaryTenantId: json['primaryTenantId'] as String?,
       mid: json['mid'] as String?,
+      merchantName: json['merchantName'] as String?,
+      phone: json['phone'] as String?,
+      permissions:
+          (json['permissions'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
       tenants:
           (json['tenants'] as List<dynamic>?)
               ?.map((e) => TenantInfo.fromJson(e as Map<String, dynamic>))
@@ -116,5 +123,8 @@ Map<String, dynamic> _$UserInfoResponseToJson(_UserInfoResponse instance) =>
       'emailVerified': instance.emailVerified,
       'primaryTenantId': instance.primaryTenantId,
       'mid': instance.mid,
+      'merchantName': instance.merchantName,
+      'phone': instance.phone,
+      'permissions': instance.permissions,
       'tenants': instance.tenants,
     };

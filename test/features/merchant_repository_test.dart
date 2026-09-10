@@ -20,12 +20,17 @@ void main() {
 
   test('fetchSummary parses the response and sends mid', () async {
     final adapter = FakeAdapter((o) async => json(summaryJson));
-    final repo = MerchantRepository(fakeApi((_) async => json({}), adapter: adapter));
+    final repo = MerchantRepository(
+      fakeApi((_) async => json({}), adapter: adapter),
+    );
     final s = await repo.fetchSummary(mid: 'M1');
     expect(s.totalSettlements, 3);
     expect(s.totalSettledAmount, 1500.5);
     expect(adapter.requests.single.uri.queryParameters['mid'], 'M1');
-    expect(adapter.requests.single.uri.path, '/api/v1/merchant/reports/summary');
+    expect(
+      adapter.requests.single.uri.path,
+      '/api/v1/merchant/reports/summary',
+    );
   });
 
   test('serves the cached copy when the network is unreachable', () async {
@@ -90,13 +95,17 @@ void main() {
   });
 
   test('searchMerchants drops rows without a mid', () async {
-    final repo = MerchantRepository(fakeApi((o) async => json({
+    final repo = MerchantRepository(
+      fakeApi(
+        (o) async => json({
           'content': [
             {'mid': 'A', 'merchantName': 'Alpha', 'email': 'a@x.com'},
             {'mid': '', 'merchantName': 'NoMid'},
             {'merchantName': 'Missing'},
-          ]
-        })));
+          ],
+        }),
+      ),
+    );
     final list = await repo.searchMerchants(search: 'al');
     expect(list.map((m) => m.mid), ['A']);
     expect(list.single.name, 'Alpha');

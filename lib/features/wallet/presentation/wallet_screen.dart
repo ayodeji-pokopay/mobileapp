@@ -4,9 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../core/api/models/merchant_models.dart';
+import '../../../core/api/models/wallet_models.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/format.dart';
 import '../../../shared/widgets/async_slot.dart';
 import '../../../shared/widgets/back_scaffold.dart';
@@ -15,8 +17,8 @@ import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/offline_banner.dart';
 import '../../../shared/widgets/pill_tabs.dart';
+import '../../../shared/widgets/pills.dart';
 import '../../merchant/presentation/merchant_providers.dart';
-import '../../../l10n/generated/app_localizations.dart';
 
 class WalletScreen extends ConsumerStatefulWidget {
   const WalletScreen({super.key});
@@ -31,6 +33,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final wallet = ref.watch(walletProvider);
     final summary = ref.watch(summaryProvider);
     final settlements = ref.watch(settlementsProvider);
 
@@ -39,10 +42,11 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
       bottomNav: const PokoBottomNav(active: NavTab.money),
       child: RefreshIndicator(
         onRefresh: () async {
+          ref.invalidate(walletProvider);
           ref.invalidate(summaryProvider);
           ref.invalidate(settlementsProvider);
           await Future.wait([
-            ref.read(summaryProvider.future),
+            ref.read(walletProvider.future),
             ref.read(settlementsProvider.future),
           ]);
         },
@@ -51,38 +55,43 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
           children: [
             const OfflineBanner(),
-            AsyncSlot<MerchantSettlementSummary>(
-              value: summary,
-              loadingHeight: 240,
-              onRetry: () => ref.invalidate(summaryProvider),
-              data: (s) => _BalanceCard(
-                summary: s,
+            AsyncSlot<WalletResponse>(
+              value: wallet,
+              loadingHeight: 230,
+              onRetry: () => ref.invalidate(walletProvider),
+              data: (w) => _BalanceCard(
+                wallet: w,
+                monthToDate: summary.asData?.value.monthToDateSales,
                 onWithdraw: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(l10n.walletWithdrawHint)),
                   );
                 },
-                onStatement: () => context.push(AppRoutes.settlements),
+                onStatements: () =>
+                    context.push('${AppRoutes.settlements}?tab=statements'),
               ),
             ),
-            const SizedBox(height: 16),
-            AsyncSlot<PageSettlementResponse>(
-              value: settlements,
+            if ((wallet.asData?.value.status ?? '').toUpperCase() ==
+                'FROZEN') ...[
+              const SizedBox(height: 12),
+              _FrozenBanner(text: l10n.walletFrozen),
+            ],
+            const SizedBox(height: 12),
+            AsyncSlot<WalletResponse>(
+              value: wallet,
               loadingHeight: 76,
-              data: (page) {
-                final next =
-                    page.content
-                        .where(
-                          (s) => (s.status ?? '').toUpperCase() != 'COMPLETED',
-                        )
-                        .firstOrNull ??
-                    page.content.firstOrNull;
-                if (next == null) return const SizedBox.shrink();
-                return _NextPayoutCard(
-                  s: next,
-                  onTap: () => context.push(AppRoutes.settlements),
-                );
-              },
+              data: (w) => _NextPayoutCard(
+                config: w.settlementConfig,
+                onTap: () => context.push(AppRoutes.settlements),
+              ),
+            ),
+            const SizedBox(height: 12),
+            AsyncSlot<WalletResponse>(
+              value: wallet,
+              loadingHeight: 76,
+              data: (w) => w.settlementAccount == null
+                  ? const SizedBox.shrink()
+                  : _AccountCard(account: w.settlementAccount!),
             ),
             const SizedBox(height: 24),
             Padding(
@@ -98,13 +107,13 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
               selected: _tab,
               onChanged: (i) => setState(() => _tab = i),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
             AsyncSlot<PageSettlementResponse>(
               value: settlements,
               loadingHeight: 200,
               onRetry: () => ref.invalidate(settlementsProvider),
               data: (page) {
-                final entries = _entriesFor(page.content, _tab);
+                final entries = _entriesFor(page.content, _tab, l10n);
                 if (entries.isEmpty) {
                   return EmptyState(
                     icon: LucideIcons.wallet,
@@ -123,8 +132,11 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
     );
   }
 
-  List<_Entry> _entriesFor(List<SettlementResponse> list, int tab) {
-    final l10n = AppLocalizations.of(context);
+  List<_Entry> _entriesFor(
+    List<SettlementResponse> list,
+    int tab,
+    AppLocalizations l10n,
+  ) {
     final out = <_Entry>[];
     for (final s in list) {
       final failed = (s.status ?? '').toUpperCase() == 'FAILED';
@@ -173,14 +185,16 @@ class _Entry {
 
 class _BalanceCard extends StatelessWidget {
   const _BalanceCard({
-    required this.summary,
+    required this.wallet,
+    required this.monthToDate,
     required this.onWithdraw,
-    required this.onStatement,
+    required this.onStatements,
   });
 
-  final MerchantSettlementSummary summary;
+  final WalletResponse wallet;
+  final num? monthToDate;
   final VoidCallback onWithdraw;
-  final VoidCallback onStatement;
+  final VoidCallback onStatements;
 
   @override
   Widget build(BuildContext context) {
@@ -188,25 +202,61 @@ class _BalanceCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.navy,
         borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.navyMuted, AppColors.navy, AppColors.navyDark],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.navy.withValues(alpha: 0.3),
+            blurRadius: 28,
+            offset: const Offset(0, 12),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            l10n.dashboardAvailableBalance,
-            style: AppText.body(
-              size: 13,
-              color: Colors.white.withValues(alpha: 0.6),
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.dashboardAvailableBalance,
+                  style: AppText.body(
+                    size: 13,
+                    color: Colors.white.withValues(alpha: 0.65),
+                  ),
+                ),
+              ),
+              if ((wallet.currency ?? '').isNotEmpty)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    wallet.currency!,
+                    style: AppText.body(
+                      size: 11,
+                      weight: FontWeight.w600,
+                      color: Colors.white.withValues(alpha: 0.8),
+                    ),
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 5),
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
             child: Text(
-              formatMoney(summary.totalSettledAmount),
+              formatMoney(wallet.availableBalance),
               style: AppText.display(size: 30, color: Colors.white, height: 1),
             ),
           ),
@@ -215,19 +265,21 @@ class _BalanceCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _StatTile(
-                  icon: LucideIcons.trendingUp,
-                  iconColor: AppColors.primaryBright,
-                  label: l10n.walletSettlements,
-                  value: formatNumber(summary.totalSettlements),
+                  icon: LucideIcons.clock,
+                  iconColor: const Color(0xFFFFD166),
+                  label: l10n.walletPending,
+                  value: formatMoneyCompact(wallet.pendingBalance),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 10),
               Expanded(
                 child: _StatTile(
-                  icon: LucideIcons.clock,
-                  iconColor: Colors.white.withValues(alpha: 0.6),
-                  label: l10n.walletPending,
-                  value: formatMoneyCompact(summary.pendingAmount),
+                  icon: LucideIcons.trendingUp,
+                  iconColor: AppColors.primaryBright,
+                  label: l10n.walletThisMonth,
+                  value: monthToDate == null
+                      ? l10n.commonDash
+                      : formatMoneyCompact(monthToDate),
                 ),
               ),
             ],
@@ -246,13 +298,45 @@ class _BalanceCard extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: _DarkButton(
-                  icon: LucideIcons.download,
+                  icon: LucideIcons.fileDown,
                   label: l10n.walletStatement,
-                  color: Colors.white.withValues(alpha: 0.1),
-                  onTap: onStatement,
+                  color: Colors.white.withValues(alpha: 0.12),
+                  onTap: onStatements,
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FrozenBanner extends StatelessWidget {
+  const _FrozenBanner({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.dangerBg,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            LucideIcons.circleAlert,
+            size: 18,
+            color: AppColors.danger,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: AppText.body(size: 13, color: AppColors.danger),
+            ),
           ),
         ],
       ),
@@ -291,7 +375,7 @@ class _StatTile extends StatelessWidget {
                 label,
                 style: AppText.body(
                   size: 12,
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: Colors.white.withValues(alpha: 0.65),
                 ),
               ),
             ],
@@ -320,10 +404,10 @@ class _DarkButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: color,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
@@ -347,52 +431,71 @@ class _DarkButton extends StatelessWidget {
   }
 }
 
+String cycleLabel(String? cycle, AppLocalizations l10n) {
+  return switch ((cycle ?? '').toUpperCase()) {
+    'T0' => l10n.cycleT0,
+    'T1' => l10n.cycleT1,
+    'T2' => l10n.cycleT2,
+    'WEEKLY' => l10n.cycleWeekly,
+    'INSTANT' => l10n.cycleInstant,
+    'MANUAL' => l10n.cycleManual,
+    _ => cycle ?? '',
+  };
+}
+
 class _NextPayoutCard extends StatelessWidget {
-  const _NextPayoutCard({required this.s, required this.onTap});
-  final SettlementResponse s;
+  const _NextPayoutCard({required this.config, required this.onTap});
+  final SettlementConfig? config;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final status = (s.status ?? 'PENDING').toLowerCase();
-    final pending = status != 'completed';
+    final c = config;
+    final parts = <String>[
+      if ((c?.nextSettlementDate ?? '').isNotEmpty)
+        formatDayLabel(c!.nextSettlementDate).split(' · ').first,
+      if (c?.instantEnabled == true)
+        l10n.cycleInstant
+      else if ((c?.cycle ?? '').isNotEmpty)
+        cycleLabel(c!.cycle, l10n),
+    ];
     return SurfaceCard(
       radius: 14,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       onTap: onTap,
       child: Row(
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              LucideIcons.clock,
-              size: 20,
-              color: AppColors.primary,
-            ),
-          ),
-          const SizedBox(width: 16),
+          const IconBubble(icon: LucideIcons.clock, tone: PillTone.success),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  pending ? l10n.walletNextPayout : l10n.walletLatestPayout,
+                  l10n.walletNextPayout,
                   style: AppText.body(size: 13, color: AppColors.textTertiary),
                 ),
                 const SizedBox(height: 2),
-                Text(formatMoney(s.netAmount), style: AppText.money(size: 18)),
+                Text(
+                  c?.nextSettlementAmount == null
+                      ? l10n.commonDash
+                      : formatMoney(c!.nextSettlementAmount),
+                  style: AppText.money(size: 18),
+                ),
                 const SizedBox(height: 2),
                 Text(
-                  '${formatDateShort(s.settlementDate)} · '
-                  '${status[0].toUpperCase()}${status.substring(1)}',
+                  parts.isEmpty ? l10n.walletSchedule : parts.join(' · '),
                   style: AppText.body(size: 12, color: AppColors.textSecondary),
                 ),
+                if ((c?.minimumAmount ?? 0) > 0)
+                  Text(
+                    l10n.walletMinimumPayout(formatMoney(c!.minimumAmount)),
+                    style: AppText.body(
+                      size: 12,
+                      color: AppColors.textTertiary,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -407,6 +510,59 @@ class _NextPayoutCard extends StatelessWidget {
   }
 }
 
+class _AccountCard extends StatelessWidget {
+  const _AccountCard({required this.account});
+  final SettlementAccount account;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final number = account.accountNumberMasked ?? _mask(account.accountNumber);
+    return SurfaceCard(
+      radius: 14,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          const IconBubble(icon: LucideIcons.landmark, tone: PillTone.info),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.walletSettlementAccount,
+                  style: AppText.body(size: 13, color: AppColors.textTertiary),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  [
+                    account.bankName,
+                    number,
+                  ].where((e) => (e ?? '').isNotEmpty).join(' · '),
+                  style: AppText.body(size: 15, weight: FontWeight.w600),
+                ),
+                if ((account.accountName ?? '').isNotEmpty)
+                  Text(
+                    account.accountName!,
+                    style: AppText.body(
+                      size: 12,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String? _mask(String? n) {
+    if (n == null || n.length < 4) return n;
+    return '****${n.substring(n.length - 4)}';
+  }
+}
+
 class _TxnRow extends StatelessWidget {
   const _TxnRow(this.e);
   final _Entry e;
@@ -415,20 +571,9 @@ class _TxnRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final inbound = e.inbound && !e.failed;
     return ListRow(
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: inbound
-              ? AppColors.primary.withValues(alpha: 0.1)
-              : AppColors.dangerBg,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          inbound ? LucideIcons.arrowDownLeft : LucideIcons.arrowUpRight,
-          size: 16,
-          color: inbound ? AppColors.primary : AppColors.danger,
-        ),
+      leading: IconBubble(
+        icon: inbound ? LucideIcons.arrowDownLeft : LucideIcons.arrowUpRight,
+        tone: inbound ? PillTone.success : PillTone.danger,
       ),
       title: e.title,
       subtitle: e.date,

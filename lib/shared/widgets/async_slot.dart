@@ -5,6 +5,9 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../error_text.dart';
+import 'list_card.dart';
+import 'skeleton.dart';
 
 /// Renders loading / error / data for an [AsyncValue] with the design's
 /// white card treatment.
@@ -29,27 +32,13 @@ class AsyncSlot<T> extends StatelessWidget {
     return value.when(
       skipLoadingOnRefresh: true,
       data: data,
-      loading: () =>
-          skeleton ??
-          Container(
-            height: loadingHeight,
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Center(
-              child: SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(strokeWidth: 2.2),
-              ),
-            ),
-          ),
+      loading: () => skeleton ?? Skeleton.card(height: loadingHeight),
       error: (err, _) => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
+          boxShadow: cardShadow,
         ),
         child: Row(
           children: [
@@ -61,7 +50,7 @@ class AsyncSlot<T> extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                err.toString().replaceFirst('Exception: ', ''),
+                describeError(err, AppLocalizations.of(context)),
                 style: AppText.body(size: 14, color: AppColors.textBody),
               ),
             ),

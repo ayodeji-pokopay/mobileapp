@@ -2,65 +2,82 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/api/models/business_models.dart';
+import '../../../core/config/app_config_provider.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
-import '../../../core/config/app_config_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/error_text.dart';
 import '../../../shared/widgets/back_scaffold.dart';
 import '../../../shared/widgets/bottom_nav.dart';
 import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/section_label.dart';
+import '../../../shared/widgets/skeleton.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
-import '../../../l10n/generated/app_localizations.dart';
+import 'recipients_sheet.dart';
 
-class SettingsScreen extends ConsumerStatefulWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  @override
-  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  static const _dailyKey = 'pref_daily_report';
-  static const _monthlyKey = 'pref_monthly_report';
-  bool _daily = true;
-  bool _monthly = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPrefs();
-  }
-
-  Future<void> _loadPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (!mounted) return;
-    setState(() {
-      _daily = prefs.getBool(_dailyKey) ?? true;
-      _monthly = prefs.getBool(_monthlyKey) ?? true;
-    });
-  }
-
-  Future<void> _setPref(String key, bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(key, value);
-  }
-
-  void _notYet() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context).commonComingSoon)),
-    );
+  Future<void> _save(
+    BuildContext context,
+    WidgetRef ref,
+    Future<void> Function() action,
+  ) async {
+    final l10n = AppLocalizations.of(context);
+    try {
+      await action();
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${l10n.settingsSaveFailed} ${describeError(e, l10n)}'),
+          backgroundColor: AppColors.danger,
+        ),
+      );
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final user = ref.watch(authControllerProvider).user;
     final displayName = ref.watch(businessNameProvider);
     final version = ref.watch(packageInfoProvider).asData?.value.version ?? '';
+    final prefs = ref.watch(preferencesProvider);
+    final p = prefs.asData?.value;
+    final unread =
+        ref.watch(notificationsProvider).asData?.value.unreadCount ?? 0;
+
+    void notYet() {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.commonComingSoon)));
+    }
+
+    Widget toggle({
+      required String title,
+      required String subtitle,
+      required bool? value,
+      required Future<void> Function(bool v) onChanged,
+    }) {
+      return ListRow(
+        title: title,
+        subtitle: subtitle,
+        chevron: false,
+        trailing: prefs.isLoading
+            ? const Skeleton(height: 28, width: 48, radius: 14)
+            : Switch(
+                value: value ?? false,
+                onChanged: prefs.hasError
+                    ? null
+                    : (v) => _save(context, ref, () => onChanged(v)),
+              ),
+      );
+    }
 
     return BackScaffold(
       title: l10n.settingsTitle,
@@ -84,6 +101,33 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 onTap: () => context.push(AppRoutes.personalInfo),
               ),
               ListRow(
+                leading: const _RowIcon(LucideIcons.bell),
+                title: l10n.notificationsTitle,
+                subtitle: unread > 0 ? '$unread' : l10n.notificationsEmpty,
+                trailing: unread > 0
+                    ? Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          '$unread',
+                          style: AppText.body(
+                            size: 12,
+                            weight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    : null,
+                chevron: true,
+                onTap: () => context.push(AppRoutes.notifications),
+              ),
+              ListRow(
                 leading: const _RowIcon(LucideIcons.lock),
                 title: l10n.settingsSecurity,
                 subtitle: l10n.settingsSecurityHint,
@@ -93,11 +137,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 leading: const _RowIcon(LucideIcons.globe),
                 title: l10n.settingsPreferences,
                 subtitle: l10n.settingsPreferencesHint,
-                onTap: _notYet,
+                onTap: notYet,
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 22),
           SectionLabel(l10n.settingsCompany, color: AppColors.textSecondary),
           ListCard(
             children: [
@@ -108,7 +152,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 onTap: () => context.push(AppRoutes.businessDetails),
               ),
               ListRow(
-                leading: const _RowIcon(LucideIcons.creditCard),
+                leading: const _RowIcon(LucideIcons.printer),
                 title: l10n.settingsCardMachines,
                 subtitle: l10n.settingsCardMachinesHint,
                 onTap: () => context.push(AppRoutes.stores),
@@ -121,7 +165,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 22),
           SectionLabel(
             l10n.settingsReportsSection,
             uppercase: true,
@@ -129,38 +173,41 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           ListCard(
             children: [
-              ListRow(
+              toggle(
                 title: l10n.settingsDailyReport,
                 subtitle: l10n.settingsDailyReportHint,
-                chevron: false,
-                trailing: Switch(
-                  value: _daily,
-                  onChanged: (v) {
-                    setState(() => _daily = v);
-                    _setPref(_dailyKey, v);
-                  },
-                ),
+                value: p?.dailySettlementReport,
+                onChanged: (v) => ref
+                    .read(preferencesProvider.notifier)
+                    .save(dailySettlementReport: v),
               ),
-              ListRow(
+              toggle(
                 title: l10n.settingsMonthlyReport,
                 subtitle: l10n.settingsMonthlyReportHint,
-                chevron: false,
-                trailing: Switch(
-                  value: _monthly,
-                  onChanged: (v) {
-                    setState(() => _monthly = v);
-                    _setPref(_monthlyKey, v);
-                  },
-                ),
+                value: p?.monthlySettlementReport,
+                onChanged: (v) => ref
+                    .read(preferencesProvider.notifier)
+                    .save(monthlySettlementReport: v),
               ),
               ListRow(
                 title: l10n.settingsRecipients,
-                subtitle: user?.email ?? l10n.settingsNoEmail,
-                onTap: _notYet,
+                subtitle: prefs.hasError
+                    ? describeError(prefs.error!, l10n)
+                    : l10n.settingsRecipientsCount(
+                        p?.reportRecipients.length ?? 0,
+                      ),
+                onTap: p == null ? null : () => showRecipientsSheet(context, p),
+              ),
+              toggle(
+                title: l10n.settingsPush,
+                subtitle: l10n.settingsPushHint,
+                value: p?.pushEnabled,
+                onChanged: (v) =>
+                    ref.read(preferencesProvider.notifier).save(pushEnabled: v),
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 22),
           ListCard(
             children: [
               ListRow(
@@ -198,3 +245,6 @@ class _RowIcon extends StatelessWidget {
     return Icon(icon, size: 20, color: AppColors.textSecondary);
   }
 }
+
+// Keep the type in scope for callers that pass preferences around.
+typedef Preferences = MerchantPreferences;

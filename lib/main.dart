@@ -70,6 +70,9 @@ class PokopayApp extends ConsumerWidget {
         ref.invalidate(weeklySalesProvider);
         ref.invalidate(terminalsProvider);
         ref.invalidate(merchantProfileProvider);
+        ref.invalidate(walletProvider);
+        ref.invalidate(recentTransactionsProvider);
+        ref.invalidate(notificationsProvider);
       }
     });
 

@@ -82,6 +82,9 @@ abstract class UserInfoResponse with _$UserInfoResponse {
     bool? emailVerified,
     String? primaryTenantId,
     String? mid,
+    String? merchantName,
+    String? phone,
+    @Default(<String>[]) List<String> permissions,
     @Default(<TenantInfo>[]) List<TenantInfo> tenants,
   }) = _UserInfoResponse;
 

@@ -28,18 +28,18 @@ class FakeAdapter implements HttpClientAdapter {
 }
 
 ResponseBody json(Object data, {int status = 200}) => ResponseBody.fromString(
-      jsonEncode(data),
-      status,
-      headers: {
-        Headers.contentTypeHeader: [Headers.jsonContentType],
-      },
-    );
+  jsonEncode(data),
+  status,
+  headers: {
+    Headers.contentTypeHeader: [Headers.jsonContentType],
+  },
+);
 
 DioException offline(RequestOptions o) => DioException(
-      requestOptions: o,
-      type: DioExceptionType.connectionError,
-      message: 'Network is unreachable',
-    );
+  requestOptions: o,
+  type: DioExceptionType.connectionError,
+  message: 'Network is unreachable',
+);
 
 ApiClient fakeApi(Handler handler, {FakeAdapter? adapter}) {
   final dio = Dio(BaseOptions(baseUrl: 'https://test.local'));
@@ -57,44 +57,49 @@ class FakeSecureStorage extends SecureStorage {
   @override
   Future<String?> readRefreshToken() async => data['refresh'];
   @override
+  Future<DateTime?> readTokenExpiry() async {
+    final raw = data['expiry'];
+    return raw == null ? null : DateTime.tryParse(raw);
+  }
+
+  @override
   Future<void> writeTokens({
     required String accessToken,
     String? refreshToken,
+    int? expiresIn,
   }) async {
     data['access'] = accessToken;
-    if (refreshToken != null) data['refresh'] = refreshToken;
+    if (refreshToken != null && refreshToken.isNotEmpty) {
+      data['refresh'] = refreshToken;
+    }
+    if (expiresIn != null && expiresIn > 0) {
+      data['expiry'] = DateTime.now()
+          .add(Duration(seconds: expiresIn))
+          .toIso8601String();
+    } else {
+      data.remove('expiry');
+    }
   }
 
   @override
   Future<void> clear() async {
     data.remove('access');
     data.remove('refresh');
+    data.remove('expiry');
   }
 
   @override
-  Future<void> saveBiometricCredentials({
-    required String email,
-    required String password,
-  }) async {
-    data['bio_email'] = email;
-    data['bio_password'] = password;
-  }
-
+  Future<String> ensureDeviceId() async =>
+      data.putIfAbsent('deviceId', () => 'device-1');
   @override
-  Future<({String email, String password})?> readBiometricCredentials() async {
-    final e = data['bio_email'];
-    final p = data['bio_password'];
-    if (e == null || p == null) return null;
-    return (email: e, password: p);
-  }
-
+  Future<String?> readDeviceId() async => data['deviceId'];
   @override
-  Future<bool> hasBiometricCredentials() async =>
-      (data['bio_email'] ?? '').isNotEmpty;
-
+  Future<String?> readDeviceToken() async => data['deviceToken'];
   @override
-  Future<void> clearBiometricCredentials() async {
-    data.remove('bio_email');
-    data.remove('bio_password');
-  }
+  Future<void> writeDeviceToken(String token) async =>
+      data['deviceToken'] = token;
+  @override
+  Future<bool> hasDeviceToken() async => (data['deviceToken'] ?? '').isNotEmpty;
+  @override
+  Future<void> clearDeviceToken() async => data.remove('deviceToken');
 }

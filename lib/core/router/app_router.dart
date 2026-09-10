@@ -6,6 +6,7 @@ import '../../features/auth/presentation/auth_controller.dart';
 import '../../features/auth/presentation/change_password_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/notifications/presentation/notifications_screen.dart';
 import '../../features/reports/presentation/reports_screen.dart';
 import '../../features/settings/presentation/business_details_screen.dart';
 import '../../features/settings/presentation/personal_info_screen.dart';
@@ -24,6 +25,7 @@ class AppRoutes {
   static const settlements = '/settlements';
   static const wallet = '/wallet';
   static const stores = '/stores';
+  static const notifications = '/notifications';
   static const settings = '/settings';
   static const personalInfo = '/settings/personal';
   static const businessDetails = '/settings/business';
@@ -65,7 +67,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.settlements,
-        builder: (_, _) => const SettlementsScreen(),
+        builder: (_, state) =>
+            SettlementsScreen(initialTab: state.uri.queryParameters['tab']),
+      ),
+      GoRoute(
+        path: AppRoutes.notifications,
+        builder: (_, _) => const NotificationsScreen(),
       ),
       GoRoute(path: AppRoutes.wallet, builder: (_, _) => const WalletScreen()),
       GoRoute(path: AppRoutes.stores, builder: (_, _) => const StoresScreen()),

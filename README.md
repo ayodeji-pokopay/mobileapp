@@ -92,7 +92,8 @@ lib/
 │   ├── auth/                     # Login, change password, AuthController
 │   ├── dashboard/                # Home screen: balance, latest payout, recent settlements
 │   ├── merchant/                 # MerchantRepository + Riverpod providers for reports/settlements
-│   ├── reports/                  # Sales report by period (daily/weekly/monthly)
+│   ├── notifications/            # Notification feed
+│   ├── reports/                  # Sales overview, transactions, receipts, PDF export
 │   ├── settlements/              # Settlements: payout history + detail sheet
 │   ├── settings/                 # Profile, business details, report preferences
 │   ├── splash/
@@ -136,11 +137,13 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 
 1. On launch `AuthController` reads the access token from secure storage. If present it calls `GET /api/v1/auth/me` to hydrate the user; otherwise the state becomes `unauthenticated`.
 2. Login posts to `POST /api/v1/auth/login`, stores the access (and optional refresh) token, then loads `/me`.
-3. Merchant screens need a merchant ID (`mid`). If `/me` does not return one, the controller searches `GET /api/v1/merchants?search=<email>` and uses the matching record's `mid`. If that finds nothing (admin and CSA accounts), it falls back to the first merchant on the platform, and the account drawer shows a "Switch merchant" picker so those users can choose which business to view.
-4. Every request carries `Authorization: Bearer <token>`. A `401` response clears stored tokens, which flips the router back to `/login`.
-5. Logout calls `POST /api/v1/auth/logout` (errors ignored) and clears all stored tokens and biometric credentials.
+3. Merchant screens need a merchant ID (`mid`). If `/me` does not return one, the controller searches `GET /api/v1/merchants?search=<email>` and uses the matching record's `mid`. If that finds nothing (admin and CSA accounts), it falls back to the first merchant on the platform, and the account drawer shows a "Switch merchant" picker so those users can choose which business to view. The backend forces `mid` to the signed-in merchant for MERCHANT logins, so the app always sends it and never treats it as a security boundary.
+4. Every request carries `Authorization: Bearer <token>`. The `AuthInterceptor` in [api_client.dart](lib/core/api/api_client.dart) refreshes the token via `POST /auth/refresh` shortly before it expires, and retries a request once after a `401`. When the refresh token itself is rejected the session is cleared, `SessionEvents` fires, and the router returns to `/login` with a "session expired" notice. A refresh that fails because the device is offline does not sign the user out.
+5. Logout revokes the device enrolment, calls `POST /api/v1/auth/logout` (errors ignored), and clears tokens and the offline cache.
 
-**Biometric sign-in.** When the user opts in at login, the email and password are saved in platform secure storage. "Use Biometrics" prompts with `local_auth`, and on success replays a normal password login with the saved credentials. Note that this is credential replay, not a device-bound token; keep that in mind if the backend later offers refresh tokens or device keys.
+**Biometric sign-in.** No password is stored. Ticking "Enable biometric sign-in" after a password login calls `POST /auth/devices` and keeps the returned device token in the Keychain or Keystore. "Continue with biometrics" runs the OS prompt, then exchanges the device token via `POST /auth/devices/login`. A `401` there clears the token and asks the user to sign in with their password and re-enrol.
+
+**Standard errors.** `/merchant/**` and app endpoints return `{ status, code, message, fieldErrors[] }`. `ApiError.from` parses it (and tolerates the legacy `/auth/*` shape), and `describeError` maps each `code` to localised copy. Validation errors surface field messages inline, for example on the report recipients sheet.
 
 ## Operations
 
@@ -170,11 +173,20 @@ All paths are relative to `API_BASE_URL`.
 | POST | `/api/v1/auth/logout` | Logout |
 | GET | `/api/v1/merchants?search=&page=&size=` | Discover `mid` by email; merchant switcher for admins |
 | GET | `/api/v1/merchants/mid/{mid}` | Business details |
-| GET | `/api/v1/merchant/reports/summary?mid=` | Dashboard, wallet, settlements header |
-| GET | `/api/v1/merchant/reports/sales?mid=&period=&startDate=&endDate=` | Reports |
-| GET | `/api/v1/merchant/reports/settlements?mid=&page=&size=` | Settlement list |
-| GET | `/api/v1/merchant/reports/settlements/{reference}` | Settlement detail |
-| GET | `/api/v1/merchant/reports/terminals?mid=` | Terminal list |
+| POST | `/api/v1/auth/refresh` | Silent token refresh |
+| POST / DELETE | `/api/v1/auth/devices`, `/auth/devices/login`, `/auth/devices/{id}` | Biometric enrol, sign-in, revoke |
+| GET | `/api/v1/app/config?platform=&version=` | Force update, maintenance, feature flags, currency |
+| GET | `/api/v1/wallets/mid/{mid}` | Dashboard balance, Wallet, next payout, settlement account |
+| GET | `/api/v1/merchant/reports/summary?mid=` | Dashboard tiles (today vs yesterday, today's settlement) |
+| GET | `/api/v1/merchant/reports/sales?mid=&period=&compare=true` | Sales overview, previous-period delta, channels, refunds |
+| GET | `/api/v1/merchant/reports/sales/pdf?mid=&period=` | "Download report" share sheet |
+| GET | `/api/v1/merchant/transactions?mid=&status=&last4=&startDate=&endDate=&page=&size=` | Sales › Transactions, dashboard activity |
+| GET | `/api/v1/merchant/transactions/{reference}?mid=` | Receipt sheet |
+| GET | `/api/v1/merchant/reports/settlements?mid=&status=&page=&size=` | Settlements › History |
+| GET | `/api/v1/merchant/statements?mid=&year=` and `/{id}/pdf` | Settlements › Statements, PDF download |
+| GET | `/api/v1/merchant/terminals?mid=` | My business › POS terminals, drawer count |
+| GET / PUT | `/api/v1/merchant/preferences?mid=` | Settings toggles and report recipients |
+| GET / POST | `/api/v1/merchant/notifications?mid=`, `/read-all` | Notifications screen, bell badge |
 
 Response shapes live in [auth_models.dart](lib/core/api/models/auth_models.dart) and [merchant_models.dart](lib/core/api/models/merchant_models.dart). In debug builds Dio logs request and response bodies to the console.
 
@@ -224,6 +236,7 @@ Reusable pieces in `lib/shared/widgets/`:
 - Data-layer error messages (for example "Invalid email or password") are English-only; UI strings are localised.
 - Export, payment links, "New sale", withdraw, preferences, and report recipients show a "Coming soon" or informational message; there are no backend endpoints for them yet.
 - Wallet fee rows are derived from each settlement's `settlementFee`; there is no separate fee ledger endpoint.
-- Report e-mail toggles on the Settings screen are stored locally with `shared_preferences` and are not yet synced to the backend.
-- The remote config, transactions, wallet, and other endpoints in the backend brief do not exist yet; the app degrades gracefully without them.
+- Push registration (`POST /devices/push`) is not called yet because no FCM/APNs provider is configured; the in-app notification feed works.
+- Payment links and invoices are hidden behind `features.paymentLinks` / `features.invoices` from remote config.
+- Refunds and chargebacks come back as zeros from the backend for now, so that card is hidden until either is non-zero.
 - Refresh tokens are stored but not yet used to renew an expired session; a `401` simply logs the user out.

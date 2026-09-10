@@ -1387,7 +1387,7 @@ as bool?,
 /// @nodoc
 mixin _$UserInfoResponse {
 
- String? get id; String? get email; String? get firstName; String? get lastName; String? get role; bool? get emailVerified; String? get primaryTenantId; String? get mid; List<TenantInfo> get tenants;
+ String? get id; String? get email; String? get firstName; String? get lastName; String? get role; bool? get emailVerified; String? get primaryTenantId; String? get mid; String? get merchantName; String? get phone; List<String> get permissions; List<TenantInfo> get tenants;
 /// Create a copy of UserInfoResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1400,16 +1400,16 @@ $UserInfoResponseCopyWith<UserInfoResponse> get copyWith => _$UserInfoResponseCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserInfoResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.role, role) || other.role == role)&&(identical(other.emailVerified, emailVerified) || other.emailVerified == emailVerified)&&(identical(other.primaryTenantId, primaryTenantId) || other.primaryTenantId == primaryTenantId)&&(identical(other.mid, mid) || other.mid == mid)&&const DeepCollectionEquality().equals(other.tenants, tenants));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserInfoResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.role, role) || other.role == role)&&(identical(other.emailVerified, emailVerified) || other.emailVerified == emailVerified)&&(identical(other.primaryTenantId, primaryTenantId) || other.primaryTenantId == primaryTenantId)&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.merchantName, merchantName) || other.merchantName == merchantName)&&(identical(other.phone, phone) || other.phone == phone)&&const DeepCollectionEquality().equals(other.permissions, permissions)&&const DeepCollectionEquality().equals(other.tenants, tenants));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,email,firstName,lastName,role,emailVerified,primaryTenantId,mid,const DeepCollectionEquality().hash(tenants));
+int get hashCode => Object.hash(runtimeType,id,email,firstName,lastName,role,emailVerified,primaryTenantId,mid,merchantName,phone,const DeepCollectionEquality().hash(permissions),const DeepCollectionEquality().hash(tenants));
 
 @override
 String toString() {
-  return 'UserInfoResponse(id: $id, email: $email, firstName: $firstName, lastName: $lastName, role: $role, emailVerified: $emailVerified, primaryTenantId: $primaryTenantId, mid: $mid, tenants: $tenants)';
+  return 'UserInfoResponse(id: $id, email: $email, firstName: $firstName, lastName: $lastName, role: $role, emailVerified: $emailVerified, primaryTenantId: $primaryTenantId, mid: $mid, merchantName: $merchantName, phone: $phone, permissions: $permissions, tenants: $tenants)';
 }
 
 
@@ -1420,7 +1420,7 @@ abstract mixin class $UserInfoResponseCopyWith<$Res>  {
   factory $UserInfoResponseCopyWith(UserInfoResponse value, $Res Function(UserInfoResponse) _then) = _$UserInfoResponseCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? email, String? firstName, String? lastName, String? role, bool? emailVerified, String? primaryTenantId, String? mid, List<TenantInfo> tenants
+ String? id, String? email, String? firstName, String? lastName, String? role, bool? emailVerified, String? primaryTenantId, String? mid, String? merchantName, String? phone, List<String> permissions, List<TenantInfo> tenants
 });
 
 
@@ -1437,7 +1437,7 @@ class _$UserInfoResponseCopyWithImpl<$Res>
 
 /// Create a copy of UserInfoResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? role = freezed,Object? emailVerified = freezed,Object? primaryTenantId = freezed,Object? mid = freezed,Object? tenants = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? role = freezed,Object? emailVerified = freezed,Object? primaryTenantId = freezed,Object? mid = freezed,Object? merchantName = freezed,Object? phone = freezed,Object? permissions = null,Object? tenants = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -1447,7 +1447,10 @@ as String?,role: freezed == role ? _self.role : role // ignore: cast_nullable_to
 as String?,emailVerified: freezed == emailVerified ? _self.emailVerified : emailVerified // ignore: cast_nullable_to_non_nullable
 as bool?,primaryTenantId: freezed == primaryTenantId ? _self.primaryTenantId : primaryTenantId // ignore: cast_nullable_to_non_nullable
 as String?,mid: freezed == mid ? _self.mid : mid // ignore: cast_nullable_to_non_nullable
-as String?,tenants: null == tenants ? _self.tenants : tenants // ignore: cast_nullable_to_non_nullable
+as String?,merchantName: freezed == merchantName ? _self.merchantName : merchantName // ignore: cast_nullable_to_non_nullable
+as String?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,permissions: null == permissions ? _self.permissions : permissions // ignore: cast_nullable_to_non_nullable
+as List<String>,tenants: null == tenants ? _self.tenants : tenants // ignore: cast_nullable_to_non_nullable
 as List<TenantInfo>,
   ));
 }
@@ -1533,10 +1536,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? primaryTenantId,  String? mid,  List<TenantInfo> tenants)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? primaryTenantId,  String? mid,  String? merchantName,  String? phone,  List<String> permissions,  List<TenantInfo> tenants)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserInfoResponse() when $default != null:
-return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.primaryTenantId,_that.mid,_that.tenants);case _:
+return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.primaryTenantId,_that.mid,_that.merchantName,_that.phone,_that.permissions,_that.tenants);case _:
   return orElse();
 
 }
@@ -1554,10 +1557,10 @@ return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? primaryTenantId,  String? mid,  List<TenantInfo> tenants)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? primaryTenantId,  String? mid,  String? merchantName,  String? phone,  List<String> permissions,  List<TenantInfo> tenants)  $default,) {final _that = this;
 switch (_that) {
 case _UserInfoResponse():
-return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.primaryTenantId,_that.mid,_that.tenants);case _:
+return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.primaryTenantId,_that.mid,_that.merchantName,_that.phone,_that.permissions,_that.tenants);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1574,10 +1577,10 @@ return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? primaryTenantId,  String? mid,  List<TenantInfo> tenants)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? primaryTenantId,  String? mid,  String? merchantName,  String? phone,  List<String> permissions,  List<TenantInfo> tenants)?  $default,) {final _that = this;
 switch (_that) {
 case _UserInfoResponse() when $default != null:
-return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.primaryTenantId,_that.mid,_that.tenants);case _:
+return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.primaryTenantId,_that.mid,_that.merchantName,_that.phone,_that.permissions,_that.tenants);case _:
   return null;
 
 }
@@ -1589,7 +1592,7 @@ return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_
 @JsonSerializable()
 
 class _UserInfoResponse implements UserInfoResponse {
-  const _UserInfoResponse({this.id, this.email, this.firstName, this.lastName, this.role, this.emailVerified, this.primaryTenantId, this.mid, final  List<TenantInfo> tenants = const <TenantInfo>[]}): _tenants = tenants;
+  const _UserInfoResponse({this.id, this.email, this.firstName, this.lastName, this.role, this.emailVerified, this.primaryTenantId, this.mid, this.merchantName, this.phone, final  List<String> permissions = const <String>[], final  List<TenantInfo> tenants = const <TenantInfo>[]}): _permissions = permissions,_tenants = tenants;
   factory _UserInfoResponse.fromJson(Map<String, dynamic> json) => _$UserInfoResponseFromJson(json);
 
 @override final  String? id;
@@ -1600,6 +1603,15 @@ class _UserInfoResponse implements UserInfoResponse {
 @override final  bool? emailVerified;
 @override final  String? primaryTenantId;
 @override final  String? mid;
+@override final  String? merchantName;
+@override final  String? phone;
+ final  List<String> _permissions;
+@override@JsonKey() List<String> get permissions {
+  if (_permissions is EqualUnmodifiableListView) return _permissions;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_permissions);
+}
+
  final  List<TenantInfo> _tenants;
 @override@JsonKey() List<TenantInfo> get tenants {
   if (_tenants is EqualUnmodifiableListView) return _tenants;
@@ -1621,16 +1633,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserInfoResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.role, role) || other.role == role)&&(identical(other.emailVerified, emailVerified) || other.emailVerified == emailVerified)&&(identical(other.primaryTenantId, primaryTenantId) || other.primaryTenantId == primaryTenantId)&&(identical(other.mid, mid) || other.mid == mid)&&const DeepCollectionEquality().equals(other._tenants, _tenants));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserInfoResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.role, role) || other.role == role)&&(identical(other.emailVerified, emailVerified) || other.emailVerified == emailVerified)&&(identical(other.primaryTenantId, primaryTenantId) || other.primaryTenantId == primaryTenantId)&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.merchantName, merchantName) || other.merchantName == merchantName)&&(identical(other.phone, phone) || other.phone == phone)&&const DeepCollectionEquality().equals(other._permissions, _permissions)&&const DeepCollectionEquality().equals(other._tenants, _tenants));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,email,firstName,lastName,role,emailVerified,primaryTenantId,mid,const DeepCollectionEquality().hash(_tenants));
+int get hashCode => Object.hash(runtimeType,id,email,firstName,lastName,role,emailVerified,primaryTenantId,mid,merchantName,phone,const DeepCollectionEquality().hash(_permissions),const DeepCollectionEquality().hash(_tenants));
 
 @override
 String toString() {
-  return 'UserInfoResponse(id: $id, email: $email, firstName: $firstName, lastName: $lastName, role: $role, emailVerified: $emailVerified, primaryTenantId: $primaryTenantId, mid: $mid, tenants: $tenants)';
+  return 'UserInfoResponse(id: $id, email: $email, firstName: $firstName, lastName: $lastName, role: $role, emailVerified: $emailVerified, primaryTenantId: $primaryTenantId, mid: $mid, merchantName: $merchantName, phone: $phone, permissions: $permissions, tenants: $tenants)';
 }
 
 
@@ -1641,7 +1653,7 @@ abstract mixin class _$UserInfoResponseCopyWith<$Res> implements $UserInfoRespon
   factory _$UserInfoResponseCopyWith(_UserInfoResponse value, $Res Function(_UserInfoResponse) _then) = __$UserInfoResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? email, String? firstName, String? lastName, String? role, bool? emailVerified, String? primaryTenantId, String? mid, List<TenantInfo> tenants
+ String? id, String? email, String? firstName, String? lastName, String? role, bool? emailVerified, String? primaryTenantId, String? mid, String? merchantName, String? phone, List<String> permissions, List<TenantInfo> tenants
 });
 
 
@@ -1658,7 +1670,7 @@ class __$UserInfoResponseCopyWithImpl<$Res>
 
 /// Create a copy of UserInfoResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? role = freezed,Object? emailVerified = freezed,Object? primaryTenantId = freezed,Object? mid = freezed,Object? tenants = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? role = freezed,Object? emailVerified = freezed,Object? primaryTenantId = freezed,Object? mid = freezed,Object? merchantName = freezed,Object? phone = freezed,Object? permissions = null,Object? tenants = null,}) {
   return _then(_UserInfoResponse(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -1668,7 +1680,10 @@ as String?,role: freezed == role ? _self.role : role // ignore: cast_nullable_to
 as String?,emailVerified: freezed == emailVerified ? _self.emailVerified : emailVerified // ignore: cast_nullable_to_non_nullable
 as bool?,primaryTenantId: freezed == primaryTenantId ? _self.primaryTenantId : primaryTenantId // ignore: cast_nullable_to_non_nullable
 as String?,mid: freezed == mid ? _self.mid : mid // ignore: cast_nullable_to_non_nullable
-as String?,tenants: null == tenants ? _self._tenants : tenants // ignore: cast_nullable_to_non_nullable
+as String?,merchantName: freezed == merchantName ? _self.merchantName : merchantName // ignore: cast_nullable_to_non_nullable
+as String?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,permissions: null == permissions ? _self._permissions : permissions // ignore: cast_nullable_to_non_nullable
+as List<String>,tenants: null == tenants ? _self._tenants : tenants // ignore: cast_nullable_to_non_nullable
 as List<TenantInfo>,
   ));
 }

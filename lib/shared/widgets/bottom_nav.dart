@@ -34,7 +34,16 @@ class PokoBottomNav extends StatelessWidget {
       l10n.navSettings,
     ];
     return Container(
-      color: AppColors.surface,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.navy.withValues(alpha: 0.06),
+            blurRadius: 24,
+            offset: const Offset(0, -6),
+          ),
+        ],
+      ),
       padding: EdgeInsets.fromLTRB(16, 8, 16, bottom > 0 ? bottom : 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

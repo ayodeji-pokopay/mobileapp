@@ -12,10 +12,63 @@ abstract class MerchantSettlementSummary with _$MerchantSettlementSummary {
     num? pendingAmount,
     int? todayTransactions,
     num? todaySales,
+    num? yesterdaySales,
+    int? yesterdayTransactions,
+    num? monthToDateSales,
+    TodaySettlement? todaySettlement,
+    int? activeTerminals,
+    int? instantTerminals,
   }) = _MerchantSettlementSummary;
 
   factory MerchantSettlementSummary.fromJson(Map<String, dynamic> json) =>
       _$MerchantSettlementSummaryFromJson(json);
+}
+
+@freezed
+abstract class TodaySettlement with _$TodaySettlement {
+  const factory TodaySettlement({
+    num? amount,
+    String? status,
+    String? expectedDate,
+  }) = _TodaySettlement;
+
+  factory TodaySettlement.fromJson(Map<String, dynamic> json) =>
+      _$TodaySettlementFromJson(json);
+}
+
+@freezed
+abstract class PeriodTotals with _$PeriodTotals {
+  const factory PeriodTotals({
+    String? startDate,
+    String? endDate,
+    num? totalSales,
+    int? totalTransactionCount,
+    num? totalFees,
+    num? netAmount,
+  }) = _PeriodTotals;
+
+  factory PeriodTotals.fromJson(Map<String, dynamic> json) =>
+      _$PeriodTotalsFromJson(json);
+}
+
+@freezed
+abstract class ChannelSummary with _$ChannelSummary {
+  const factory ChannelSummary({
+    String? channel,
+    num? totalAmount,
+    int? transactionCount,
+  }) = _ChannelSummary;
+
+  factory ChannelSummary.fromJson(Map<String, dynamic> json) =>
+      _$ChannelSummaryFromJson(json);
+}
+
+@freezed
+abstract class CountAmount with _$CountAmount {
+  const factory CountAmount({int? count, num? amount}) = _CountAmount;
+
+  factory CountAmount.fromJson(Map<String, dynamic> json) =>
+      _$CountAmountFromJson(json);
 }
 
 @freezed
@@ -64,6 +117,10 @@ abstract class MerchantSalesReportResponse with _$MerchantSalesReportResponse {
     num? netAmount,
     @Default(<CardSchemeSummary>[]) List<CardSchemeSummary> cardSchemeBreakdown,
     @Default(<DailyBreakdown>[]) List<DailyBreakdown> dailyBreakdown,
+    PeriodTotals? previousPeriod,
+    @Default(<ChannelSummary>[]) List<ChannelSummary> channelBreakdown,
+    CountAmount? refunds,
+    CountAmount? chargebacks,
   }) = _MerchantSalesReportResponse;
 
   factory MerchantSalesReportResponse.fromJson(Map<String, dynamic> json) =>
@@ -89,6 +146,9 @@ abstract class SettlementResponse with _$SettlementResponse {
     String? accountName,
     String? bankName,
     String? status,
+    String? settledAt,
+    String? failureReason,
+    String? cycle,
   }) = _SettlementResponse;
 
   factory SettlementResponse.fromJson(Map<String, dynamic> json) =>

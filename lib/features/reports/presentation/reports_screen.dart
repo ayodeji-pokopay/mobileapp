@@ -3,18 +3,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../core/api/models/merchant_models.dart';
+import '../../../core/api/models/transaction_models.dart';
+import '../../../core/config/app_config_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/error_text.dart';
 import '../../../shared/format.dart';
+import '../../../shared/pdf_share.dart';
 import '../../../shared/widgets/async_slot.dart';
 import '../../../shared/widgets/bottom_nav.dart';
+import '../../../shared/widgets/charts.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/offline_banner.dart';
 import '../../../shared/widgets/pill_tabs.dart';
+import '../../../shared/widgets/pills.dart';
 import '../../../shared/widgets/section_label.dart';
+import '../../auth/presentation/auth_controller.dart';
+import '../../merchant/data/merchant_repository.dart';
 import '../../merchant/presentation/merchant_providers.dart';
-import '../../../l10n/generated/app_localizations.dart';
+import 'receipt_sheet.dart';
+import 'transaction_style.dart';
 
 class ReportsScreen extends ConsumerStatefulWidget {
   const ReportsScreen({super.key});
@@ -27,7 +37,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
   static const _periods = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'];
 
   int _tab = 0;
-  String _search = '';
+  bool _exporting = false;
 
   void _notYet(String what) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -39,11 +49,44 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
     );
   }
 
+  Future<void> _export() async {
+    final l10n = AppLocalizations.of(context);
+    final mid = ref.read(authControllerProvider).mid;
+    if (mid == null || _exporting) return;
+    setState(() => _exporting = true);
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.showSnackBar(SnackBar(content: Text(l10n.salesDownloading)));
+    try {
+      final period = ref.read(salesPeriodProvider);
+      final bytes = await ref
+          .read(merchantRepositoryProvider)
+          .downloadSalesPdf(mid: mid, period: period);
+      await sharePdf(
+        bytes,
+        fileName: 'pokopay-sales-${period.toLowerCase()}.pdf',
+      );
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            '${l10n.salesDownloadFailed} ${describeError(e, l10n)}',
+          ),
+          backgroundColor: AppColors.danger,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _exporting = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final period = ref.watch(salesPeriodProvider);
     final sales = ref.watch(salesReportProvider);
+    final paymentLinks =
+        ref.watch(appConfigProvider).asData?.value.features.paymentLinks ??
+        false;
     final periodIndex = _periods.indexOf(period);
     final periodLabels = [
       l10n.periodToday,
@@ -51,6 +94,12 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
       l10n.periodLastMonth,
       l10n.periodLastYear,
     ];
+    final tabs = [
+      l10n.salesTabOverview,
+      l10n.salesTabTransactions,
+      if (paymentLinks) l10n.salesTabPaymentLinks,
+    ];
+    final tab = _tab.clamp(0, tabs.length - 1);
 
     return Scaffold(
       backgroundColor: AppColors.canvas,
@@ -72,27 +121,23 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                       _PlusMenu(
                         tooltip: l10n.salesAdd,
                         newSale: l10n.salesNewSale,
-                        newLink: l10n.salesNewPaymentLink,
+                        newLink: paymentLinks ? l10n.salesNewPaymentLink : null,
                         onNewSale: () => _notYet(l10n.salesNewSale),
                         onNewLink: () => _notYet(l10n.salesPaymentLinks),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
                   UnderlineTabs(
-                    items: [
-                      l10n.salesTabOverview,
-                      l10n.salesTabTransactions,
-                      l10n.salesTabPaymentLinks,
-                    ],
-                    selected: _tab,
+                    items: tabs,
+                    selected: tab,
                     onChanged: (i) => setState(() => _tab = i),
                   ),
                 ],
               ),
             ),
             Expanded(
-              child: switch (_tab) {
+              child: switch (tab) {
                 0 => _Overview(
                   sales: sales,
                   periodIndex: periodIndex < 0 ? 1 : periodIndex,
@@ -105,14 +150,9 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                   },
                   onRetry: () => ref.invalidate(salesReportProvider),
                   onGoTransactions: () => setState(() => _tab = 1),
-                  onExport: () => _notYet(l10n.salesExportFeature),
+                  onExport: _exporting ? null : _export,
                 ),
-                1 => _Transactions(
-                  sales: sales,
-                  search: _search,
-                  onSearch: (v) => setState(() => _search = v.trim()),
-                  onRetry: () => ref.invalidate(salesReportProvider),
-                ),
+                1 => const _Transactions(),
                 _ => const _PaymentLinks(),
               },
             ),
@@ -133,7 +173,7 @@ class _PlusMenu extends StatelessWidget {
   });
   final String tooltip;
   final String newSale;
-  final String newLink;
+  final String? newLink;
   final VoidCallback onNewSale;
   final VoidCallback onNewLink;
 
@@ -141,7 +181,7 @@ class _PlusMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<int>(
       tooltip: tooltip,
-      offset: const Offset(0, 56),
+      offset: const Offset(0, 52),
       color: AppColors.surface,
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -151,10 +191,11 @@ class _PlusMenu extends StatelessWidget {
           value: 0,
           child: _MenuRow(icon: LucideIcons.printer, label: newSale),
         ),
-        PopupMenuItem(
-          value: 1,
-          child: _MenuRow(icon: LucideIcons.link, label: newLink),
-        ),
+        if (newLink != null)
+          PopupMenuItem(
+            value: 1,
+            child: _MenuRow(icon: LucideIcons.link, label: newLink!),
+          ),
       ],
       child: Container(
         width: 42,
@@ -165,8 +206,8 @@ class _PlusMenu extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: AppColors.primary.withValues(alpha: 0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -214,7 +255,7 @@ class _Overview extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final VoidCallback onRetry;
   final VoidCallback onGoTransactions;
-  final VoidCallback onExport;
+  final VoidCallback? onExport;
 
   @override
   Widget build(BuildContext context) {
@@ -235,14 +276,14 @@ class _Overview extends StatelessWidget {
             selected: periodIndex,
             onChanged: onPeriod,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           AsyncSlot<MerchantSalesReportResponse>(
             value: sales,
             loadingHeight: 300,
             onRetry: onRetry,
             data: (r) => _GrossSalesCard(r: r),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           SurfaceCard(
             radius: 14,
             padding: const EdgeInsets.symmetric(vertical: 13),
@@ -254,19 +295,35 @@ class _Overview extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           AsyncSlot<MerchantSalesReportResponse>(
             value: sales,
             loadingHeight: 120,
             data: (r) => _FeesNetCard(r: r),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           AsyncSlot<MerchantSalesReportResponse>(
             value: sales,
             loadingHeight: 160,
             data: (r) => _BreakdownCard(r: r),
           ),
-          const SizedBox(height: 16),
+          AsyncSlot<MerchantSalesReportResponse>(
+            value: sales,
+            loadingHeight: 0,
+            skeleton: const SizedBox.shrink(),
+            data: (r) {
+              final refunds = r.refunds?.count ?? 0;
+              final chargebacks = r.chargebacks?.count ?? 0;
+              if (refunds == 0 && chargebacks == 0) {
+                return const SizedBox.shrink();
+              }
+              return Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: _RefundsCard(r: r),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
           AsyncSlot<MerchantSalesReportResponse>(
             value: sales,
             loadingHeight: 120,
@@ -294,7 +351,14 @@ class _GrossSalesCard extends StatelessWidget {
             formatDateShort(r.endDate),
           )
         : '';
+    final delta = percentDelta(r.totalSales, r.previousPeriod?.totalSales);
+    final rows = r.dailyBreakdown;
+    final values = rows.map((d) => (d.totalAmount ?? 0).toDouble()).toList();
+    String xLabel(int i) => formatDayMonth(rows[i].date).split(', ').last;
+
     return SurfaceCard(
+      radius: 18,
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -302,10 +366,13 @@ class _GrossSalesCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(l10n.salesGross.toUpperCase(), style: AppText.label()),
-              Text(
-                l10n.salesTransactionsCount(count),
-                style: AppText.body(size: 13, color: AppColors.textTertiary),
-              ),
+              if (r.previousPeriod != null)
+                DeltaPill(delta: delta, label: (v) => l10n.salesVsPrevious(v))
+              else
+                Text(
+                  l10n.salesTransactionsCount(count),
+                  style: AppText.body(size: 13, color: AppColors.textTertiary),
+                ),
             ],
           ),
           const SizedBox(height: 10),
@@ -314,12 +381,15 @@ class _GrossSalesCard extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               formatMoney(r.totalSales),
-              style: AppText.display(size: 22, height: 1),
+              style: AppText.display(size: 28, height: 1),
             ),
           ),
           const SizedBox(height: 5),
           Text(
-            range.isEmpty ? (r.reportPeriod ?? '') : range,
+            [
+              l10n.salesTransactionsCount(count),
+              if (range.isNotEmpty) range,
+            ].join(' · '),
             style: AppText.body(size: 13, color: AppColors.textTertiary),
           ),
           const SizedBox(height: 16),
@@ -333,9 +403,25 @@ class _GrossSalesCard extends StatelessWidget {
               ),
             ],
           ),
-          if (r.dailyBreakdown.isNotEmpty) ...[
+          if (rows.isNotEmpty) ...[
             const SizedBox(height: 20),
-            _BarChart(rows: r.dailyBreakdown),
+            BarChart(
+              values: values,
+              xLabels: [
+                xLabel(0),
+                if (rows.length > 2) xLabel(rows.length ~/ 2),
+                if (rows.length > 1) xLabel(rows.length - 1),
+              ],
+              yFormat: formatMoneyCompact,
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                _Legend(color: AppColors.navy, label: l10n.salesDailySales),
+                const SizedBox(width: 16),
+                _Legend(color: AppColors.primary, label: l10n.salesBestDay),
+              ],
+            ),
           ],
         ],
       ),
@@ -363,110 +449,6 @@ class _MiniStat extends StatelessWidget {
         ),
         const SizedBox(height: 2),
         Text(value, style: AppText.money(size: 16)),
-      ],
-    );
-  }
-}
-
-class _BarChart extends StatelessWidget {
-  const _BarChart({required this.rows});
-  final List<DailyBreakdown> rows;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final values = rows.map((d) => (d.totalAmount ?? 0).toDouble()).toList();
-    final max = values.fold<double>(0, (a, b) => a > b ? a : b);
-    final maxIndex = values.indexOf(max);
-    final mid = rows.length ~/ 2;
-    String xLabel(int i) => formatDayMonth(rows[i].date).split(', ').last;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 110,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 20, right: 8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (final v in [max, max / 2, 0.0])
-                      Text(
-                        formatMoneyCompact(v),
-                        style: AppText.body(
-                          size: 12,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 96,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        for (var i = 0; i < values.length; i++)
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: values.length > 20 ? 0.5 : 1.5,
-                              ),
-                              child: FractionallySizedBox(
-                                heightFactor: max == 0
-                                    ? 0.03
-                                    : (values[i] / max).clamp(0.03, 1.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: i == maxIndex && max > 0
-                                        ? AppColors.primary
-                                        : AppColors.navy,
-                                    borderRadius: BorderRadius.circular(2),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  const Divider(color: AppColors.surfaceAlt, height: 1),
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      for (final i in {0, mid, rows.length - 1})
-                        Text(
-                          xLabel(i),
-                          style: AppText.body(
-                            size: 12,
-                            color: AppColors.textTertiary,
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            _Legend(color: AppColors.navy, label: l10n.salesDailySales),
-            const SizedBox(width: 16),
-            _Legend(color: AppColors.primary, label: l10n.salesBestDay),
-          ],
-        ),
       ],
     );
   }
@@ -507,16 +489,17 @@ class _FeesNetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final count = r.totalTransactionCount ?? 0;
+    final fees = r.totalFees ?? 0;
     return SurfaceCard(
+      radius: 18,
+      padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           Expanded(
             child: _BigStat(
               label: l10n.salesFees.toUpperCase(),
-              value: (r.totalFees ?? 0) > 0
-                  ? '-${formatMoney(r.totalFees)}'
-                  : formatMoney(0),
-              color: (r.totalFees ?? 0) > 0 ? AppColors.danger : AppColors.navy,
+              value: fees > 0 ? '-${formatMoney(fees)}' : formatMoney(0),
+              color: fees > 0 ? AppColors.danger : AppColors.navy,
               sub: l10n.salesTransactionsCount(count),
             ),
           ),
@@ -527,6 +510,41 @@ class _FeesNetCard extends StatelessWidget {
               value: formatMoney(r.netAmount),
               color: AppColors.navy,
               sub: l10n.salesAfterFees,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RefundsCard extends StatelessWidget {
+  const _RefundsCard({required this.r});
+  final MerchantSalesReportResponse r;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SurfaceCard(
+      radius: 18,
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Expanded(
+            child: _BigStat(
+              label: l10n.salesRefunds.toUpperCase(),
+              value: '-${formatMoney(r.refunds?.amount)}',
+              color: AppColors.danger,
+              sub: l10n.salesCountItems(r.refunds?.count ?? 0),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: _BigStat(
+              label: l10n.salesChargebacks.toUpperCase(),
+              value: formatMoney(r.chargebacks?.amount),
+              color: AppColors.navy,
+              sub: l10n.salesCountItems(r.chargebacks?.count ?? 0),
             ),
           ),
         ],
@@ -569,30 +587,72 @@ class _BigStat extends StatelessWidget {
   }
 }
 
-class _BreakdownCard extends StatelessWidget {
+class _BreakdownCard extends StatefulWidget {
   const _BreakdownCard({required this.r});
   final MerchantSalesReportResponse r;
 
   @override
+  State<_BreakdownCard> createState() => _BreakdownCardState();
+}
+
+class _BreakdownCardState extends State<_BreakdownCard> {
+  int _mode = 0; // 0 card brands, 1 channels
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final r = widget.r;
     final total = (r.totalSales ?? 0).toDouble();
-    final ranked = [...r.cardSchemeBreakdown]
-      ..sort((a, b) => (b.totalAmount ?? 0).compareTo(a.totalAmount ?? 0));
+    final channels = r.channelBreakdown;
+    final showChannels = channels.length > 1;
+    final mode = showChannels ? _mode : 0;
+
+    final rows = mode == 0
+        ? ([...r.cardSchemeBreakdown]..sort(
+                (a, b) => (b.totalAmount ?? 0).compareTo(a.totalAmount ?? 0),
+              ))
+              .map(
+                (c) => (
+                  abbr: schemeAbbr(c.cardScheme),
+                  name: schemeName(c.cardScheme, l10n),
+                  amount: c.totalAmount,
+                  count: c.transactionCount,
+                  color: _brandColor(c.cardScheme),
+                ),
+              )
+              .toList()
+        : ([...channels]..sort(
+                (a, b) => (b.totalAmount ?? 0).compareTo(a.totalAmount ?? 0),
+              ))
+              .map(
+                (c) => (
+                  abbr: _channelAbbr(c.channel),
+                  name: _channelName(c.channel, l10n),
+                  amount: c.totalAmount,
+                  count: c.transactionCount,
+                  color: AppColors.textBody,
+                ),
+              )
+              .toList();
+
     return SurfaceCard(
+      radius: 18,
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(l10n.salesBreakdown.toUpperCase(), style: AppText.label()),
-          const SizedBox(height: 14),
-          PillChip(
-            label: l10n.salesCardBrands,
-            selected: true,
-            onTap: () {},
+          const SizedBox(height: 12),
+          PillTabs(
+            items: [l10n.salesCardBrands, if (showChannels) l10n.salesChannels],
+            selected: mode,
+            onChanged: (i) => setState(() => _mode = i),
             activeColor: AppColors.primary,
+            inactiveColor: AppColors.canvas,
+            inactiveTextColor: AppColors.textBody,
           ),
-          const SizedBox(height: 8),
-          if (ranked.isEmpty)
+          const SizedBox(height: 6),
+          if (rows.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Text(
@@ -601,43 +661,57 @@ class _BreakdownCard extends StatelessWidget {
               ),
             )
           else
-            for (var i = 0; i < ranked.length; i++)
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  border: i == ranked.length - 1
-                      ? null
-                      : const Border(
-                          bottom: BorderSide(color: AppColors.divider),
-                        ),
-                ),
+            for (var i = 0; i < rows.length; i++) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   children: [
                     InitialsTile(
-                      text: _abbr(ranked[i].cardScheme),
-                      foreground: _brandColor(ranked[i].cardScheme),
+                      text: rows[i].abbr,
+                      foreground: rows[i].color,
                       fontSize: 11,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: Text(
-                        _titleCase(ranked[i].cardScheme ?? l10n.salesOther),
-                        style: AppText.body(size: 15, weight: FontWeight.w500),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            rows[i].name,
+                            style: AppText.body(
+                              size: 15,
+                              weight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(999),
+                            child: LinearProgressIndicator(
+                              value: total == 0
+                                  ? 0
+                                  : ((rows[i].amount ?? 0) / total)
+                                        .clamp(0, 1)
+                                        .toDouble(),
+                              minHeight: 4,
+                              backgroundColor: AppColors.canvas,
+                              valueColor: AlwaysStoppedAnimation(rows[i].color),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                    const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          formatMoney(ranked[i].totalAmount),
+                          formatMoney(rows[i].amount),
                           style: AppText.money(size: 15),
                         ),
                         Text(
                           total == 0
-                              ? l10n.settlementTxns(
-                                  ranked[i].transactionCount ?? 0,
-                                )
-                              : '${((ranked[i].totalAmount ?? 0) / total * 100).toStringAsFixed(1)}%',
+                              ? l10n.settlementTxns(rows[i].count ?? 0)
+                              : '${((rows[i].amount ?? 0) / total * 100).toStringAsFixed(1)}%',
                           style: AppText.body(
                             size: 13,
                             color: AppColors.textTertiary,
@@ -648,42 +722,48 @@ class _BreakdownCard extends StatelessWidget {
                   ],
                 ),
               ),
+              if (i != rows.length - 1) const Divider(color: AppColors.divider),
+            ],
         ],
       ),
     );
-  }
-
-  String _abbr(String? scheme) {
-    final s = (scheme ?? '').toUpperCase();
-    if (s.startsWith('MASTER')) return 'MC';
-    if (s.startsWith('VISA')) return 'VS';
-    if (s.startsWith('VERVE')) return 'VE';
-    if (s.isEmpty) return '··';
-    return s.length >= 2 ? s.substring(0, 2) : s;
   }
 
   Color _brandColor(String? scheme) {
     final s = (scheme ?? '').toUpperCase();
     if (s.startsWith('MASTER')) return AppColors.mastercard;
     if (s.startsWith('VISA')) return AppColors.visa;
+    if (s.startsWith('VERVE')) return AppColors.primary;
     return AppColors.textBody;
   }
 
-  String _titleCase(String s) {
-    final lower = s.toLowerCase();
-    return lower.isEmpty ? s : lower[0].toUpperCase() + lower.substring(1);
-  }
+  String _channelAbbr(String? c) => switch ((c ?? '').toUpperCase()) {
+    'POS' => 'POS',
+    'LINK' => 'LNK',
+    'TAP' => 'TAP',
+    _ => '··',
+  };
+
+  String _channelName(String? c, AppLocalizations l10n) =>
+      switch ((c ?? '').toUpperCase()) {
+        'POS' => l10n.channelPos,
+        'LINK' => l10n.channelLink,
+        'TAP' => l10n.channelTap,
+        _ => c ?? l10n.salesOther,
+      };
 }
 
 class _ExportCard extends StatelessWidget {
   const _ExportCard({required this.r, required this.onExport});
   final MerchantSalesReportResponse r;
-  final VoidCallback onExport;
+  final VoidCallback? onExport;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return SurfaceCard(
+      radius: 18,
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -701,7 +781,7 @@ class _ExportCard extends StatelessWidget {
             l10n.salesNetSettled(r.businessName ?? r.merchantName ?? ''),
             style: AppText.body(size: 13, color: AppColors.textTertiary),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           Material(
             color: AppColors.canvas,
             borderRadius: BorderRadius.circular(12),
@@ -713,15 +793,23 @@ class _ExportCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
-                      LucideIcons.download,
+                    Icon(
+                      LucideIcons.fileDown,
                       size: 16,
-                      color: AppColors.textBody,
+                      color: onExport == null
+                          ? AppColors.textTertiary
+                          : AppColors.textBody,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       l10n.salesExport,
-                      style: AppText.body(size: 15, weight: FontWeight.w600),
+                      style: AppText.body(
+                        size: 15,
+                        weight: FontWeight.w600,
+                        color: onExport == null
+                            ? AppColors.textTertiary
+                            : AppColors.navy,
+                      ),
                     ),
                   ],
                 ),
@@ -736,116 +824,187 @@ class _ExportCard extends StatelessWidget {
 
 // ── Transactions ────────────────────────────────────────────────────────
 
-class _Transactions extends StatelessWidget {
-  const _Transactions({
-    required this.sales,
-    required this.search,
-    required this.onSearch,
-    required this.onRetry,
-  });
+class _Transactions extends ConsumerStatefulWidget {
+  const _Transactions();
 
-  final AsyncValue<MerchantSalesReportResponse> sales;
-  final String search;
-  final ValueChanged<String> onSearch;
-  final VoidCallback onRetry;
+  @override
+  ConsumerState<_Transactions> createState() => _TransactionsState();
+}
+
+class _TransactionsState extends ConsumerState<_Transactions> {
+  static const _statuses = [
+    null,
+    'APPROVED',
+    'DECLINED',
+    'REVERSED',
+    'REFUNDED',
+  ];
+  int _status = 0;
+  String _search = '';
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-      children: [
-        TextField(
-          onChanged: onSearch,
-          style: AppText.body(size: 15),
-          decoration: InputDecoration(
-            hintText: l10n.salesSearchByDate,
-            hintStyle: AppText.body(size: 15, color: AppColors.textTertiary),
-            prefixIcon: const Icon(
-              LucideIcons.search,
-              size: 16,
-              color: AppColors.textTertiary,
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(999),
-              borderSide: BorderSide.none,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(999),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(999),
-              borderSide: BorderSide.none,
+    final digits = RegExp(r'^\d{4}$').hasMatch(_search);
+    final query = (
+      status: _statuses[_status],
+      last4: digits ? _search : null,
+      days: 90,
+    );
+    final txns = ref.watch(transactionsProvider(query));
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.invalidate(transactionsProvider(query));
+        await ref.read(transactionsProvider(query).future);
+      },
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+        children: [
+          TextField(
+            onChanged: (v) => setState(() => _search = v.trim()),
+            keyboardType: TextInputType.text,
+            style: AppText.body(size: 15),
+            decoration: InputDecoration(
+              hintText: l10n.salesSearchLast4,
+              hintStyle: AppText.body(size: 15, color: AppColors.textTertiary),
+              prefixIcon: const Icon(
+                LucideIcons.search,
+                size: 16,
+                color: AppColors.textTertiary,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(999),
+                borderSide: BorderSide.none,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(999),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(999),
+                borderSide: BorderSide.none,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-        AsyncSlot<MerchantSalesReportResponse>(
-          value: sales,
-          loadingHeight: 200,
-          onRetry: onRetry,
-          data: (r) {
-            final days = r.dailyBreakdown.where((d) {
-              if (search.isEmpty) return true;
-              final q = search.toLowerCase();
-              return formatDayLabel(d.date).toLowerCase().contains(q) ||
-                  (d.date ?? '').contains(q);
-            }).toList()..sort((a, b) => (b.date ?? '').compareTo(a.date ?? ''));
-            if (days.isEmpty) {
-              return EmptyState(
-                icon: LucideIcons.receipt,
-                title: l10n.salesNoTransactions,
-                subtitle: l10n.salesNoTransactionsHint,
-              );
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (final d in days) ...[
-                  SectionLabel(formatDayLabel(d.date)),
-                  ListCard(children: [_DayRow(d)]),
-                  const SizedBox(height: 20),
+          const SizedBox(height: 12),
+          PillTabs(
+            scrollable: true,
+            inactiveColor: AppColors.surface,
+            inactiveTextColor: AppColors.textBody,
+            items: [
+              l10n.filterAll,
+              l10n.filterApproved,
+              l10n.filterDeclined,
+              l10n.filterReversed,
+              l10n.filterRefunded,
+            ],
+            selected: _status,
+            onChanged: (i) => setState(() => _status = i),
+          ),
+          const SizedBox(height: 16),
+          AsyncSlot<PageTransactionResponse>(
+            value: txns,
+            loadingHeight: 220,
+            onRetry: () => ref.invalidate(transactionsProvider(query)),
+            data: (page) {
+              var items = page.content;
+              if (_search.isNotEmpty && !digits) {
+                final q = _search.toLowerCase();
+                items = items
+                    .where(
+                      (t) =>
+                          (t.reference ?? '').toLowerCase().contains(q) ||
+                          (t.storeName ?? '').toLowerCase().contains(q),
+                    )
+                    .toList();
+              }
+              if (items.isEmpty) {
+                return EmptyState(
+                  icon: LucideIcons.receipt,
+                  title: l10n.salesNoTransactions,
+                  subtitle: l10n.salesNoTransactionsHint,
+                );
+              }
+              final groups = <String, List<TransactionResponse>>{};
+              for (final t in items) {
+                final day = (t.transactionDate ?? '').split('T').first;
+                groups.putIfAbsent(day, () => []).add(t);
+              }
+              final days = groups.keys.toList()..sort((a, b) => b.compareTo(a));
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (final d in days) ...[
+                    SectionLabel(formatDayLabel(d)),
+                    ListCard(
+                      children: [
+                        for (final t in groups[d]!)
+                          _TxnRow(
+                            t: t,
+                            onTap: () => showReceiptSheet(context, t),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                  ],
                 ],
-              ],
-            );
-          },
-        ),
-      ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
 
-class _DayRow extends StatelessWidget {
-  const _DayRow(this.d);
-  final DailyBreakdown d;
+class _TxnRow extends StatelessWidget {
+  const _TxnRow({required this.t, required this.onTap});
+  final TransactionResponse t;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final count = d.transactionCount ?? 0;
+    final style = transactionStyle(t, l10n);
+    final d = DateTime.tryParse(t.transactionDate ?? '');
+    final title = (t.maskedPan ?? '').isNotEmpty
+        ? l10n.cardLabel(schemeName(t.cardScheme, l10n), last4(t.maskedPan))
+        : style.title;
+    final subtitle = [
+      if (d != null) formatTime(d),
+      if ((t.storeName ?? '').isNotEmpty) t.storeName!,
+      if (style.tone != PillTone.success) style.statusLabel,
+    ].join(' · ');
     return ListRow(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      onTap: onTap,
+      chevron: false,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
       leading: Stack(
         clipBehavior: Clip.none,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 42,
+            height: 42,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: AppColors.surfacePressed,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: const Color(0xFFEBEBEA)),
             ),
-            child: const Icon(
-              LucideIcons.creditCard,
-              size: 18,
-              color: AppColors.textBody,
+            child: Text(
+              schemeAbbr(t.cardScheme),
+              style: AppText.body(
+                size: 11,
+                weight: FontWeight.w800,
+                color: _brandColor(t.cardScheme),
+                letterSpacing: 0.3,
+              ),
             ),
           ),
           Positioned(
@@ -854,12 +1013,17 @@ class _DayRow extends StatelessWidget {
             child: Container(
               width: 16,
               height: 16,
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
+              decoration: BoxDecoration(
+                color: switch (style.tone) {
+                  PillTone.success => AppColors.primary,
+                  PillTone.reversed => const Color(0xFF6B4FD0),
+                  _ => AppColors.danger,
+                },
                 shape: BoxShape.circle,
+                border: Border.all(color: AppColors.surface, width: 1.5),
               ),
-              child: const Icon(
-                LucideIcons.check,
+              child: Icon(
+                style.tone == PillTone.success ? LucideIcons.check : style.icon,
                 size: 9,
                 color: Colors.white,
               ),
@@ -867,16 +1031,25 @@ class _DayRow extends StatelessWidget {
           ),
         ],
       ),
-      title: l10n.salesCardSales(count),
-      subtitle: l10n.salesFeesNet(
-        formatMoney(d.totalFees),
-        formatMoney(d.netAmount),
-      ),
+      title: title,
+      subtitle: subtitle,
       trailing: Text(
-        formatMoney(d.totalAmount),
-        style: AppText.money(size: 15),
+        formatMoney(t.amount),
+        style: AppText.money(
+          size: 15,
+          color: style.muted ? AppColors.textTertiary : AppColors.navy,
+          decoration: style.muted ? TextDecoration.lineThrough : null,
+        ),
       ),
     );
+  }
+
+  Color _brandColor(String? scheme) {
+    final s = (scheme ?? '').toUpperCase();
+    if (s.startsWith('MASTER')) return AppColors.mastercard;
+    if (s.startsWith('VISA')) return AppColors.visa;
+    if (s.startsWith('VERVE')) return AppColors.primary;
+    return AppColors.textBody;
   }
 }
 
@@ -889,7 +1062,7 @@ class _PaymentLinks extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return ListView(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 40),
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
       children: [
         EmptyState(
           icon: LucideIcons.link,

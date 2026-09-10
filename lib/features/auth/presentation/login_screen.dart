@@ -7,9 +7,10 @@ import '../../../core/biometric/biometric_service.dart';
 import '../../../core/storage/secure_storage.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
-import '../../../shared/widgets/pokopay_logo.dart';
-import 'auth_controller.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/pokopay_logo.dart';
+import '../data/auth_repository.dart';
+import 'auth_controller.dart';
 
 /// Debug-only convenience: prefill and submit the form when both defines are
 /// set, e.g. `flutter run --dart-define=DEV_LOGIN_EMAIL=... --dart-define=DEV_LOGIN_PASSWORD=...`.
@@ -31,12 +32,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _obscure = true;
   bool _enableBiometric = false;
   bool _submitting = false;
-  bool _hasSavedCredentials = false;
+  bool _hasDeviceToken = false;
 
   @override
   void initState() {
     super.initState();
-    _checkSavedCredentials();
+    _checkDevice();
     if (kDebugMode && _devEmail.isNotEmpty && _devPassword.isNotEmpty) {
       _emailCtrl.text = _devEmail;
       _passwordCtrl.text = _devPassword;
@@ -53,10 +54,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _checkSavedCredentials() async {
-    final has = await ref.read(secureStorageProvider).hasBiometricCredentials();
+  Future<void> _checkDevice() async {
+    final has = await ref.read(secureStorageProvider).hasDeviceToken();
     if (!mounted) return;
-    setState(() => _hasSavedCredentials = has);
+    setState(() => _hasDeviceToken = has);
   }
 
   void _showError(String message) {
@@ -87,23 +88,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _biometricLogin() async {
+    final l10n = AppLocalizations.of(context);
     final ok = await ref
         .read(biometricServiceProvider)
-        .authenticate(
-          reason: AppLocalizations.of(context).loginBiometricReason,
-        );
+        .authenticate(reason: l10n.loginBiometricReason);
     if (!ok || !mounted) return;
     setState(() => _submitting = true);
     final success = await ref
         .read(authControllerProvider.notifier)
-        .loginWithBiometricCredentials();
+        .loginWithDevice();
     if (!mounted) return;
     setState(() => _submitting = false);
     if (!success) {
-      _showError(
-        ref.read(authControllerProvider).error ??
-            AppLocalizations.of(context).loginBiometricFailed,
-      );
+      final auth = ref.read(authControllerProvider);
+      if (auth.errorCode == AuthException.deviceReenrol) {
+        setState(() => _hasDeviceToken = false);
+        _showError(l10n.loginBiometricReenrol);
+      } else {
+        _showError(auth.error ?? l10n.loginBiometricFailed);
+      }
     }
   }
 
@@ -112,7 +115,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final l10n = AppLocalizations.of(context);
     final bioAvailable =
         ref.watch(biometricAvailableProvider).asData?.value ?? false;
-    final showBiometricButton = bioAvailable && _hasSavedCredentials;
+    final sessionExpired = ref.watch(authControllerProvider).sessionExpired;
+    final showBiometricButton = bioAvailable && _hasDeviceToken;
 
     return Scaffold(
       backgroundColor: AppColors.canvas,
@@ -129,9 +133,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 28),
                         const Center(child: PokopayMark()),
-                        const SizedBox(height: 44),
+                        const SizedBox(height: 40),
                         Text(
                           l10n.loginWelcome,
                           style: AppText.display(size: 34),
@@ -144,13 +148,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             color: AppColors.textSecondary,
                           ),
                         ),
-                        const SizedBox(height: 36),
+                        if (sessionExpired) ...[
+                          const SizedBox(height: 16),
+                          _Notice(text: l10n.loginSessionExpired),
+                        ],
+                        const SizedBox(height: 32),
                         _FieldLabel(l10n.loginEmailLabel),
                         const SizedBox(height: 8),
                         TextFormField(
                           controller: _emailCtrl,
                           keyboardType: TextInputType.emailAddress,
                           autocorrect: false,
+                          autofillHints: const [AutofillHints.email],
                           textInputAction: TextInputAction.next,
                           style: AppText.body(size: 16),
                           decoration: InputDecoration(
@@ -190,6 +199,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         TextFormField(
                           controller: _passwordCtrl,
                           obscureText: _obscure,
+                          autofillHints: const [AutofillHints.password],
                           textInputAction: TextInputAction.done,
                           onFieldSubmitted: (_) => _submit(),
                           style: AppText.body(size: 16),
@@ -233,11 +243,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 10),
-                                Text(
-                                  l10n.loginEnableBiometric,
-                                  style: AppText.body(
-                                    size: 14,
-                                    color: AppColors.textSecondary,
+                                Expanded(
+                                  child: Text(
+                                    l10n.loginEnableBiometric,
+                                    style: AppText.body(
+                                      size: 14,
+                                      color: AppColors.textSecondary,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -275,7 +287,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               : Text(l10n.loginButton),
                         ),
                         if (showBiometricButton) ...[
-                          const SizedBox(height: 28),
+                          const SizedBox(height: 24),
                           Row(
                             children: [
                               const Expanded(
@@ -298,7 +310,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 28),
+                          const SizedBox(height: 24),
                           OutlinedButton.icon(
                             onPressed: _submitting ? null : _biometricLogin,
                             icon: const Icon(
@@ -311,7 +323,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ],
                         const Spacer(),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 32),
+                          padding: const EdgeInsets.symmetric(vertical: 28),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -339,6 +351,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _Notice extends StatelessWidget {
+  const _Notice({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.warningBg,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          const Icon(LucideIcons.clock, size: 16, color: AppColors.warningText),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: AppText.body(size: 13, color: AppColors.warningText),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -137,7 +137,15 @@ class AppDrawer extends ConsumerWidget {
                     icon: LucideIcons.printer,
                     label: l10n.drawerTerminals,
                     sub: terminals.when(
-                      data: (t) => l10n.drawerTerminalsActive(t.length),
+                      data: (t) => l10n.drawerTerminalsActive(
+                        t
+                            .where(
+                              (x) =>
+                                  (x.status ?? 'ACTIVE').toUpperCase() ==
+                                  'ACTIVE',
+                            )
+                            .length,
+                      ),
                       loading: () => '…',
                       error: (_, _) => l10n.commonUnavailable,
                     ),

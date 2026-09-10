@@ -6,18 +6,23 @@ import '../helpers/fakes.dart';
 void main() {
   test('login stores tokens and returns the response', () async {
     final storage = FakeSecureStorage();
-    final adapter = FakeAdapter((o) async => json({
-          'accessToken': 'acc',
-          'refreshToken': 'ref',
-        }));
-    final repo = AuthRepository(fakeApi((_) async => json({}), adapter: adapter), storage);
+    final adapter = FakeAdapter(
+      (o) async => json({'accessToken': 'acc', 'refreshToken': 'ref'}),
+    );
+    final repo = AuthRepository(
+      fakeApi((_) async => json({}), adapter: adapter),
+      storage,
+    );
 
     final res = await repo.login(email: 'a@b.com', password: 'pw');
     expect(res.accessToken, 'acc');
     expect(storage.data['access'], 'acc');
     expect(storage.data['refresh'], 'ref');
     expect(adapter.requests.single.path, '/api/v1/auth/login');
-    expect(adapter.requests.single.data, {'email': 'a@b.com', 'password': 'pw'});
+    expect(adapter.requests.single.data, {
+      'email': 'a@b.com',
+      'password': 'pw',
+    });
   });
 
   test('login without an access token throws AuthException', () async {
@@ -27,7 +32,13 @@ void main() {
     );
     expect(
       () => repo.login(email: 'a@b.com', password: 'pw'),
-      throwsA(isA<AuthException>().having((e) => e.message, 'message', 'No token for you')),
+      throwsA(
+        isA<AuthException>().having(
+          (e) => e.message,
+          'message',
+          'No token for you',
+        ),
+      ),
     );
   });
 
@@ -38,7 +49,13 @@ void main() {
     );
     expect(
       () => repo.login(email: 'a@b.com', password: 'bad'),
-      throwsA(isA<AuthException>().having((e) => e.message, 'message', 'Invalid email or password')),
+      throwsA(
+        isA<AuthException>().having(
+          (e) => e.message,
+          'message',
+          'Invalid email or password',
+        ),
+      ),
     );
   });
 
@@ -49,19 +66,27 @@ void main() {
     );
     expect(
       () => repo.login(email: 'a@b.com', password: 'pw'),
-      throwsA(isA<AuthException>().having((e) => e.message, 'message', 'Account locked')),
+      throwsA(
+        isA<AuthException>().having(
+          (e) => e.message,
+          'message',
+          'Account locked',
+        ),
+      ),
     );
   });
 
   group('discoverMidForEmail', () {
     test('prefers the merchant whose email matches', () async {
       final repo = AuthRepository(
-        fakeApi((o) async => json({
-              'content': [
-                {'mid': 'OTHER', 'email': 'x@y.com'},
-                {'mid': 'MINE', 'email': 'Me@Shop.com'},
-              ]
-            })),
+        fakeApi(
+          (o) async => json({
+            'content': [
+              {'mid': 'OTHER', 'email': 'x@y.com'},
+              {'mid': 'MINE', 'email': 'Me@Shop.com'},
+            ],
+          }),
+        ),
         FakeSecureStorage(),
       );
       expect(await repo.discoverMidForEmail('me@shop.com'), 'MINE');
@@ -75,8 +100,8 @@ void main() {
           }
           return json({
             'content': [
-              {'mid': 'FIRST', 'email': 'first@x.com'}
-            ]
+              {'mid': 'FIRST', 'email': 'first@x.com'},
+            ],
           });
         }),
         FakeSecureStorage(),

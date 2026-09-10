@@ -3,8 +3,13 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'dart:typed_data';
+
 import '../../../core/api/api_client.dart';
+import '../../../core/api/models/business_models.dart';
 import '../../../core/api/models/merchant_models.dart';
+import '../../../core/api/models/transaction_models.dart';
+import '../../../core/api/models/wallet_models.dart';
 import '../../../core/cache/cache_store.dart';
 import '../../../core/connectivity/offline_status.dart';
 
@@ -121,13 +126,14 @@ class MerchantRepository {
 
   Future<PageSettlementResponse> fetchSettlements({
     String? mid,
+    String? status,
     DateTime? startDate,
     DateTime? endDate,
     int page = 0,
     int size = 20,
   }) {
     final key =
-        'settlements:$mid:$page:$size:'
+        'settlements:$mid:$status:$page:$size:'
         '${startDate == null ? '' : _formatDate(startDate)}:'
         '${endDate == null ? '' : _formatDate(endDate)}';
     return _cached(
@@ -137,6 +143,7 @@ class MerchantRepository {
             '/api/v1/merchant/reports/settlements',
             queryParameters: {
               if (mid != null) 'mid': mid,
+              if (status != null && status.isNotEmpty) 'status': status,
               if (startDate != null) 'startDate': _formatDate(startDate),
               if (endDate != null) 'endDate': _formatDate(endDate),
               'page': page,
@@ -198,6 +205,217 @@ class MerchantRepository {
             status: (item['status'] ?? '').toString(),
           ),
     ].where((m) => m.mid.isNotEmpty).toList();
+  }
+
+  // ── Wallet ──────────────────────────────────────────────────────────
+
+  Future<WalletResponse> fetchWallet(String mid) {
+    return _cached(
+      'wallet:$mid',
+      () async =>
+          (await _api.dio.get<Map<String, dynamic>>(
+            '/api/v1/wallets/mid/$mid',
+          )).data ??
+          const {},
+      WalletResponse.fromJson,
+    );
+  }
+
+  // ── Transactions ────────────────────────────────────────────────────
+
+  Future<PageTransactionResponse> fetchTransactions({
+    required String mid,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? tid,
+    String? status,
+    String? last4,
+    int page = 0,
+    int size = 30,
+  }) {
+    final query = {
+      'mid': mid,
+      if (startDate != null) 'startDate': _formatDate(startDate),
+      if (endDate != null) 'endDate': _formatDate(endDate),
+      if (tid != null && tid.isNotEmpty) 'tid': tid,
+      if (status != null && status.isNotEmpty) 'status': status,
+      if (last4 != null && last4.isNotEmpty) 'last4': last4,
+      'page': page,
+      'size': size,
+    };
+    Future<Map<String, dynamic>> fetch() async =>
+        (await _api.dio.get<Map<String, dynamic>>(
+          '/api/v1/merchant/transactions',
+          queryParameters: query,
+        )).data ??
+        const {};
+    // Only the unfiltered first page is worth keeping for offline use.
+    if (page == 0 && (status ?? '').isEmpty && (last4 ?? '').isEmpty) {
+      return _cached(
+        'transactions:$mid:${query['startDate']}:${query['endDate']}:$tid',
+        fetch,
+        PageTransactionResponse.fromJson,
+      );
+    }
+    return fetch().then(PageTransactionResponse.fromJson);
+  }
+
+  Future<TransactionResponse> fetchTransaction(
+    String reference, {
+    required String mid,
+  }) async {
+    final res = await _api.dio.get<Map<String, dynamic>>(
+      '/api/v1/merchant/transactions/$reference',
+      queryParameters: {'mid': mid},
+    );
+    return TransactionResponse.fromJson(res.data ?? const {});
+  }
+
+  // ── Statements & PDFs ───────────────────────────────────────────────
+
+  Future<List<StatementResponse>> fetchStatements({
+    required String mid,
+    required int year,
+  }) {
+    return _cached(
+      'statements:$mid:$year',
+      () async => {
+        'items':
+            (await _api.dio.get<List<dynamic>>(
+              '/api/v1/merchant/statements',
+              queryParameters: {'mid': mid, 'year': year},
+            )).data ??
+            const [],
+      },
+      (json) => ((json['items'] as List?) ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(StatementResponse.fromJson)
+          .toList(),
+    );
+  }
+
+  Future<Uint8List> downloadStatementPdf(String id, {required String mid}) {
+    return _bytes('/api/v1/merchant/statements/$id/pdf', {'mid': mid});
+  }
+
+  Future<Uint8List> downloadSalesPdf({
+    required String mid,
+    String? period,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? tid,
+  }) {
+    return _bytes('/api/v1/merchant/reports/sales/pdf', {
+      'mid': mid,
+      if (period != null) 'period': period,
+      if (startDate != null) 'startDate': _formatDate(startDate),
+      if (endDate != null) 'endDate': _formatDate(endDate),
+      if (tid != null && tid.isNotEmpty) 'tid': tid,
+    });
+  }
+
+  Future<Uint8List> _bytes(String path, Map<String, dynamic> query) async {
+    final res = await _api.dio.get<List<int>>(
+      path,
+      queryParameters: query,
+      options: Options(
+        responseType: ResponseType.bytes,
+        receiveTimeout: const Duration(seconds: 60),
+      ),
+    );
+    return Uint8List.fromList(res.data ?? const []);
+  }
+
+  // ── Terminals ───────────────────────────────────────────────────────
+
+  Future<List<TerminalResponse>> fetchTerminalsDetailed({required String mid}) {
+    return _cached(
+      'terminals-v2:$mid',
+      () async => {
+        'items':
+            (await _api.dio.get<List<dynamic>>(
+              '/api/v1/merchant/terminals',
+              queryParameters: {'mid': mid},
+            )).data ??
+            const [],
+      },
+      (json) => ((json['items'] as List?) ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(TerminalResponse.fromJson)
+          .toList(),
+    );
+  }
+
+  // ── Preferences ─────────────────────────────────────────────────────
+
+  Future<MerchantPreferences> fetchPreferences({required String mid}) {
+    return _cached(
+      'preferences:$mid',
+      () async =>
+          (await _api.dio.get<Map<String, dynamic>>(
+            '/api/v1/merchant/preferences',
+            queryParameters: {'mid': mid},
+          )).data ??
+          const {},
+      MerchantPreferences.fromJson,
+    );
+  }
+
+  /// Partial update: only non-null fields in [changes] are sent.
+  Future<MerchantPreferences> updatePreferences({
+    required String mid,
+    bool? dailySettlementReport,
+    bool? monthlySettlementReport,
+    List<String>? reportRecipients,
+    String? language,
+    bool? pushEnabled,
+  }) async {
+    final res = await _api.dio.put<Map<String, dynamic>>(
+      '/api/v1/merchant/preferences',
+      queryParameters: {'mid': mid},
+      data: {
+        if (dailySettlementReport != null)
+          'dailySettlementReport': dailySettlementReport,
+        if (monthlySettlementReport != null)
+          'monthlySettlementReport': monthlySettlementReport,
+        if (reportRecipients != null) 'reportRecipients': reportRecipients,
+        if (language != null) 'language': language,
+        if (pushEnabled != null) 'pushEnabled': pushEnabled,
+      },
+    );
+    final json = res.data ?? const <String, dynamic>{};
+    await _cache?.write('preferences:$mid', json);
+    return MerchantPreferences.fromJson(json);
+  }
+
+  // ── Notifications ───────────────────────────────────────────────────
+
+  Future<NotificationFeed> fetchNotifications({
+    required String mid,
+    int page = 0,
+    int size = 30,
+  }) {
+    Future<Map<String, dynamic>> fetch() async =>
+        (await _api.dio.get<Map<String, dynamic>>(
+          '/api/v1/merchant/notifications',
+          queryParameters: {'mid': mid, 'page': page, 'size': size},
+        )).data ??
+        const {};
+    if (page == 0) {
+      return _cached('notifications:$mid', fetch, NotificationFeed.fromJson);
+    }
+    return fetch().then(NotificationFeed.fromJson);
+  }
+
+  Future<void> markNotificationRead(String id) async {
+    await _api.dio.post<void>('/api/v1/merchant/notifications/$id/read');
+  }
+
+  Future<void> markAllNotificationsRead({required String mid}) async {
+    await _api.dio.post<void>(
+      '/api/v1/merchant/notifications/read-all',
+      queryParameters: {'mid': mid},
+    );
   }
 
   Future<Map<String, dynamic>> fetchMerchantByMid(String mid) {

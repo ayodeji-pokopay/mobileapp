@@ -17,7 +17,10 @@ class LoginRepoStub extends AuthRepository {
   LoginRepoStub() : super(fakeApi((_) async => json({})), FakeSecureStorage());
   String? error;
   @override
-  Future<AuthResponse> login({required String email, required String password}) async {
+  Future<AuthResponse> login({
+    required String email,
+    required String password,
+  }) async {
     throw AuthException(error ?? 'Invalid email or password');
   }
 }
