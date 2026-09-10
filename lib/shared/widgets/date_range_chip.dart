@@ -31,7 +31,13 @@ class DateWindow {
     ).subtract(Duration(days: (days ?? 7) - 1));
   }
 
-  DateTime get to => end ?? DateTime.now();
+  /// End of today at day precision, so two windows built moments apart
+  /// compare equal and don't churn the providers keyed on them.
+  DateTime get to {
+    if (end != null) return end!;
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day, 23, 59, 59);
+  }
 
   @override
   bool operator ==(Object other) =>

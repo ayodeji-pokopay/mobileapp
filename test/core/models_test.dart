@@ -4,6 +4,7 @@ import 'package:pokopay/core/api/models/transaction_models.dart';
 import 'package:pokopay/core/api/models/wallet_models.dart';
 import 'package:pokopay/features/merchant/presentation/merchant_providers.dart';
 import 'package:pokopay/shared/format.dart';
+import 'package:pokopay/shared/widgets/date_range_chip.dart';
 
 void main() {
   group('WalletResponse', () {
@@ -116,5 +117,24 @@ void main() {
     expect(percentDelta(0, 0), 0);
     expect(percentDelta(5, 0), isNull);
     expect(percentDelta(null, 5), isNull);
+  });
+
+  group('DateWindow', () {
+    test('preset windows are stable keys within a day', () {
+      const a = DateWindow.days(7);
+      const b = DateWindow.days(7);
+      expect(a, b);
+      expect(a.to, b.to);
+      expect(a.from, b.from);
+      expect(a.to.difference(a.from).inDays, 6);
+      expect(a.to.hour, 23);
+    });
+
+    test('custom windows keep their exact bounds', () {
+      final w = DateWindow.custom(DateTime(2026, 9, 1), DateTime(2026, 9, 5, 23, 59, 59));
+      expect(w.isCustom, isTrue);
+      expect(w.from, DateTime(2026, 9, 1));
+      expect(w.to.day, 5);
+    });
   });
 }
