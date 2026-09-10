@@ -13,8 +13,8 @@ import 'package:pokopay/l10n/generated/app_localizations.dart';
 
 import '../helpers/fakes.dart';
 
-class _LoginRepo extends AuthRepository {
-  _LoginRepo() : super(fakeApi((_) async => json({})), FakeSecureStorage());
+class LoginRepoStub extends AuthRepository {
+  LoginRepoStub() : super(fakeApi((_) async => json({})), FakeSecureStorage());
   String? error;
   @override
   Future<AuthResponse> login({required String email, required String password}) async {
@@ -22,7 +22,7 @@ class _LoginRepo extends AuthRepository {
   }
 }
 
-Widget harness(_LoginRepo repo) {
+Widget harness(LoginRepoStub repo) {
   return ProviderScope(
     overrides: [
       secureStorageProvider.overrideWithValue(FakeSecureStorage()),
@@ -47,7 +47,7 @@ void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
   testWidgets('renders the welcome copy and fields', (tester) async {
-    await tester.pumpWidget(harness(_LoginRepo()));
+    await tester.pumpWidget(harness(LoginRepoStub()));
     await tester.pumpAndSettle();
     expect(find.text('Welcome back'), findsOneWidget);
     expect(find.text('Sign in to your merchant account'), findsOneWidget);
@@ -56,7 +56,7 @@ void main() {
   });
 
   testWidgets('validates empty fields before calling the API', (tester) async {
-    await tester.pumpWidget(harness(_LoginRepo()));
+    await tester.pumpWidget(harness(LoginRepoStub()));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Sign in'));
     await tester.pumpAndSettle();
@@ -65,7 +65,7 @@ void main() {
   });
 
   testWidgets('rejects an email without @', (tester) async {
-    await tester.pumpWidget(harness(_LoginRepo()));
+    await tester.pumpWidget(harness(LoginRepoStub()));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).first, 'notanemail');
     await tester.enterText(find.byType(TextFormField).last, 'secret');
@@ -75,7 +75,7 @@ void main() {
   });
 
   testWidgets('shows the backend error in a snackbar', (tester) async {
-    final repo = _LoginRepo()..error = 'Account locked';
+    final repo = LoginRepoStub()..error = 'Account locked';
     await tester.pumpWidget(harness(repo));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).first, 'a@b.com');
@@ -86,7 +86,7 @@ void main() {
   });
 
   testWidgets('toggles password visibility', (tester) async {
-    await tester.pumpWidget(harness(_LoginRepo()));
+    await tester.pumpWidget(harness(LoginRepoStub()));
     await tester.pumpAndSettle();
     expect(find.byTooltip('Show password'), findsOneWidget);
     await tester.tap(find.byTooltip('Show password'));
