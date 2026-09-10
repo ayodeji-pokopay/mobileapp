@@ -44,7 +44,8 @@ Future<void> main() async {
     options.attachScreenshot = false;
     options.beforeSend = (event, hint) {
       // Never ship request bodies or auth headers.
-      return event.copyWith(request: null);
+      event.request = null;
+      return event;
     };
   }, appRunner: () => runApp(SentryWidget(child: app)));
 }
