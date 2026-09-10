@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/auth_controller.dart';
 import '../../features/auth/presentation/change_password_screen.dart';
+import '../../features/auth/presentation/forgot_password_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
@@ -20,6 +21,8 @@ class AppRoutes {
   AppRoutes._();
   static const splash = '/';
   static const login = '/login';
+  static const forgotPassword = '/forgot-password';
+  static const resetPassword = '/reset-password';
   static const dashboard = '/dashboard';
   static const reports = '/reports';
   static const settlements = '/settlements';
@@ -48,7 +51,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isUnauthed = auth.status == AuthStatus.unauthenticated;
       final isAuthed = auth.status == AuthStatus.authenticated;
 
-      if (isUnauthed && loc != AppRoutes.login) return AppRoutes.login;
+      const public = {
+        AppRoutes.login,
+        AppRoutes.forgotPassword,
+        AppRoutes.resetPassword,
+      };
+      if (isUnauthed && !public.contains(loc)) return AppRoutes.login;
       if (isAuthed && (loc == AppRoutes.login || loc == AppRoutes.splash)) {
         return _startRoute.isNotEmpty ? _startRoute : AppRoutes.dashboard;
       }
@@ -57,6 +65,19 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: AppRoutes.splash, builder: (_, _) => const SplashScreen()),
       GoRoute(path: AppRoutes.login, builder: (_, _) => const LoginScreen()),
+      GoRoute(
+        path: AppRoutes.forgotPassword,
+        builder: (_, state) => ForgotPasswordScreen(
+          initialEmail: state.uri.queryParameters['email'],
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.resetPassword,
+        builder: (_, state) => ResetPasswordScreen(
+          email: state.uri.queryParameters['email'],
+          token: state.uri.queryParameters['token'],
+        ),
+      ),
       GoRoute(
         path: AppRoutes.dashboard,
         builder: (_, _) => const DashboardScreen(),

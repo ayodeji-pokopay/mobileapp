@@ -97,7 +97,7 @@ class AppDrawer extends ConsumerWidget {
                       ),
                       if (canSwitch) ...[
                         const SizedBox(width: 4),
-                        const Icon(
+                        Icon(
                           LucideIcons.chevronDown,
                           size: 16,
                           color: AppColors.textTertiary,
@@ -171,7 +171,7 @@ class AppDrawer extends ConsumerWidget {
             ListCard(
               children: [
                 ListRow(
-                  leading: const Icon(
+                  leading: Icon(
                     LucideIcons.store,
                     size: 20,
                     color: AppColors.textSecondary,
@@ -180,7 +180,7 @@ class AppDrawer extends ConsumerWidget {
                   onTap: () => go(AppRoutes.stores),
                 ),
                 ListRow(
-                  leading: const Icon(
+                  leading: Icon(
                     LucideIcons.fileText,
                     size: 20,
                     color: AppColors.textSecondary,
@@ -194,7 +194,7 @@ class AppDrawer extends ConsumerWidget {
             ListCard(
               children: [
                 ListRow(
-                  leading: const Icon(
+                  leading: Icon(
                     LucideIcons.settings,
                     size: 20,
                     color: AppColors.textSecondary,
@@ -204,7 +204,7 @@ class AppDrawer extends ConsumerWidget {
                   onTap: () => go(AppRoutes.settings),
                 ),
                 ListRow(
-                  leading: const Icon(
+                  leading: Icon(
                     LucideIcons.circleQuestionMark,
                     size: 20,
                     color: AppColors.textSecondary,
@@ -214,7 +214,7 @@ class AppDrawer extends ConsumerWidget {
                   onTap: notYet,
                 ),
                 ListRow(
-                  leading: const Icon(
+                  leading: Icon(
                     LucideIcons.logOut,
                     size: 20,
                     color: AppColors.danger,
@@ -343,7 +343,7 @@ class _MerchantPickerSheetState extends ConsumerState<MerchantPickerSheet> {
               decoration: InputDecoration(
                 hintText: l10n.drawerSearchMerchants,
                 fillColor: AppColors.canvas,
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   LucideIcons.search,
                   size: 16,
                   color: AppColors.textTertiary,
@@ -415,7 +415,7 @@ class _MerchantPickerSheetState extends ConsumerState<MerchantPickerSheet> {
                         ].join(' · '),
                         chevron: false,
                         trailing: selected
-                            ? const Icon(
+                            ? Icon(
                                 LucideIcons.circleCheck,
                                 size: 20,
                                 color: AppColors.primary,

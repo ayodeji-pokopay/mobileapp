@@ -11,9 +11,9 @@ class PillTabs extends StatelessWidget {
     required this.items,
     required this.selected,
     required this.onChanged,
-    this.activeColor = AppColors.navy,
-    this.inactiveColor = AppColors.surfaceAlt,
-    this.inactiveTextColor = AppColors.textSecondary,
+    this.activeColor,
+    this.inactiveColor,
+    this.inactiveTextColor,
     this.scrollable = false,
     this.dropdown = false,
   });
@@ -21,14 +21,17 @@ class PillTabs extends StatelessWidget {
   final List<String> items;
   final int selected;
   final ValueChanged<int> onChanged;
-  final Color activeColor;
-  final Color inactiveColor;
-  final Color inactiveTextColor;
+  final Color? activeColor;
+  final Color? inactiveColor;
+  final Color? inactiveTextColor;
   final bool scrollable;
   final bool dropdown;
 
   @override
   Widget build(BuildContext context) {
+    final activeColor = this.activeColor ?? AppColors.navy;
+    final inactiveColor = this.inactiveColor ?? AppColors.surfaceAlt;
+    final inactiveTextColor = this.inactiveTextColor ?? AppColors.textSecondary;
     final chips = [
       for (var i = 0; i < items.length; i++)
         Padding(
@@ -61,23 +64,26 @@ class PillChip extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.onTap,
-    this.activeColor = AppColors.navy,
-    this.inactiveColor = AppColors.surfaceAlt,
-    this.inactiveTextColor = AppColors.textSecondary,
+    this.activeColor,
+    this.inactiveColor,
+    this.inactiveTextColor,
     this.dropdown = false,
   });
 
   final String label;
   final bool selected;
   final VoidCallback onTap;
-  final Color activeColor;
-  final Color inactiveColor;
-  final Color inactiveTextColor;
+  final Color? activeColor;
+  final Color? inactiveColor;
+  final Color? inactiveTextColor;
   final bool dropdown;
 
   @override
   Widget build(BuildContext context) {
-    final fg = selected ? Colors.white : inactiveTextColor;
+    final activeColor = this.activeColor ?? AppColors.navy;
+    final inactiveColor = this.inactiveColor ?? AppColors.surfaceAlt;
+    final inactiveTextColor = this.inactiveTextColor ?? AppColors.textSecondary;
+    final fg = selected ? AppColors.onNavy : inactiveTextColor;
     return Material(
       color: selected ? activeColor : inactiveColor,
       borderRadius: BorderRadius.circular(999),
@@ -194,7 +200,7 @@ class UnderlineTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.hairline)),
       ),
       child: Row(
@@ -204,7 +210,7 @@ class UnderlineTabs extends StatelessWidget {
               onTap: () => onChanged(i),
               behavior: HitTestBehavior.opaque,
               child: Padding(
-                padding: const EdgeInsets.only(right: 20),
+                padding: EdgeInsets.only(right: 20),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

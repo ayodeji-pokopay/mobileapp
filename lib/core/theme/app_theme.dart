@@ -10,8 +10,16 @@ class AppTheme {
   static TextStyle tagline(TextStyle? base, {double size = 12}) =>
       AppText.tagline(size: size);
 
-  static ThemeData light() {
-    final base = ThemeData.light(useMaterial3: true);
+  /// Light theme. Kept for callers and tests; [build] is the general form.
+  static ThemeData light() => build(dark: false);
+
+  /// Builds the theme for one brightness. Applies the matching palette
+  /// first so every `AppColors` getter used below resolves correctly.
+  static ThemeData build({required bool dark}) {
+    AppColors.apply(dark: dark);
+    final base = dark
+        ? ThemeData.dark(useMaterial3: true)
+        : ThemeData.light(useMaterial3: true);
     final body = GoogleFonts.dmSansTextTheme(base.textTheme);
     final display = GoogleFonts.montserratTextTheme(base.textTheme);
 
@@ -42,12 +50,13 @@ class AppTheme {
         );
 
     return base.copyWith(
+      brightness: dark ? Brightness.dark : Brightness.light,
       scaffoldBackgroundColor: AppColors.canvas,
       canvasColor: AppColors.canvas,
       colorScheme: base.colorScheme.copyWith(
         primary: AppColors.primary,
         onPrimary: Colors.white,
-        secondary: AppColors.navy,
+        secondary: AppColors.brandNavy,
         onSecondary: Colors.white,
         surface: AppColors.surface,
         onSurface: AppColors.textPrimary,
@@ -99,7 +108,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           backgroundColor: AppColors.surface,
-          foregroundColor: AppColors.navy,
+          foregroundColor: AppColors.textPrimary,
           minimumSize: const Size.fromHeight(50),
           side: BorderSide.none,
           shape: pill,
@@ -123,31 +132,33 @@ class AppTheme {
       ),
       checkboxTheme: CheckboxThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        side: const BorderSide(color: AppColors.borderStrong, width: 1.5),
+        side: BorderSide(color: AppColors.borderStrong, width: 1.5),
         fillColor: WidgetStateProperty.resolveWith(
           (s) => s.contains(WidgetState.selected)
               ? AppColors.primary
               : Colors.transparent,
         ),
       ),
-      dividerTheme: const DividerThemeData(
+      dividerTheme: DividerThemeData(
         color: AppColors.divider,
         thickness: 1,
         space: 1,
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: AppColors.navy,
+        backgroundColor: dark ? AppColors.surfaceAlt : AppColors.brandNavy,
         contentTextStyle: AppText.body(size: 14, color: Colors.white),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
-      bottomSheetTheme: const BottomSheetThemeData(
+      bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
       ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
+      dialogTheme: DialogThemeData(backgroundColor: AppColors.surface),
+      popupMenuTheme: PopupMenuThemeData(color: AppColors.surface),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
         color: AppColors.primary,
       ),
     );

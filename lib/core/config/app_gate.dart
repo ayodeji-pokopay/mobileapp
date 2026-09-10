@@ -70,11 +70,7 @@ class _MaintenanceStrip extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(16, top + 8, 16, 10),
         child: Row(
           children: [
-            const Icon(
-              LucideIcons.wrench,
-              size: 18,
-              color: AppColors.warningText,
-            ),
+            Icon(LucideIcons.wrench, size: 18, color: AppColors.warningText),
             const SizedBox(width: 10),
             Expanded(
               child: Column(

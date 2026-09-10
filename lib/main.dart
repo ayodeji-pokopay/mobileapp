@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'core/config/app_gate.dart';
 import 'core/connectivity/offline_status.dart';
+import 'core/l10n/locale_controller.dart';
 import 'core/router/app_router.dart';
+import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_mode_controller.dart';
 import 'features/auth/presentation/auth_controller.dart';
 import 'features/merchant/presentation/merchant_providers.dart';
 import 'l10n/generated/app_localizations.dart';
@@ -59,6 +61,25 @@ class PokopayApp extends ConsumerWidget {
     // without waiting for the first router redirect.
     ref.watch(authControllerProvider);
     final router = ref.watch(routerProvider);
+    final mode = ref.watch(themeModeProvider);
+    final locale = ref.watch(localeProvider);
+    final platformDark =
+        MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+    final dark = switch (mode) {
+      ThemeMode.dark => true,
+      ThemeMode.light => false,
+      ThemeMode.system => platformDark,
+    };
+    // Palette getters are read at build time; re-key the app so every
+    // widget rebuilds when the palette flips.
+    final theme = AppTheme.build(dark: dark);
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: dark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: dark ? Brightness.dark : Brightness.light,
+      ),
+    );
 
     // Refetch merchant data as soon as connectivity returns.
     ref.listen(connectivityProvider, (prev, next) {
@@ -77,15 +98,17 @@ class PokopayApp extends ConsumerWidget {
     });
 
     return MaterialApp.router(
+      key: ValueKey('${AppColors.isDark}-${locale?.languageCode}'),
       onGenerateTitle: (context) => AppLocalizations.of(context).appName,
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
+      theme: theme,
       routerConfig: router,
+      locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+        FallbackMaterialLocalizationsDelegate(),
+        FallbackWidgetsLocalizationsDelegate(),
+        FallbackCupertinoLocalizationsDelegate(),
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) {

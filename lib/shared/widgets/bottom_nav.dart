@@ -38,7 +38,9 @@ class PokoBottomNav extends StatelessWidget {
         color: AppColors.surface,
         boxShadow: [
           BoxShadow(
-            color: AppColors.navy.withValues(alpha: 0.06),
+            color: AppColors.shadow.withValues(
+              alpha: AppColors.isDark ? 0.4 : 0.06,
+            ),
             blurRadius: 24,
             offset: const Offset(0, -6),
           ),

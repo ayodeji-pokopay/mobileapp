@@ -347,3 +347,167 @@ final notificationsProvider =
     AsyncNotifierProvider<NotificationsController, NotificationFeed>(
       NotificationsController.new,
     );
+
+// ── Paged lists ─────────────────────────────────────────────────────
+
+/// Inclusive date window plus optional filters for the transactions list.
+typedef TransactionFilter = ({
+  String? status,
+  String? last4,
+  DateTime start,
+  DateTime end,
+});
+
+typedef SettlementFilter = ({String? status, DateTime? start, DateTime? end});
+
+class Paged<T> {
+  const Paged({
+    required this.items,
+    required this.page,
+    required this.hasMore,
+    this.loadingMore = false,
+    this.total,
+  });
+  final List<T> items;
+  final int page;
+  final bool hasMore;
+  final bool loadingMore;
+  final int? total;
+
+  Paged<T> copyWith({
+    List<T>? items,
+    int? page,
+    bool? hasMore,
+    bool? loadingMore,
+    int? total,
+  }) => Paged(
+    items: items ?? this.items,
+    page: page ?? this.page,
+    hasMore: hasMore ?? this.hasMore,
+    loadingMore: loadingMore ?? this.loadingMore,
+    total: total ?? this.total,
+  );
+}
+
+const _pageSize = 40;
+
+/// Transactions for a filter, loaded a page at a time. Call [loadMore]
+/// when the list nears its end.
+class TransactionsList extends AsyncNotifier<Paged<TransactionResponse>> {
+  TransactionsList(this.filter);
+  final TransactionFilter filter;
+
+  Future<PageTransactionResponse> _fetch(int page) {
+    final mid = ref.read(_midProvider);
+    if (mid == null || mid.isEmpty) throw _noMerchant();
+    return ref
+        .read(merchantRepositoryProvider)
+        .fetchTransactions(
+          mid: mid,
+          startDate: filter.start,
+          endDate: filter.end,
+          status: filter.status,
+          last4: filter.last4,
+          page: page,
+          size: _pageSize,
+        );
+  }
+
+  @override
+  Future<Paged<TransactionResponse>> build() async {
+    ref.watch(_midProvider);
+    final p = await _fetch(0);
+    return Paged(
+      items: p.content,
+      page: 0,
+      hasMore: p.last == false,
+      total: p.totalElements,
+    );
+  }
+
+  Future<void> loadMore() async {
+    final current = state.asData?.value;
+    if (current == null || !current.hasMore || current.loadingMore) return;
+    state = AsyncData(current.copyWith(loadingMore: true));
+    try {
+      final p = await _fetch(current.page + 1);
+      state = AsyncData(
+        current.copyWith(
+          items: [...current.items, ...p.content],
+          page: current.page + 1,
+          hasMore: p.last == false,
+          loadingMore: false,
+          total: p.totalElements,
+        ),
+      );
+    } catch (_) {
+      state = AsyncData(current.copyWith(loadingMore: false));
+    }
+  }
+}
+
+final transactionsListProvider =
+    AsyncNotifierProvider.family<
+      TransactionsList,
+      Paged<TransactionResponse>,
+      TransactionFilter
+    >(TransactionsList.new);
+
+class SettlementsList extends AsyncNotifier<Paged<SettlementResponse>> {
+  SettlementsList(this.filter);
+  final SettlementFilter filter;
+
+  Future<PageSettlementResponse> _fetch(int page) {
+    final mid = ref.read(_midProvider);
+    if (mid == null || mid.isEmpty) throw _noMerchant();
+    return ref
+        .read(merchantRepositoryProvider)
+        .fetchSettlements(
+          mid: mid,
+          status: filter.status,
+          startDate: filter.start,
+          endDate: filter.end,
+          page: page,
+          size: _pageSize,
+        );
+  }
+
+  @override
+  Future<Paged<SettlementResponse>> build() async {
+    ref.watch(_midProvider);
+    final p = await _fetch(0);
+    return Paged(
+      items: p.content,
+      page: 0,
+      hasMore: p.last == false,
+      total: p.totalElements,
+    );
+  }
+
+  Future<void> loadMore() async {
+    final current = state.asData?.value;
+    if (current == null || !current.hasMore || current.loadingMore) return;
+    state = AsyncData(current.copyWith(loadingMore: true));
+    try {
+      final p = await _fetch(current.page + 1);
+      state = AsyncData(
+        current.copyWith(
+          items: [...current.items, ...p.content],
+          page: current.page + 1,
+          hasMore: p.last == false,
+          loadingMore: false,
+          total: p.totalElements,
+        ),
+      );
+    } catch (_) {
+      state = AsyncData(current.copyWith(loadingMore: false));
+    }
+  }
+}
+
+final settlementsListProvider =
+    AsyncNotifierProvider.family<
+      SettlementsList,
+      Paged<SettlementResponse>,
+      SettlementFilter
+    >(SettlementsList.new);

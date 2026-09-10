@@ -13,6 +13,7 @@ import '../../../shared/format.dart';
 import '../../../shared/pdf_share.dart';
 import '../../../shared/widgets/async_slot.dart';
 import '../../../shared/widgets/back_scaffold.dart';
+import '../../../shared/widgets/date_range_chip.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/offline_banner.dart';
@@ -42,7 +43,14 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
     _ => 0,
   };
   late int _year = DateTime.now().year;
+  DateWindow? _window;
   String? _downloading;
+
+  SettlementFilter get _filter => (
+    status: ref.read(settlementStatusProvider),
+    start: _window?.from,
+    end: _window?.to,
+  );
 
   Future<void> _download(StatementResponse s) async {
     final l10n = AppLocalizations.of(context);
@@ -91,31 +99,39 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
       titleSize: 30,
       child: RefreshIndicator(
         onRefresh: () async {
-          ref.invalidate(filteredSettlementsProvider);
+          ref.invalidate(settlementsListProvider(_filter));
           ref.invalidate(statementsProvider(_year));
-          await ref.read(filteredSettlementsProvider.future);
+          await ref.read(settlementsListProvider(_filter).future);
         },
-        child: ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-          children: [
-            const OfflineBanner(),
-            SegmentedControl(
-              items: segments,
-              selected: segment,
-              onChanged: (i) => setState(() => _segment = i),
-            ),
-            const SizedBox(height: 18),
-            switch (segment) {
-              0 => _history(l10n),
-              1 => _statements(l10n),
-              _ => EmptyState(
-                icon: LucideIcons.receipt,
-                title: l10n.invoicesEmpty,
-                subtitle: l10n.invoicesEmptyHint,
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (n) {
+            if (segment == 0 && n.metrics.extentAfter < 400) {
+              ref.read(settlementsListProvider(_filter).notifier).loadMore();
+            }
+            return false;
+          },
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+            children: [
+              const OfflineBanner(),
+              SegmentedControl(
+                items: segments,
+                selected: segment,
+                onChanged: (i) => setState(() => _segment = i),
               ),
-            },
-          ],
+              const SizedBox(height: 18),
+              switch (segment) {
+                0 => _history(l10n),
+                1 => _statements(l10n),
+                _ => EmptyState(
+                  icon: LucideIcons.receipt,
+                  title: l10n.invoicesEmpty,
+                  subtitle: l10n.invoicesEmptyHint,
+                ),
+              },
+            ],
+          ),
         ),
       ),
     );
@@ -123,7 +139,8 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
 
   Widget _history(AppLocalizations l10n) {
     final status = ref.watch(settlementStatusProvider);
-    final data = ref.watch(filteredSettlementsProvider);
+    final filter = (status: status, start: _window?.from, end: _window?.to);
+    final data = ref.watch(settlementsListProvider(filter));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -141,13 +158,25 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
           onChanged: (i) =>
               ref.read(settlementStatusProvider.notifier).set(_statuses[i]),
         ),
+        const SizedBox(height: 8),
+        DateWindowChips(
+          value: _window ?? const DateWindow.days(90),
+          presets: const [30, 90, 365],
+          presetLabels: [
+            l10n.salesWindow30,
+            l10n.salesWindow90,
+            l10n.periodLastYear,
+          ],
+          customLabel: l10n.customRange,
+          onChanged: (w) => setState(() => _window = w),
+        ),
         const SizedBox(height: 18),
-        AsyncSlot<PageSettlementResponse>(
+        AsyncSlot<Paged<SettlementResponse>>(
           value: data,
           loadingHeight: 240,
-          onRetry: () => ref.invalidate(filteredSettlementsProvider),
-          data: (page) {
-            final items = page.content;
+          onRetry: () => ref.invalidate(settlementsListProvider(filter)),
+          data: (paged) {
+            final items = paged.items;
             if (items.isEmpty) {
               return EmptyState(
                 icon: LucideIcons.fileText,
@@ -182,6 +211,11 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
                   ),
                   const SizedBox(height: 18),
                 ],
+                LoadMoreFooter(
+                  loading: paged.loadingMore,
+                  hasMore: paged.hasMore,
+                  endLabel: l10n.listEnd,
+                ),
               ],
             );
           },
@@ -241,7 +275,7 @@ class _SettlementsScreenState extends ConsumerState<SettlementsScreen> {
                             height: 18,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Icon(
+                        : Icon(
                             LucideIcons.fileDown,
                             size: 20,
                             color: AppColors.textSecondary,

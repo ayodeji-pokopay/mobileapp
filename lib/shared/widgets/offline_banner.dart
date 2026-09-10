@@ -35,11 +35,7 @@ class OfflineBanner extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            const Icon(
-              LucideIcons.wifiOff,
-              size: 16,
-              color: AppColors.warningText,
-            ),
+            Icon(LucideIcons.wifiOff, size: 16, color: AppColors.warningText),
             const SizedBox(width: 10),
             Expanded(
               child: Text(

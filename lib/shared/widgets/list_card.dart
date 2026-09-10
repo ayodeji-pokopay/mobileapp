@@ -8,12 +8,12 @@ import '../../core/theme/app_text.dart';
 /// wide, faint ambient one.
 List<BoxShadow> get cardShadow => [
   BoxShadow(
-    color: AppColors.navy.withValues(alpha: 0.04),
+    color: AppColors.shadow.withValues(alpha: AppColors.isDark ? 0.3 : 0.04),
     blurRadius: 2,
     offset: const Offset(0, 1),
   ),
   BoxShadow(
-    color: AppColors.navy.withValues(alpha: 0.05),
+    color: AppColors.shadow.withValues(alpha: AppColors.isDark ? 0.35 : 0.05),
     blurRadius: 20,
     offset: const Offset(0, 8),
   ),
@@ -49,7 +49,7 @@ class ListCard extends StatelessWidget {
           for (var i = 0; i < children.length; i++) ...[
             children[i],
             if (i != children.length - 1)
-              const Divider(height: 1, color: AppColors.divider),
+              Divider(height: 1, color: AppColors.divider),
           ],
         ],
       ),
@@ -64,18 +64,19 @@ class SurfaceCard extends StatelessWidget {
     required this.child,
     this.padding = const EdgeInsets.all(16),
     this.radius = 18,
-    this.color = AppColors.surface,
+    this.color,
     this.onTap,
   });
 
   final Widget child;
   final EdgeInsetsGeometry padding;
   final double radius;
-  final Color color;
+  final Color? color;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final color = this.color ?? AppColors.surface;
     final card = Ink(
       padding: padding,
       decoration: BoxDecoration(
@@ -108,7 +109,7 @@ class ListRow extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.onTap,
-    this.titleColor = AppColors.navy,
+    this.titleColor,
     this.chevron,
     this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
   });
@@ -118,12 +119,13 @@ class ListRow extends StatelessWidget {
   final String? subtitle;
   final Widget? trailing;
   final VoidCallback? onTap;
-  final Color titleColor;
+  final Color? titleColor;
   final bool? chevron;
   final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
+    final titleColor = this.titleColor ?? AppColors.navy;
     final showChevron = chevron ?? (onTap != null && trailing == null);
     final row = Padding(
       padding: padding,
@@ -163,7 +165,7 @@ class ListRow extends StatelessWidget {
           if (trailing != null) ...[const SizedBox(width: 12), trailing!],
           if (showChevron) ...[
             const SizedBox(width: 8),
-            const Icon(
+            Icon(
               LucideIcons.chevronRight,
               size: 20,
               color: AppColors.textDisabled,
@@ -190,20 +192,22 @@ class InitialsTile extends StatelessWidget {
     required this.text,
     this.size = 40,
     this.radius = 12,
-    this.background = AppColors.canvas,
-    this.foreground = AppColors.navy,
+    this.background,
+    this.foreground,
     this.fontSize = 11,
   });
 
   final String text;
   final double size;
   final double radius;
-  final Color background;
-  final Color foreground;
+  final Color? background;
+  final Color? foreground;
   final double fontSize;
 
   @override
   Widget build(BuildContext context) {
+    final background = this.background ?? AppColors.canvas;
+    final foreground = this.foreground ?? AppColors.navy;
     return Container(
       width: size,
       height: size,

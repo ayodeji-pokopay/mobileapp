@@ -164,7 +164,9 @@ class ReceiptCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.navy.withValues(alpha: 0.06),
+            color: AppColors.shadow.withValues(
+              alpha: AppColors.isDark ? 0.35 : 0.06,
+            ),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -177,7 +179,7 @@ class ReceiptCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
             decoration: const BoxDecoration(
-              color: AppColors.navy,
+              color: AppColors.brandNavy,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Column(
@@ -326,7 +328,7 @@ class _Notch extends StatelessWidget {
     return Container(
       width: 20,
       height: 20,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.canvas,
         shape: BoxShape.circle,
       ),

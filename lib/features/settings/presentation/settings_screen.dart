@@ -18,6 +18,7 @@ import '../../../shared/widgets/section_label.dart';
 import '../../../shared/widgets/skeleton.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
+import 'preferences_sheet.dart';
 import 'recipients_sheet.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -56,12 +57,6 @@ class SettingsScreen extends ConsumerWidget {
         ref.watch(biometricAvailableProvider).asData?.value ?? false;
     final enrolled = ref.watch(deviceEnrolledProvider);
 
-    void notYet() {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.commonComingSoon)));
-    }
-
     Widget toggle({
       required String title,
       required String subtitle,
@@ -95,7 +90,7 @@ class SettingsScreen extends ConsumerWidget {
               ListRow(
                 leading: InitialsTile(
                   text: initialsOf(displayName),
-                  background: AppColors.navy,
+                  background: AppColors.brandNavy,
                   foreground: Colors.white,
                   radius: 999,
                   fontSize: 14,
@@ -168,7 +163,7 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const _RowIcon(LucideIcons.globe),
                 title: l10n.settingsPreferences,
                 subtitle: l10n.settingsPreferencesHint,
-                onTap: notYet,
+                onTap: () => showPreferencesSheet(context),
               ),
             ],
           ),
@@ -242,7 +237,7 @@ class SettingsScreen extends ConsumerWidget {
           ListCard(
             children: [
               ListRow(
-                leading: const Icon(
+                leading: Icon(
                   LucideIcons.logOut,
                   size: 20,
                   color: AppColors.danger,

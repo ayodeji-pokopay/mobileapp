@@ -42,11 +42,7 @@ class AsyncSlot<T> extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(
-              LucideIcons.triangleAlert,
-              size: 20,
-              color: AppColors.danger,
-            ),
+            Icon(LucideIcons.triangleAlert, size: 20, color: AppColors.danger),
             const SizedBox(width: 12),
             Expanded(
               child: Text(

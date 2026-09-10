@@ -129,6 +129,57 @@ class AuthRepository {
     }
   }
 
+  // ── Password reset ──────────────────────────────────────────────────
+
+  /// Always resolves; the backend never reveals whether the email exists.
+  Future<void> forgotPassword(String email) async {
+    try {
+      await _api.dio.post<void>(
+        '/api/v1/auth/forgot-password',
+        data: {'email': email},
+        options: Options(extra: const {'skipAuth': true}),
+      );
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e), code: _extractCode(e));
+    }
+  }
+
+  /// Checks a reset token from the emailed link before asking for a
+  /// new password. Throws [AuthException] when invalid or expired.
+  Future<void> verifyResetToken(String token) async {
+    try {
+      final res = await _api.dio.post<Map<String, dynamic>>(
+        '/api/v1/auth/verify-reset-token',
+        queryParameters: {'token': token},
+        options: Options(extra: const {'skipAuth': true}),
+      );
+      // The backend answers 200 with {valid: false} for bad tokens.
+      if (res.data?['valid'] == false) {
+        throw AuthException(
+          res.data?['message']?.toString() ?? 'Token is invalid or expired',
+          code: 'RESET_TOKEN_INVALID',
+        );
+      }
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e), code: _extractCode(e));
+    }
+  }
+
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      await _api.dio.post<void>(
+        '/api/v1/auth/reset-password',
+        data: {'token': token, 'newPassword': newPassword},
+        options: Options(extra: const {'skipAuth': true}),
+      );
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e), code: _extractCode(e));
+    }
+  }
+
   // ── Biometric sign-in via backend device tokens ──────────────────────
 
   /// Enrols this install for biometric sign-in. Requires a live session.

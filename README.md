@@ -157,7 +157,13 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 
 **Offline.** Every merchant read (summary, sales, settlements, terminals, profile) stores its last successful JSON in `CacheStore`. When the network is unreachable, the cached copy is served and an "Offline · showing data saved…" banner appears on the data screens. When connectivity returns, providers refetch automatically. Cache is cleared on logout.
 
-**Localisation.** Strings live in `lib/l10n/app_en.arb`. To add a language, copy it to `app_<code>.arb`, translate, and run `flutter gen-l10n`. Currency symbol, code, and locale come from remote config (`currency`) via `MoneyFormat.configure`, defaulting to Naira.
+**Localisation.** Strings live in `lib/l10n/app_en.arb`, with full translations in `app_yo.arb` (Yoruba), `app_ha.arb` (Hausa), `app_ig.arb` (Igbo), and `app_pcm.arb` (Nigerian Pidgin). The language follows the phone by default and can be forced from Settings › Preferences (`localeProvider`). Flutter ships no Material strings for these four languages, so `FallbackMaterialLocalizationsDelegate` and friends in `lib/core/l10n/` serve English for date pickers and system dialogs. The Nigerian translations were machine-drafted and should be reviewed by native speakers. Currency symbol, code, and locale come from remote config (`currency`) via `MoneyFormat.configure`, defaulting to Naira.
+
+**Dark mode.** `AppColors` is a set of getters over a `Palette` (light or dark). `AppTheme.build(dark:)` applies the palette and builds the `ThemeData`; the app root is re-keyed on every switch so all widgets rebuild. Appearance is chosen in Settings › Preferences (`themeModeProvider`: system, light, dark) and persisted. Because the palette is read at build time, never put an `AppColors` getter inside a `const` widget; use the `brandNavy` / `brandGreen` constants when a compile-time colour is genuinely needed.
+
+**Lists.** Transactions and settlements page through `TransactionsList` / `SettlementsList` (`AsyncNotifier` families keyed by filter) with `loadMore()` triggered near the end of the scroll, and a `DateWindowChips` control offering 7/30/90-day presets or a custom range from the Material date-range picker.
+
+**Password reset.** Login › "Forgot?" requests `POST /auth/forgot-password`; the user pastes the code (or the whole link) from the email, which the app verifies with `POST /auth/verify-reset-token?token=` before `POST /auth/reset-password`.
 
 **Accessibility.** Icon-only buttons carry semantic labels, touch targets are at least 44 pt, body text never drops below 12 pt, and tertiary text uses a grey that passes WCAG AA on white.
 

@@ -61,11 +61,7 @@ class InfoRow extends StatelessWidget {
                   ),
                 );
               },
-              icon: const Icon(
-                LucideIcons.copy,
-                size: 18,
-                color: AppColors.primary,
-              ),
+              icon: Icon(LucideIcons.copy, size: 18, color: AppColors.primary),
             ),
         ],
       ),

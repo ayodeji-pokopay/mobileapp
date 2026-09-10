@@ -45,9 +45,9 @@ class _SkeletonState extends State<Skeleton>
             gradient: LinearGradient(
               begin: Alignment(-1 + 2 * t - 1, 0),
               end: Alignment(-1 + 2 * t + 1, 0),
-              colors: const [
+              colors: [
                 AppColors.surfaceAlt,
-                Color(0xFFF4F3F0),
+                AppColors.surfacePressed,
                 AppColors.surfaceAlt,
               ],
             ),

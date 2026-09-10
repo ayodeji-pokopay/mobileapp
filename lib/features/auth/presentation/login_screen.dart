@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../core/biometric/biometric_service.dart';
+import '../../../core/router/app_router.dart';
 import '../../../core/storage/secure_storage.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
@@ -181,11 +183,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           children: [
                             _FieldLabel(l10n.loginPasswordLabel),
                             TextButton(
-                              onPressed: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(l10n.loginForgotHint)),
-                                );
-                              },
+                              onPressed: () => context.push(
+                                '${AppRoutes.forgotPassword}?email=${Uri.encodeComponent(_emailCtrl.text.trim())}',
+                              ),
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 minimumSize: const Size(0, 0),
@@ -290,7 +290,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           const SizedBox(height: 24),
                           Row(
                             children: [
-                              const Expanded(
+                              Expanded(
                                 child: Divider(color: AppColors.hairline),
                               ),
                               Padding(
@@ -305,7 +305,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   ),
                                 ),
                               ),
-                              const Expanded(
+                              Expanded(
                                 child: Divider(color: AppColors.hairline),
                               ),
                             ],
@@ -313,7 +313,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           const SizedBox(height: 24),
                           OutlinedButton.icon(
                             onPressed: _submitting ? null : _biometricLogin,
-                            icon: const Icon(
+                            icon: Icon(
                               LucideIcons.fingerprintPattern,
                               size: 24,
                               color: AppColors.primary,
@@ -327,7 +327,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(
+                              Icon(
                                 LucideIcons.shieldCheck,
                                 size: 16,
                                 color: AppColors.textTertiary,
@@ -370,7 +370,7 @@ class _Notice extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(LucideIcons.clock, size: 16, color: AppColors.warningText),
+          Icon(LucideIcons.clock, size: 16, color: AppColors.warningText),
           const SizedBox(width: 10),
           Expanded(
             child: Text(

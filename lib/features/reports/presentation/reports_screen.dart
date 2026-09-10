@@ -16,6 +16,7 @@ import '../../../shared/widgets/async_slot.dart';
 import '../../../shared/widgets/bottom_nav.dart';
 import '../../../shared/widgets/card_brand_logo.dart';
 import '../../../shared/widgets/charts.dart';
+import '../../../shared/widgets/date_range_chip.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/offline_banner.dart';
@@ -791,7 +792,7 @@ class _BreakdownCardState extends State<_BreakdownCard> {
                   ],
                 ),
               ),
-              if (i != rows.length - 1) const Divider(color: AppColors.divider),
+              if (i != rows.length - 1) Divider(color: AppColors.divider),
             ],
         ],
       ),
@@ -902,184 +903,221 @@ class _Transactions extends ConsumerStatefulWidget {
 
 class _TransactionsState extends ConsumerState<_Transactions> {
   static const _statuses = [null, 'APPROVED', 'FAILED', 'REVERSED', 'REFUNDED'];
-  static const _windows = [7, 30, 90];
   int _status = 0;
-  int _window = 0;
+  DateWindow _window = const DateWindow.days(7);
   String _search = '';
+
+  TransactionFilter get _filter {
+    final digits = RegExp(r'^\d{4}$').hasMatch(_search);
+    return (
+      status: _statuses[_status],
+      last4: digits ? _search : null,
+      start: _window.from,
+      end: _window.to,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final digits = RegExp(r'^\d{4}$').hasMatch(_search);
-    final query = (
-      status: _statuses[_status],
-      last4: digits ? _search : null,
-      days: _windows[_window],
-    );
-    final txns = ref.watch(transactionsProvider(query));
+    final filter = _filter;
+    final digits = filter.last4 != null;
+    final txns = ref.watch(transactionsListProvider(filter));
 
     return RefreshIndicator(
       onRefresh: () async {
-        ref.invalidate(transactionsProvider(query));
-        await ref.read(transactionsProvider(query).future);
+        ref.invalidate(transactionsListProvider(filter));
+        await ref.read(transactionsListProvider(filter).future);
       },
-      child: ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-        children: [
-          TextField(
-            onChanged: (v) => setState(() => _search = v.trim()),
-            keyboardType: TextInputType.text,
-            style: AppText.body(size: 15),
-            decoration: InputDecoration(
-              hintText: l10n.salesSearchLast4,
-              hintStyle: AppText.body(size: 15, color: AppColors.textTertiary),
-              prefixIcon: const Icon(
-                LucideIcons.search,
-                size: 16,
-                color: AppColors.textTertiary,
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999),
-                borderSide: BorderSide.none,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999),
-                borderSide: BorderSide.none,
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (n) {
+          if (n.metrics.extentAfter < 400) {
+            ref.read(transactionsListProvider(filter).notifier).loadMore();
+          }
+          return false;
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+          children: [
+            TextField(
+              onChanged: (v) => setState(() => _search = v.trim()),
+              keyboardType: TextInputType.text,
+              style: AppText.body(size: 15),
+              decoration: InputDecoration(
+                hintText: l10n.salesSearchLast4,
+                hintStyle: AppText.body(
+                  size: 15,
+                  color: AppColors.textTertiary,
+                ),
+                prefixIcon: Icon(
+                  LucideIcons.search,
+                  size: 16,
+                  color: AppColors.textTertiary,
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(999),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(999),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(999),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          PillTabs(
-            scrollable: true,
-            dropdown: true,
-            inactiveColor: AppColors.surface,
-            inactiveTextColor: AppColors.textBody,
-            items: [l10n.salesWindow7, l10n.salesWindow30, l10n.salesWindow90],
-            selected: _window,
-            onChanged: (i) => setState(() => _window = i),
-          ),
-          const SizedBox(height: 8),
-          PillTabs(
-            scrollable: true,
-            inactiveColor: AppColors.surface,
-            inactiveTextColor: AppColors.textBody,
-            items: [
-              l10n.filterAll,
-              l10n.filterApproved,
-              l10n.filterDeclined,
-              l10n.filterReversed,
-              l10n.filterRefunded,
-            ],
-            selected: _status,
-            onChanged: (i) => setState(() => _status = i),
-          ),
-          const SizedBox(height: 16),
-          AsyncSlot<PageTransactionResponse>(
-            value: txns,
-            loadingHeight: 220,
-            onRetry: () => ref.invalidate(transactionsProvider(query)),
-            data: (page) {
-              var items = page.content;
-              if (_search.isNotEmpty && !digits) {
-                final q = _search.toLowerCase();
-                items = items
-                    .where(
-                      (t) =>
-                          (t.reference ?? '').toLowerCase().contains(q) ||
-                          (t.storeName ?? '').toLowerCase().contains(q),
-                    )
-                    .toList();
-              }
-              if (items.isEmpty) {
-                return EmptyState(
-                  icon: LucideIcons.receipt,
-                  title: l10n.salesNoTransactions,
-                  subtitle: l10n.salesNoTransactionsHint,
-                );
-              }
-              final groups = <String, List<TransactionResponse>>{};
-              for (final t in items) {
-                final local = DateTime.tryParse(
-                  t.transactionDate ?? '',
-                )?.toLocal();
-                final day = local == null
-                    ? ''
-                    : local.toIso8601String().split('T').first;
-                groups.putIfAbsent(day, () => []).add(t);
-              }
-              final days = groups.keys.toList()..sort((a, b) => b.compareTo(a));
-              num approvedTotal(List<TransactionResponse> list) => list
-                  .where((t) => (t.status ?? '').toUpperCase() == 'APPROVED')
-                  .fold<num>(0, (a, t) => a + (t.amount ?? 0));
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4, bottom: 14),
-                    child: Text(
-                      l10n.salesTransactionsSummary(
-                        items.length,
-                        formatMoney(approvedTotal(items)),
-                      ),
-                      style: AppText.body(
-                        size: 13,
-                        weight: FontWeight.w600,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ),
-                  for (final d in days) ...[
+            const SizedBox(height: 10),
+            DateWindowChips(
+              value: _window,
+              presetLabels: [
+                l10n.salesWindow7,
+                l10n.salesWindow30,
+                l10n.salesWindow90,
+              ],
+              customLabel: l10n.customRange,
+              onChanged: (w) => setState(() => _window = w),
+            ),
+            const SizedBox(height: 8),
+            PillTabs(
+              scrollable: true,
+              inactiveColor: AppColors.surface,
+              inactiveTextColor: AppColors.textBody,
+              items: [
+                l10n.filterAll,
+                l10n.filterApproved,
+                l10n.filterDeclined,
+                l10n.filterReversed,
+                l10n.filterRefunded,
+              ],
+              selected: _status,
+              onChanged: (i) => setState(() => _status = i),
+            ),
+            const SizedBox(height: 16),
+            AsyncSlot<Paged<TransactionResponse>>(
+              value: txns,
+              loadingHeight: 220,
+              onRetry: () => ref.invalidate(transactionsListProvider(filter)),
+              data: (paged) {
+                var items = paged.items;
+                if (_search.isNotEmpty && !digits) {
+                  final q = _search.toLowerCase();
+                  items = items
+                      .where(
+                        (t) =>
+                            (t.reference ?? '').toLowerCase().contains(q) ||
+                            (t.tid ?? '').toLowerCase().contains(q),
+                      )
+                      .toList();
+                }
+                if (items.isEmpty) {
+                  return EmptyState(
+                    icon: LucideIcons.receipt,
+                    title: l10n.salesNoTransactions,
+                    subtitle: l10n.salesNoTransactionsHint,
+                  );
+                }
+                final groups = <String, List<TransactionResponse>>{};
+                for (final t in items) {
+                  final local = DateTime.tryParse(
+                    t.transactionDate ?? '',
+                  )?.toLocal();
+                  final day = local == null
+                      ? ''
+                      : local.toIso8601String().split('T').first;
+                  groups.putIfAbsent(day, () => []).add(t);
+                }
+                final days = groups.keys.toList()
+                  ..sort((a, b) => b.compareTo(a));
+                num approvedTotal(List<TransactionResponse> list) => list
+                    .where((t) => (t.status ?? '').toUpperCase() == 'APPROVED')
+                    .fold<num>(0, (a, t) => a + (t.amount ?? 0));
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 4, bottom: 10),
+                      padding: const EdgeInsets.only(left: 4, bottom: 14),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            formatDayLabel(d),
+                            l10n.salesTransactionsSummary(
+                              paged.total ?? items.length,
+                              formatMoney(approvedTotal(items)),
+                            ),
                             style: AppText.body(
                               size: 13,
                               weight: FontWeight.w600,
                               color: AppColors.textSecondary,
                             ),
                           ),
-                          Text(
-                            l10n.dayTotal(
-                              groups[d]!.length,
-                              formatMoney(approvedTotal(groups[d]!)),
+                          if (paged.total != null &&
+                              paged.total! > items.length)
+                            Text(
+                              l10n.listShowing(items.length, paged.total!),
+                              style: AppText.body(
+                                size: 12,
+                                color: AppColors.textTertiary,
+                              ),
                             ),
-                            style: AppText.body(
-                              size: 12,
-                              color: AppColors.textTertiary,
-                            ),
-                          ),
                         ],
                       ),
                     ),
-                    ListCard(
-                      children: [
-                        for (final t in groups[d]!)
-                          _TxnRow(
-                            t: t,
-                            onTap: () => showReceiptSheet(context, t),
-                          ),
-                      ],
+                    for (final d in days) ...[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              formatDayLabel(d),
+                              style: AppText.body(
+                                size: 13,
+                                weight: FontWeight.w600,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                            Text(
+                              l10n.dayTotal(
+                                groups[d]!.length,
+                                formatMoney(approvedTotal(groups[d]!)),
+                              ),
+                              style: AppText.body(
+                                size: 12,
+                                color: AppColors.textTertiary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListCard(
+                        children: [
+                          for (final t in groups[d]!)
+                            _TxnRow(
+                              t: t,
+                              onTap: () => showReceiptSheet(context, t),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 18),
+                    ],
+                    LoadMoreFooter(
+                      loading: paged.loadingMore,
+                      hasMore: paged.hasMore,
+                      endLabel: l10n.listEnd,
                     ),
-                    const SizedBox(height: 18),
                   ],
-                ],
-              );
-            },
-          ),
-        ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

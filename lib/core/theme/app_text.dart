@@ -11,7 +11,7 @@ class AppText {
   static TextStyle display({
     double size = 42,
     FontWeight weight = FontWeight.w800,
-    Color color = AppColors.navy,
+    Color? color,
     double? letterSpacing,
     double height = 1.05,
     TextDecoration? decoration,
@@ -19,18 +19,18 @@ class AppText {
     return GoogleFonts.montserrat(
       fontSize: size,
       fontWeight: weight,
-      color: color,
+      color: color ?? AppColors.textPrimary,
       letterSpacing: letterSpacing ?? -size * 0.025,
       height: height,
       decoration: decoration,
-      decorationColor: color,
+      decorationColor: color ?? AppColors.textPrimary,
     );
   }
 
   static TextStyle money({
     double size = 15,
     FontWeight weight = FontWeight.w700,
-    Color color = AppColors.navy,
+    Color? color,
     double? letterSpacing,
     double height = 1.0,
     TextDecoration? decoration,
@@ -38,18 +38,18 @@ class AppText {
     return GoogleFonts.montserrat(
       fontSize: size,
       fontWeight: weight,
-      color: color,
+      color: color ?? AppColors.textPrimary,
       letterSpacing: letterSpacing ?? (size >= 24 ? -size * 0.025 : 0),
       height: height,
       decoration: decoration,
-      decorationColor: color,
+      decorationColor: color ?? AppColors.textPrimary,
     );
   }
 
   static TextStyle body({
     double size = 15,
     FontWeight weight = FontWeight.w400,
-    Color color = AppColors.navy,
+    Color? color,
     double? height,
     double? letterSpacing,
     TextDecoration? decoration,
@@ -57,7 +57,7 @@ class AppText {
     return GoogleFonts.dmSans(
       fontSize: size,
       fontWeight: weight,
-      color: color,
+      color: color ?? AppColors.textPrimary,
       height: height,
       letterSpacing: letterSpacing,
       decoration: decoration,
@@ -65,11 +65,11 @@ class AppText {
   }
 
   /// Small uppercase section label, e.g. "ACCOUNT ACTIVITY".
-  static TextStyle label({Color color = AppColors.textTertiary}) {
+  static TextStyle label({Color? color}) {
     return GoogleFonts.dmSans(
       fontSize: 12,
       fontWeight: FontWeight.w600,
-      color: color,
+      color: color ?? AppColors.textTertiary,
       letterSpacing: 0.7,
     );
   }

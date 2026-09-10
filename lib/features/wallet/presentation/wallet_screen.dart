@@ -206,11 +206,15 @@ class _BalanceCard extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AppColors.navyMuted, AppColors.navy, AppColors.navyDark],
+          colors: [
+            AppColors.brandNavyMuted,
+            AppColors.brandNavy,
+            AppColors.brandNavyDark,
+          ],
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.navy.withValues(alpha: 0.3),
+            color: AppColors.brandNavy.withValues(alpha: 0.3),
             blurRadius: 28,
             offset: const Offset(0, 12),
           ),
@@ -326,11 +330,7 @@ class _FrozenBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(
-            LucideIcons.circleAlert,
-            size: 18,
-            color: AppColors.danger,
-          ),
+          Icon(LucideIcons.circleAlert, size: 18, color: AppColors.danger),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -488,7 +488,7 @@ class _NextPayoutCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(
+          Icon(
             LucideIcons.chevronRight,
             size: 20,
             color: AppColors.textDisabled,

@@ -9,17 +9,18 @@ class SectionLabel extends StatelessWidget {
     this.text, {
     super.key,
     this.uppercase = false,
-    this.color = AppColors.textTertiary,
+    this.color,
     this.padding = const EdgeInsets.only(left: 4, bottom: 12),
   });
 
   final String text;
   final bool uppercase;
-  final Color color;
+  final Color? color;
   final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
+    final color = this.color ?? AppColors.textTertiary;
     return Padding(
       padding: padding,
       child: Text(

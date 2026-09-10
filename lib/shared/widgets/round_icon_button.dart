@@ -11,8 +11,8 @@ class RoundIconButton extends StatelessWidget {
     required this.semanticLabel,
     this.size = 36,
     this.iconSize = 18,
-    this.background = AppColors.surface,
-    this.iconColor = AppColors.textBody,
+    this.background,
+    this.iconColor,
     this.badge = false,
     this.shadow = true,
   });
@@ -24,13 +24,15 @@ class RoundIconButton extends StatelessWidget {
   final String semanticLabel;
   final double size;
   final double iconSize;
-  final Color background;
-  final Color iconColor;
+  final Color? background;
+  final Color? iconColor;
   final bool badge;
   final bool shadow;
 
   @override
   Widget build(BuildContext context) {
+    final background = this.background ?? AppColors.surface;
+    final iconColor = this.iconColor ?? AppColors.textBody;
     // Keep the visual at [size] but guarantee a 44pt touch target.
     final hitPad = size < 44 ? (44 - size) / 2 : 0.0;
     return Semantics(

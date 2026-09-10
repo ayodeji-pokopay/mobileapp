@@ -11,15 +11,16 @@ class Sparkline extends StatelessWidget {
     super.key,
     required this.values,
     this.height = 36,
-    this.color = AppColors.primary,
+    this.color,
   });
 
   final List<double> values;
   final double height;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
+    final color = this.color ?? AppColors.primary;
     return SizedBox(
       height: height,
       width: double.infinity,
@@ -77,7 +78,7 @@ class _SparklinePainter extends CustomPainter {
         ..strokeJoin = StrokeJoin.round,
     );
     final last = pt(data.length - 1);
-    canvas.drawCircle(last, 4.5, Paint()..color = Colors.white);
+    canvas.drawCircle(last, 4.5, Paint()..color = AppColors.surface);
     canvas.drawCircle(
       last,
       3,

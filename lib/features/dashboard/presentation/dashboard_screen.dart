@@ -208,12 +208,16 @@ class _HeroCard extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AppColors.navyMuted, AppColors.navy, AppColors.navyDark],
+          colors: [
+            AppColors.brandNavyMuted,
+            AppColors.brandNavy,
+            AppColors.brandNavyDark,
+          ],
           stops: [0, 0.55, 1],
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.navy.withValues(alpha: 0.32),
+            color: AppColors.brandNavy.withValues(alpha: 0.32),
             blurRadius: 28,
             offset: const Offset(0, 12),
           ),
@@ -319,7 +323,7 @@ class _HeroCard extends StatelessWidget {
                         child: InkWell(
                           onTap: onSettlements,
                           customBorder: const CircleBorder(),
-                          child: const SizedBox(
+                          child: SizedBox(
                             width: 36,
                             height: 36,
                             child: Icon(
@@ -378,7 +382,7 @@ class _GreenPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white,
+      color: AppColors.primary,
       borderRadius: BorderRadius.circular(999),
       child: InkWell(
         onTap: onTap,
@@ -388,11 +392,15 @@ class _GreenPill extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 16, color: AppColors.navy),
+              Icon(icon, size: 16, color: Colors.white),
               const SizedBox(width: 8),
               Text(
                 label,
-                style: AppText.body(size: 14, weight: FontWeight.w700),
+                style: AppText.body(
+                  size: 14,
+                  weight: FontWeight.w700,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
@@ -657,7 +665,7 @@ class _PayoutCard extends StatelessWidget {
           const SizedBox(height: 10),
           Row(
             children: [
-              const Icon(LucideIcons.zap, size: 12, color: AppColors.primary),
+              Icon(LucideIcons.zap, size: 12, color: AppColors.primary),
               const SizedBox(width: 4),
               Expanded(
                 child: Text(
@@ -687,7 +695,7 @@ class _PayoutCard extends StatelessWidget {
                 l10n.dashboardMoreDetails,
                 style: AppText.body(size: 12, weight: FontWeight.w600),
               ),
-              const Icon(
+              Icon(
                 LucideIcons.chevronRight,
                 size: 14,
                 color: AppColors.textDisabled,
@@ -757,7 +765,7 @@ class _FeedbackBanner extends StatelessWidget {
             child: GestureDetector(
               onTap: onDismiss,
               behavior: HitTestBehavior.opaque,
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.all(6),
                 child: Icon(
                   LucideIcons.x,
