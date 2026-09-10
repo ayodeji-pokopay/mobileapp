@@ -143,8 +143,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             if (v == null || v.trim().isEmpty) {
                               return l10n.validationEmailRequired;
                             }
-                            if (!v.contains('@'))
+                            if (!v.contains('@')) {
                               return l10n.validationEmailInvalid;
+                            }
                             return null;
                           },
                         ),
