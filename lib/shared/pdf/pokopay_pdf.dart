@@ -223,7 +223,7 @@ pw.Widget _kv(PdfAssets a, String k, String? v, {bool mono = false}) {
         pw.Expanded(
           child: pw.Text(
             v,
-            style: a.t(9.5, strong: !mono),
+            style: a.v(v, 9.5, color: PdfBrand.navy, strong: !mono),
             textAlign: pw.TextAlign.right,
           ),
         ),
@@ -253,7 +253,7 @@ pw.Widget _table(
             textAlign: al(i),
             style: header
                 ? a.label(color: PdfBrand.muted)
-                : a.t(9.5, color: color ?? PdfBrand.ink),
+                : a.v(s, 9.5, color: color ?? PdfBrand.ink, strong: false),
           ),
         ),
       );
@@ -393,7 +393,15 @@ Future<Uint8List> buildSalesReportPdf({
                 ),
                 pw.SizedBox(width: 8),
                 pw.Text(
-                  'vs previous period (${formatDateShort(prev.startDate)} – ${formatDateShort(prev.endDate)}: ${formatMoney(prev.totalSales)}, ${formatNumber(prev.totalTransactionCount)} transactions)',
+                  'vs previous period (${formatDateShort(prev.startDate)} – ${formatDateShort(prev.endDate)}): ',
+                  style: a.t(9, color: PdfBrand.muted),
+                ),
+                pw.Text(
+                  formatMoney(prev.totalSales),
+                  style: a.h(9, color: PdfBrand.muted),
+                ),
+                pw.Text(
+                  ', ${formatNumber(prev.totalTransactionCount)} transactions',
                   style: a.t(9, color: PdfBrand.muted),
                 ),
               ],
