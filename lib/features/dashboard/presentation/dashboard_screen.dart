@@ -47,7 +47,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final businessName = ref.watch(businessNameProvider);
 
     final balance =
-        wallet.asData?.value.availableBalance ??
+        wallet.asData?.value.availableNaira ??
         summary.asData?.value.totalSettledAmount;
     final balanceLoading = wallet.isLoading && summary.isLoading;
     final balanceUnavailable = wallet.hasError && summary.hasError;
@@ -199,7 +199,7 @@ class _HeroCard extends StatelessWidget {
         ? '₦ ••••••'
         : loading || unavailable
         ? '₦ —'
-        : formatMoney(balance, compact: true).replaceFirst('₦', '₦ ');
+        : formatMoney(balance).replaceFirst('₦', '₦ ');
 
     return Container(
       clipBehavior: Clip.antiAlias,
