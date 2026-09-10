@@ -131,7 +131,10 @@ void main() {
     });
 
     test('custom windows keep their exact bounds', () {
-      final w = DateWindow.custom(DateTime(2026, 9, 1), DateTime(2026, 9, 5, 23, 59, 59));
+      final w = DateWindow.custom(
+        DateTime(2026, 9, 1),
+        DateTime(2026, 9, 5, 23, 59, 59),
+      );
       expect(w.isCustom, isTrue);
       expect(w.from, DateTime(2026, 9, 1));
       expect(w.to.day, 5);

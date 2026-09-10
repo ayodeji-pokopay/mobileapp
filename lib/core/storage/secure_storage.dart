@@ -79,6 +79,12 @@ class SecureStorage {
   }
 
   Future<void> clearDeviceToken() => _storage.delete(key: _deviceTokenKey);
+
+  // Generic slots for other secure values (app-lock PIN hash and salt).
+  Future<String?> readValue(String key) => _storage.read(key: key);
+  Future<void> writeValue(String key, String value) =>
+      _storage.write(key: key, value: value);
+  Future<void> deleteValue(String key) => _storage.delete(key: key);
 }
 
 final secureStorageProvider = Provider<SecureStorage>((ref) {

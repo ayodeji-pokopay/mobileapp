@@ -346,6 +346,20 @@ class MerchantRepository {
     );
   }
 
+  Future<TerminalResponse> updateTerminalLabel({
+    required String mid,
+    required String id,
+    required String label,
+  }) async {
+    final res = await _api.dio.put<Map<String, dynamic>>(
+      '/api/v1/merchant/terminals/$id',
+      queryParameters: {'mid': mid},
+      data: {'label': label},
+    );
+    await _cache?.remove('terminals-v2:$mid');
+    return TerminalResponse.fromJson(res.data ?? const {});
+  }
+
   // ── Preferences ─────────────────────────────────────────────────────
 
   Future<MerchantPreferences> fetchPreferences({required String mid}) {

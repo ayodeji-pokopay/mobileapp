@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
   flutter_secure_storage_windows
   local_auth_windows
+  print_bluetooth_thermal
   sentry_flutter
   share_plus
   url_launcher_windows

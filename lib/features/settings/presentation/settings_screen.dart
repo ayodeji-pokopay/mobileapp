@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../core/api/models/business_models.dart';
-import '../../../core/biometric/biometric_service.dart';
 import '../../../core/config/app_config_provider.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
@@ -19,6 +18,7 @@ import '../../../shared/widgets/skeleton.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
 import 'preferences_sheet.dart';
+import 'printer_sheet.dart';
 import 'recipients_sheet.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -53,9 +53,6 @@ class SettingsScreen extends ConsumerWidget {
     final p = prefs.asData?.value;
     final unread =
         ref.watch(notificationsProvider).asData?.value.unreadCount ?? 0;
-    final bioAvailable =
-        ref.watch(biometricAvailableProvider).asData?.value ?? false;
-    final enrolled = ref.watch(deviceEnrolledProvider);
 
     Widget toggle({
       required String title,
@@ -130,35 +127,8 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const _RowIcon(LucideIcons.lock),
                 title: l10n.settingsSecurity,
                 subtitle: l10n.settingsSecurityHint,
-                onTap: () => context.push(AppRoutes.changePassword),
+                onTap: () => context.push(AppRoutes.security),
               ),
-              if (bioAvailable)
-                ListRow(
-                  leading: const _RowIcon(LucideIcons.fingerprintPattern),
-                  title: l10n.settingsBiometric,
-                  subtitle: l10n.settingsBiometricHint,
-                  chevron: false,
-                  trailing: enrolled.isLoading
-                      ? const Skeleton(height: 28, width: 48, radius: 14)
-                      : Switch(
-                          value: enrolled.asData?.value ?? false,
-                          onChanged: (v) => _save(context, ref, () async {
-                            await ref
-                                .read(authControllerProvider.notifier)
-                                .setBiometricEnabled(v);
-                            if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  v
-                                      ? l10n.settingsBiometricEnrolled
-                                      : l10n.settingsBiometricOff,
-                                ),
-                              ),
-                            );
-                          }),
-                        ),
-                ),
               ListRow(
                 leading: const _RowIcon(LucideIcons.globe),
                 title: l10n.settingsPreferences,
@@ -178,7 +148,7 @@ class SettingsScreen extends ConsumerWidget {
                 onTap: () => context.push(AppRoutes.businessDetails),
               ),
               ListRow(
-                leading: const _RowIcon(LucideIcons.printer),
+                leading: const _RowIcon(LucideIcons.creditCard),
                 title: l10n.settingsCardMachines,
                 subtitle: l10n.settingsCardMachinesHint,
                 onTap: () => context.push(AppRoutes.stores),
@@ -188,6 +158,18 @@ class SettingsScreen extends ConsumerWidget {
                 title: l10n.settingsSettlements,
                 subtitle: l10n.settingsSettlementsHint,
                 onTap: () => context.push(AppRoutes.settlements),
+              ),
+              ListRow(
+                leading: const _RowIcon(LucideIcons.chartNoAxesColumn),
+                title: l10n.insightsTitle,
+                subtitle: l10n.insightsHint,
+                onTap: () => context.push(AppRoutes.insights),
+              ),
+              ListRow(
+                leading: const _RowIcon(LucideIcons.bluetooth),
+                title: l10n.printerTitle,
+                subtitle: l10n.printerSettingsHint,
+                onTap: () => showPrinterSheet(context),
               ),
             ],
           ),

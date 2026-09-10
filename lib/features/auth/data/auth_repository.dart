@@ -9,6 +9,54 @@ import '../../../core/api/models/auth_models.dart';
 import '../../../core/cache/cache_store.dart';
 import '../../../core/storage/secure_storage.dart';
 
+/// One signed-in device from `GET /users/me/sessions`.
+class SessionInfo {
+  const SessionInfo({
+    required this.tokenId,
+    required this.deviceInfo,
+    required this.ipAddress,
+    required this.location,
+    required this.createdAt,
+    required this.lastActivity,
+    required this.expiresAt,
+    required this.active,
+    required this.current,
+    this.deviceName,
+    this.platform,
+  });
+
+  final String tokenId;
+  final String deviceInfo;
+  final String ipAddress;
+  final String location;
+  final DateTime? createdAt;
+  final DateTime? lastActivity;
+  final DateTime? expiresAt;
+  final bool active;
+  final bool current;
+  final String? deviceName;
+  final String? platform;
+
+  factory SessionInfo.fromJson(Map<String, dynamic> j) => SessionInfo(
+    tokenId: j['tokenId']?.toString() ?? '',
+    deviceInfo: j['deviceInfo']?.toString() ?? '',
+    ipAddress: j['ipAddress']?.toString() ?? '',
+    location: j['location']?.toString() ?? '',
+    createdAt: DateTime.tryParse(j['createdAt']?.toString() ?? ''),
+    lastActivity: DateTime.tryParse(j['lastActivity']?.toString() ?? ''),
+    expiresAt: DateTime.tryParse(j['expiresAt']?.toString() ?? ''),
+    active: j['active'] == true,
+    current: j['current'] == true,
+    deviceName: j['deviceName']?.toString(),
+    platform: j['platform']?.toString(),
+  );
+
+  /// "Dart/3.11 (dart:io)" is the app's HTTP client; anything else is
+  /// probably a browser or tool.
+  bool get isApp =>
+      deviceInfo.startsWith('Dart/') || (deviceName ?? '').isNotEmpty;
+}
+
 class AuthException implements Exception {
   AuthException(this.message, {this.code});
   final String message;
@@ -178,6 +226,24 @@ class AuthRepository {
     } on DioException catch (e) {
       throw AuthException(_extractError(e), code: _extractCode(e));
     }
+  }
+
+  // ── Sessions ────────────────────────────────────────────────────────
+
+  Future<List<SessionInfo>> fetchSessions() async {
+    final res = await _api.dio.get<List<dynamic>>('/api/v1/users/me/sessions');
+    return [
+      for (final e in res.data ?? const [])
+        if (e is Map<String, dynamic>) SessionInfo.fromJson(e),
+    ];
+  }
+
+  Future<void> revokeSession(String tokenId) async {
+    await _api.dio.delete<void>('/api/v1/users/me/sessions/$tokenId');
+  }
+
+  Future<void> revokeOtherSessions() async {
+    await _api.dio.post<void>('/api/v1/users/me/sessions/revoke-others');
   }
 
   // ── Biometric sign-in via backend device tokens ──────────────────────

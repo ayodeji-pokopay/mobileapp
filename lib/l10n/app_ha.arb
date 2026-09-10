@@ -397,5 +397,122 @@
   "prefLanguage": "Harshe",
   "prefLanguageSystem": "Harshen waya",
   "prefLanguageSystemHint": "Bi harshen da aka saita a wannan wayar",
-  "prefLanguageNote": "Fassarar Yoruba, Hausa, Igbo da Pidgin sabbi ne. Idan wata jumla ba ta dace ba, aika ra'ayi daga shafin Gida, za mu gyara."
+  "prefLanguageNote": "Fassarar Yoruba, Hausa, Igbo da Pidgin sabbi ne. Idan wata jumla ba ta dace ba, aika ra'ayi daga shafin Gida, za mu gyara.",
+  "lockTitle": "Buɗe Pokopay",
+  "lockSubtitle": "Shigar da PIN ɗinka mai lamba 4",
+  "lockWrongPin": "{left, plural, =1{PIN ba daidai ba. Saura yunƙuri 1 kafin a fitar da kai.} other{PIN ba daidai ba. Saura yunƙuri {left} kafin a fitar da kai.}}",
+  "@lockWrongPin": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "lockSignOut": "Fita maimakon haka",
+  "lockSection": "Kulle manhaja",
+  "lockEnable": "Kulle manhajar",
+  "lockEnableHint": "Nemi Face ID, yatsa ko PIN idan ka dawo",
+  "lockTimeout": "Kulle bayan",
+  "lockTimeoutHint": "Tsawon lokacin da manhajar za ta iya zama a baya kafin ta kulle",
+  "lockTimeoutImmediately": "Nan take",
+  "lockTimeoutMinutes": "{count, plural, =1{minti 1} other{minti {count}}}",
+  "@lockTimeoutMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lockUseBiometrics": "Buɗe da Face ID ko yatsa",
+  "lockUseBiometricsHint": "PIN ɗinka har yanzu yana aiki a matsayin madadin",
+  "lockChangePin": "Canza PIN",
+  "lockPinUpdated": "An sabunta PIN",
+  "lockSetPinTitle": "Zaɓi PIN",
+  "lockSetPinHint": "Lambobi 4. Za ka buƙace shi duk lokacin da manhajar ta kulle.",
+  "lockPin": "PIN",
+  "lockPinConfirm": "Tabbatar da PIN",
+  "lockPinFormat": "Shigar da lambobi 4 daidai.",
+  "lockPinMismatch": "PIN ɗin ba su yi daidai ba.",
+  "lockFootnote": "Bayan PIN {count} marasa daidai manhajar za ta fitar da kai don kare asusunka.",
+  "@lockFootnote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "securityTitle": "Tsaro",
+  "securitySignIn": "Shiga",
+  "securityChangePassword": "Canza kalmar sirri",
+  "sessionsTitle": "Na'urorin da aka shiga",
+  "sessionsHint": "Duba inda asusunka ya shiga ka fitar da na'urorin da ba ka sani ba.",
+  "sessionsCurrent": "Wannan na'ura",
+  "sessionsOthers": "Sauran na'urori",
+  "sessionsEmpty": "Babu wata na'ura da ta shiga.",
+  "sessionsUnknownDevice": "Manhajar Pokopay",
+  "sessionsLastActive": "Ya yi aiki {when}",
+  "@sessionsLastActive": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionsRevoke": "Fita",
+  "sessionsRevokeOthers": "Fitar da duk sauran na'urori",
+  "sessionsRevoked": "An fita",
+  "insightsTitle": "Fahimta",
+  "insightsHint": "Mafi kyawun awanni, mafi kyawun kwanaki da yadda wannan mako ya kwatanta",
+  "insightsNoData": "Har yanzu babu isasshen tallace-tallace",
+  "insightsNoDataHint": "Fahimta za ta bayyana idan kana da ma'amaloli na 'yan kwanaki.",
+  "insightsAvgTicket": "Matsakaicin tallace",
+  "insightsApprovalRate": "Adadin amincewa",
+  "insightsBestDay": "Mafi kyawun rana",
+  "insightsBestHours": "Awanni mafi cunkoso",
+  "insightsBestDays": "Kwanaki mafi cunkoso",
+  "insightsPeak": "Kololuwa {label}",
+  "@insightsPeak": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsWeekOnWeek": "{delta} idan aka kwatanta da makon da ya gabata",
+  "@insightsWeekOnWeek": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsMonthToDate": "Wannan wata zuwa yanzu",
+  "insightsTopTerminal": "Babbar na'ura",
+  "sendReceiptTitle": "Aika wa abokin ciniki",
+  "sendReceiptPhone": "Wayar abokin ciniki (na zaɓi)",
+  "sendReceiptPhoneHint": "0803 000 0000",
+  "sendReceiptWhatsApp": "Aika ta WhatsApp",
+  "sendReceiptSms": "Aika ta SMS",
+  "sendReceiptCopy": "Kwafi rubutun rasit",
+  "sendReceiptCopied": "An kwafi rasit",
+  "sendReceiptPrint": "Buga rasit",
+  "sendReceiptAppMissing": "Ba a iya buɗe wannan manhaja a wannan waya ba.",
+  "receiptTextHeader": "Rasit na Pokopay",
+  "printerTitle": "Na'urar buga rasit",
+  "printerSettingsHint": "Haɗa na'urar bugawa ta Bluetooth don rasit na takarda",
+  "printerHint": "Fara haɗa na'urar bugawa a saitunan Bluetooth na wayarka, sannan ka zaɓe ta a nan.",
+  "printerPaperWidth": "Faɗin takarda",
+  "printerPaired": "Na'urorin bugawa da aka haɗa",
+  "printerNoPaired": "Ba a sami na'urar bugawa da aka haɗa ba",
+  "printerNone": "Ba a saita na'urar bugawa ba",
+  "printerSelected": "An adana na'urar bugawa",
+  "printerTest": "Buga shafin gwaji",
+  "printerPrinted": "An aika zuwa na'urar bugawa",
+  "printerBluetoothOff": "Kunna Bluetooth don bugawa",
+  "printerConnectFailed": "Ba a iya isa ga na'urar bugawa ba. Duba tana kunne kuma a kusa.",
+  "terminalRename": "Sauya sunan na'urar kati",
+  "terminalRenameLabel": "Suna",
+  "terminalRenameHint": "misali Kantin gaba",
+  "terminalRenamed": "An sauya sunan na'urar kati",
+  "terminalRenameUnavailable": "Sauya suna bai samu ba tukuna. Ƙungiyar Pokopay na kunna shi."
 }

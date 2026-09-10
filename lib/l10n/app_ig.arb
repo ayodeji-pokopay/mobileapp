@@ -397,5 +397,122 @@
   "prefLanguage": "Asụsụ",
   "prefLanguageSystem": "Asụsụ ekwentị",
   "prefLanguageSystemHint": "Soro asụsụ e tọrọ na ekwentị a",
-  "prefLanguageNote": "Nsụgharị Yoruba, Hausa, Igbo na Pidgin dị ọhụrụ. Ọ bụrụ na nkebi ahịrịokwu adịghị mma, zipu nzaghachi site na ihuenyo Ụlọ, anyị ga-edozi ya."
+  "prefLanguageNote": "Nsụgharị Yoruba, Hausa, Igbo na Pidgin dị ọhụrụ. Ọ bụrụ na nkebi ahịrịokwu adịghị mma, zipu nzaghachi site na ihuenyo Ụlọ, anyị ga-edozi ya.",
+  "lockTitle": "Mepee Pokopay",
+  "lockSubtitle": "Tinye PIN ọnụọgụ anọ gị",
+  "lockWrongPin": "{left, plural, =1{PIN ezighi ezi. Mgbalị 1 fọdụrụ tupu a pụọ gị.} other{PIN ezighi ezi. Mgbalị {left} fọdụrụ tupu a pụọ gị.}}",
+  "@lockWrongPin": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "lockSignOut": "Pụọ kama",
+  "lockSection": "Mkpọchi ngwa",
+  "lockEnable": "Kpọchie ngwa ahụ",
+  "lockEnableHint": "Jụọ Face ID, mkpịsị aka ma ọ bụ PIN mgbe ị laghachiri",
+  "lockTimeout": "Kpọchie mgbe",
+  "lockTimeoutHint": "Ogologo oge ngwa nwere ike ịnọ n'azụ tupu ọ kpọchie",
+  "lockTimeoutImmediately": "Ozugbo",
+  "lockTimeoutMinutes": "{count, plural, =1{nkeji 1} other{nkeji {count}}}",
+  "@lockTimeoutMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lockUseBiometrics": "Mepee na Face ID ma ọ bụ mkpịsị aka",
+  "lockUseBiometricsHint": "PIN gị ka na-arụ ọrụ dị ka nkwado",
+  "lockChangePin": "Gbanwee PIN",
+  "lockPinUpdated": "Emelitere PIN",
+  "lockSetPinTitle": "Họrọ PIN",
+  "lockSetPinHint": "Ọnụọgụ anọ. Ị ga-achọ ya mgbe ọ bụla ngwa kpọchiri.",
+  "lockPin": "PIN",
+  "lockPinConfirm": "Kwenye PIN",
+  "lockPinFormat": "Tinye kpọmkwem ọnụọgụ anọ.",
+  "lockPinMismatch": "PIN ndị ahụ adabaghị.",
+  "lockFootnote": "Mgbe PIN {count} ezighi ezi gasịrị, ngwa ahụ na-apụ gị iji chebe akaụntụ gị.",
+  "@lockFootnote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "securityTitle": "Nchekwa",
+  "securitySignIn": "Mbanye",
+  "securityChangePassword": "Gbanwee okwuntughe",
+  "sessionsTitle": "Ngwaọrụ ndị banyere",
+  "sessionsHint": "Hụ ebe akaụntụ gị banyere ma pụọ ngwaọrụ ndị ị na-amaghị.",
+  "sessionsCurrent": "Ngwaọrụ a",
+  "sessionsOthers": "Ngwaọrụ ndị ọzọ",
+  "sessionsEmpty": "Ọ dịghị ngwaọrụ ọzọ banyere.",
+  "sessionsUnknownDevice": "Ngwa Pokopay",
+  "sessionsLastActive": "Rụrụ ọrụ {when}",
+  "@sessionsLastActive": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionsRevoke": "Pụọ",
+  "sessionsRevokeOthers": "Pụọ ngwaọrụ ndị ọzọ niile",
+  "sessionsRevoked": "Apụọla",
+  "insightsTitle": "Nghọta",
+  "insightsHint": "Awa kacha mma, ụbọchị kacha mma na otu izu a si atụnyere",
+  "insightsNoData": "Ahịa ezughị oke",
+  "insightsNoDataHint": "Nghọta ga-apụta mgbe ị nwere azụmahịa ụbọchị ole na ole.",
+  "insightsAvgTicket": "Nkezi ahịa",
+  "insightsApprovalRate": "Ọnụego nkwenye",
+  "insightsBestDay": "Ụbọchị kacha mma",
+  "insightsBestHours": "Awa kacha ejupụta",
+  "insightsBestDays": "Ụbọchị kacha ejupụta",
+  "insightsPeak": "Elu {label}",
+  "@insightsPeak": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsWeekOnWeek": "{delta} ma e jiri izu gara aga tụnyere",
+  "@insightsWeekOnWeek": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsMonthToDate": "Ọnwa a ruo ugbu a",
+  "insightsTopTerminal": "Ngwaọrụ kacha elu",
+  "sendReceiptTitle": "Zigara onye ahịa",
+  "sendReceiptPhone": "Ekwentị onye ahịa (nhọrọ)",
+  "sendReceiptPhoneHint": "0803 000 0000",
+  "sendReceiptWhatsApp": "Ziga na WhatsApp",
+  "sendReceiptSms": "Ziga site na SMS",
+  "sendReceiptCopy": "Depụta ederede nnata",
+  "sendReceiptCopied": "Edepụtara nnata",
+  "sendReceiptPrint": "Bipụta nnata",
+  "sendReceiptAppMissing": "Enweghị ike imepe ngwa ahụ na ekwentị a.",
+  "receiptTextHeader": "Nnata Pokopay",
+  "printerTitle": "Ngwa mbipụta nnata",
+  "printerSettingsHint": "Jikọọ ngwa mbipụta Bluetooth maka nnata akwụkwọ",
+  "printerHint": "Buru ụzọ jikọọ ngwa mbipụta na ntọala Bluetooth ekwentị gị, wee họrọ ya ebe a.",
+  "printerPaperWidth": "Obosara akwụkwọ",
+  "printerPaired": "Ngwa mbipụta ejikọrọ",
+  "printerNoPaired": "Ahụghị ngwa mbipụta ejikọrọ",
+  "printerNone": "Ọ dịghị ngwa mbipụta e debere",
+  "printerSelected": "Echekwara ngwa mbipụta",
+  "printerTest": "Bipụta ibe nnwale",
+  "printerPrinted": "Ezigara na ngwa mbipụta",
+  "printerBluetoothOff": "Gbanye Bluetooth iji bipụta",
+  "printerConnectFailed": "Enweghị ike iru ngwa mbipụta. Lelee na ọ gbanyere ma dị nso.",
+  "terminalRename": "Gbanwee aha igwe kaadị",
+  "terminalRenameLabel": "Aha",
+  "terminalRenameHint": "dịka Tebụl ihu",
+  "terminalRenamed": "Agbanwela aha igwe kaadị",
+  "terminalRenameUnavailable": "Mgbanwe aha adịbeghị. Ndị otu Pokopay gị na-eme ka ọ rụọ ọrụ."
 }

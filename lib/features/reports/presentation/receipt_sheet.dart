@@ -13,6 +13,7 @@ import '../../../shared/widgets/card_brand_logo.dart';
 import '../../../shared/widgets/pills.dart';
 import '../../../shared/widgets/pokopay_logo.dart';
 import '../../merchant/presentation/merchant_providers.dart';
+import 'send_receipt_sheet.dart';
 import 'transaction_style.dart';
 
 /// Opens the receipt for [t], fetching the full detail behind the row.
@@ -100,6 +101,12 @@ class _ReceiptSheetState extends ConsumerState<ReceiptSheet> {
             onPressed: _sharing ? null : () => _share(t),
             icon: const Icon(LucideIcons.share2, size: 18),
             label: Text(l10n.receiptShare),
+          ),
+          const SizedBox(height: 10),
+          OutlinedButton.icon(
+            onPressed: () => showSendReceiptSheet(context, t),
+            icon: const Icon(LucideIcons.send, size: 18),
+            label: Text(l10n.sendReceiptTitle),
           ),
         ],
       ),

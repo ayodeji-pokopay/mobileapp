@@ -6,6 +6,8 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'core/config/app_gate.dart';
 import 'core/connectivity/offline_status.dart';
 import 'core/l10n/locale_controller.dart';
+import 'core/lock/app_lock.dart';
+import 'core/lock/lock_screen.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
@@ -60,6 +62,8 @@ class PokopayApp extends ConsumerWidget {
     // Force auth controller to build immediately so _bootstrap runs
     // without waiting for the first router redirect.
     ref.watch(authControllerProvider);
+    // Registers the lifecycle observer that drives the app lock.
+    ref.watch(appLockProvider);
     final router = ref.watch(routerProvider);
     final mode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
@@ -118,7 +122,21 @@ class PokopayApp extends ConsumerWidget {
           updateBody: l10n.updateRequiredBody,
           updateButton: l10n.updateRequiredButton,
           maintenanceTitle: l10n.maintenanceTitle,
-          child: child ?? const SizedBox.shrink(),
+          child: Consumer(
+            builder: (context, ref, _) {
+              final lock = ref.watch(appLockProvider);
+              final show = lock.locked || lock.covered;
+              return Stack(
+                children: [
+                  child ?? const SizedBox.shrink(),
+                  if (show)
+                    Positioned.fill(
+                      child: LockScreen(covered: lock.covered && !lock.locked),
+                    ),
+                ],
+              );
+            },
+          ),
         );
       },
     );

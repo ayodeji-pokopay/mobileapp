@@ -511,3 +511,31 @@ final settlementsListProvider =
       Paged<SettlementResponse>,
       SettlementFilter
     >(SettlementsList.new);
+
+/// Every transaction in the last [days] days, following pages until the
+/// backend says it is done (capped at 2000 rows). Powers Insights.
+final allTransactionsProvider =
+    FutureProvider.family<List<TransactionResponse>, int>((ref, days) async {
+      final mid = ref.watch(_midProvider);
+      if (mid == null || mid.isEmpty) throw _noMerchant();
+      final repo = ref.watch(merchantRepositoryProvider);
+      final now = DateTime.now();
+      final start = DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ).subtract(Duration(days: days - 1));
+      final out = <TransactionResponse>[];
+      for (var page = 0; page < 10; page++) {
+        final p = await repo.fetchTransactions(
+          mid: mid,
+          startDate: start,
+          endDate: now,
+          page: page,
+          size: 200,
+        );
+        out.addAll(p.content);
+        if (p.last != false || out.length >= 2000) break;
+      }
+      return out;
+    });

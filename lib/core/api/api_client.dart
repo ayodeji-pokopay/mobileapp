@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +22,20 @@ class ApiClient {
 }
 
 enum RefreshResult { ok, invalid, network }
+
+/// Human-readable device name sent as X-Device-Name so sessions can be
+/// told apart in Settings › Active devices.
+String get deviceLabel {
+  if (kIsWeb) return 'Web';
+  final os = Platform.operatingSystem;
+  final name = switch (os) {
+    'ios' => 'iPhone',
+    'android' => 'Android',
+    _ => os,
+  };
+  return '$name ${Platform.operatingSystemVersion.split(' ').take(2).join(' ')}'
+      .trim();
+}
 
 /// Single-flight token refresh. Uses its own bare [Dio] so the auth
 /// interceptor never recurses into itself.
@@ -102,6 +118,8 @@ class AuthInterceptor extends QueuedInterceptor {
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
     }
+    options.headers['X-Device-Id'] = await _storage.ensureDeviceId();
+    options.headers['X-Device-Name'] = deviceLabel;
     handler.next(options);
   }
 

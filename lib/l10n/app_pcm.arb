@@ -397,5 +397,122 @@
   "prefLanguage": "Language",
   "prefLanguageSystem": "Phone language",
   "prefLanguageSystemHint": "Follow the language wey dey your phone",
-  "prefLanguageNote": "Yoruba, Hausa, Igbo and Pidgin translations still new. If any sentence no sound well, send feedback from the Home screen and we go fix am."
+  "prefLanguageNote": "Yoruba, Hausa, Igbo and Pidgin translations still new. If any sentence no sound well, send feedback from the Home screen and we go fix am.",
+  "lockTitle": "Open Pokopay",
+  "lockSubtitle": "Put your 4-number PIN",
+  "lockWrongPin": "{left, plural, =1{PIN no correct. 1 try remain before we sign you out.} other{PIN no correct. {left} tries remain before we sign you out.}}",
+  "@lockWrongPin": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "lockSignOut": "Sign out instead",
+  "lockSection": "App lock",
+  "lockEnable": "Lock the app",
+  "lockEnableHint": "Ask for Face ID, finger or PIN when you come back",
+  "lockTimeout": "Lock after",
+  "lockTimeoutHint": "How long the app fit stay for background before e lock",
+  "lockTimeoutImmediately": "Sharp sharp",
+  "lockTimeoutMinutes": "{count, plural, =1{1 minute} other{{count} minutes}}",
+  "@lockTimeoutMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lockUseBiometrics": "Open with Face ID or finger",
+  "lockUseBiometricsHint": "Your PIN still dey work as backup",
+  "lockChangePin": "Change PIN",
+  "lockPinUpdated": "PIN don update",
+  "lockSetPinTitle": "Choose PIN",
+  "lockSetPinHint": "4 numbers. You go need am anytime the app lock.",
+  "lockPin": "PIN",
+  "lockPinConfirm": "Confirm PIN",
+  "lockPinFormat": "Put exactly 4 numbers.",
+  "lockPinMismatch": "The PINs no match.",
+  "lockFootnote": "After {count} wrong PINs the app go sign you out to protect your account.",
+  "@lockFootnote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "securityTitle": "Security",
+  "securitySignIn": "Sign-in",
+  "securityChangePassword": "Change password",
+  "sessionsTitle": "Devices wey sign in",
+  "sessionsHint": "See where your account sign in and sign out devices wey you no know.",
+  "sessionsCurrent": "This device",
+  "sessionsOthers": "Other devices",
+  "sessionsEmpty": "No other device sign in.",
+  "sessionsUnknownDevice": "Pokopay app",
+  "sessionsLastActive": "Active {when}",
+  "@sessionsLastActive": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionsRevoke": "Sign out",
+  "sessionsRevokeOthers": "Sign out all other devices",
+  "sessionsRevoked": "Don sign out",
+  "insightsTitle": "Insights",
+  "insightsHint": "Best hours, best days and how this week compare",
+  "insightsNoData": "Sales never reach yet",
+  "insightsNoDataHint": "Insights go show once you get some days of transactions.",
+  "insightsAvgTicket": "Average sale",
+  "insightsApprovalRate": "Approval rate",
+  "insightsBestDay": "Best day",
+  "insightsBestHours": "Busiest hours",
+  "insightsBestDays": "Busiest days",
+  "insightsPeak": "Peak {label}",
+  "@insightsPeak": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsWeekOnWeek": "{delta} vs last week",
+  "@insightsWeekOnWeek": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsMonthToDate": "This month so far",
+  "insightsTopTerminal": "Top terminal",
+  "sendReceiptTitle": "Send to customer",
+  "sendReceiptPhone": "Customer phone (optional)",
+  "sendReceiptPhoneHint": "0803 000 0000",
+  "sendReceiptWhatsApp": "Send for WhatsApp",
+  "sendReceiptSms": "Send by SMS",
+  "sendReceiptCopy": "Copy receipt text",
+  "sendReceiptCopied": "Receipt don copy",
+  "sendReceiptPrint": "Print receipt",
+  "sendReceiptAppMissing": "No fit open that app for this phone.",
+  "receiptTextHeader": "Pokopay receipt",
+  "printerTitle": "Receipt printer",
+  "printerSettingsHint": "Pair Bluetooth printer for paper receipts",
+  "printerHint": "First pair the printer for your phone Bluetooth settings, then pick am here.",
+  "printerPaperWidth": "Paper width",
+  "printerPaired": "Paired printers",
+  "printerNoPaired": "No paired printer dey",
+  "printerNone": "No printer set up",
+  "printerSelected": "Printer don save",
+  "printerTest": "Print test page",
+  "printerPrinted": "Don send to printer",
+  "printerBluetoothOff": "On Bluetooth to print",
+  "printerConnectFailed": "No fit reach the printer. Check say e dey on and e dey near.",
+  "terminalRename": "Rename card machine",
+  "terminalRenameLabel": "Name",
+  "terminalRenameHint": "e.g. Front counter",
+  "terminalRenamed": "Card machine don rename",
+  "terminalRenameUnavailable": "Rename never ready yet. Your Pokopay team dey enable am."
 }

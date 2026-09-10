@@ -53,6 +53,13 @@ class FakeSecureStorage extends SecureStorage {
   final Map<String, String> data = {};
 
   @override
+  Future<String?> readValue(String key) async => data[key];
+  @override
+  Future<void> writeValue(String key, String value) async => data[key] = value;
+  @override
+  Future<void> deleteValue(String key) async => data.remove(key);
+
+  @override
   Future<String?> readAccessToken() async => data['access'];
   @override
   Future<String?> readRefreshToken() async => data['refresh'];

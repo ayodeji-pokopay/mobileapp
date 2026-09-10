@@ -17,6 +17,7 @@ import '../../../shared/widgets/pills.dart';
 import '../../../shared/widgets/section_label.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
+import 'rename_terminal_sheet.dart';
 
 /// Lists the merchant's business and its POS terminals.
 class StoresScreen extends ConsumerWidget {
@@ -156,6 +157,7 @@ class _TerminalRow extends StatelessWidget {
       ].join(' · '),
       trailing: StatusPill(label: label, tone: tone),
       chevron: false,
+      onTap: () => showRenameTerminalSheet(context, t),
     );
   }
 }

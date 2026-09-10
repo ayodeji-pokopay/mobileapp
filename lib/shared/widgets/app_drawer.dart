@@ -188,6 +188,15 @@ class AppDrawer extends ConsumerWidget {
                   title: l10n.drawerStatements,
                   onTap: () => go(AppRoutes.settlements),
                 ),
+                ListRow(
+                  leading: Icon(
+                    LucideIcons.chartNoAxesColumn,
+                    size: 20,
+                    color: AppColors.textSecondary,
+                  ),
+                  title: l10n.insightsTitle,
+                  onTap: () => go(AppRoutes.insights),
+                ),
               ],
             ),
             const SizedBox(height: 12),

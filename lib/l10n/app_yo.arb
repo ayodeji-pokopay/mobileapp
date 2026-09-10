@@ -397,5 +397,122 @@
   "prefLanguage": "Èdè",
   "prefLanguageSystem": "Èdè fóònù",
   "prefLanguageSystemHint": "Tẹ̀lé èdè tí a ṣètò lórí fóònù yìí",
-  "prefLanguageNote": "Ìtumọ̀ Yorùbá, Hausa, Igbo àti Pidgin ṣì jẹ́ tuntun. Tí gbólóhùn kan bá dàbí àṣìṣe, fi èsì ránṣẹ́ láti ojú Ilé, a ó sì tún un ṣe."
+  "prefLanguageNote": "Ìtumọ̀ Yorùbá, Hausa, Igbo àti Pidgin ṣì jẹ́ tuntun. Tí gbólóhùn kan bá dàbí àṣìṣe, fi èsì ránṣẹ́ láti ojú Ilé, a ó sì tún un ṣe.",
+  "lockTitle": "Ṣí Pokopay",
+  "lockSubtitle": "Tẹ PIN oní-nọ́mbà mẹ́rin rẹ",
+  "lockWrongPin": "{left, plural, =1{PIN kò tọ́. Ìgbìyànjú 1 ló kù kí a tó jáde rẹ.} other{PIN kò tọ́. Ìgbìyànjú {left} ló kù kí a tó jáde rẹ.}}",
+  "@lockWrongPin": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "lockSignOut": "Jáde dípò",
+  "lockSection": "Títì àpù",
+  "lockEnable": "Tì àpù náà",
+  "lockEnableHint": "Béèrè Face ID, ìka tàbí PIN nígbà tí o bá padà",
+  "lockTimeout": "Tì lẹ́yìn",
+  "lockTimeoutHint": "Bí àpù ṣe lè pẹ́ tó ní ẹ̀yìn kí ó tó tì",
+  "lockTimeoutImmediately": "Lẹ́sẹ̀kẹsẹ̀",
+  "lockTimeoutMinutes": "{count, plural, =1{ìṣẹ́jú 1} other{ìṣẹ́jú {count}}}",
+  "@lockTimeoutMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lockUseBiometrics": "Ṣí pẹ̀lú Face ID tàbí ìka",
+  "lockUseBiometricsHint": "PIN rẹ ṣì ń ṣiṣẹ́ gẹ́gẹ́ bí àfidípò",
+  "lockChangePin": "Yí PIN padà",
+  "lockPinUpdated": "A ti ṣàtúnṣe PIN",
+  "lockSetPinTitle": "Yan PIN kan",
+  "lockSetPinHint": "Nọ́mbà mẹ́rin. Wàá nílò rẹ̀ nígbàkúgbà tí àpù bá tì.",
+  "lockPin": "PIN",
+  "lockPinConfirm": "Jẹ́rìí PIN",
+  "lockPinFormat": "Tẹ nọ́mbà mẹ́rin gan-an.",
+  "lockPinMismatch": "Àwọn PIN náà kò bára mu.",
+  "lockFootnote": "Lẹ́yìn PIN tí kò tọ́ {count}, àpù yóò jáde rẹ láti dáàbò bo àkáǹtì rẹ.",
+  "@lockFootnote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "securityTitle": "Ààbò",
+  "securitySignIn": "Wíwọlé",
+  "securityChangePassword": "Yí ọ̀rọ̀ìpamọ́ padà",
+  "sessionsTitle": "Àwọn ẹ̀rọ tí a wọlé",
+  "sessionsHint": "Wo ibi tí àkáǹtì rẹ ti wọlé kí o sì jáde àwọn ẹ̀rọ tí o kò mọ̀.",
+  "sessionsCurrent": "Ẹ̀rọ yìí",
+  "sessionsOthers": "Àwọn ẹ̀rọ mìíràn",
+  "sessionsEmpty": "Kò sí ẹ̀rọ mìíràn tí ó wọlé.",
+  "sessionsUnknownDevice": "Àpù Pokopay",
+  "sessionsLastActive": "Ó ṣiṣẹ́ {when}",
+  "@sessionsLastActive": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionsRevoke": "Jáde",
+  "sessionsRevokeOthers": "Jáde gbogbo ẹ̀rọ mìíràn",
+  "sessionsRevoked": "A ti jáde",
+  "insightsTitle": "Òye",
+  "insightsHint": "Wákàtí tó dára jù, ọjọ́ tó dára jù àti bí ọ̀sẹ̀ yìí ṣe rí",
+  "insightsNoData": "Kò tíì sí títà tó pọ̀",
+  "insightsNoDataHint": "Òye yóò hàn nígbà tí o bá ní ìdúnàádúrà ọjọ́ díẹ̀.",
+  "insightsAvgTicket": "Àpapọ̀ títà",
+  "insightsApprovalRate": "Ìwọ̀n ìfọwọ́sí",
+  "insightsBestDay": "Ọjọ́ tó dára jù",
+  "insightsBestHours": "Wákàtí tí ó pọ̀ jù",
+  "insightsBestDays": "Ọjọ́ tí ó pọ̀ jù",
+  "insightsPeak": "Òkè {label}",
+  "@insightsPeak": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsWeekOnWeek": "{delta} sí ọ̀sẹ̀ tó kọjá",
+  "@insightsWeekOnWeek": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsMonthToDate": "Oṣù yìí títí di ìsinsìnyí",
+  "insightsTopTerminal": "Ẹ̀rọ tó ga jù",
+  "sendReceiptTitle": "Fi ránṣẹ́ sí oníbàárà",
+  "sendReceiptPhone": "Fóònù oníbàárà (àṣàyàn)",
+  "sendReceiptPhoneHint": "0803 000 0000",
+  "sendReceiptWhatsApp": "Fi ránṣẹ́ lórí WhatsApp",
+  "sendReceiptSms": "Fi ránṣẹ́ nípa SMS",
+  "sendReceiptCopy": "Da ọ̀rọ̀ ìwé-ẹ̀rí kọ",
+  "sendReceiptCopied": "A ti da ìwé-ẹ̀rí kọ",
+  "sendReceiptPrint": "Tẹ ìwé-ẹ̀rí jáde",
+  "sendReceiptAppMissing": "Kò lè ṣí àpù yẹn lórí fóònù yìí.",
+  "receiptTextHeader": "Ìwé-ẹ̀rí Pokopay",
+  "printerTitle": "Ẹ̀rọ ìtẹ̀wé ìwé-ẹ̀rí",
+  "printerSettingsHint": "So ẹ̀rọ ìtẹ̀wé Bluetooth pọ̀ fún ìwé-ẹ̀rí bébà",
+  "printerHint": "So ẹ̀rọ ìtẹ̀wé pọ̀ nínú ètò Bluetooth fóònù rẹ lákọ̀ọ́kọ́, kí o wá yàn án níbí.",
+  "printerPaperWidth": "Ìbú bébà",
+  "printerPaired": "Àwọn ẹ̀rọ ìtẹ̀wé tí a so pọ̀",
+  "printerNoPaired": "Kò rí ẹ̀rọ ìtẹ̀wé tí a so pọ̀",
+  "printerNone": "Kò sí ẹ̀rọ ìtẹ̀wé tí a ṣètò",
+  "printerSelected": "A ti fi ẹ̀rọ ìtẹ̀wé pamọ́",
+  "printerTest": "Tẹ ojú-ìwé ìdánwò jáde",
+  "printerPrinted": "A ti fi ránṣẹ́ sí ẹ̀rọ ìtẹ̀wé",
+  "printerBluetoothOff": "Tan Bluetooth láti tẹ̀wé",
+  "printerConnectFailed": "Kò lè dé ẹ̀rọ ìtẹ̀wé. Ṣàyẹ̀wò pé ó wà ní títan àti ní àyíká.",
+  "terminalRename": "Tún ẹ̀rọ káàdì lórúkọ",
+  "terminalRenameLabel": "Orúkọ",
+  "terminalRenameHint": "bíi Iwájú kóńtà",
+  "terminalRenamed": "A ti tún ẹ̀rọ káàdì lórúkọ",
+  "terminalRenameUnavailable": "Ìtúnlórúkọ kò tíì wà. Ẹgbẹ́ Pokopay rẹ ń mú un ṣiṣẹ́."
 }

@@ -7,10 +7,13 @@ import '../../features/auth/presentation/change_password_screen.dart';
 import '../../features/auth/presentation/forgot_password_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/insights/presentation/insights_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
 import '../../features/reports/presentation/reports_screen.dart';
 import '../../features/settings/presentation/business_details_screen.dart';
 import '../../features/settings/presentation/personal_info_screen.dart';
+import '../../features/settings/presentation/security_screen.dart';
+import '../../features/sessions/presentation/sessions_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/settlements/presentation/settlements_screen.dart';
 import '../../features/splash/splash_screen.dart';
@@ -32,7 +35,10 @@ class AppRoutes {
   static const settings = '/settings';
   static const personalInfo = '/settings/personal';
   static const businessDetails = '/settings/business';
+  static const security = '/settings/security';
   static const changePassword = '/settings/security/change-password';
+  static const sessions = '/settings/sessions';
+  static const insights = '/insights';
 }
 
 /// Optional screen to open right after sign-in, for previews and screenshots:
@@ -110,8 +116,20 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const BusinessDetailsScreen(),
       ),
       GoRoute(
+        path: AppRoutes.security,
+        builder: (_, _) => const SecurityScreen(),
+      ),
+      GoRoute(
         path: AppRoutes.changePassword,
         builder: (_, _) => const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.sessions,
+        builder: (_, _) => const SessionsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.insights,
+        builder: (_, _) => const InsightsScreen(),
       ),
     ],
   );

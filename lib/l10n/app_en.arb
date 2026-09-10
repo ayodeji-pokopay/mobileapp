@@ -1,15 +1,25 @@
 {
   "@@locale": "en",
-
   "appName": "Pokopay",
   "tagline": "FINANCE MADE EASY",
   "appVersionLabel": "pokopay Merchant v{version}",
-  "@appVersionLabel": {"placeholders": {"version": {"type": "String"}}},
-
+  "@appVersionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "commonRetry": "Retry",
   "commonComingSoon": "Coming soon.",
   "commonFeatureComingSoon": "{feature} is coming soon.",
-  "@commonFeatureComingSoon": {"placeholders": {"feature": {"type": "String"}}},
+  "@commonFeatureComingSoon": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
   "commonUnavailable": "Unavailable",
   "commonBack": "Back",
   "commonClose": "Close",
@@ -18,31 +28,57 @@
   "commonNoMerchantContext": "No merchant context yet",
   "commonSignInAgain": "Sign in again or contact support.",
   "commonCopied": "{label} copied",
-  "@commonCopied": {"placeholders": {"label": {"type": "String"}}},
+  "@commonCopied": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
   "commonNotifications": "Notifications",
   "commonNoNewNotifications": "No new notifications.",
   "commonUndated": "Undated",
-
   "offlineBanner": "Offline · showing data saved {ago}",
-  "@offlineBanner": {"placeholders": {"ago": {"type": "String"}}},
+  "@offlineBanner": {
+    "placeholders": {
+      "ago": {
+        "type": "String"
+      }
+    }
+  },
   "relativeJustNow": "just now",
   "relativeMinutes": "{count} min ago",
-  "@relativeMinutes": {"placeholders": {"count": {"type": "int"}}},
+  "@relativeMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "relativeHours": "{count} h ago",
-  "@relativeHours": {"placeholders": {"count": {"type": "int"}}},
+  "@relativeHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "relativeDays": "{count, plural, =1{1 day ago} other{{count} days ago}}",
-  "@relativeDays": {"placeholders": {"count": {"type": "int"}}},
-
+  "@relativeDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "updateRequiredTitle": "Update required",
   "updateRequiredBody": "This version of Pokopay is no longer supported. Update to keep viewing your sales and settlements.",
   "updateRequiredButton": "Update now",
   "maintenanceTitle": "Pokopay is under maintenance",
-
   "navHome": "Home",
   "navSales": "Sales",
   "navMoney": "Wallet",
   "navSettings": "Settings",
-
   "loginWelcome": "Welcome back",
   "loginSubtitle": "Sign in to your merchant account",
   "loginEmailLabel": "Email address",
@@ -64,7 +100,6 @@
   "validationPasswordRequired": "Password required",
   "showPassword": "Show password",
   "hidePassword": "Hide password",
-
   "dashboardAvailableBalance": "Available balance",
   "dashboardHideBalance": "Hide balance",
   "dashboardShowBalance": "Show balance",
@@ -74,12 +109,24 @@
   "dashboardGrossSalesToday": "Sales today",
   "dashboardFirstSale": "No sales yet today",
   "dashboardTransactionsToday": "{count, plural, =1{1 transaction} other{{count} transactions}}",
-  "@dashboardTransactionsToday": {"placeholders": {"count": {"type": "int"}}},
+  "@dashboardTransactionsToday": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardTodaysSettlements": "Pending payout",
   "dashboardPending": "Pending",
   "dashboardSettled": "Settled",
   "dashboardSettlementsCount": "{count, plural, =1{1 settlement} other{{count} settlements}}",
-  "@dashboardSettlementsCount": {"placeholders": {"count": {"type": "int"}}},
+  "@dashboardSettlementsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardTotalToDate": "Total to date",
   "dashboardMoreDetails": "View payouts",
   "feedbackTitle": "Enjoying Pokopay Merchant?",
@@ -93,9 +140,14 @@
   "activitySettlementReceived": "Payout received",
   "activitySettlementFailed": "Payout failed",
   "activitySettlementPending": "Payout pending",
-
   "drawerRoleMerchant": "{role} · Merchant",
-  "@drawerRoleMerchant": {"placeholders": {"role": {"type": "String"}}},
+  "@drawerRoleMerchant": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
   "drawerSwitchMerchant": "Switch merchant",
   "drawerSwitchMerchantHint": "Choose which business to view.",
   "drawerSearchMerchants": "Search by name or email",
@@ -103,7 +155,13 @@
   "drawerLoadMerchantsFailed": "Could not load merchants",
   "drawerTerminals": "Terminals",
   "drawerTerminalsActive": "{count, plural, =1{1 active} other{{count} active}}",
-  "@drawerTerminalsActive": {"placeholders": {"count": {"type": "int"}}},
+  "@drawerTerminalsActive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "drawerSettled": "Settled",
   "drawerStores": "My business",
   "drawerStatements": "Settlements",
@@ -111,8 +169,13 @@
   "drawerHelp": "Help",
   "drawerLogout": "Log out",
   "midLabel": "MID {mid}",
-  "@midLabel": {"placeholders": {"mid": {"type": "String"}}},
-
+  "@midLabel": {
+    "placeholders": {
+      "mid": {
+        "type": "String"
+      }
+    }
+  },
   "walletTitle": "Wallet",
   "walletSettlements": "Settlements",
   "walletPending": "Pending",
@@ -129,7 +192,6 @@
   "walletProcessingFee": "Pokopay fee",
   "walletEmpty": "No payouts yet",
   "walletEmptyHint": "Payouts and fees will appear here.",
-
   "salesTitle": "Sales",
   "salesAdd": "New",
   "salesNewSale": "New sale",
@@ -144,9 +206,24 @@
   "periodLastYear": "Last year",
   "salesGross": "Total sales",
   "salesTransactionsCount": "{count, plural, =1{1 transaction} other{{count} transactions}}",
-  "@salesTransactionsCount": {"placeholders": {"count": {"type": "int"}}},
+  "@salesTransactionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "salesRange": "From {start} to {end}",
-  "@salesRange": {"placeholders": {"start": {"type": "String"}, "end": {"type": "String"}}},
+  "@salesRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "salesNet": "Net ›",
   "salesFeesShort": "Fees ›",
   "salesDailySales": "Daily sales",
@@ -161,19 +238,39 @@
   "salesOther": "Other",
   "salesReportSummary": "Report",
   "salesNetSettled": "Net settled · {business}",
-  "@salesNetSettled": {"placeholders": {"business": {"type": "String"}}},
+  "@salesNetSettled": {
+    "placeholders": {
+      "business": {
+        "type": "String"
+      }
+    }
+  },
   "salesExport": "Download report",
   "salesExportFeature": "Report download",
   "salesSearchByDate": "Search by date",
   "salesNoTransactions": "No transactions",
   "salesNoTransactionsHint": "Nothing recorded for this period.",
   "salesCardSales": "{count, plural, =1{1 card sale} other{{count} card sales}}",
-  "@salesCardSales": {"placeholders": {"count": {"type": "int"}}},
+  "@salesCardSales": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "salesFeesNet": "Fees {fees} · Net {net}",
-  "@salesFeesNet": {"placeholders": {"fees": {"type": "String"}, "net": {"type": "String"}}},
+  "@salesFeesNet": {
+    "placeholders": {
+      "fees": {
+        "type": "String"
+      },
+      "net": {
+        "type": "String"
+      }
+    }
+  },
   "salesNoPaymentLinks": "No payment links yet",
   "salesNoPaymentLinksHint": "Payment links are coming soon to Pokopay.",
-
   "settlementsTitle": "Settlements",
   "settlementsTab": "History",
   "invoicesTab": "Invoices",
@@ -190,7 +287,13 @@
   "settlementsEmpty": "No settlements",
   "settlementsEmptyHint": "Nothing matches this filter yet.",
   "settlementTxns": "{count, plural, =1{1 txn} other{{count} txns}}",
-  "@settlementTxns": {"placeholders": {"count": {"type": "int"}}},
+  "@settlementTxns": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "settlementDetailTitle": "Settlement",
   "settlementReference": "Reference",
   "settlementBatch": "Batch",
@@ -202,7 +305,6 @@
   "settlementBank": "Bank",
   "settlementAccountName": "Account name",
   "settlementAccountNumber": "Account number",
-
   "settingsTitle": "Settings",
   "settingsPersonal": "Personal",
   "settingsSecurity": "Security",
@@ -224,7 +326,6 @@
   "settingsRecipients": "Send reports to",
   "settingsNoEmail": "No email assigned",
   "settingsLogout": "Log out",
-
   "personalTitle": "Personal\ninformation",
   "personalFirstName": "First name",
   "personalLastName": "Last name",
@@ -232,7 +333,6 @@
   "personalRole": "Role",
   "personalEmailVerified": "Email verified",
   "personalUserId": "User ID",
-
   "storeInfoTitle": "Business\ndetails",
   "storeDetails": "Business",
   "storeName": "Name",
@@ -247,19 +347,29 @@
   "storeUpdatePrompt": "Need to change your business details?",
   "storeContactUs": "Contact us",
   "storeReachUs": "Reach us at {email}",
-  "@storeReachUs": {"placeholders": {"email": {"type": "String"}}},
+  "@storeReachUs": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "storeDefaultName": "Your business",
   "businessDefaultName": "Your business",
-
   "storesTitle": "My business",
   "storesNoAddress": "No address on file",
   "storesCardMachines": "POS terminals",
   "storesTerminal": "Terminal",
   "tidLabel": "TID {tid}",
-  "@tidLabel": {"placeholders": {"tid": {"type": "String"}}},
+  "@tidLabel": {
+    "placeholders": {
+      "tid": {
+        "type": "String"
+      }
+    }
+  },
   "storesNoTerminals": "No terminals yet",
   "storesNoTerminalsHint": "Terminals assigned to you will appear here.",
-
   "changePasswordTitle": "Change\npassword",
   "changePasswordSubtitle": "Use a strong, unique password.",
   "changePasswordCurrent": "Current password",
@@ -273,7 +383,6 @@
   "validationNewPasswordRequired": "New password required",
   "validationPasswordLength": "At least 8 characters",
   "validationPasswordsMismatch": "Passwords don't match",
-
   "errorNetwork": "You're offline. Check your connection and try again.",
   "errorValidation": "Some details need attention.",
   "errorNotFound": "That item isn't available.",
@@ -296,7 +405,13 @@
   "loginSessionExpired": "Your session expired. Please sign in again.",
   "loginBiometricReenrol": "Biometric sign-in needs to be set up again. Sign in with your password and tick the biometric option.",
   "dashboardVsYesterday": "{delta} vs yesterday",
-  "@dashboardVsYesterday": {"placeholders": {"delta": {"type": "String"}}},
+  "@dashboardVsYesterday": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
   "dashboardRecentActivity": "Recent activity",
   "dashboardNoRecentActivity": "No activity yet",
   "dashboardNoRecentActivityHint": "Card payments and payouts will appear here.",
@@ -305,7 +420,13 @@
   "activityReversal": "Reversal",
   "activityDeclined": "Declined payment",
   "dashboardPayoutExpected": "Expected {date}",
-  "@dashboardPayoutExpected": {"placeholders": {"date": {"type": "String"}}},
+  "@dashboardPayoutExpected": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "dashboardPostponed": "Postponed",
   "dashboardNoPayoutToday": "Nothing to pay out today",
   "dashboardMonthToDate": "Month to date",
@@ -318,7 +439,13 @@
   "cycleInstant": "Instant",
   "cycleManual": "Manual",
   "walletMinimumPayout": "Minimum payout {amount}",
-  "@walletMinimumPayout": {"placeholders": {"amount": {"type": "String"}}},
+  "@walletMinimumPayout": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "walletThisMonth": "This month",
   "walletFrozen": "Your wallet is frozen. Contact support for help.",
   "walletViewStatements": "View statements",
@@ -335,7 +462,13 @@
   "txnReversal": "Reversal",
   "salesSearchLast4": "Search by last 4 digits",
   "salesVsPrevious": "{delta} vs previous period",
-  "@salesVsPrevious": {"placeholders": {"delta": {"type": "String"}}},
+  "@salesVsPrevious": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
   "salesChannels": "Channels",
   "channelPos": "Card machine",
   "channelLink": "Pay by link",
@@ -343,11 +476,26 @@
   "salesRefunds": "Refunds",
   "salesChargebacks": "Chargebacks",
   "salesCountItems": "{count, plural, =1{1 transaction} other{{count} transactions}}",
-  "@salesCountItems": {"placeholders": {"count": {"type": "int"}}},
+  "@salesCountItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "salesDownloading": "Preparing your report…",
   "salesDownloadFailed": "Could not download the report. Try again.",
   "cardLabel": "{scheme} ···· {last4}",
-  "@cardLabel": {"placeholders": {"scheme": {"type": "String"}, "last4": {"type": "String"}}},
+  "@cardLabel": {
+    "placeholders": {
+      "scheme": {
+        "type": "String"
+      },
+      "last4": {
+        "type": "String"
+      }
+    }
+  },
   "receiptTitle": "Receipt",
   "receiptShare": "Share receipt",
   "receiptAmount": "Amount",
@@ -366,12 +514,30 @@
   "receiptResponseCode": "Response code",
   "receiptOriginal": "Original transaction",
   "receiptShareText": "Pokopay receipt {reference} · {amount} · {date}",
-  "@receiptShareText": {"placeholders": {"reference": {"type": "String"}, "amount": {"type": "String"}, "date": {"type": "String"}}},
+  "@receiptShareText": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "statementsTab": "Statements",
   "statementsEmpty": "No statements yet",
   "statementsEmptyHint": "Monthly statements appear after your first full month.",
   "statementSettlements": "{count, plural, =1{1 settlement} other{{count} settlements}}",
-  "@statementSettlements": {"placeholders": {"count": {"type": "int"}}},
+  "@statementSettlements": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "statementDownloading": "Preparing statement…",
   "statementDownloadFailed": "Could not download the statement. Try again.",
   "settlementCycle": "Cycle",
@@ -380,14 +546,26 @@
   "settlementsYear": "Year",
   "settlementDownloadPdf": "Download PDF",
   "settingsRecipientsCount": "{count, plural, =0{No recipients yet} =1{1 recipient} other{{count} recipients}}",
-  "@settingsRecipientsCount": {"placeholders": {"count": {"type": "int"}}},
+  "@settingsRecipientsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "recipientsTitle": "Send reports to",
   "recipientsHint": "Up to 5 email addresses.",
   "recipientsAdd": "Add email",
   "recipientsEmailHint": "name@company.com",
   "recipientsSaved": "Recipients updated",
   "recipientsRemove": "Remove {email}",
-  "@recipientsRemove": {"placeholders": {"email": {"type": "String"}}},
+  "@recipientsRemove": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSaveFailed": "Could not save. Try again.",
   "settingsPush": "Push notifications",
   "settingsPushHint": "Payout and terminal alerts on this phone",
@@ -396,15 +574,26 @@
   "notificationsEmptyHint": "Payout and terminal alerts will appear here.",
   "notificationsMarkAllRead": "Mark all read",
   "terminalLastSeen": "Last seen {ago}",
-  "@terminalLastSeen": {"placeholders": {"ago": {"type": "String"}}},
+  "@terminalLastSeen": {
+    "placeholders": {
+      "ago": {
+        "type": "String"
+      }
+    }
+  },
   "terminalNeverSeen": "Not seen yet",
   "terminalSerial": "Serial {serial}",
-  "@terminalSerial": {"placeholders": {"serial": {"type": "String"}}},
+  "@terminalSerial": {
+    "placeholders": {
+      "serial": {
+        "type": "String"
+      }
+    }
+  },
   "statusInactive": "Inactive",
   "statusSuspended": "Suspended",
   "statusDisabled": "Disabled",
   "statusFrozen": "Frozen",
-
   "receiptBank": "Issuing bank",
   "receiptProcessor": "Processor",
   "receiptResponse": "Response",
@@ -417,24 +606,62 @@
   "settingsBiometricOff": "Biometric sign-in turned off",
   "salesByTerminal": "By terminal",
   "salesTransactionsSummary": "{count, plural, =1{1 transaction} other{{count} transactions}} · {total}",
-  "@salesTransactionsSummary": {"placeholders": {"count": {"type": "int"}, "total": {"type": "String"}}},
+  "@salesTransactionsSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
   "salesWindow7": "Last 7 days",
   "salesWindow30": "Last 30 days",
   "salesWindow90": "Last 90 days",
   "terminalLabel": "Terminal {tid}",
-  "@terminalLabel": {"placeholders": {"tid": {"type": "String"}}},
+  "@terminalLabel": {
+    "placeholders": {
+      "tid": {
+        "type": "String"
+      }
+    }
+  },
   "dayTotal": "{count, plural, =1{1 sale} other{{count} sales}} · {total}",
-  "@dayTotal": {"placeholders": {"count": {"type": "int"}, "total": {"type": "String"}}},
-
+  "@dayTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
   "listEnd": "That's everything",
   "listShowing": "{shown} of {total}",
-  "@listShowing": {"placeholders": {"shown": {"type": "int"}, "total": {"type": "int"}}},
+  "@listShowing": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "customRange": "Custom range",
   "forgotTitle": "Reset your\npassword",
   "forgotSubtitle": "Enter the email on your Pokopay account and we'll send you a reset link.",
   "forgotButton": "Send reset link",
   "forgotSent": "If an account exists for {email}, a reset link is on its way. Open it on this phone, or paste the code from the email below.",
-  "@forgotSent": {"placeholders": {"email": {"type": "String"}}},
+  "@forgotSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "forgotResend": "Send again",
   "resetTitle": "Choose a new\npassword",
   "resetTokenLabel": "Reset code",
@@ -446,7 +673,6 @@
   "backToLogin": "Back to sign in",
   "haveCode": "I already have a code",
   "validationResetTokenRequired": "Paste the reset code",
-
   "prefAppearance": "Appearance",
   "prefAppearanceSystem": "Match phone setting",
   "prefAppearanceLight": "Light",
@@ -454,5 +680,122 @@
   "prefLanguage": "Language",
   "prefLanguageSystem": "Phone language",
   "prefLanguageSystemHint": "Follow the language set on this phone",
-  "prefLanguageNote": "Yoruba, Hausa, Igbo and Pidgin translations are new. If a phrase reads wrong, send feedback from the Home screen and we'll fix it."
+  "prefLanguageNote": "Yoruba, Hausa, Igbo and Pidgin translations are new. If a phrase reads wrong, send feedback from the Home screen and we'll fix it.",
+  "lockTitle": "Unlock Pokopay",
+  "lockSubtitle": "Enter your 4-digit PIN",
+  "lockWrongPin": "{left, plural, =1{Wrong PIN. 1 attempt left before you are signed out.} other{Wrong PIN. {left} attempts left before you are signed out.}}",
+  "@lockWrongPin": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "lockSignOut": "Sign out instead",
+  "lockSection": "App lock",
+  "lockEnable": "Lock the app",
+  "lockEnableHint": "Ask for Face ID, fingerprint or a PIN when you come back",
+  "lockTimeout": "Lock after",
+  "lockTimeoutHint": "How long the app can stay in the background before it locks",
+  "lockTimeoutImmediately": "Right away",
+  "lockTimeoutMinutes": "{count, plural, =1{1 minute} other{{count} minutes}}",
+  "@lockTimeoutMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lockUseBiometrics": "Unlock with Face ID or fingerprint",
+  "lockUseBiometricsHint": "Your PIN still works as a fallback",
+  "lockChangePin": "Change PIN",
+  "lockPinUpdated": "PIN updated",
+  "lockSetPinTitle": "Choose a PIN",
+  "lockSetPinHint": "4 digits. You'll need it whenever the app locks.",
+  "lockPin": "PIN",
+  "lockPinConfirm": "Confirm PIN",
+  "lockPinFormat": "Enter exactly 4 digits.",
+  "lockPinMismatch": "The PINs don't match.",
+  "lockFootnote": "After {count} wrong PINs the app signs you out to protect your account.",
+  "@lockFootnote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "securityTitle": "Security",
+  "securitySignIn": "Sign-in",
+  "securityChangePassword": "Change password",
+  "sessionsTitle": "Signed-in devices",
+  "sessionsHint": "See where your account is signed in and sign out devices you don't recognise.",
+  "sessionsCurrent": "This device",
+  "sessionsOthers": "Other devices",
+  "sessionsEmpty": "No other devices are signed in.",
+  "sessionsUnknownDevice": "Pokopay app",
+  "sessionsLastActive": "Active {when}",
+  "@sessionsLastActive": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionsRevoke": "Sign out",
+  "sessionsRevokeOthers": "Sign out all other devices",
+  "sessionsRevoked": "Signed out",
+  "insightsTitle": "Insights",
+  "insightsHint": "Best hours, best days and how this week compares",
+  "insightsNoData": "Not enough sales yet",
+  "insightsNoDataHint": "Insights appear once you have a few days of transactions.",
+  "insightsAvgTicket": "Average sale",
+  "insightsApprovalRate": "Approval rate",
+  "insightsBestDay": "Best day",
+  "insightsBestHours": "Busiest hours",
+  "insightsBestDays": "Busiest days",
+  "insightsPeak": "Peak {label}",
+  "@insightsPeak": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsWeekOnWeek": "{delta} vs last week",
+  "@insightsWeekOnWeek": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsMonthToDate": "This month so far",
+  "insightsTopTerminal": "Top terminal",
+  "sendReceiptTitle": "Send to customer",
+  "sendReceiptPhone": "Customer's phone (optional)",
+  "sendReceiptPhoneHint": "0803 000 0000",
+  "sendReceiptWhatsApp": "Send on WhatsApp",
+  "sendReceiptSms": "Send by SMS",
+  "sendReceiptCopy": "Copy receipt text",
+  "sendReceiptCopied": "Receipt copied",
+  "sendReceiptPrint": "Print receipt",
+  "sendReceiptAppMissing": "Couldn't open that app on this phone.",
+  "receiptTextHeader": "Pokopay receipt",
+  "printerTitle": "Receipt printer",
+  "printerSettingsHint": "Pair a Bluetooth printer for paper receipts",
+  "printerHint": "Pair the printer in your phone's Bluetooth settings first, then pick it here.",
+  "printerPaperWidth": "Paper width",
+  "printerPaired": "Paired printers",
+  "printerNoPaired": "No paired printers found",
+  "printerNone": "No printer set up",
+  "printerSelected": "Printer saved",
+  "printerTest": "Print a test page",
+  "printerPrinted": "Sent to printer",
+  "printerBluetoothOff": "Turn on Bluetooth to print",
+  "printerConnectFailed": "Couldn't reach the printer. Check it's on and in range.",
+  "terminalRename": "Rename card machine",
+  "terminalRenameLabel": "Name",
+  "terminalRenameHint": "e.g. Front counter",
+  "terminalRenamed": "Card machine renamed",
+  "terminalRenameUnavailable": "Renaming isn't available yet. Your Pokopay team is enabling it."
 }

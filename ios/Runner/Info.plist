@@ -6,6 +6,16 @@
 		<true/>
 		<key>NSFaceIDUsageDescription</key>
 		<string>Use Face ID to sign in to Pokopay securely.</string>
+		<key>NSBluetoothAlwaysUsageDescription</key>
+		<string>Pokopay connects to your Bluetooth receipt printer to print customer receipts.</string>
+		<key>NSBluetoothPeripheralUsageDescription</key>
+		<string>Pokopay connects to your Bluetooth receipt printer to print customer receipts.</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>whatsapp</string>
+			<string>sms</string>
+			<string>https</string>
+		</array>
 		<key>NSAppTransportSecurity</key>
 		<dict>
 			<key>NSAllowsLocalNetworking</key>
