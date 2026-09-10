@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokopay/features/auth/data/auth_repository.dart';
 
@@ -37,6 +38,48 @@ void main() {
           (e) => e.message,
           'message',
           'No token for you',
+        ),
+      ),
+    );
+  });
+
+  test('502 with an HTML body never leaks the Dio message', () async {
+    final repo = AuthRepository(
+      fakeApi(
+        (o) async => ResponseBody.fromString(
+          '<html>502 Bad Gateway</html>',
+          502,
+          headers: {
+            Headers.contentTypeHeader: ['text/html'],
+          },
+        ),
+      ),
+      FakeSecureStorage(),
+    );
+    expect(
+      () => repo.login(email: 'a@b.com', password: 'pw'),
+      throwsA(
+        isA<AuthException>().having(
+          (e) => e.message,
+          'message',
+          'Pokopay is temporarily unavailable. Please try again in a few minutes.',
+        ),
+      ),
+    );
+  });
+
+  test('a dropped connection on login becomes a plain message', () async {
+    final repo = AuthRepository(
+      fakeApi((o) async => throw offline(o)),
+      FakeSecureStorage(),
+    );
+    expect(
+      () => repo.login(email: 'a@b.com', password: 'pw'),
+      throwsA(
+        isA<AuthException>().having(
+          (e) => e.message,
+          'message',
+          "Couldn't reach Pokopay. Check your connection and try again.",
         ),
       ),
     );

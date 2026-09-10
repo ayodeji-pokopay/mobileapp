@@ -351,8 +351,16 @@ class AuthRepository {
       final msg = data['message'] ?? data['error'];
       if (msg is String && msg.isNotEmpty) return msg;
     }
-    if (e.response?.statusCode == 401) return 'Invalid email or password';
-    return e.message ?? 'Something went wrong. Please try again.';
+    final status = e.response?.statusCode;
+    if (status == 401) return 'Invalid email or password';
+    if (status != null && status >= 500) {
+      return 'Pokopay is temporarily unavailable. Please try again in a few minutes.';
+    }
+    if (e.response == null) {
+      // Timeout, DNS failure, no network: never surface Dio's own text.
+      return "Couldn't reach Pokopay. Check your connection and try again.";
+    }
+    return 'Something went wrong. Please try again.';
   }
 }
 
