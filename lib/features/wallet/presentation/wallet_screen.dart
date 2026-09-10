@@ -48,7 +48,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
           children: [
             const OfflineBanner(),
             AsyncSlot<MerchantSettlementSummary>(

@@ -72,7 +72,7 @@
   "dashboardPay": "Wallet",
   "dashboardAdd": "Settlements",
   "dashboardGrossSalesToday": "Sales today",
-  "dashboardFirstSale": "Ready for your first sale",
+  "dashboardFirstSale": "No sales yet today",
   "dashboardTransactionsToday": "{count, plural, =1{1 transaction} other{{count} transactions}}",
   "@dashboardTransactionsToday": {"placeholders": {"count": {"type": "int"}}},
   "dashboardTodaysSettlements": "Pending payout",

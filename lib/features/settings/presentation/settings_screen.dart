@@ -66,7 +66,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       title: l10n.settingsTitle,
       bottomNav: const PokoBottomNav(active: NavTab.settings),
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         children: [
           SectionLabel(l10n.settingsPersonal, color: AppColors.textSecondary),
           ListCard(

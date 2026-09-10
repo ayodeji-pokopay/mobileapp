@@ -483,9 +483,13 @@ class _GrossSalesCard extends StatelessWidget {
             txns == 0
                 ? l10n.dashboardFirstSale
                 : l10n.dashboardTransactionsToday(txns),
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: AppText.body(size: 12, color: AppColors.primary),
+            style: AppText.body(
+              size: 12,
+              color: AppColors.primary,
+              height: 1.25,
+            ),
           ),
           const SizedBox(height: 10),
           _Sparkline(values: bars),
