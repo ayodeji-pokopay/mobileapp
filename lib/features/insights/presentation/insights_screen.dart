@@ -33,15 +33,16 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final days = _windows[_w];
-    final txns = ref.watch(allTransactionsProvider(days));
+    final txns = ref.watch(insightsProvider(days));
     final locale = Localizations.localeOf(context).toString();
 
     return BackScaffold(
       title: l10n.insightsTitle,
       child: RefreshIndicator(
         onRefresh: () async {
+          ref.invalidate(insightsProvider(days));
           ref.invalidate(allTransactionsProvider(days));
-          await ref.read(allTransactionsProvider(days).future);
+          await ref.read(insightsProvider(days).future);
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -61,12 +62,11 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
               onChanged: (i) => setState(() => _w = i),
             ),
             const SizedBox(height: 16),
-            AsyncSlot<List<dynamic>>(
+            AsyncSlot<InsightsStats>(
               value: txns,
               loadingHeight: 320,
-              onRetry: () => ref.invalidate(allTransactionsProvider(days)),
-              data: (list) {
-                final s = InsightsStats.compute(list.cast(), days);
+              onRetry: () => ref.invalidate(insightsProvider(days)),
+              data: (s) {
                 if (s.isEmpty) {
                   return EmptyState(
                     icon: LucideIcons.chartNoAxesColumn,
@@ -92,8 +92,12 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
                           child: _Kpi(
                             label: l10n.salesGross,
                             value: formatMoney(s.totalSales),
-                            delta: s.weekOnWeek,
-                            deltaLabel: (v) => l10n.insightsWeekOnWeek(v),
+                            delta: s.fromServer ? s.periodDelta : s.weekOnWeek,
+                            isNew: s.periodIsNew,
+                            newLabel: l10n.insightsNew,
+                            deltaLabel: (v) => s.fromServer
+                                ? l10n.salesVsPrevious(v)
+                                : l10n.insightsWeekOnWeek(v),
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -135,8 +139,10 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
                       highlight: l10n.insightsPeak(hourFmt.format(peak)),
                       child: BarChart(
                         values: s.byHour,
-                        xLabels: ['12am', '6am', '12pm', '6pm', '11pm'],
-                        yFormat: formatMoneyCompact,
+                        xLabels: const ['12am', '6am', '12pm', '6pm', '11pm'],
+                        yFormat: s.byHourIsCount
+                            ? (v) => formatNumber(v.round())
+                            : formatMoneyCompact,
                         height: 110,
                       ),
                     ),
@@ -193,12 +199,16 @@ class _Kpi extends StatelessWidget {
     this.sub,
     this.delta,
     this.deltaLabel,
+    this.isNew = false,
+    this.newLabel,
   });
   final String label;
   final String value;
   final String? sub;
   final double? delta;
   final String Function(String)? deltaLabel;
+  final bool isNew;
+  final String? newLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -219,7 +229,9 @@ class _Kpi extends StatelessWidget {
             child: Text(value, style: AppText.money(size: 20)),
           ),
           const SizedBox(height: 4),
-          if (deltaLabel != null)
+          if (isNew && newLabel != null)
+            StatusPill(label: newLabel!, tone: PillTone.success)
+          else if (deltaLabel != null)
             DeltaPill(delta: delta, label: deltaLabel!)
           else if (sub != null)
             Text(

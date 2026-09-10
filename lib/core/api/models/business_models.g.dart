@@ -90,6 +90,10 @@ _NotificationItem _$NotificationItemFromJson(Map<String, dynamic> json) =>
       reference: json['reference'] as String?,
       read: json['read'] as bool? ?? false,
       createdAt: json['createdAt'] as String?,
+      severity: json['severity'] as String?,
+      rule: json['rule'] as String?,
+      evidence: json['evidence'] as Map<String, dynamic>?,
+      acknowledged: json['acknowledged'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$NotificationItemToJson(_NotificationItem instance) =>
@@ -101,6 +105,10 @@ Map<String, dynamic> _$NotificationItemToJson(_NotificationItem instance) =>
       'reference': instance.reference,
       'read': instance.read,
       'createdAt': instance.createdAt,
+      'severity': instance.severity,
+      'rule': instance.rule,
+      'evidence': instance.evidence,
+      'acknowledged': instance.acknowledged,
     };
 
 _NotificationFeed _$NotificationFeedFromJson(Map<String, dynamic> json) =>

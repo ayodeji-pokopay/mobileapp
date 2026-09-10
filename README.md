@@ -171,7 +171,9 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 
 **App lock.** `lib/core/lock/` holds `AppLockController` (a `Notifier` that is also a `WidgetsBindingObserver`) and `LockScreen`. When enabled from Settings › Security, the app covers its content whenever it leaves the foreground and, after the chosen timeout (right away, 1, 5 or 15 minutes), demands Face ID / fingerprint or a 4-digit PIN. The PIN is stored only as a salted SHA-256 hash in secure storage; five wrong PINs sign the user out. The overlay is mounted from the `MaterialApp.builder` in `main.dart`, so it sits above every route.
 
-**Insights.** `InsightsStats.compute` (pure Dart, unit-tested) aggregates the transaction window served by `allTransactionsProvider(days)` into hour-of-day, weekday, per-day, per-terminal totals, approval rate, average sale, week-on-week and month-to-date. Nothing is fetched from a dedicated insights endpoint yet; when the backend ships `/merchant/insights` the screen can switch to it without UI changes.
+**Insights.** `insightsProvider(days)` calls the backend's reporting endpoints in parallel (`summary-comparison`, `weekday`, `hourly`, `by-terminal`, `timeseries`, all bucketed in Africa/Lagos) and maps them with `InsightsStats.fromReports`. If those endpoints are unreachable on an older backend it falls back to `InsightsStats.compute`, which sums the raw transaction window on the phone. A null previous-period change is shown as "New", never as +100%.
+
+**Suspicious-activity alerts.** Notifications with `type = SUSPICIOUS_ACTIVITY` carry `severity`, `rule`, `evidence` and `acknowledged`. Unreviewed ones appear first in the feed as alert cards with "Mark as reviewed" (`POST /merchant/notifications/{id}/acknowledge`, which also re-arms detection for that terminal and rule) and as a red banner on Home. Known rule: `REVERSAL_BURST`.
 
 **Receipts to customers.** The receipt sheet offers "Send to customer": WhatsApp (`wa.me`), SMS (`sms:`), clipboard, or a paired ESC/POS Bluetooth thermal printer (`lib/core/printing/receipt_printer.dart`, 58 or 80 mm, set up under Settings › Receipt printer). Thermal fonts rarely include ₦, so printed receipts say `NGN`.
 
@@ -209,6 +211,8 @@ All paths are relative to `API_BASE_URL`.
 | GET | `/api/v1/merchant/statements?mid=&year=` and `/{id}/pdf` | Settlements › Statements, PDF download |
 | GET | `/api/v1/merchant/terminals?mid=` | My business › POS terminals, drawer count |
 | PUT | `/api/v1/merchant/terminals/{id}?mid=` | Rename a card machine (backend pending; 5xx shows "not available yet") |
+| GET | `/api/v1/merchant/reports/transactions/summary-comparison`, `weekday`, `hourly`, `by-terminal`, `timeseries` | Insights (Lagos-time buckets; client fallback if absent) |
+| POST | `/api/v1/merchant/notifications/{id}/acknowledge` | Mark a suspicious-activity alert reviewed |
 | GET | `/api/v1/users/me/sessions` | Settings › Security › Signed-in devices |
 | DELETE | `/api/v1/users/me/sessions/{tokenId}` | Sign out one device |
 | POST | `/api/v1/users/me/sessions/revoke-others` | Sign out all other devices |

@@ -797,5 +797,35 @@
   "terminalRenameLabel": "Name",
   "terminalRenameHint": "e.g. Front counter",
   "terminalRenamed": "Card machine renamed",
-  "terminalRenameUnavailable": "Renaming isn't available yet. Your Pokopay team is enabling it."
+  "terminalRenameUnavailable": "Renaming isn't available yet. Your Pokopay team is enabling it.",
+  "insightsNew": "New",
+  "alertsTitle": "Suspicious activity",
+  "alertsNeedsReview": "Needs your review",
+  "alertsSeverityHigh": "High",
+  "alertsMarkReviewed": "Mark as reviewed",
+  "alertsReviewed": "Alert marked as reviewed",
+  "alertsViewTerminal": "View card machines",
+  "alertsReversalBurst": "{count, plural, =1{1 reversal} other{{count} reversals}} in {minutes} min on {tid}",
+  "@alertsReversalBurst": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      },
+      "tid": {
+        "type": "String"
+      }
+    }
+  },
+  "alertsBannerTitle": "{count, plural, =1{1 alert needs your review} other{{count} alerts need your review}}",
+  "@alertsBannerTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "alertsBannerBody": "We spotted unusual activity on a card machine. Take a look and mark it reviewed."
 }

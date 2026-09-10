@@ -870,7 +870,8 @@ as String?,
 /// @nodoc
 mixin _$NotificationItem {
 
- String? get id; String? get type; String? get title; String? get body; String? get reference; bool get read; String? get createdAt;
+ String? get id; String? get type; String? get title; String? get body; String? get reference; bool get read; String? get createdAt;// Suspicious-activity alerts (type == SUSPICIOUS_ACTIVITY) only.
+ String? get severity; String? get rule; Map<String, dynamic>? get evidence; bool get acknowledged;
 /// Create a copy of NotificationItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -883,16 +884,16 @@ $NotificationItemCopyWith<NotificationItem> get copyWith => _$NotificationItemCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotificationItem&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.title, title) || other.title == title)&&(identical(other.body, body) || other.body == body)&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.read, read) || other.read == read)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotificationItem&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.title, title) || other.title == title)&&(identical(other.body, body) || other.body == body)&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.read, read) || other.read == read)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.rule, rule) || other.rule == rule)&&const DeepCollectionEquality().equals(other.evidence, evidence)&&(identical(other.acknowledged, acknowledged) || other.acknowledged == acknowledged));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,title,body,reference,read,createdAt);
+int get hashCode => Object.hash(runtimeType,id,type,title,body,reference,read,createdAt,severity,rule,const DeepCollectionEquality().hash(evidence),acknowledged);
 
 @override
 String toString() {
-  return 'NotificationItem(id: $id, type: $type, title: $title, body: $body, reference: $reference, read: $read, createdAt: $createdAt)';
+  return 'NotificationItem(id: $id, type: $type, title: $title, body: $body, reference: $reference, read: $read, createdAt: $createdAt, severity: $severity, rule: $rule, evidence: $evidence, acknowledged: $acknowledged)';
 }
 
 
@@ -903,7 +904,7 @@ abstract mixin class $NotificationItemCopyWith<$Res>  {
   factory $NotificationItemCopyWith(NotificationItem value, $Res Function(NotificationItem) _then) = _$NotificationItemCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? type, String? title, String? body, String? reference, bool read, String? createdAt
+ String? id, String? type, String? title, String? body, String? reference, bool read, String? createdAt, String? severity, String? rule, Map<String, dynamic>? evidence, bool acknowledged
 });
 
 
@@ -920,7 +921,7 @@ class _$NotificationItemCopyWithImpl<$Res>
 
 /// Create a copy of NotificationItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? type = freezed,Object? title = freezed,Object? body = freezed,Object? reference = freezed,Object? read = null,Object? createdAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? type = freezed,Object? title = freezed,Object? body = freezed,Object? reference = freezed,Object? read = null,Object? createdAt = freezed,Object? severity = freezed,Object? rule = freezed,Object? evidence = freezed,Object? acknowledged = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -929,7 +930,11 @@ as String?,body: freezed == body ? _self.body : body // ignore: cast_nullable_to
 as String?,reference: freezed == reference ? _self.reference : reference // ignore: cast_nullable_to_non_nullable
 as String?,read: null == read ? _self.read : read // ignore: cast_nullable_to_non_nullable
 as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,severity: freezed == severity ? _self.severity : severity // ignore: cast_nullable_to_non_nullable
+as String?,rule: freezed == rule ? _self.rule : rule // ignore: cast_nullable_to_non_nullable
+as String?,evidence: freezed == evidence ? _self.evidence : evidence // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,acknowledged: null == acknowledged ? _self.acknowledged : acknowledged // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -1014,10 +1019,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? type,  String? title,  String? body,  String? reference,  bool read,  String? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? type,  String? title,  String? body,  String? reference,  bool read,  String? createdAt,  String? severity,  String? rule,  Map<String, dynamic>? evidence,  bool acknowledged)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NotificationItem() when $default != null:
-return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that.read,_that.createdAt);case _:
+return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that.read,_that.createdAt,_that.severity,_that.rule,_that.evidence,_that.acknowledged);case _:
   return orElse();
 
 }
@@ -1035,10 +1040,10 @@ return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? type,  String? title,  String? body,  String? reference,  bool read,  String? createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? type,  String? title,  String? body,  String? reference,  bool read,  String? createdAt,  String? severity,  String? rule,  Map<String, dynamic>? evidence,  bool acknowledged)  $default,) {final _that = this;
 switch (_that) {
 case _NotificationItem():
-return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that.read,_that.createdAt);case _:
+return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that.read,_that.createdAt,_that.severity,_that.rule,_that.evidence,_that.acknowledged);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1055,10 +1060,10 @@ return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? type,  String? title,  String? body,  String? reference,  bool read,  String? createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? type,  String? title,  String? body,  String? reference,  bool read,  String? createdAt,  String? severity,  String? rule,  Map<String, dynamic>? evidence,  bool acknowledged)?  $default,) {final _that = this;
 switch (_that) {
 case _NotificationItem() when $default != null:
-return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that.read,_that.createdAt);case _:
+return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that.read,_that.createdAt,_that.severity,_that.rule,_that.evidence,_that.acknowledged);case _:
   return null;
 
 }
@@ -1069,8 +1074,8 @@ return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that
 /// @nodoc
 @JsonSerializable()
 
-class _NotificationItem implements NotificationItem {
-  const _NotificationItem({this.id, this.type, this.title, this.body, this.reference, this.read = false, this.createdAt});
+class _NotificationItem extends NotificationItem {
+  const _NotificationItem({this.id, this.type, this.title, this.body, this.reference, this.read = false, this.createdAt, this.severity, this.rule, final  Map<String, dynamic>? evidence, this.acknowledged = false}): _evidence = evidence,super._();
   factory _NotificationItem.fromJson(Map<String, dynamic> json) => _$NotificationItemFromJson(json);
 
 @override final  String? id;
@@ -1080,6 +1085,19 @@ class _NotificationItem implements NotificationItem {
 @override final  String? reference;
 @override@JsonKey() final  bool read;
 @override final  String? createdAt;
+// Suspicious-activity alerts (type == SUSPICIOUS_ACTIVITY) only.
+@override final  String? severity;
+@override final  String? rule;
+ final  Map<String, dynamic>? _evidence;
+@override Map<String, dynamic>? get evidence {
+  final value = _evidence;
+  if (value == null) return null;
+  if (_evidence is EqualUnmodifiableMapView) return _evidence;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
+@override@JsonKey() final  bool acknowledged;
 
 /// Create a copy of NotificationItem
 /// with the given fields replaced by the non-null parameter values.
@@ -1094,16 +1112,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NotificationItem&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.title, title) || other.title == title)&&(identical(other.body, body) || other.body == body)&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.read, read) || other.read == read)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NotificationItem&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.title, title) || other.title == title)&&(identical(other.body, body) || other.body == body)&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.read, read) || other.read == read)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.rule, rule) || other.rule == rule)&&const DeepCollectionEquality().equals(other._evidence, _evidence)&&(identical(other.acknowledged, acknowledged) || other.acknowledged == acknowledged));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,title,body,reference,read,createdAt);
+int get hashCode => Object.hash(runtimeType,id,type,title,body,reference,read,createdAt,severity,rule,const DeepCollectionEquality().hash(_evidence),acknowledged);
 
 @override
 String toString() {
-  return 'NotificationItem(id: $id, type: $type, title: $title, body: $body, reference: $reference, read: $read, createdAt: $createdAt)';
+  return 'NotificationItem(id: $id, type: $type, title: $title, body: $body, reference: $reference, read: $read, createdAt: $createdAt, severity: $severity, rule: $rule, evidence: $evidence, acknowledged: $acknowledged)';
 }
 
 
@@ -1114,7 +1132,7 @@ abstract mixin class _$NotificationItemCopyWith<$Res> implements $NotificationIt
   factory _$NotificationItemCopyWith(_NotificationItem value, $Res Function(_NotificationItem) _then) = __$NotificationItemCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? type, String? title, String? body, String? reference, bool read, String? createdAt
+ String? id, String? type, String? title, String? body, String? reference, bool read, String? createdAt, String? severity, String? rule, Map<String, dynamic>? evidence, bool acknowledged
 });
 
 
@@ -1131,7 +1149,7 @@ class __$NotificationItemCopyWithImpl<$Res>
 
 /// Create a copy of NotificationItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? type = freezed,Object? title = freezed,Object? body = freezed,Object? reference = freezed,Object? read = null,Object? createdAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? type = freezed,Object? title = freezed,Object? body = freezed,Object? reference = freezed,Object? read = null,Object? createdAt = freezed,Object? severity = freezed,Object? rule = freezed,Object? evidence = freezed,Object? acknowledged = null,}) {
   return _then(_NotificationItem(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -1140,7 +1158,11 @@ as String?,body: freezed == body ? _self.body : body // ignore: cast_nullable_to
 as String?,reference: freezed == reference ? _self.reference : reference // ignore: cast_nullable_to_non_nullable
 as String?,read: null == read ? _self.read : read // ignore: cast_nullable_to_non_nullable
 as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,severity: freezed == severity ? _self.severity : severity // ignore: cast_nullable_to_non_nullable
+as String?,rule: freezed == rule ? _self.rule : rule // ignore: cast_nullable_to_non_nullable
+as String?,evidence: freezed == evidence ? _self._evidence : evidence // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,acknowledged: null == acknowledged ? _self.acknowledged : acknowledged // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

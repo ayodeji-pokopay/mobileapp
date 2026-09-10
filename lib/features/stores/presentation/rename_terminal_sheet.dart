@@ -8,7 +8,8 @@ import '../../../core/theme/app_text.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/error_text.dart';
 import '../../auth/presentation/auth_controller.dart';
-import '../../merchant/data/merchant_repository.dart' show merchantRepositoryProvider;
+import '../../merchant/data/merchant_repository.dart'
+    show merchantRepositoryProvider;
 import '../../merchant/presentation/merchant_providers.dart';
 
 Future<void> showRenameTerminalSheet(BuildContext context, TerminalResponse t) {

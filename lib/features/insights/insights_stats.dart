@@ -1,3 +1,4 @@
+import '../../core/api/models/insights_models.dart';
 import '../../core/api/models/transaction_models.dart';
 
 /// Pure aggregation over a window of transactions. Kept free of Flutter
@@ -21,7 +22,28 @@ class InsightsStats {
     required this.bestDayAmount,
     required this.topTerminal,
     required this.topTerminalAmount,
+    this.fromServer = false,
+    this.byHourIsCount = false,
+    this.fees,
+    this.periodDelta,
+    this.periodIsNew = false,
   });
+
+  /// True when the numbers came from the backend's reporting endpoints
+  /// (Lagos-time buckets, whole-window comparison) rather than being
+  /// summed from the transaction list on the phone.
+  final bool fromServer;
+
+  /// Server hourly buckets carry counts, not amounts.
+  final bool byHourIsCount;
+  final double? fees;
+
+  /// Percent change of approved amount vs the preceding window of the
+  /// same length. Null when unknown.
+  final double? periodDelta;
+
+  /// The preceding window had no data at all: show "new", not a percent.
+  final bool periodIsNew;
 
   final double totalSales;
   final int count;
@@ -70,6 +92,88 @@ class InsightsStats {
   }
 
   bool get isEmpty => count == 0;
+
+  /// Builds the same view from the backend's aggregate endpoints.
+  /// [monthSeries] is the timeseries from the 1st of this month to today.
+  static InsightsStats fromReports({
+    required SummaryComparison comparison,
+    required List<WeekdayBucket> weekday,
+    required List<HourBucket> hourly,
+    required List<TerminalBucket> terminals,
+    required List<DayPoint> series,
+    required List<DayPoint> monthSeries,
+    required int days,
+    DateTime? now,
+  }) {
+    final today = now ?? DateTime.now();
+    final startOfToday = DateTime(today.year, today.month, today.day);
+    final windowStart = startOfToday.subtract(Duration(days: days - 1));
+    final weekStart = startOfToday.subtract(Duration(days: today.weekday - 1));
+    final lastWeekStart = weekStart.subtract(const Duration(days: 7));
+
+    final byHour = List<double>.filled(24, 0);
+    for (final h in hourly) {
+      if (h.hour >= 0 && h.hour < 24) byHour[h.hour] = h.approved.toDouble();
+    }
+    final byWeekday = List<double>.filled(7, 0);
+    for (final w in weekday) {
+      if (w.isoDayOfWeek >= 1 && w.isoDayOfWeek <= 7) {
+        byWeekday[w.isoDayOfWeek - 1] = w.approvedAmount;
+      }
+    }
+    final byDay = List<double>.filled(days, 0);
+    DateTime? bestDay;
+    var bestAmt = 0.0, thisWeek = 0.0, lastWeek = 0.0;
+    for (final p in series) {
+      final d = DateTime(p.date.year, p.date.month, p.date.day);
+      final i = d.difference(windowStart).inDays;
+      if (i >= 0 && i < days) byDay[i] = p.approvedAmount;
+      if (p.approvedAmount > bestAmt) {
+        bestAmt = p.approvedAmount;
+        bestDay = d;
+      }
+      if (!d.isBefore(weekStart)) {
+        thisWeek += p.approvedAmount;
+      } else if (!d.isBefore(lastWeekStart)) {
+        lastWeek += p.approvedAmount;
+      }
+    }
+    final byTerminal = {for (final t in terminals) t.tid: t.approvedAmount};
+    final top = terminals.isEmpty ? null : terminals.first;
+    var mtd = 0.0;
+    var monthCount = 0;
+    for (final p in monthSeries) {
+      mtd += p.approvedAmount;
+      monthCount += p.approved;
+    }
+    final c = comparison.current;
+    return InsightsStats(
+      totalSales: c.approvedAmount,
+      count: c.total,
+      approvedCount: c.approved,
+      averageTicket: c.approved == 0 ? 0 : c.approvedAmount / c.approved,
+      approvalRate: c.approvalRate / 100,
+      byHour: byHour,
+      byWeekday: byWeekday,
+      byDay: byDay,
+      byTerminal: byTerminal,
+      thisWeek: thisWeek,
+      lastWeek: lastWeek,
+      monthToDate: mtd,
+      monthCount: monthCount,
+      bestDay: bestDay,
+      bestDayAmount: bestAmt,
+      topTerminal: top?.tid,
+      topTerminalAmount: top?.approvedAmount ?? 0,
+      fromServer: true,
+      byHourIsCount: true,
+      fees: c.approvedFees,
+      periodDelta: comparison.approvedAmountChangePct,
+      periodIsNew:
+          comparison.previous == null ||
+          (comparison.previous!.total == 0 && c.total > 0),
+    );
+  }
 
   static InsightsStats compute(
     List<TransactionResponse> txns,

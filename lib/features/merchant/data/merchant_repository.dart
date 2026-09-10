@@ -7,6 +7,7 @@ import 'dart:typed_data';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/models/business_models.dart';
+import '../../../core/api/models/insights_models.dart';
 import '../../../core/api/models/merchant_models.dart';
 import '../../../core/api/models/transaction_models.dart';
 import '../../../core/api/models/wallet_models.dart';
@@ -402,6 +403,76 @@ class MerchantRepository {
     return MerchantPreferences.fromJson(json);
   }
 
+  // ── Insights (reports/transactions/*) ───────────────────────────────
+
+  Map<String, dynamic> _window(String mid, DateTime start, DateTime end) => {
+    'mid': mid,
+    'startDate': _formatDate(start),
+    'endDate': _formatDate(end),
+  };
+
+  Future<T> _report<T>(
+    String name,
+    Map<String, dynamic> query,
+    T Function(Object? data) parse,
+  ) async {
+    final res = await _api.dio.get<Object>(
+      '/api/v1/merchant/reports/transactions/$name',
+      queryParameters: query,
+    );
+    return parse(res.data);
+  }
+
+  Future<SummaryComparison> fetchSummaryComparison({
+    required String mid,
+    required DateTime start,
+    required DateTime end,
+  }) => _report(
+    'summary-comparison',
+    _window(mid, start, end),
+    (d) => SummaryComparison.fromJson((d as Map).cast()),
+  );
+
+  Future<List<WeekdayBucket>> fetchWeekday({
+    required String mid,
+    required DateTime start,
+    required DateTime end,
+  }) => _report(
+    'weekday',
+    _window(mid, start, end),
+    (d) => parseList(d, WeekdayBucket.fromJson),
+  );
+
+  Future<List<HourBucket>> fetchHourly({
+    required String mid,
+    required DateTime start,
+    required DateTime end,
+  }) => _report(
+    'hourly',
+    _window(mid, start, end),
+    (d) => parseList(d, HourBucket.fromJson),
+  );
+
+  Future<List<TerminalBucket>> fetchByTerminal({
+    required String mid,
+    required DateTime start,
+    required DateTime end,
+  }) => _report(
+    'by-terminal',
+    _window(mid, start, end),
+    (d) => parseList(d, TerminalBucket.fromJson),
+  );
+
+  Future<List<DayPoint>> fetchTimeseries({
+    required String mid,
+    required DateTime start,
+    required DateTime end,
+  }) => _report(
+    'timeseries',
+    _window(mid, start, end),
+    (d) => parseList(d, DayPoint.fromJson),
+  );
+
   // ── Notifications ───────────────────────────────────────────────────
 
   Future<NotificationFeed> fetchNotifications({
@@ -419,6 +490,12 @@ class MerchantRepository {
       return _cached('notifications:$mid', fetch, NotificationFeed.fromJson);
     }
     return fetch().then(NotificationFeed.fromJson);
+  }
+
+  /// Marks a suspicious-activity alert as reviewed (and read); re-arms
+  /// detection for that terminal + rule.
+  Future<void> acknowledgeNotification(String id) async {
+    await _api.dio.post<void>('/api/v1/merchant/notifications/$id/acknowledge');
   }
 
   Future<void> markNotificationRead(String id) async {

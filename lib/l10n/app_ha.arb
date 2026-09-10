@@ -514,5 +514,35 @@
   "terminalRenameLabel": "Suna",
   "terminalRenameHint": "misali Kantin gaba",
   "terminalRenamed": "An sauya sunan na'urar kati",
-  "terminalRenameUnavailable": "Sauya suna bai samu ba tukuna. Ƙungiyar Pokopay na kunna shi."
+  "terminalRenameUnavailable": "Sauya suna bai samu ba tukuna. Ƙungiyar Pokopay na kunna shi.",
+  "insightsNew": "Sabo",
+  "alertsTitle": "Ayyukan tuhuma",
+  "alertsNeedsReview": "Yana buƙatar dubawarka",
+  "alertsSeverityHigh": "Babba",
+  "alertsMarkReviewed": "Alama an duba",
+  "alertsReviewed": "An yi wa faɗakarwa alamar an duba",
+  "alertsViewTerminal": "Duba na'urorin kati",
+  "alertsReversalBurst": "{count, plural, =1{juyawa 1} other{juyawa {count}}} cikin minti {minutes} a {tid}",
+  "@alertsReversalBurst": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      },
+      "tid": {
+        "type": "String"
+      }
+    }
+  },
+  "alertsBannerTitle": "{count, plural, =1{Faɗakarwa 1 na buƙatar dubawarka} other{Faɗakarwa {count} na buƙatar dubawarka}}",
+  "@alertsBannerTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "alertsBannerBody": "Mun lura da ayyuka marasa kyau a na'urar kati. Duba ka yi mata alamar an duba."
 }

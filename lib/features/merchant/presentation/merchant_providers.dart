@@ -1,10 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/models/business_models.dart';
+import '../../../core/api/models/insights_models.dart';
 import '../../../core/api/models/merchant_models.dart';
 import '../../../core/api/models/transaction_models.dart';
 import '../../../core/api/models/wallet_models.dart';
 import '../../auth/presentation/auth_controller.dart';
+import '../../insights/insights_stats.dart';
 import '../data/merchant_repository.dart';
 export '../data/merchant_repository.dart' show MerchantSummaryItem;
 
@@ -323,6 +326,26 @@ class NotificationsController extends AsyncNotifier<NotificationFeed> {
     return ref.watch(merchantRepositoryProvider).fetchNotifications(mid: mid);
   }
 
+  /// Optimistically marks an alert reviewed, then tells the backend.
+  Future<void> acknowledge(String id) async {
+    final current = state.asData?.value;
+    if (current == null) return;
+    state = AsyncData(
+      current.copyWith(
+        content: [
+          for (final n in current.content)
+            if (n.id == id) n.copyWith(acknowledged: true, read: true) else n,
+        ],
+      ),
+    );
+    try {
+      await ref.read(merchantRepositoryProvider).acknowledgeNotification(id);
+    } catch (_) {
+      ref.invalidateSelf();
+      rethrow;
+    }
+  }
+
   Future<void> markAllRead() async {
     final mid = ref.read(_midProvider);
     final current = state.asData?.value;
@@ -539,3 +562,45 @@ final allTransactionsProvider =
       }
       return out;
     });
+
+/// Insights for the last [days] days. Uses the backend's reporting
+/// endpoints (Lagos-time buckets, previous-period comparison) and falls
+/// back to summing the transaction list on the phone if they are not
+/// reachable, so the screen keeps working on older backends.
+final insightsProvider = FutureProvider.family<InsightsStats, int>((
+  ref,
+  days,
+) async {
+  final mid = ref.watch(_midProvider);
+  if (mid == null || mid.isEmpty) throw _noMerchant();
+  final repo = ref.watch(merchantRepositoryProvider);
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final start = today.subtract(Duration(days: days - 1));
+  final monthStart = DateTime(now.year, now.month, 1);
+  try {
+    final results = await Future.wait<Object>([
+      repo.fetchSummaryComparison(mid: mid, start: start, end: today),
+      repo.fetchWeekday(mid: mid, start: start, end: today),
+      repo.fetchHourly(mid: mid, start: start, end: today),
+      repo.fetchByTerminal(mid: mid, start: start, end: today),
+      repo.fetchTimeseries(mid: mid, start: start, end: today),
+      repo.fetchTimeseries(mid: mid, start: monthStart, end: today),
+    ]);
+    return InsightsStats.fromReports(
+      comparison: results[0] as SummaryComparison,
+      weekday: results[1] as List<WeekdayBucket>,
+      hourly: results[2] as List<HourBucket>,
+      terminals: results[3] as List<TerminalBucket>,
+      series: results[4] as List<DayPoint>,
+      monthSeries: results[5] as List<DayPoint>,
+      days: days,
+      now: now,
+    );
+  } on DioException catch (e) {
+    // Offline: let the caller show the offline state, not stale maths.
+    if (MerchantRepository.isOffline(e)) rethrow;
+    final txns = await ref.watch(allTransactionsProvider(days).future);
+    return InsightsStats.compute(txns, days, now: now);
+  }
+});

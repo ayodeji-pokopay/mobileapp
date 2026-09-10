@@ -514,5 +514,35 @@
   "terminalRenameLabel": "Aha",
   "terminalRenameHint": "dịka Tebụl ihu",
   "terminalRenamed": "Agbanwela aha igwe kaadị",
-  "terminalRenameUnavailable": "Mgbanwe aha adịbeghị. Ndị otu Pokopay gị na-eme ka ọ rụọ ọrụ."
+  "terminalRenameUnavailable": "Mgbanwe aha adịbeghị. Ndị otu Pokopay gị na-eme ka ọ rụọ ọrụ.",
+  "insightsNew": "Ọhụrụ",
+  "alertsTitle": "Omume enyo",
+  "alertsNeedsReview": "Ọ chọrọ nyocha gị",
+  "alertsSeverityHigh": "Elu",
+  "alertsMarkReviewed": "Kaa akara dịka enyochara",
+  "alertsReviewed": "Akaa mkpesa akara dịka enyochara",
+  "alertsViewTerminal": "Lee igwe kaadị",
+  "alertsReversalBurst": "{count, plural, =1{mgbanwe 1} other{mgbanwe {count}}} n'ime nkeji {minutes} na {tid}",
+  "@alertsReversalBurst": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      },
+      "tid": {
+        "type": "String"
+      }
+    }
+  },
+  "alertsBannerTitle": "{count, plural, =1{Mkpesa 1 chọrọ nyocha gị} other{Mkpesa {count} chọrọ nyocha gị}}",
+  "@alertsBannerTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "alertsBannerBody": "Anyị hụrụ omume na-adịghị mma na igwe kaadị. Lee ya ma kaa ya akara dịka enyochara."
 }

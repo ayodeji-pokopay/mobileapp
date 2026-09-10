@@ -44,6 +44,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final recent = ref.watch(recentTransactionsProvider);
     final unread =
         ref.watch(notificationsProvider).asData?.value.unreadCount ?? 0;
+    final alerts =
+        ref
+            .watch(notificationsProvider)
+            .asData
+            ?.value
+            .content
+            .where((n) => n.needsReview)
+            .length ??
+        0;
     final businessName = ref.watch(businessNameProvider);
 
     final balance =
@@ -108,6 +117,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   ),
                 ],
               ),
+              if (alerts > 0) ...[
+                const SizedBox(height: 12),
+                _AlertBanner(
+                  count: alerts,
+                  onTap: () => context.push(AppRoutes.notifications),
+                ),
+              ],
               if (_showFeedback) ...[
                 const SizedBox(height: 12),
                 _FeedbackBanner(
@@ -702,6 +718,58 @@ class _PayoutCard extends StatelessWidget {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Unreviewed suspicious-activity alerts. Tapping opens the feed.
+class _AlertBanner extends StatelessWidget {
+  const _AlertBanner({required this.count, required this.onTap});
+  final int count;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SurfaceCard(
+      radius: 14,
+      padding: const EdgeInsets.all(12),
+      color: AppColors.dangerBg,
+      onTap: onTap,
+      child: Row(
+        children: [
+          const IconBubble(
+            icon: LucideIcons.shieldAlert,
+            tone: PillTone.danger,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.alertsBannerTitle(count),
+                  style: AppText.body(
+                    size: 14,
+                    weight: FontWeight.w600,
+                    color: AppColors.danger,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  l10n.alertsBannerBody,
+                  style: AppText.body(
+                    size: 12.5,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Icon(LucideIcons.chevronRight, size: 18, color: AppColors.danger),
         ],
       ),
     );

@@ -514,5 +514,35 @@
   "terminalRenameLabel": "Orúkọ",
   "terminalRenameHint": "bíi Iwájú kóńtà",
   "terminalRenamed": "A ti tún ẹ̀rọ káàdì lórúkọ",
-  "terminalRenameUnavailable": "Ìtúnlórúkọ kò tíì wà. Ẹgbẹ́ Pokopay rẹ ń mú un ṣiṣẹ́."
+  "terminalRenameUnavailable": "Ìtúnlórúkọ kò tíì wà. Ẹgbẹ́ Pokopay rẹ ń mú un ṣiṣẹ́.",
+  "insightsNew": "Tuntun",
+  "alertsTitle": "Ìṣe ìfura",
+  "alertsNeedsReview": "Ó nílò àyẹ̀wò rẹ",
+  "alertsSeverityHigh": "Gíga",
+  "alertsMarkReviewed": "Sàmì sí àyẹ̀wò",
+  "alertsReviewed": "A ti sàmì ìkìlọ̀ sí àyẹ̀wò",
+  "alertsViewTerminal": "Wo àwọn ẹ̀rọ káàdì",
+  "alertsReversalBurst": "{count, plural, =1{ìyípadà 1} other{ìyípadà {count}}} ní ìṣẹ́jú {minutes} lórí {tid}",
+  "@alertsReversalBurst": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      },
+      "tid": {
+        "type": "String"
+      }
+    }
+  },
+  "alertsBannerTitle": "{count, plural, =1{Ìkìlọ̀ 1 nílò àyẹ̀wò rẹ} other{Ìkìlọ̀ {count} nílò àyẹ̀wò rẹ}}",
+  "@alertsBannerTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "alertsBannerBody": "A rí ìṣe àìdàbí lórí ẹ̀rọ káàdì kan. Wò ó kí o sì sàmì sí àyẹ̀wò."
 }

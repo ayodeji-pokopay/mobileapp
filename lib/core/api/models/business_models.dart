@@ -63,7 +63,17 @@ abstract class NotificationItem with _$NotificationItem {
     String? reference,
     @Default(false) bool read,
     String? createdAt,
+    // Suspicious-activity alerts (type == SUSPICIOUS_ACTIVITY) only.
+    String? severity,
+    String? rule,
+    Map<String, dynamic>? evidence,
+    @Default(false) bool acknowledged,
   }) = _NotificationItem;
+
+  const NotificationItem._();
+
+  bool get isAlert => (type ?? '').toUpperCase() == 'SUSPICIOUS_ACTIVITY';
+  bool get needsReview => isAlert && !acknowledged;
 
   factory NotificationItem.fromJson(Map<String, dynamic> json) =>
       _$NotificationItemFromJson(json);
