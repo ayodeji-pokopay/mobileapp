@@ -36,6 +36,7 @@ The app talks to `https://api.pokopayng.com` by default. Everything environment-
 | `APP_ENV` | Environment tag on Sentry events | `development` |
 | `START_ROUTE` | Screen to open right after sign-in, for screenshots | empty (dashboard) |
 | `DEV_LOGIN_EMAIL`, `DEV_LOGIN_PASSWORD` | Debug builds only: prefill and submit the login form | empty |
+| `DEV_MID` | Debug builds only: pin platform users (no merchant of their own) to this merchant | empty |
 
 ```bash
 flutter run --dart-define=API_BASE_URL=https://staging.api.example.com \
@@ -129,7 +130,10 @@ Defined in [app_router.dart](lib/core/router/app_router.dart) as `AppRoutes` con
 | `/settings` | Settings hub |
 | `/settings/personal` | Personal info |
 | `/settings/business` | Business details |
+| `/settings/security` | Security: password, biometric sign-in, app lock, signed-in devices |
 | `/settings/security/change-password` | Change password |
+| `/settings/sessions` | Signed-in devices, with per-device sign-out |
+| `/insights` | Busiest hours and days, average sale, approval rate, week-on-week |
 
 The router listens to `authControllerProvider`. Unauthenticated users are always sent to `/login`; authenticated users hitting `/` or `/login` are sent to `/dashboard`.
 
@@ -165,6 +169,16 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 
 **Password reset.** Login › "Forgot?" requests `POST /auth/forgot-password`; the user pastes the code (or the whole link) from the email, which the app verifies with `POST /auth/verify-reset-token?token=` before `POST /auth/reset-password`.
 
+**App lock.** `lib/core/lock/` holds `AppLockController` (a `Notifier` that is also a `WidgetsBindingObserver`) and `LockScreen`. When enabled from Settings › Security, the app covers its content whenever it leaves the foreground and, after the chosen timeout (right away, 1, 5 or 15 minutes), demands Face ID / fingerprint or a 4-digit PIN. The PIN is stored only as a salted SHA-256 hash in secure storage; five wrong PINs sign the user out. The overlay is mounted from the `MaterialApp.builder` in `main.dart`, so it sits above every route.
+
+**Insights.** `InsightsStats.compute` (pure Dart, unit-tested) aggregates the transaction window served by `allTransactionsProvider(days)` into hour-of-day, weekday, per-day, per-terminal totals, approval rate, average sale, week-on-week and month-to-date. Nothing is fetched from a dedicated insights endpoint yet; when the backend ships `/merchant/insights` the screen can switch to it without UI changes.
+
+**Receipts to customers.** The receipt sheet offers "Send to customer": WhatsApp (`wa.me`), SMS (`sms:`), clipboard, or a paired ESC/POS Bluetooth thermal printer (`lib/core/printing/receipt_printer.dart`, 58 or 80 mm, set up under Settings › Receipt printer). Thermal fonts rarely include ₦, so printed receipts say `NGN`.
+
+**Signed-in devices.** Settings › Security › Signed-in devices lists `GET /users/me/sessions`, revokes one with `DELETE /users/me/sessions/{tokenId}` and everything else with `POST /users/me/sessions/revoke-others`. Every request carries `X-Device-Id` (stable per install) and `X-Device-Name` so the backend can label sessions once it reads them.
+
+**Card machine names.** Tapping a terminal under My business opens a rename sheet backed by `PUT /merchant/terminals/{id}`. Until the backend ships that endpoint (it currently returns 500) the sheet shows a friendly "not available yet" message.
+
 **Accessibility.** Icon-only buttons carry semantic labels, touch targets are at least 44 pt, body text never drops below 12 pt, and tertiary text uses a grey that passes WCAG AA on white.
 
 **CI.** `.github/workflows/ci.yml` runs analyze, tests, and a debug APK build on every push and PR, plus an unsigned iOS build on `main`.
@@ -194,6 +208,10 @@ All paths are relative to `API_BASE_URL`.
 | GET | `/api/v1/merchant/reports/settlements?mid=&status=&page=&size=` | Settlements › History |
 | GET | `/api/v1/merchant/statements?mid=&year=` and `/{id}/pdf` | Settlements › Statements, PDF download |
 | GET | `/api/v1/merchant/terminals?mid=` | My business › POS terminals, drawer count |
+| PUT | `/api/v1/merchant/terminals/{id}?mid=` | Rename a card machine (backend pending; 5xx shows "not available yet") |
+| GET | `/api/v1/users/me/sessions` | Settings › Security › Signed-in devices |
+| DELETE | `/api/v1/users/me/sessions/{tokenId}` | Sign out one device |
+| POST | `/api/v1/users/me/sessions/revoke-others` | Sign out all other devices |
 | GET / PUT | `/api/v1/merchant/preferences?mid=` | Settings toggles and report recipients |
 | GET / POST | `/api/v1/merchant/notifications?mid=`, `/read-all` | Notifications screen, bell badge |
 
@@ -248,4 +266,5 @@ Reusable pieces in `lib/shared/widgets/`:
 - Push registration (`POST /devices/push`) is not called yet because no FCM/APNs provider is configured; the in-app notification feed works.
 - Payment links and invoices are hidden behind `features.paymentLinks` / `features.invoices` from remote config.
 - Refunds and chargebacks come back as zeros from the backend for now, so that card is hidden until either is non-zero.
-- Refresh tokens are stored but not yet used to renew an expired session; a `401` simply logs the user out.
+- Terminal renaming, staff roles and server-side insights wait on backend endpoints (see the Phase 2 brief); the app degrades gracefully in the meantime.
+- Bluetooth printing needs a real device; the simulator reports no paired printers.
