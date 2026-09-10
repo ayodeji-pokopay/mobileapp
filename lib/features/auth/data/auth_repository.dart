@@ -51,10 +51,24 @@ class SessionInfo {
     platform: j['platform']?.toString(),
   );
 
-  /// "Dart/3.11 (dart:io)" is the app's HTTP client; anything else is
-  /// probably a browser or tool.
+  /// A user-agent string such as "Dart/3.11 (dart:io)" or "curl/8.7.1";
+  /// the backend currently echoes it into [deviceName] too.
+  static final _looksLikeUserAgent = RegExp(r'^[\w.-]+/\d');
+
+  /// The friendly name the app sent as X-Device-Name, once the backend
+  /// stores it; null while it only echoes the user agent.
+  String? get friendlyName {
+    final n = (deviceName ?? '').trim();
+    if (n.isEmpty || _looksLikeUserAgent.hasMatch(n)) return null;
+    return n;
+  }
+
+  /// "Dart/…" is the app's HTTP client; anything else is probably a
+  /// browser or tool.
   bool get isApp =>
-      deviceInfo.startsWith('Dart/') || (deviceName ?? '').isNotEmpty;
+      deviceInfo.startsWith('Dart/') ||
+      (deviceName ?? '').startsWith('Dart/') ||
+      friendlyName != null;
 }
 
 class AuthException implements Exception {

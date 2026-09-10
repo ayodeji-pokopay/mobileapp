@@ -179,11 +179,10 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = (s.deviceName ?? '').isNotEmpty
-        ? s.deviceName!
-        : s.isApp
-        ? l10n.sessionsUnknownDevice
-        : s.deviceInfo.split(' ').first;
+    final ua = s.deviceInfo.isNotEmpty ? s.deviceInfo : (s.deviceName ?? '');
+    final name =
+        s.friendlyName ??
+        (s.isApp ? l10n.sessionsUnknownDevice : ua.split(' ').first);
     final where = s.location.isNotEmpty && s.location != s.ipAddress
         ? s.location
         : s.ipAddress;

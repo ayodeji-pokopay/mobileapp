@@ -20,6 +20,26 @@ void main() {
     expect(s.lastActivity, DateTime.utc(2026, 9, 9, 12));
   });
 
+  test('a user-agent echoed into deviceName is not shown as the name', () {
+    final s = SessionInfo.fromJson({
+      'tokenId': 'y',
+      'deviceInfo': 'Dart/3.11 (dart:io)',
+      'deviceName': 'Dart/3.11 (dart:io)',
+      'active': true,
+      'current': false,
+    });
+    expect(s.friendlyName, isNull);
+    expect(s.isApp, isTrue);
+    final named = SessionInfo.fromJson({
+      'tokenId': 'z',
+      'deviceInfo': 'Dart/3.11 (dart:io)',
+      'deviceName': 'iPhone 26.0',
+      'active': true,
+      'current': false,
+    });
+    expect(named.friendlyName, 'iPhone 26.0');
+  });
+
   test('browser sessions are not flagged as the app', () {
     final s = SessionInfo.fromJson({
       'tokenId': 'x',
