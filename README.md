@@ -173,6 +173,8 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 
 **Insights.** `insightsProvider(days)` calls the backend's reporting endpoints in parallel (`summary-comparison`, `weekday`, `hourly`, `by-terminal`, `timeseries`, all bucketed in Africa/Lagos) and maps them with `InsightsStats.fromReports`. If those endpoints are unreachable on an older backend it falls back to `InsightsStats.compute`, which sums the raw transaction window on the phone. A null previous-period change is shown as "New", never as +100%.
 
+**Push notifications.** Firebase project `pokopay-2d7af`; client identifiers live in `lib/firebase_options.dart` (no native config files needed). `PushService` requests permission, fetches the FCM token and registers it with `POST /devices/push` (`{mid, platform, token, deviceId, appVersion}`) whenever a merchant is signed in and the push preference is on; it deletes the registration on sign-out or when push is turned off. A push received in the foreground refreshes the bell; tapping one opens the feed. iOS needs the APNs auth key uploaded in Firebase › Cloud Messaging and the `aps-environment` entitlement (already in `Runner.entitlements`). The backend's Admin SDK service-account key is kept outside the repo at `~/.pokopay/firebase-service-account.json`.
+
 **Suspicious-activity alerts.** Notifications with `type = SUSPICIOUS_ACTIVITY` carry `severity`, `rule`, `evidence` and `acknowledged`. Unreviewed ones appear first in the feed as alert cards with "Mark as reviewed" (`POST /merchant/notifications/{id}/acknowledge`, which also re-arms detection for that terminal and rule) and as a red banner on Home. Known rule: `REVERSAL_BURST`.
 
 **Receipts to customers.** The receipt sheet offers "Send to customer": WhatsApp (`wa.me`), SMS (`sms:`), clipboard, or a paired ESC/POS Bluetooth thermal printer (`lib/core/printing/receipt_printer.dart`, 58 or 80 mm, set up under Settings › Receipt printer). Thermal fonts rarely include ₦, so printed receipts say `NGN`.
@@ -213,6 +215,7 @@ All paths are relative to `API_BASE_URL`.
 | PUT | `/api/v1/merchant/terminals/{id}?mid=` | Rename a card machine (backend pending; 5xx shows "not available yet") |
 | GET | `/api/v1/merchant/reports/transactions/summary-comparison`, `weekday`, `hourly`, `by-terminal`, `timeseries` | Insights (Lagos-time buckets; client fallback if absent) |
 | POST | `/api/v1/merchant/notifications/{id}/acknowledge` | Mark a suspicious-activity alert reviewed |
+| POST / DELETE | `/api/v1/devices/push`, `/api/v1/devices/push/{deviceId}?mid=` | FCM token registration and removal |
 | GET | `/api/v1/users/me/sessions` | Settings › Security › Signed-in devices |
 | DELETE | `/api/v1/users/me/sessions/{tokenId}` | Sign out one device |
 | POST | `/api/v1/users/me/sessions/revoke-others` | Sign out all other devices |
@@ -267,7 +270,6 @@ Reusable pieces in `lib/shared/widgets/`:
 - Data-layer error messages (for example "Invalid email or password") are English-only; UI strings are localised.
 - Export, payment links, "New sale", withdraw, preferences, and report recipients show a "Coming soon" or informational message; there are no backend endpoints for them yet.
 - Wallet fee rows are derived from each settlement's `settlementFee`; there is no separate fee ledger endpoint.
-- Push registration (`POST /devices/push`) is not called yet because no FCM/APNs provider is configured; the in-app notification feed works.
 - Payment links and invoices are hidden behind `features.paymentLinks` / `features.invoices` from remote config.
 - Refunds and chargebacks come back as zeros from the backend for now, so that card is hidden until either is non-zero.
 - Terminal renaming, staff roles and server-side insights wait on backend endpoints (see the Phase 2 brief); the app degrades gracefully in the meantime.

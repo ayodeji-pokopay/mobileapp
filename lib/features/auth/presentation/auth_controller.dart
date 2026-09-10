@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/api/models/auth_models.dart';
 import '../../../core/auth/session_events.dart';
+import '../../../core/push/push_service.dart';
 import '../../../core/storage/secure_storage.dart';
 import '../data/auth_repository.dart';
 
@@ -223,6 +224,10 @@ class AuthController extends Notifier<AuthState> {
   }
 
   Future<void> logout() async {
+    final mid = state.mid;
+    if (mid != null) {
+      await ref.read(pushServiceProvider).unregister(mid: mid);
+    }
     await _repo.logout();
     state = const AuthState(status: AuthStatus.unauthenticated);
   }

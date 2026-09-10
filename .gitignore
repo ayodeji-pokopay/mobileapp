@@ -45,3 +45,7 @@ app.*.map.json
 /android/app/release
 lib/l10n/generated/
 private_keys/
+
+# Firebase native configs (the app uses lib/firebase_options.dart instead)
+**/google-services.json
+**/GoogleService-Info.plist

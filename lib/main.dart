@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -8,12 +10,15 @@ import 'core/connectivity/offline_status.dart';
 import 'core/l10n/locale_controller.dart';
 import 'core/lock/app_lock.dart';
 import 'core/lock/lock_screen.dart';
+import 'core/push/push_registrar.dart';
+import 'core/push/push_service.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_mode_controller.dart';
 import 'features/auth/presentation/auth_controller.dart';
 import 'features/merchant/presentation/merchant_providers.dart';
+import 'firebase_options.dart';
 import 'l10n/generated/app_localizations.dart';
 
 /// Sentry DSN, injected at build time:
@@ -34,6 +39,16 @@ Future<void> main() async {
       statusBarBrightness: Brightness.light,
     ),
   );
+
+  final firebaseOptions = DefaultFirebaseOptions.currentPlatform;
+  if (firebaseOptions != null) {
+    try {
+      await Firebase.initializeApp(options: firebaseOptions);
+      firebaseReady = true;
+    } catch (e) {
+      debugPrint('Firebase init skipped: $e');
+    }
+  }
 
   const app = ProviderScope(child: PokopayApp());
   if (_sentryDsn.isEmpty) {
@@ -64,7 +79,13 @@ class PokopayApp extends ConsumerWidget {
     ref.watch(authControllerProvider);
     // Registers the lifecycle observer that drives the app lock.
     ref.watch(appLockProvider);
+    ref.watch(pushRegistrarProvider);
+    ref.watch(pushMessagesProvider);
     final router = ref.watch(routerProvider);
+    // Tapping a push opens the notification feed.
+    ref.listen(pushTapProvider, (_, next) {
+      if (next.asData?.value != null) router.go(AppRoutes.notifications);
+    });
     final mode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
     final platformDark =
@@ -142,3 +163,11 @@ class PokopayApp extends ConsumerWidget {
     );
   }
 }
+
+/// Emits when the user opens the app by tapping a push notification.
+final pushTapProvider = StreamProvider<RemoteMessage>((ref) async* {
+  if (!firebaseReady) return;
+  final initial = await FirebaseMessaging.instance.getInitialMessage();
+  if (initial != null) yield initial;
+  yield* FirebaseMessaging.onMessageOpenedApp;
+});
