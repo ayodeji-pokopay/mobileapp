@@ -35,6 +35,7 @@ The app talks to `https://api.pokopayng.com` by default. Everything environment-
 | `SENTRY_DSN` | Enables crash reporting when set | empty (reporting off) |
 | `APP_ENV` | Environment tag on Sentry events | `development` |
 | `START_ROUTE` | Screen to open right after sign-in, for screenshots | empty (dashboard) |
+| `DEV_LOGIN_EMAIL`, `DEV_LOGIN_PASSWORD` | Debug builds only: prefill and submit the login form | empty |
 
 ```bash
 flutter run --dart-define=API_BASE_URL=https://staging.api.example.com \

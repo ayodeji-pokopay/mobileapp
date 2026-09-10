@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -9,6 +10,12 @@ import '../../../core/theme/app_text.dart';
 import '../../../shared/widgets/pokopay_logo.dart';
 import 'auth_controller.dart';
 import '../../../l10n/generated/app_localizations.dart';
+
+/// Debug-only convenience: prefill and submit the form when both defines are
+/// set, e.g. `flutter run --dart-define=DEV_LOGIN_EMAIL=... --dart-define=DEV_LOGIN_PASSWORD=...`.
+/// Ignored in release builds.
+const _devEmail = String.fromEnvironment('DEV_LOGIN_EMAIL');
+const _devPassword = String.fromEnvironment('DEV_LOGIN_PASSWORD');
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -30,6 +37,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void initState() {
     super.initState();
     _checkSavedCredentials();
+    if (kDebugMode && _devEmail.isNotEmpty && _devPassword.isNotEmpty) {
+      _emailCtrl.text = _devEmail;
+      _passwordCtrl.text = _devPassword;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _submit();
+      });
+    }
   }
 
   @override
