@@ -18,8 +18,8 @@ class PdfBrand {
   static const greenSoft = PdfColor.fromInt(0xFFE8F5EA);
   static const canvas = PdfColor.fromInt(0xFFF0EFEC);
   static const ink = PdfColor.fromInt(0xFF1F2937);
-  static const muted = PdfColor.fromInt(0xFF6B7280);
-  static const faint = PdfColor.fromInt(0xFF9CA3AF);
+  static const muted = PdfColor.fromInt(0xFF4B5563);
+  static const faint = PdfColor.fromInt(0xFF6B7280);
   static const line = PdfColor.fromInt(0xFFE5E3E0);
   static const danger = PdfColor.fromInt(0xFFDC2626);
   static const white = PdfColors.white;
@@ -80,6 +80,18 @@ class PdfAssets {
     fontSize: size,
     color: color,
   );
+
+  /// Style for a value cell: Montserrat when the text carries the Naira
+  /// sign (DM Sans lacks it), DM Sans otherwise.
+  pw.TextStyle v(
+    String text,
+    double size, {
+    PdfColor color = PdfBrand.ink,
+    bool strong = true,
+  }) => text.contains('₦')
+      ? h(size, color: color)
+      : t(size, color: color, strong: strong);
+
   pw.TextStyle label({PdfColor color = PdfBrand.faint}) => pw.TextStyle(
     font: bodyStrong,
     fontSize: 8,
@@ -142,7 +154,7 @@ pw.Widget _header(
             padding: const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: const pw.BoxDecoration(
               color: PdfBrand.green,
-              borderRadius: pw.BorderRadius.all(pw.Radius.circular(999)),
+              borderRadius: pw.BorderRadius.all(pw.Radius.circular(9)),
             ),
             child: pw.Text(
               badge,
@@ -529,7 +541,7 @@ Future<Uint8List> buildReceiptPdf({
                       decoration: pw.BoxDecoration(
                         color: approved ? PdfBrand.green : PdfBrand.danger,
                         borderRadius: const pw.BorderRadius.all(
-                          pw.Radius.circular(999),
+                          pw.Radius.circular(9),
                         ),
                       ),
                       child: pw.Text(
@@ -585,7 +597,6 @@ Future<Uint8List> buildReceiptPdf({
             ].where((e) => (e ?? '').isNotEmpty).join(' · '),
             mono: true,
           ),
-          _kv(a, l10n.receiptProcessor, t.processorHost),
           pw.Spacer(),
           pw.Center(
             child: pw.Text(

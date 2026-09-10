@@ -269,7 +269,6 @@ class ReceiptCard extends StatelessWidget {
                 ),
                 if ((t.errorMessage ?? '').isNotEmpty)
                   row(l10n.settlementFailureReason, t.errorMessage),
-                row(l10n.receiptProcessor, t.processorHost),
                 const SizedBox(height: 10),
                 Center(
                   child: Text(
