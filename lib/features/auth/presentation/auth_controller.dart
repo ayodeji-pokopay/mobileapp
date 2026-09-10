@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/api/models/auth_models.dart';
 import '../../../core/auth/session_events.dart';
@@ -117,8 +119,25 @@ class AuthController extends Notifier<AuthState> {
     }
   }
 
+  static const _selectedMidKey = 'selected_mid';
+
+  /// Debug-only: pin platform users to a merchant for previews and
+  /// screenshots, e.g. `--dart-define=DEV_MID=2POK00000000003`.
+  static const _devMid = String.fromEnvironment('DEV_MID');
+
   Future<void> _maybeDiscoverMid(UserInfoResponse user) async {
     if ((user.mid ?? '').isNotEmpty) return;
+    if (kDebugMode && _devMid.isNotEmpty) {
+      state = state.copyWith(discoveredMid: _devMid);
+      return;
+    }
+    // A merchant picked from the drawer earlier wins over discovery.
+    final prefs = await SharedPreferences.getInstance();
+    final remembered = prefs.getString(_selectedMidKey);
+    if (remembered != null && remembered.isNotEmpty) {
+      state = state.copyWith(discoveredMid: remembered);
+      return;
+    }
     final email = user.email;
     if (email == null || email.isEmpty) return;
     final mid = await _repo.discoverMidForEmail(email);
@@ -198,6 +217,9 @@ class AuthController extends Notifier<AuthState> {
   void selectMerchant(String mid) {
     if (mid.isEmpty || mid == state.mid) return;
     state = state.copyWith(discoveredMid: mid);
+    SharedPreferences.getInstance().then(
+      (p) => p.setString(_selectedMidKey, mid),
+    );
   }
 
   Future<void> logout() async {

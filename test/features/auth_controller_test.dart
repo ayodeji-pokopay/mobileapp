@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pokopay/core/api/models/auth_models.dart';
 import 'package:pokopay/core/auth/session_events.dart';
 import 'package:pokopay/core/storage/secure_storage.dart';
@@ -78,6 +79,7 @@ void main() {
       Future<void>.delayed(const Duration(milliseconds: 20));
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
     storage = FakeSecureStorage();
     repo = FakeAuthRepository(storage);
   });
