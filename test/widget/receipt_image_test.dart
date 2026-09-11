@@ -49,7 +49,7 @@ void main() {
         (e, _) {
           if (!e.toString().contains('font')) throw e;
         },
-      ),
+      )!,
     );
     expect(bytes, isNotNull);
     expect(bytes!.length, greaterThan(1000));
