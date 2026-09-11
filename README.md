@@ -182,7 +182,7 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 
 **Suspicious-activity alerts.** Notifications with `type = SUSPICIOUS_ACTIVITY` carry `severity`, `rule`, `evidence` and `acknowledged`. Unreviewed ones appear first in the feed as alert cards with "Mark as reviewed" (`POST /merchant/notifications/{id}/acknowledge`, which also re-arms detection for that terminal and rule) and as a red banner on Home. Known rule: `REVERSAL_BURST`.
 
-**Receipts to customers.** The receipt sheet offers "Send to customer": WhatsApp (`wa.me`), SMS (`sms:`), clipboard, or a paired ESC/POS Bluetooth thermal printer (`lib/core/printing/receipt_printer.dart`, 58 or 80 mm, set up under Settings › Receipt printer). Thermal fonts rarely include ₦, so printed receipts say `NGN`.
+**Receipts to customers.** The receipt sheet offers "Send to customer": share as an image (`lib/shared/receipt_image.dart` renders the on-screen `ReceiptCard` off-screen to a PNG via the `screenshot` package, so WhatsApp and email get the branded card), share as PDF, SMS text (`sms:`), clipboard, or a paired ESC/POS Bluetooth thermal printer (`lib/core/printing/receipt_printer.dart`, 58 or 80 mm, set up under Settings › Receipt printer). Thermal fonts rarely include ₦, so printed receipts say `NGN`.
 
 **Signed-in devices.** Settings › Security › Signed-in devices lists `GET /users/me/sessions`, revokes one with `DELETE /users/me/sessions/{tokenId}` and everything else with `POST /users/me/sessions/revoke-others`. Every request carries `X-Device-Id` (stable per install) and `X-Device-Name` so the backend can label sessions once it reads them.
 

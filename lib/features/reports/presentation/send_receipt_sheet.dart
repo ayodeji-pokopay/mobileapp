@@ -11,6 +11,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/format.dart';
+import '../../../shared/pdf/pokopay_pdf.dart';
+import '../../../shared/pdf_share.dart';
+import '../../../shared/receipt_image.dart';
 import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/pills.dart';
 import '../../merchant/presentation/merchant_providers.dart';
@@ -60,6 +63,53 @@ class SendReceiptSheet extends ConsumerStatefulWidget {
 class _SendReceiptSheetState extends ConsumerState<SendReceiptSheet> {
   final _phone = TextEditingController();
   bool _printing = false;
+  bool _sharing = false;
+
+  Future<void> _shareImage() async {
+    final l10n = AppLocalizations.of(context);
+    setState(() => _sharing = true);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final bytes = await buildReceiptImage(
+        context,
+        t: widget.t,
+        business: ref.read(businessNameProvider),
+      );
+      await shareImage(
+        bytes,
+        fileName: 'pokopay-receipt-${widget.t.reference ?? 'txn'}.png',
+        text: '${l10n.receiptTextHeader} · ${formatMoney(widget.t.amount)}',
+      );
+    } catch (_) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.receiptImageFailed)));
+    } finally {
+      if (mounted) setState(() => _sharing = false);
+    }
+  }
+
+  Future<void> _sharePdf() async {
+    final l10n = AppLocalizations.of(context);
+    setState(() => _sharing = true);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final style = transactionStyle(widget.t, l10n);
+      final bytes = await buildReceiptPdf(
+        t: widget.t,
+        business: ref.read(businessNameProvider),
+        l10n: l10n,
+        statusLabel: style.statusLabel,
+        approved: style.tone == PillTone.success,
+      );
+      await sharePdf(
+        bytes,
+        fileName: 'pokopay-receipt-${widget.t.reference ?? 'txn'}.pdf',
+      );
+    } catch (_) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.receiptImageFailed)));
+    } finally {
+      if (mounted) setState(() => _sharing = false);
+    }
+  }
 
   @override
   void dispose() {
@@ -84,15 +134,6 @@ class _SendReceiptSheetState extends ConsumerState<SendReceiptSheet> {
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.sendReceiptAppMissing)));
     }
-  }
-
-  Future<void> _whatsapp(String text) {
-    final n = _normalised();
-    return _open(
-      Uri.parse(
-        'https://wa.me/${n.isEmpty ? '' : n}?text=${Uri.encodeComponent(text)}',
-      ),
-    );
   }
 
   Future<void> _sms(String text) {
@@ -184,7 +225,7 @@ class _SendReceiptSheetState extends ConsumerState<SendReceiptSheet> {
             keyboardType: TextInputType.phone,
             style: AppText.body(size: 15),
             decoration: InputDecoration(
-              labelText: l10n.sendReceiptPhone,
+              labelText: l10n.sendReceiptPhoneSms,
               hintText: l10n.sendReceiptPhoneHint,
               fillColor: AppColors.canvas,
               prefixIcon: const Icon(LucideIcons.phone, size: 18),
@@ -195,12 +236,30 @@ class _SendReceiptSheetState extends ConsumerState<SendReceiptSheet> {
             children: [
               ListRow(
                 leading: const IconBubble(
-                  icon: LucideIcons.messageCircle,
+                  icon: LucideIcons.image,
                   tone: PillTone.success,
                 ),
-                title: l10n.sendReceiptWhatsApp,
+                title: l10n.sendReceiptImage,
+                subtitle: l10n.sendReceiptImageHint,
                 chevron: false,
-                onTap: () => _whatsapp(text),
+                trailing: _sharing
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : null,
+                onTap: _sharing ? null : _shareImage,
+              ),
+              ListRow(
+                leading: const IconBubble(
+                  icon: LucideIcons.fileText,
+                  tone: PillTone.info,
+                ),
+                title: l10n.sendReceiptPdf,
+                subtitle: l10n.sendReceiptPdfHint,
+                chevron: false,
+                onTap: _sharing ? null : _sharePdf,
               ),
               ListRow(
                 leading: const IconBubble(

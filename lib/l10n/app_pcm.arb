@@ -680,5 +680,10 @@
   },
   "staffUpdated": "Staff member don update",
   "staffAccessOn": "Fit sign in",
-  "staffAccessHint": "Off am to block this person without deleting am"
+  "staffAccessHint": "Off am to block this person without deleting am",
+  "sendReceiptImage": "Share as image",
+  "sendReceiptImageHint": "WhatsApp, email, or save for Photos",
+  "sendReceiptPdf": "Share as PDF",
+  "sendReceiptPdfHint": "For email and record keeping",
+  "sendReceiptPhoneSms": "Customer phone for SMS (optional)"
 }

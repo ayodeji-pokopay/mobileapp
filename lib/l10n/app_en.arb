@@ -963,5 +963,10 @@
   },
   "staffUpdated": "Staff member updated",
   "staffAccessOn": "Can sign in",
-  "staffAccessHint": "Turn off to block this person without deleting them"
+  "staffAccessHint": "Turn off to block this person without deleting them",
+  "sendReceiptImage": "Share as image",
+  "sendReceiptImageHint": "WhatsApp, email, or save to Photos",
+  "sendReceiptPdf": "Share as PDF",
+  "sendReceiptPdfHint": "For email and record-keeping",
+  "sendReceiptPhoneSms": "Customer's phone for SMS (optional)"
 }

@@ -680,5 +680,10 @@
   },
   "staffUpdated": "An sabunta ma'aikaci",
   "staffAccessOn": "Zai iya shiga",
-  "staffAccessHint": "Kashe don hana wannan mutum ba tare da goge shi ba"
+  "staffAccessHint": "Kashe don hana wannan mutum ba tare da goge shi ba",
+  "sendReceiptImage": "Raba a matsayin hoto",
+  "sendReceiptImageHint": "WhatsApp, imel, ko ajiye a Hotuna",
+  "sendReceiptPdf": "Raba a matsayin PDF",
+  "sendReceiptPdfHint": "Don imel da adana bayanai",
+  "sendReceiptPhoneSms": "Wayar abokin ciniki don SMS (na zaɓi)"
 }

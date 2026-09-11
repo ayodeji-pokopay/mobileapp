@@ -680,5 +680,10 @@
   },
   "staffUpdated": "Emelitere onye ọrụ",
   "staffAccessOn": "Nwere ike ịbanye",
-  "staffAccessHint": "Gbanyụọ iji gbochie onye a n'ehichapụghị ya"
+  "staffAccessHint": "Gbanyụọ iji gbochie onye a n'ehichapụghị ya",
+  "sendReceiptImage": "Kesaa dịka onyonyo",
+  "sendReceiptImageHint": "WhatsApp, email, ma ọ bụ chekwaa na Foto",
+  "sendReceiptPdf": "Kesaa dịka PDF",
+  "sendReceiptPdfHint": "Maka email na ndekọ",
+  "sendReceiptPhoneSms": "Ekwentị onye ahịa maka SMS (nhọrọ)"
 }

@@ -680,5 +680,10 @@
   },
   "staffUpdated": "A ti ṣàtúnṣe òṣìṣẹ́",
   "staffAccessOn": "Ó lè wọlé",
-  "staffAccessHint": "Pa á láti dí ẹni yìí lọ́wọ́ láìpa á rẹ́"
+  "staffAccessHint": "Pa á láti dí ẹni yìí lọ́wọ́ láìpa á rẹ́",
+  "sendReceiptImage": "Pín gẹ́gẹ́ bí àwòrán",
+  "sendReceiptImageHint": "WhatsApp, ímeèlì, tàbí fi pamọ́ sí Fọ́tò",
+  "sendReceiptPdf": "Pín gẹ́gẹ́ bí PDF",
+  "sendReceiptPdfHint": "Fún ímeèlì àti ìkọ̀sílẹ̀",
+  "sendReceiptPhoneSms": "Fóònù oníbàárà fún SMS (àṣàyàn)"
 }
