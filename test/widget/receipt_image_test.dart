@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,12 +13,6 @@ void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
   testWidgets('receipt renders to a PNG off-screen', (tester) async {
-    // Fonts can't be fetched in tests; the fallback face is fine for this
-    // check, so ignore google_fonts' complaints.
-    final original = FlutterError.onError;
-    FlutterError.onError = (d) {
-      if (!d.toString().contains('google_fonts')) original?.call(d);
-    };
     late BuildContext ctx;
     await tester.pumpWidget(
       MaterialApp(
@@ -45,10 +41,16 @@ void main() {
       cardScheme: 'VERVE',
       completedAt: '2026-09-12T10:00:00Z',
     );
+    // Fonts can't be fetched in tests and google_fonts reports that as an
+    // uncaught async error; the fallback face is fine for this check.
     final bytes = await tester.runAsync(
-      () => buildReceiptImage(ctx, t: t, business: 'POKOPAY PILOT'),
+      () => runZonedGuarded(
+        () => buildReceiptImage(ctx, t: t, business: 'POKOPAY PILOT'),
+        (e, _) {
+          if (!e.toString().contains('font')) throw e;
+        },
+      ),
     );
-    FlutterError.onError = original;
     expect(bytes, isNotNull);
     expect(bytes!.length, greaterThan(1000));
     // PNG signature
