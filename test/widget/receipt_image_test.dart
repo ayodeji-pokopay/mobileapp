@@ -17,7 +17,6 @@ void main() {
     FlutterError.onError = (d) {
       if (!d.toString().contains('google_fonts')) original?.call(d);
     };
-    addTearDown(() => FlutterError.onError = original);
     late BuildContext ctx;
     await tester.pumpWidget(
       MaterialApp(
@@ -49,6 +48,7 @@ void main() {
     final bytes = await tester.runAsync(
       () => buildReceiptImage(ctx, t: t, business: 'POKOPAY PILOT'),
     );
+    FlutterError.onError = original;
     expect(bytes, isNotNull);
     expect(bytes!.length, greaterThan(1000));
     // PNG signature
