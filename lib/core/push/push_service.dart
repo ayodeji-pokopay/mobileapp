@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,6 +32,78 @@ class PushService {
 
   String? _lastRegisteredKey;
   StreamSubscription<String>? _refreshSub;
+
+  final _local = FlutterLocalNotificationsPlugin();
+  bool _foregroundReady = false;
+  final _tapped = StreamController<Map<String, dynamic>>.broadcast();
+
+  /// `data` of a notification the user tapped (foreground banner).
+  Stream<Map<String, dynamic>> get tapped => _tapped.stream;
+
+  static const _channel = AndroidNotificationChannel(
+    'pokopay_alerts',
+    'Pokopay alerts',
+    description: 'Payouts, settlements and account alerts',
+    importance: Importance.high,
+  );
+
+  /// Lets a push that arrives while the app is open show as a banner.
+  /// iOS can present FCM notifications itself; Android needs a local
+  /// notification on a channel.
+  Future<void> initForeground() async {
+    final m = _messaging;
+    if (m == null || _foregroundReady) return;
+    _foregroundReady = true;
+    if (Platform.isIOS) {
+      await m.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      return;
+    }
+    await _local.initialize(
+      settings: const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      ),
+      onDidReceiveNotificationResponse: (r) {
+        final raw = r.payload;
+        if (raw == null || raw.isEmpty) return;
+        try {
+          _tapped.add((jsonDecode(raw) as Map).cast<String, dynamic>());
+        } catch (_) {}
+      },
+    );
+    await _local
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
+        ?.createNotificationChannel(_channel);
+  }
+
+  Future<void> showForeground(RemoteMessage m) async {
+    if (Platform.isIOS) return; // presented by the system, see above
+    final n = m.notification;
+    final title = n?.title ?? m.data['title']?.toString();
+    final body = n?.body ?? m.data['body']?.toString();
+    if (title == null && body == null) return;
+    await _local.show(
+      id: m.messageId.hashCode,
+      title: title,
+      body: body,
+      notificationDetails: NotificationDetails(
+        android: AndroidNotificationDetails(
+          _channel.id,
+          _channel.name,
+          channelDescription: _channel.description,
+          importance: Importance.high,
+          priority: Priority.high,
+          icon: '@mipmap/ic_launcher',
+        ),
+      ),
+      payload: jsonEncode(m.data),
+    );
+  }
 
   static String get platform => Platform.isIOS ? 'IOS' : 'ANDROID';
 
@@ -106,12 +180,17 @@ class PushService {
     await _refreshSub?.cancel();
     _refreshSub = null;
     final deviceId = await _storage.readDeviceId();
-    if (deviceId == null) return;
+    if (deviceId != null) {
+      try {
+        await _api.dio.delete<void>(
+          '/api/v1/devices/push/$deviceId',
+          queryParameters: {'mid': mid},
+        );
+      } catch (_) {}
+    }
+    // Force a fresh token on the next sign-in.
     try {
-      await _api.dio.delete<void>(
-        '/api/v1/devices/push/$deviceId',
-        queryParameters: {'mid': mid},
-      );
+      await _messaging?.deleteToken();
     } catch (_) {}
   }
 }

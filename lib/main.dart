@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -84,7 +83,8 @@ class PokopayApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
     // Tapping a push opens the notification feed.
     ref.listen(pushTapProvider, (_, next) {
-      if (next.asData?.value != null) router.go(AppRoutes.notifications);
+      final data = next.asData?.value;
+      if (data != null) router.push(pushRouteFor(data));
     });
     final mode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
@@ -163,11 +163,3 @@ class PokopayApp extends ConsumerWidget {
     );
   }
 }
-
-/// Emits when the user opens the app by tapping a push notification.
-final pushTapProvider = StreamProvider<RemoteMessage>((ref) async* {
-  if (!firebaseReady) return;
-  final initial = await FirebaseMessaging.instance.getInitialMessage();
-  if (initial != null) yield initial;
-  yield* FirebaseMessaging.onMessageOpenedApp;
-});
