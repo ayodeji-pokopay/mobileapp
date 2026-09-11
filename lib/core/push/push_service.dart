@@ -112,32 +112,40 @@ class PushService {
   Future<void> register({required String mid}) async {
     final m = _messaging;
     if (m == null) return;
-    final settings = await m.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-    if (settings.authorizationStatus == AuthorizationStatus.denied) {
-      debugPrint('push: permission denied');
-      return;
-    }
-    final token = await m.getToken();
-    if (token == null || token.isEmpty) {
-      debugPrint('push: no FCM token yet');
-      return;
-    }
     try {
+      final settings = await m.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      debugPrint('push: permission ${settings.authorizationStatus.name}');
+      if (settings.authorizationStatus == AuthorizationStatus.denied) return;
+      if (Platform.isIOS) {
+        // FCM on iOS needs the APNs token first; it can lag the prompt.
+        String? apns;
+        for (var i = 0; i < 45 && apns == null; i++) {
+          apns = await m.getAPNSToken();
+          if (apns == null)
+            await Future<void>.delayed(const Duration(seconds: 1));
+        }
+        debugPrint('push: apns token ${apns == null ? 'missing' : 'ok'}');
+      }
+      final token = await m.getToken();
+      if (token == null || token.isEmpty) {
+        debugPrint('push: no FCM token yet');
+        return;
+      }
       await registerToken(mid: mid, token: token);
       debugPrint(
         'push: registered token …${token.substring(token.length - 8)} for $mid',
+      );
+      _refreshSub ??= m.onTokenRefresh.listen(
+        (t) => registerToken(mid: mid, token: t),
       );
     } catch (e) {
       debugPrint('push: registration failed: $e');
       rethrow;
     }
-    _refreshSub ??= m.onTokenRefresh.listen(
-      (t) => registerToken(mid: mid, token: t),
-    );
   }
 
   Future<void>? _inFlight;
