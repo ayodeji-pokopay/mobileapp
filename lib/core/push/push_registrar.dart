@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/auth/presentation/auth_controller.dart';
 import '../router/app_router.dart';
+import '../security/device_integrity.dart';
 import '../../features/merchant/presentation/merchant_providers.dart';
 import 'push_service.dart';
 
@@ -14,6 +16,12 @@ final pushRegistrarProvider = Provider<void>((ref) {
   final auth = ref.watch(authControllerProvider);
   final mid = auth.mid;
   if (auth.status != AuthStatus.authenticated || mid == null) return;
+  // Simulators and emulators can't receive push; don't prompt for it.
+  final integrity = ref.watch(deviceIntegrityProvider).asData?.value;
+  debugPrint(
+    'push: registrar integrity=${integrity == null ? 'pending' : 'emulator=${integrity.emulator}'}',
+  );
+  if (integrity == null || integrity.emulator) return;
   final enabled =
       ref.watch(preferencesProvider).asData?.value.pushEnabled ?? true;
   final push = ref.read(pushServiceProvider);

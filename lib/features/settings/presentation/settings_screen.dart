@@ -46,7 +46,8 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final user = ref.watch(authControllerProvider).user;
+    final auth = ref.watch(authControllerProvider);
+    final user = auth.user;
     final displayName = ref.watch(businessNameProvider);
     final version = ref.watch(packageInfoProvider).asData?.value.version ?? '';
     final prefs = ref.watch(preferencesProvider);
@@ -153,12 +154,13 @@ class SettingsScreen extends ConsumerWidget {
                 subtitle: l10n.settingsCardMachinesHint,
                 onTap: () => context.push(AppRoutes.stores),
               ),
-              ListRow(
-                leading: const _RowIcon(LucideIcons.receipt),
-                title: l10n.settingsSettlements,
-                subtitle: l10n.settingsSettlementsHint,
-                onTap: () => context.push(AppRoutes.settlements),
-              ),
+              if (auth.canViewMoney)
+                ListRow(
+                  leading: const _RowIcon(LucideIcons.receipt),
+                  title: l10n.settingsSettlements,
+                  subtitle: l10n.settingsSettlementsHint,
+                  onTap: () => context.push(AppRoutes.settlements),
+                ),
               ListRow(
                 leading: const _RowIcon(LucideIcons.chartNoAxesColumn),
                 title: l10n.insightsTitle,
@@ -173,48 +175,53 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 22),
-          SectionLabel(
-            l10n.settingsReportsSection,
-            uppercase: true,
-            color: AppColors.textSecondary,
-          ),
-          ListCard(
-            children: [
-              toggle(
-                title: l10n.settingsDailyReport,
-                subtitle: l10n.settingsDailyReportHint,
-                value: p?.dailySettlementReport,
-                onChanged: (v) => ref
-                    .read(preferencesProvider.notifier)
-                    .save(dailySettlementReport: v),
-              ),
-              toggle(
-                title: l10n.settingsMonthlyReport,
-                subtitle: l10n.settingsMonthlyReportHint,
-                value: p?.monthlySettlementReport,
-                onChanged: (v) => ref
-                    .read(preferencesProvider.notifier)
-                    .save(monthlySettlementReport: v),
-              ),
-              ListRow(
-                title: l10n.settingsRecipients,
-                subtitle: prefs.hasError
-                    ? describeError(prefs.error!, l10n)
-                    : l10n.settingsRecipientsCount(
-                        p?.reportRecipients.length ?? 0,
-                      ),
-                onTap: p == null ? null : () => showRecipientsSheet(context, p),
-              ),
-              toggle(
-                title: l10n.settingsPush,
-                subtitle: l10n.settingsPushHint,
-                value: p?.pushEnabled,
-                onChanged: (v) =>
-                    ref.read(preferencesProvider.notifier).save(pushEnabled: v),
-              ),
-            ],
-          ),
+          if (auth.canManagePreferences) ...[
+            const SizedBox(height: 22),
+            SectionLabel(
+              l10n.settingsReportsSection,
+              uppercase: true,
+              color: AppColors.textSecondary,
+            ),
+            ListCard(
+              children: [
+                toggle(
+                  title: l10n.settingsDailyReport,
+                  subtitle: l10n.settingsDailyReportHint,
+                  value: p?.dailySettlementReport,
+                  onChanged: (v) => ref
+                      .read(preferencesProvider.notifier)
+                      .save(dailySettlementReport: v),
+                ),
+                toggle(
+                  title: l10n.settingsMonthlyReport,
+                  subtitle: l10n.settingsMonthlyReportHint,
+                  value: p?.monthlySettlementReport,
+                  onChanged: (v) => ref
+                      .read(preferencesProvider.notifier)
+                      .save(monthlySettlementReport: v),
+                ),
+                ListRow(
+                  title: l10n.settingsRecipients,
+                  subtitle: prefs.hasError
+                      ? describeError(prefs.error!, l10n)
+                      : l10n.settingsRecipientsCount(
+                          p?.reportRecipients.length ?? 0,
+                        ),
+                  onTap: p == null
+                      ? null
+                      : () => showRecipientsSheet(context, p),
+                ),
+                toggle(
+                  title: l10n.settingsPush,
+                  subtitle: l10n.settingsPushHint,
+                  value: p?.pushEnabled,
+                  onChanged: (v) => ref
+                      .read(preferencesProvider.notifier)
+                      .save(pushEnabled: v),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: 22),
           ListCard(
             children: [

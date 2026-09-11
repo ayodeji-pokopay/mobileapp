@@ -125,7 +125,11 @@ class SecurityScreen extends ConsumerWidget {
                             return;
                           }
                           final pin = await showSetPinSheet(context);
-                          if (pin != null) await n.enable(pin: pin);
+                          if (pin != null) {
+                            await n.enable(pin: pin);
+                          } else if (bioAvailable) {
+                            await n.enable();
+                          }
                         },
                       ),
               ),
@@ -162,7 +166,9 @@ class SecurityScreen extends ConsumerWidget {
                   ),
                 ListRow(
                   leading: const _RowIcon(LucideIcons.hash),
-                  title: l10n.lockChangePin,
+                  title: lock.hasPin
+                      ? l10n.lockChangePin
+                      : l10n.lockSetPinTitle,
                   onTap: () async {
                     final pin = await showSetPinSheet(context);
                     if (pin == null || !context.mounted) return;

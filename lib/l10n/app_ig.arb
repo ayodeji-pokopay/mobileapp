@@ -554,5 +554,91 @@
         "type": "String"
       }
     }
-  }
+  },
+  "commonToday": "taa",
+  "dashboardTakingsToday": "Ego e nwetara taa",
+  "dashboardQuickSendReceipt": "Ziga nnata",
+  "dashboardQuickPrintLast": "Bipụta nnata ikpeazụ",
+  "dashboardQuickPaymentLink": "Njikọ ịkwụ ụgwọ",
+  "dashboardQuickCallSupport": "Kpọọ nkwado",
+  "dashboardNoReceiptsYet": "Enweghị ahịa a kwadoro taa iji zipu.",
+  "terminalOnline": "nọ n'ịntanetị",
+  "terminalIdle": "na-ezu ike",
+  "terminalOffline": "anọghị",
+  "settlementStepBatched": "Achịkọtala ahịa",
+  "settlementStepSent": "Ezigara ụlọ akụ",
+  "settlementStepPaid": "Akwụọla",
+  "settlementStepNone": "Enweghị ahịa a ga-akwụ ugbu a",
+  "settlementStepFailed": "Ịkwụ ụgwọ dara. Pịa maka nkọwa.",
+  "settlementStepPostponed": "Ehichiri ya gaa na usoro ọzọ",
+  "dashboardExpectedBy": "A na-atụ anya {when}",
+  "@dashboardExpectedBy": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardVsLastWeekday": "{delta} ma e jiri {day} gara aga tụnyere",
+  "@dashboardVsLastWeekday": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardApprovalWarningTitle": "Njụ karịrị ka ọ dị na mbụ",
+  "dashboardApprovalWarningBody": "A kwadoro {today}% nke ahịa taa, na-abụkarị {usual}%. Lelee igwe kaadị na netwọk.",
+  "@dashboardApprovalWarningBody": {
+    "placeholders": {
+      "today": {
+        "type": "int"
+      },
+      "usual": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardApprovalTopReason": "Ihe kpatara ya kacha: {reason}",
+  "@dashboardApprovalTopReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardGoalSet": "Tọọ ebumnuche ahịa",
+  "dashboardGoalProgress": "{done} n'ime {target} taa",
+  "@dashboardGoalProgress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "goalSheetTitle": "Ebumnuche ahịa",
+  "goalSheetHint": "Edebere ya naanị na ekwentị a. Hapụ ya efu iji wepụ ebumnuche.",
+  "goalDaily": "Ebumnuche kwa ụbọchị",
+  "goalMonthly": "Ebumnuche kwa ọnwa",
+  "goalClear": "Wepụ ebumnuche",
+  "activityFilterAll": "Niile",
+  "activityFilterApproved": "A kwadoro",
+  "activityFilterDeclined": "A jụrụ",
+  "activityFilterReversed": "E weghachiri",
+  "deviceCompromisedTitle": "Ekwentị a dị ka e mere ya root ma ọ bụ jailbreak",
+  "deviceCompromisedBody": "Pokopay enweghị ike ikwe nkwa na data gị dị mma na ya. Jiri ekwentị nkịtị maka akaụntụ azụmahịa gị.",
+  "deviceBlockedTitle": "Pokopay enweghị ike ịrụ ọrụ na ekwentị a",
+  "deviceBlockedBody": "Ekwentị a dị ka e mere ya root ma ọ bụ jailbreak, nke na-etinye akaụntụ azụmahịa gị n'ihe ize ndụ. Biko jiri ekwentị nkịtị.",
+  "lockSetPinPromptTitle": "Tinye PIN maka mkpọchi ngwa",
+  "lockSetPinPromptBody": "Pokopay na-akpọchi mgbe nkeji 15 gasịrị n'azụ. PIN na-enye gị ohere imepe mgbe Face ID ma ọ bụ mkpịsị aka adịghị.",
+  "lockSetPinPromptAction": "Tọọ PIN",
+  "lockNotNow": "Ọ bụghị ugbu a",
+  "lockNoPinHint": "Enweghị PIN maka ngwa a. Mepee na Face ID ma ọ bụ mkpịsị aka, ma ọ bụ tinye PIN na Ntọala › Nchekwa.",
+  "lockUnlockWithBiometrics": "Mepee"
 }

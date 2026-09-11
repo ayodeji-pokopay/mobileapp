@@ -1,6 +1,7 @@
 PODS:
   - connectivity_plus (0.0.1):
     - Flutter
+  - DTTJailbreakDetection (0.4.0)
   - Firebase/CoreOnly (12.18.0):
     - FirebaseCore (~> 12.18.0)
   - Firebase/Messaging (12.18.0):
@@ -81,6 +82,9 @@ PODS:
   - print_bluetooth_thermal (0.0.1):
     - Flutter
   - PromisesObjC (2.4.1)
+  - safe_device (1.0.0):
+    - DTTJailbreakDetection
+    - Flutter
   - Sentry/HybridSDK (8.58.4)
   - sentry_flutter (9.29.0):
     - Flutter
@@ -105,6 +109,7 @@ DEPENDENCIES:
   - local_auth_darwin (from `.symlinks/plugins/local_auth_darwin/darwin`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - print_bluetooth_thermal (from `.symlinks/plugins/print_bluetooth_thermal/ios`)
+  - safe_device (from `.symlinks/plugins/safe_device/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -112,6 +117,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - DTTJailbreakDetection
     - Firebase
     - FirebaseCore
     - FirebaseCoreInternal
@@ -144,6 +150,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   print_bluetooth_thermal:
     :path: ".symlinks/plugins/print_bluetooth_thermal/ios"
+  safe_device:
+    :path: ".symlinks/plugins/safe_device/ios"
   sentry_flutter:
     :path: ".symlinks/plugins/sentry_flutter/ios"
   share_plus:
@@ -155,6 +163,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
+  DTTJailbreakDetection: 5e356c5badc17995f65a83ed9483f787a0057b71
   Firebase: 5523dd53ebe603451b4e1befcd99fa20a5c015cd
   firebase_core: 22b31970001508f6e63945bedcb7b9de68819aa5
   firebase_messaging: e0eae0e66bd04d3c1856ad08ad84ac75e0673a55
@@ -173,6 +182,7 @@ SPEC CHECKSUMS:
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   print_bluetooth_thermal: 107a8766575107295e9d343a7389c78a1cb9dc63
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
+  safe_device: f9ec9e51f6573a143ad7b450e67cc5716a1aae20
   Sentry: 5321d74bdd28d6f6f8beaa1ca06f1fdc746bff49
   sentry_flutter: 17c933e05c5a55e6b84512402c38a5c84a82e83b
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a

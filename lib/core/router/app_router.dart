@@ -66,6 +66,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (isAuthed && (loc == AppRoutes.login || loc == AppRoutes.splash)) {
         return _startRoute.isNotEmpty ? _startRoute : AppRoutes.dashboard;
       }
+      // Staff without settlement rights never see balances or payouts.
+      const moneyRoutes = {AppRoutes.wallet, AppRoutes.settlements};
+      if (isAuthed && !auth.canViewMoney && moneyRoutes.contains(loc)) {
+        return AppRoutes.dashboard;
+      }
+      if (isAuthed &&
+          !auth.canViewSales &&
+          (loc == AppRoutes.reports || loc == AppRoutes.insights)) {
+        return AppRoutes.dashboard;
+      }
       return null;
     },
     routes: [

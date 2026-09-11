@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/api/models/merchant_models.dart';
 import '../../../core/api/models/transaction_models.dart';
 import '../../../core/config/app_config.dart';
 import '../../../core/config/app_config_provider.dart';
+import '../../../core/lock/app_lock.dart';
+import '../../../core/security/device_integrity.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
@@ -23,9 +26,12 @@ import '../../../shared/widgets/offline_banner.dart';
 import '../../../shared/widgets/pills.dart';
 import '../../../shared/widgets/section_label.dart';
 import '../../../shared/widgets/skeleton.dart';
+import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
 import '../../reports/presentation/receipt_sheet.dart';
 import '../../reports/presentation/transaction_style.dart';
+import 'dashboard_widgets.dart';
+import 'dashboard_providers.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -37,6 +43,7 @@ class DashboardScreen extends ConsumerStatefulWidget {
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   bool _balanceHidden = false;
   bool _showFeedback = true;
+  bool _pinPromptDismissed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +64,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             .length ??
         0;
     final businessName = ref.watch(businessNameProvider);
+    final auth = ref.watch(authControllerProvider);
+    final staffView = auth.isStaffView;
+    final lock = ref.watch(appLockProvider);
+    final integrity = ref.watch(deviceIntegrityProvider).asData?.value;
+    final goal = ref.watch(salesGoalProvider);
+    final lastWeek = ref.watch(sameWeekdayLastWeekProvider).asData?.value;
+    final filter = ref.watch(activityFilterProvider);
+    final todaySales = (summary.asData?.value.todaySales ?? 0).toDouble();
 
     final balance =
         wallet.asData?.value.availableNaira ??
@@ -77,6 +92,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ref.invalidate(periodTransactionsProvider('WEEKLY'));
             ref.invalidate(recentTransactionsProvider);
             ref.invalidate(notificationsProvider);
+            ref.invalidate(terminalsProvider);
+            ref.invalidate(sameWeekdayLastWeekProvider);
+            ref.invalidate(approvalHealthProvider);
+            ref.invalidate(allTransactionsProvider(1));
             await Future.wait([
               ref.read(summaryProvider.future),
               ref.read(recentTransactionsProvider.future),
@@ -89,17 +108,23 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               const OfflineBanner(),
               _HeroCard(
                 businessName: businessName,
-                balance: balance,
-                loading: balanceLoading,
-                unavailable: balanceUnavailable,
+                balance: staffView ? todaySales : balance,
+                staffView: staffView,
+                loading: staffView ? summary.isLoading : balanceLoading,
+                unavailable: staffView ? summary.hasError : balanceUnavailable,
                 hidden: _balanceHidden,
                 unread: unread,
+                goalDone: todaySales,
+                goalTarget: goal.daily,
+                onGoal: () => showGoalSheet(context),
                 onToggleHidden: () =>
                     setState(() => _balanceHidden = !_balanceHidden),
                 onWallet: () => context.go(AppRoutes.wallet),
                 onSettlements: () => context.push(AppRoutes.settlements),
                 onNotifications: () => context.push(AppRoutes.notifications),
               ),
+              const SizedBox(height: 12),
+              const QuickActionsRow(),
               const SizedBox(height: 12),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,18 +133,37 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     child: _SalesTodayCard(
                       summary: summary,
                       weekly: weekly,
+                      lastWeekSameDay: lastWeek,
                       onTap: () => context.go(AppRoutes.reports),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _PayoutCard(
-                      summary: summary,
-                      onTap: () => context.push(AppRoutes.settlements),
+                  if (!staffView) ...[
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: SettlementTracker(
+                        summary: summary,
+                        onTap: () => context.push(AppRoutes.settlements),
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
+              const ApprovalWarningCard(),
+              const SizedBox(height: 12),
+              const TerminalStrip(),
+              if (integrity?.compromised == true) ...[
+                const SizedBox(height: 12),
+                const DeviceWarningBanner(),
+              ],
+              if (lock.loaded &&
+                  lock.settings.enabled &&
+                  !lock.hasPin &&
+                  !_pinPromptDismissed) ...[
+                const SizedBox(height: 12),
+                SetPinCard(
+                  onDismiss: () => setState(() => _pinPromptDismissed = true),
+                ),
+              ],
               if (alerts > 0) ...[
                 const SizedBox(height: 12),
                 _AlertBanner(
@@ -154,12 +198,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   ),
                 ],
               ),
+              const ActivityFilterChips(),
+              const SizedBox(height: 10),
               AsyncSlot<PageTransactionResponse>(
                 value: recent,
                 loadingHeight: 220,
                 onRetry: () => ref.invalidate(recentTransactionsProvider),
                 data: (page) {
-                  final items = page.content.take(8).toList();
+                  final items = page.content
+                      .where((t) => matchesActivityFilter(t, filter))
+                      .take(8)
+                      .toList();
                   if (items.isEmpty) {
                     return EmptyState(
                       icon: LucideIcons.receipt,
@@ -198,10 +247,18 @@ class _HeroCard extends StatelessWidget {
     required this.onWallet,
     required this.onSettlements,
     required this.onNotifications,
+    required this.goalDone,
+    required this.goalTarget,
+    required this.onGoal,
+    this.staffView = false,
   });
 
   final String businessName;
   final num? balance;
+  final bool staffView;
+  final double goalDone;
+  final double? goalTarget;
+  final VoidCallback onGoal;
   final bool loading;
   final bool unavailable;
   final bool hidden;
@@ -303,59 +360,91 @@ class _HeroCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  l10n.dashboardAvailableBalance,
-                  style: AppText.body(
-                    size: 13,
-                    color: Colors.white.withValues(alpha: 0.78),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: Text(
-                    amount,
-                    key: ValueKey(amount),
-                    style: AppText.display(
-                      size: 34,
-                      color: Colors.white,
-                      letterSpacing: -1,
-                      height: 1,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            staffView
+                                ? l10n.dashboardTakingsToday
+                                : l10n.dashboardAvailableBalance,
+                            style: AppText.body(
+                              size: 13,
+                              color: Colors.white.withValues(alpha: 0.78),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 200),
+                            child: Text(
+                              amount,
+                              key: ValueKey(amount),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppText.display(
+                                size: 34,
+                                color: Colors.white,
+                                letterSpacing: -1,
+                                height: 1,
+                              ),
+                            ),
+                          ),
+                          if (goalTarget != null) ...[
+                            const SizedBox(height: 6),
+                            Text(
+                              l10n.dashboardGoalProgress(
+                                formatMoneyCompact(goalDone),
+                                formatMoneyCompact(goalTarget),
+                              ),
+                              style: AppText.body(
+                                size: 12,
+                                color: Colors.white.withValues(alpha: 0.7),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 12),
+                    GoalRing(done: goalDone, target: goalTarget, onTap: onGoal),
+                  ],
                 ),
                 const SizedBox(height: 18),
-                Row(
-                  children: [
-                    _GreenPill(
-                      icon: LucideIcons.wallet,
-                      label: l10n.dashboardPay,
-                      onTap: onWallet,
-                    ),
-                    const SizedBox(width: 10),
-                    Semantics(
-                      button: true,
-                      label: l10n.dashboardAdd,
-                      child: Material(
-                        color: Colors.white,
-                        shape: const CircleBorder(),
-                        child: InkWell(
-                          onTap: onSettlements,
-                          customBorder: const CircleBorder(),
-                          child: SizedBox(
-                            width: 36,
-                            height: 36,
-                            child: Icon(
-                              LucideIcons.arrowLeftRight,
-                              size: 18,
-                              color: AppColors.navy,
+                if (!staffView)
+                  Row(
+                    children: [
+                      _GreenPill(
+                        icon: LucideIcons.wallet,
+                        label: l10n.dashboardPay,
+                        onTap: onWallet,
+                      ),
+                      const SizedBox(width: 10),
+                      Semantics(
+                        button: true,
+                        label: l10n.dashboardAdd,
+                        child: Material(
+                          color: Colors.white,
+                          shape: const CircleBorder(),
+                          child: InkWell(
+                            onTap: onSettlements,
+                            customBorder: const CircleBorder(),
+                            child: SizedBox(
+                              width: 36,
+                              height: 36,
+                              child: Icon(
+                                LucideIcons.arrowLeftRight,
+                                size: 18,
+                                color: AppColors.navy,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -552,11 +641,15 @@ class _SalesTodayCard extends StatelessWidget {
     required this.summary,
     required this.weekly,
     required this.onTap,
+    this.lastWeekSameDay,
   });
 
   final AsyncValue<MerchantSettlementSummary> summary;
   final AsyncValue<PageTransactionResponse> weekly;
   final VoidCallback onTap;
+
+  /// Approved sales on this weekday last week, when the backend has it.
+  final double? lastWeekSameDay;
 
   @override
   Widget build(BuildContext context) {
@@ -566,13 +659,20 @@ class _SalesTodayCard extends StatelessWidget {
         ? const <double>[]
         : dailyTotals(weekly.asData!.value.content, 7);
     final today = (s?.todaySales ?? 0).toDouble();
-    final yesterday = s?.yesterdaySales?.toDouble();
-    final double? delta = yesterday == null
+    // Prefer the same weekday last week (steadier for shops with weekly
+    // rhythms); fall back to yesterday when the backend can't provide it.
+    final baseline = lastWeekSameDay ?? s?.yesterdaySales?.toDouble();
+    final vsLastWeek = lastWeekSameDay != null;
+    final double? delta = baseline == null
         ? null
-        : yesterday == 0
+        : baseline == 0
         ? (today == 0 ? 0 : null)
-        : (today - yesterday) / yesterday * 100;
+        : (today - baseline) / baseline * 100;
     final txns = s?.todayTransactions ?? 0;
+    final weekday = DateFormat(
+      'EEEE',
+      Localizations.localeOf(context).toString(),
+    ).format(DateTime.now());
 
     return SurfaceCard(
       radius: 16,
@@ -596,11 +696,13 @@ class _SalesTodayCard extends StatelessWidget {
               style: AppText.money(size: 18),
             ),
           const SizedBox(height: 4),
-          if (s != null && (yesterday != null || txns > 0))
+          if (s != null && (baseline != null || txns > 0))
             DeltaPill(
               delta: delta,
               label: (v) => delta == null
                   ? l10n.dashboardTransactionsToday(txns)
+                  : vsLastWeek
+                  ? l10n.dashboardVsLastWeekday(v, weekday)
                   : l10n.dashboardVsYesterday(v),
             )
           else
@@ -615,112 +717,6 @@ class _SalesTodayCard extends StatelessWidget {
             ),
           const SizedBox(height: 10),
           Sparkline(values: points, height: 30),
-        ],
-      ),
-    );
-  }
-}
-
-class _PayoutCard extends StatelessWidget {
-  const _PayoutCard({required this.summary, required this.onTap});
-
-  final AsyncValue<MerchantSettlementSummary> summary;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final s = summary.asData?.value;
-    final ts = s?.todaySettlement;
-    final amount = ts?.amount ?? s?.pendingAmount;
-    final status = (ts?.status ?? '').toUpperCase();
-    final (label, color) = switch (status) {
-      'SETTLED' => (l10n.dashboardSettled, AppColors.primary),
-      'POSTPONED' => (l10n.dashboardPostponed, AppColors.warningText),
-      'NONE' => (l10n.dashboardNoPayoutToday, AppColors.textTertiary),
-      'PENDING' => (l10n.dashboardPending, AppColors.warning),
-      _ => (
-        (s?.pendingAmount ?? 0) > 0
-            ? l10n.dashboardPending
-            : l10n.dashboardSettled,
-        (s?.pendingAmount ?? 0) > 0 ? AppColors.warning : AppColors.primary,
-      ),
-    };
-    final expected = ts?.expectedDate;
-    final terminals = s?.activeTerminals;
-
-    return SurfaceCard(
-      radius: 16,
-      padding: const EdgeInsets.all(14),
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.dashboardTodaysSettlements,
-            style: AppText.body(size: 12, color: AppColors.textTertiary),
-          ),
-          const SizedBox(height: 4),
-          if (summary.isLoading)
-            const Skeleton(height: 20, width: 90)
-          else
-            Text(
-              summary.hasValue ? formatMoney(amount) : '—',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppText.money(size: 18),
-            ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppText.body(
-              size: 12,
-              weight: FontWeight.w500,
-              color: color,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Icon(LucideIcons.zap, size: 12, color: AppColors.primary),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Text(
-                  terminals == null
-                      ? l10n.dashboardSettlementsCount(s?.totalSettlements ?? 0)
-                      : l10n.drawerTerminalsActive(terminals),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppText.body(size: 12, color: AppColors.textBody),
-                ),
-              ),
-            ],
-          ),
-          Text(
-            expected != null && expected.isNotEmpty
-                ? l10n.dashboardPayoutExpected(formatDateShort(expected))
-                : l10n.dashboardTotalToDate,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppText.body(size: 12, color: AppColors.textTertiary),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                l10n.dashboardMoreDetails,
-                style: AppText.body(size: 12, weight: FontWeight.w600),
-              ),
-              Icon(
-                LucideIcons.chevronRight,
-                size: 14,
-                color: AppColors.textDisabled,
-              ),
-            ],
-          ),
         ],
       ),
     );

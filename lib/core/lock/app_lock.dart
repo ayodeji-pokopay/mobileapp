@@ -12,8 +12,8 @@ import '../storage/secure_storage.dart';
 
 class AppLockSettings {
   const AppLockSettings({
-    this.enabled = false,
-    this.timeoutMinutes = 1,
+    this.enabled = true,
+    this.timeoutMinutes = 15,
     this.useBiometrics = true,
   });
   final bool enabled;
@@ -40,7 +40,11 @@ class AppLockState {
     this.covered = false,
     this.failedAttempts = 0,
     this.loaded = false,
+    this.hasPin = false,
   });
+
+  /// A PIN has been set; without one only biometrics can unlock.
+  final bool hasPin;
   final AppLockSettings settings;
 
   /// The lock screen is up and needs a PIN or biometric to dismiss.
@@ -57,12 +61,14 @@ class AppLockState {
     bool? covered,
     int? failedAttempts,
     bool? loaded,
+    bool? hasPin,
   }) => AppLockState(
     settings: settings ?? this.settings,
     locked: locked ?? this.locked,
     covered: covered ?? this.covered,
     failedAttempts: failedAttempts ?? this.failedAttempts,
     loaded: loaded ?? this.loaded,
+    hasPin: hasPin ?? this.hasPin,
   );
 }
 
@@ -87,15 +93,22 @@ class AppLockController extends Notifier<AppLockState>
     return const AppLockState();
   }
 
+  /// Default timeout for users who haven't chosen one; remote config
+  /// (`security.lockTimeoutMinutes`) may override it before first load.
+  static int defaultTimeoutMinutes = 15;
+
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
+    final pin = await ref.read(secureStorageProvider).readValue(_pinHashKey);
+    // Lock is on by default; the user can change it in Settings › Security.
     state = state.copyWith(
       settings: AppLockSettings(
-        enabled: prefs.getBool(_enabledKey) ?? false,
-        timeoutMinutes: prefs.getInt(_timeoutKey) ?? 1,
+        enabled: prefs.getBool(_enabledKey) ?? true,
+        timeoutMinutes: prefs.getInt(_timeoutKey) ?? defaultTimeoutMinutes,
         useBiometrics: prefs.getBool(_bioKey) ?? true,
       ),
       loaded: true,
+      hasPin: pin != null && pin.isNotEmpty,
     );
   }
 
@@ -141,11 +154,11 @@ class AppLockController extends Notifier<AppLockState>
   }
 
   Future<void> enable({
-    required String pin,
+    String? pin,
     int? timeoutMinutes,
     bool? useBiometrics,
   }) async {
-    await setPin(pin);
+    if (pin != null) await setPin(pin);
     await _save(
       state.settings.copyWith(
         enabled: true,
@@ -160,7 +173,12 @@ class AppLockController extends Notifier<AppLockState>
     await storage.deleteValue(_pinHashKey);
     await storage.deleteValue(_pinSaltKey);
     await _save(state.settings.copyWith(enabled: false));
-    state = state.copyWith(locked: false, covered: false, failedAttempts: 0);
+    state = state.copyWith(
+      locked: false,
+      covered: false,
+      failedAttempts: 0,
+      hasPin: false,
+    );
   }
 
   Future<void> setTimeout(int minutes) =>
@@ -178,6 +196,7 @@ class AppLockController extends Notifier<AppLockState>
     ).map((b) => b.toRadixString(16).padLeft(2, '0')).join();
     await storage.writeValue(_pinSaltKey, salt);
     await storage.writeValue(_pinHashKey, _hash(pin, salt));
+    state = state.copyWith(hasPin: true);
   }
 
   String _hash(String pin, String salt) =>

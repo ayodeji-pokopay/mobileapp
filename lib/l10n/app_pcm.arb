@@ -554,5 +554,91 @@
         "type": "String"
       }
     }
-  }
+  },
+  "commonToday": "today",
+  "dashboardTakingsToday": "Money wey enter today",
+  "dashboardQuickSendReceipt": "Send receipt",
+  "dashboardQuickPrintLast": "Print last receipt",
+  "dashboardQuickPaymentLink": "Payment link",
+  "dashboardQuickCallSupport": "Call support",
+  "dashboardNoReceiptsYet": "No approved sale today to send.",
+  "terminalOnline": "online",
+  "terminalIdle": "idle",
+  "terminalOffline": "offline",
+  "settlementStepBatched": "Sales don gather",
+  "settlementStepSent": "Don send to bank",
+  "settlementStepPaid": "Don pay",
+  "settlementStepNone": "No sales to settle yet",
+  "settlementStepFailed": "Payout fail. Tap for details.",
+  "settlementStepPostponed": "E don move to next cycle",
+  "dashboardExpectedBy": "Expect am {when}",
+  "@dashboardExpectedBy": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardVsLastWeekday": "{delta} vs last {day}",
+  "@dashboardVsLastWeekday": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardApprovalWarningTitle": "Declines plenty pass normal",
+  "dashboardApprovalWarningBody": "{today}% of sales approve today, e normally dey {usual}%. Check the card machine and network.",
+  "@dashboardApprovalWarningBody": {
+    "placeholders": {
+      "today": {
+        "type": "int"
+      },
+      "usual": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardApprovalTopReason": "Main reason: {reason}",
+  "@dashboardApprovalTopReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardGoalSet": "Set sales target",
+  "dashboardGoalProgress": "{done} of {target} today",
+  "@dashboardGoalProgress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "goalSheetTitle": "Sales targets",
+  "goalSheetHint": "E dey only for this phone. Leave am empty to remove target.",
+  "goalDaily": "Daily target",
+  "goalMonthly": "Monthly target",
+  "goalClear": "Remove targets",
+  "activityFilterAll": "All",
+  "activityFilterApproved": "Approved",
+  "activityFilterDeclined": "Declined",
+  "activityFilterReversed": "Reversed",
+  "deviceCompromisedTitle": "This phone look like say dem root or jailbreak am",
+  "deviceCompromisedBody": "Pokopay no fit promise say your data dey safe for am. Use normal phone for your business account.",
+  "deviceBlockedTitle": "Pokopay no fit run for this phone",
+  "deviceBlockedBody": "This phone look like say dem root or jailbreak am, and e fit put your business account for risk. Abeg use normal phone.",
+  "lockSetPinPromptTitle": "Add PIN for the app lock",
+  "lockSetPinPromptBody": "Pokopay dey lock after 15 minutes for background. PIN go let you open am when Face ID or finger no dey available.",
+  "lockSetPinPromptAction": "Set PIN",
+  "lockNotNow": "Not now",
+  "lockNoPinHint": "No PIN dey for this app. Open with Face ID or finger, or add PIN for Settings › Security.",
+  "lockUnlockWithBiometrics": "Open"
 }

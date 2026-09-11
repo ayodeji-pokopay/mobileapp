@@ -13,6 +13,7 @@ class AppConfig {
     this.features = const FeatureFlags(),
     this.currency = const CurrencyInfo(),
     this.dialCode = '234',
+    this.security = const SecurityInfo(),
   });
 
   final String? minSupportedVersion;
@@ -25,6 +26,7 @@ class AppConfig {
   /// Country calling code used to normalise customer phone numbers
   /// (`region.dialCode` in remote config; Nigeria by default).
   final String dialCode;
+  final SecurityInfo security;
   final FeatureFlags features;
   final CurrencyInfo currency;
 
@@ -41,6 +43,7 @@ class AppConfig {
       storeUrl: json['storeUrl']?.toString(),
       maintenance: MaintenanceInfo.fromJson(obj('maintenance')),
       support: SupportInfo.fromJson(obj('support')),
+      security: SecurityInfo.fromJson(obj('security')),
       dialCode: (obj('region')['dialCode'] ?? json['dialCode'] ?? '234')
           .toString()
           .replaceAll(RegExp(r'\D'), ''),
@@ -106,6 +109,26 @@ class FeatureFlags {
     paymentLinks: json['paymentLinks'] == true,
     instantSettlement: json['instantSettlement'] != false,
     invoices: json['invoices'] == true,
+  );
+}
+
+/// Device and session policy. Defaults are the strict-but-usable choice;
+/// the backend can loosen or tighten them per release.
+class SecurityInfo {
+  const SecurityInfo({
+    this.blockCompromisedDevices = false,
+    this.lockTimeoutMinutes = 15,
+  });
+
+  /// Refuse to run on rooted / jailbroken devices instead of warning.
+  final bool blockCompromisedDevices;
+
+  /// Default app-lock timeout for users who haven't chosen one.
+  final int lockTimeoutMinutes;
+
+  factory SecurityInfo.fromJson(Map<String, dynamic> json) => SecurityInfo(
+    blockCompromisedDevices: json['blockCompromisedDevices'] == true,
+    lockTimeoutMinutes: (json['lockTimeoutMinutes'] as num?)?.toInt() ?? 15,
   );
 }
 

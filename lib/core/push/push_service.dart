@@ -112,6 +112,7 @@ class PushService {
   Future<void> register({required String mid}) async {
     final m = _messaging;
     if (m == null) return;
+    debugPrint('push: register start for $mid');
     try {
       final settings = await m.requestPermission(
         alert: true,

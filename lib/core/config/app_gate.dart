@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+
+import '../security/device_integrity.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../shared/widgets/pokopay_logo.dart';
@@ -20,6 +22,8 @@ class AppGate extends ConsumerWidget {
     required this.updateBody,
     required this.updateButton,
     required this.maintenanceTitle,
+    required this.blockedTitle,
+    required this.blockedBody,
   });
 
   final Widget child;
@@ -27,6 +31,8 @@ class AppGate extends ConsumerWidget {
   final String updateBody;
   final String updateButton;
   final String maintenanceTitle;
+  final String blockedTitle;
+  final String blockedBody;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,6 +49,12 @@ class AppGate extends ConsumerWidget {
       );
     }
 
+    if (config.security.blockCompromisedDevices) {
+      final integrity = ref.watch(deviceIntegrityProvider).asData?.value;
+      if (integrity?.compromised == true) {
+        return _Blocked(title: blockedTitle, body: blockedBody);
+      }
+    }
     if (!config.maintenance.enabled) return child;
     return Column(
       children: [
@@ -150,6 +162,42 @@ class _UpdateRequired extends StatelessWidget {
                       ),
                 icon: const Icon(LucideIcons.download, size: 18),
                 label: Text(button),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Blocked extends StatelessWidget {
+  const _Blocked({required this.title, required this.body});
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.canvas,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(LucideIcons.shieldOff, size: 48, color: AppColors.danger),
+              const SizedBox(height: 20),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: AppText.display(size: 24),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                body,
+                textAlign: TextAlign.center,
+                style: AppText.body(size: 14, color: AppColors.textSecondary),
               ),
             ],
           ),

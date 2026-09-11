@@ -554,5 +554,91 @@
         "type": "String"
       }
     }
-  }
+  },
+  "commonToday": "yau",
+  "dashboardTakingsToday": "Kuɗin da aka karɓa yau",
+  "dashboardQuickSendReceipt": "Aika rasit",
+  "dashboardQuickPrintLast": "Buga rasit na ƙarshe",
+  "dashboardQuickPaymentLink": "Hanyar biya",
+  "dashboardQuickCallSupport": "Kira tallafi",
+  "dashboardNoReceiptsYet": "Babu tallace-tallace da aka amince da su yau don aikawa.",
+  "terminalOnline": "a kan layi",
+  "terminalIdle": "ba ya aiki",
+  "terminalOffline": "a kashe",
+  "settlementStepBatched": "An tara tallace-tallace",
+  "settlementStepSent": "An aika zuwa banki",
+  "settlementStepPaid": "An biya",
+  "settlementStepNone": "Babu tallace-tallace da za a daidaita tukuna",
+  "settlementStepFailed": "Biyan kuɗi ya gaza. Matsa don cikakken bayani.",
+  "settlementStepPostponed": "An dage zuwa zagaye na gaba",
+  "dashboardExpectedBy": "Ana tsammani {when}",
+  "@dashboardExpectedBy": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardVsLastWeekday": "{delta} idan aka kwatanta da {day} da ya gabata",
+  "@dashboardVsLastWeekday": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardApprovalWarningTitle": "Ƙin amincewa fiye da yadda aka saba",
+  "dashboardApprovalWarningBody": "An amince da {today}% na tallace-tallace yau, yawanci {usual}%. Duba na'urar kati da hanyar sadarwa.",
+  "@dashboardApprovalWarningBody": {
+    "placeholders": {
+      "today": {
+        "type": "int"
+      },
+      "usual": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardApprovalTopReason": "Dalili mafi yawa: {reason}",
+  "@dashboardApprovalTopReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardGoalSet": "Saita burin tallace-tallace",
+  "dashboardGoalProgress": "{done} daga {target} yau",
+  "@dashboardGoalProgress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "goalSheetTitle": "Burin tallace-tallace",
+  "goalSheetHint": "Ana ajiye a wannan waya kawai. Bar fanko don cire buri.",
+  "goalDaily": "Burin yau da kullum",
+  "goalMonthly": "Burin wata-wata",
+  "goalClear": "Cire buri",
+  "activityFilterAll": "Duka",
+  "activityFilterApproved": "An amince",
+  "activityFilterDeclined": "An ƙi",
+  "activityFilterReversed": "An mayar",
+  "deviceCompromisedTitle": "Wannan wayar tana kama da an yi mata root ko jailbreak",
+  "deviceCompromisedBody": "Pokopay ba zai iya tabbatar da tsaron bayananka a kanta ba. Yi amfani da waya ta yau da kullum don asusun kasuwancinka.",
+  "deviceBlockedTitle": "Pokopay ba zai iya aiki a wannan wayar ba",
+  "deviceBlockedBody": "Wannan wayar tana kama da an yi mata root ko jailbreak, wanda ke jefa asusun kasuwancinka cikin haɗari. Da fatan za a yi amfani da waya ta yau da kullum.",
+  "lockSetPinPromptTitle": "Ƙara PIN don kulle manhaja",
+  "lockSetPinPromptBody": "Pokopay yana kullewa bayan minti 15 a baya. PIN yana ba ka damar buɗewa idan Face ID ko yatsa ba su samu ba.",
+  "lockSetPinPromptAction": "Saita PIN",
+  "lockNotNow": "Ba yanzu ba",
+  "lockNoPinHint": "Ba a saita PIN don wannan manhaja ba. Buɗe da Face ID ko yatsa, ko ƙara PIN a Saituna › Tsaro.",
+  "lockUnlockWithBiometrics": "Buɗe"
 }

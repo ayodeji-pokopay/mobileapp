@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../core/router/app_router.dart';
+import '../../features/auth/presentation/auth_controller.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
 import '../../l10n/generated/app_localizations.dart';
@@ -11,7 +13,7 @@ enum NavTab { home, sales, money, settings }
 
 /// Bottom navigation from the design: the active tab expands into a
 /// grey chip with icon and label, inactive tabs are stacked icon + label.
-class PokoBottomNav extends StatelessWidget {
+class PokoBottomNav extends ConsumerWidget {
   const PokoBottomNav({super.key, required this.active});
 
   final NavTab active;
@@ -24,9 +26,12 @@ class PokoBottomNav extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final bottom = MediaQuery.paddingOf(context).bottom;
+    final canViewMoney = ref.watch(
+      authControllerProvider.select((a) => a.canViewMoney),
+    );
     final labels = [
       l10n.navHome,
       l10n.navSales,
@@ -51,14 +56,15 @@ class PokoBottomNav extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           for (final (i, (tab, icon, route)) in _items.indexed)
-            _NavItem(
-              icon: icon,
-              label: labels[i],
-              active: tab == active,
-              onTap: () {
-                if (tab != active) context.go(route);
-              },
-            ),
+            if (tab != NavTab.money || canViewMoney)
+              _NavItem(
+                icon: icon,
+                label: labels[i],
+                active: tab == active,
+                onTap: () {
+                  if (tab != active) context.go(route);
+                },
+              ),
         ],
       ),
     );

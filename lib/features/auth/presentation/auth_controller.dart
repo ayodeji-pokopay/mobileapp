@@ -10,6 +10,14 @@ import '../data/auth_repository.dart';
 
 enum AuthStatus { unknown, unauthenticated, authenticated }
 
+/// Permission names from `GET /auth/me`.
+abstract final class Permissions {
+  static const viewSales = 'VIEW_SALES';
+  static const viewSettlements = 'VIEW_SETTLEMENTS';
+  static const managePreferences = 'MANAGE_PREFERENCES';
+  static const manageStaff = 'MANAGE_STAFF';
+}
+
 class AuthState {
   const AuthState({
     required this.status,
@@ -42,10 +50,18 @@ class AuthState {
   bool get canSwitchMerchant =>
       status == AuthStatus.authenticated && (user?.mid ?? '').isEmpty;
 
+  /// Permissions are additive; a user with none listed (owner, legacy
+  /// backend) is treated as having all of them.
   bool hasPermission(String permission) {
     final perms = user?.permissions ?? const [];
     return perms.isEmpty || perms.contains(permission);
   }
+
+  /// Staff who may not see balances or payouts (cashier view).
+  bool get canViewMoney => hasPermission(Permissions.viewSettlements);
+  bool get canViewSales => hasPermission(Permissions.viewSales);
+  bool get canManagePreferences => hasPermission(Permissions.managePreferences);
+  bool get isStaffView => !canViewMoney;
 
   AuthState copyWith({
     AuthStatus? status,

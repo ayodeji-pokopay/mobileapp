@@ -179,15 +179,16 @@ class AppDrawer extends ConsumerWidget {
                   title: l10n.drawerStores,
                   onTap: () => go(AppRoutes.stores),
                 ),
-                ListRow(
-                  leading: Icon(
-                    LucideIcons.fileText,
-                    size: 20,
-                    color: AppColors.textSecondary,
+                if (auth.canViewMoney)
+                  ListRow(
+                    leading: Icon(
+                      LucideIcons.fileText,
+                      size: 20,
+                      color: AppColors.textSecondary,
+                    ),
+                    title: l10n.drawerStatements,
+                    onTap: () => go(AppRoutes.settlements),
                   ),
-                  title: l10n.drawerStatements,
-                  onTap: () => go(AppRoutes.settlements),
-                ),
                 ListRow(
                   leading: Icon(
                     LucideIcons.chartNoAxesColumn,

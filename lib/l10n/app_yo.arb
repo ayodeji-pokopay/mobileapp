@@ -554,5 +554,91 @@
         "type": "String"
       }
     }
-  }
+  },
+  "commonToday": "lónìí",
+  "dashboardTakingsToday": "Owó tí a gbà lónìí",
+  "dashboardQuickSendReceipt": "Fi ìwé-ẹ̀rí ránṣẹ́",
+  "dashboardQuickPrintLast": "Tẹ ìwé-ẹ̀rí tó kẹ́yìn",
+  "dashboardQuickPaymentLink": "Ọ̀nà ìsanwó",
+  "dashboardQuickCallSupport": "Pe ìrànlọ́wọ́",
+  "dashboardNoReceiptsYet": "Kò sí títà tí a fọwọ́ sí lónìí láti fi ránṣẹ́.",
+  "terminalOnline": "lórí ayélujára",
+  "terminalIdle": "ó dákẹ́",
+  "terminalOffline": "kò sí",
+  "settlementStepBatched": "A ti kó títà jọ",
+  "settlementStepSent": "A ti fi ránṣẹ́ sí báǹkì",
+  "settlementStepPaid": "A ti san",
+  "settlementStepNone": "Kò sí títà láti san síbẹ̀",
+  "settlementStepFailed": "Ìsanwó kùnà. Tẹ̀ fún àlàyé.",
+  "settlementStepPostponed": "A sún sí àkókò tó kàn",
+  "dashboardExpectedBy": "A ń retí {when}",
+  "@dashboardExpectedBy": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardVsLastWeekday": "{delta} sí {day} tó kọjá",
+  "@dashboardVsLastWeekday": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardApprovalWarningTitle": "Ìkọ̀ pọ̀ ju ti tẹ́lẹ̀ lọ",
+  "dashboardApprovalWarningBody": "{today}% títà ni a fọwọ́ sí lónìí, ó sábà máa jẹ́ {usual}%. Ṣàyẹ̀wò ẹ̀rọ káàdì àti nẹ́tíwọ́ọ̀kì.",
+  "@dashboardApprovalWarningBody": {
+    "placeholders": {
+      "today": {
+        "type": "int"
+      },
+      "usual": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardApprovalTopReason": "Ìdí tó wọ́pọ̀ jù: {reason}",
+  "@dashboardApprovalTopReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardGoalSet": "Ṣètò àfojúsùn títà",
+  "dashboardGoalProgress": "{done} nínú {target} lónìí",
+  "@dashboardGoalProgress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "goalSheetTitle": "Àwọn àfojúsùn títà",
+  "goalSheetHint": "A tọ́jú rẹ̀ lórí fóònù yìí nìkan. Fi sílẹ̀ òfo láti yọ àfojúsùn kúrò.",
+  "goalDaily": "Àfojúsùn ojoojúmọ́",
+  "goalMonthly": "Àfojúsùn oṣooṣù",
+  "goalClear": "Yọ àwọn àfojúsùn kúrò",
+  "activityFilterAll": "Gbogbo",
+  "activityFilterApproved": "A fọwọ́ sí",
+  "activityFilterDeclined": "A kọ̀",
+  "activityFilterReversed": "A dá padà",
+  "deviceCompromisedTitle": "Fóònù yìí dàbí èyí tí a ti fọ́ (root/jailbreak)",
+  "deviceCompromisedBody": "Pokopay kò lè dánilójú pé dátà rẹ wà láìléwu lórí rẹ̀. Lo fóònù déédéé fún àkáǹtì iṣẹ́ rẹ.",
+  "deviceBlockedTitle": "Pokopay kò lè ṣiṣẹ́ lórí fóònù yìí",
+  "deviceBlockedBody": "Fóònù yìí dàbí èyí tí a ti fọ́, èyí sì fi àkáǹtì iṣẹ́ rẹ sínú ewu. Jọ̀wọ́ lo fóònù déédéé.",
+  "lockSetPinPromptTitle": "Fi PIN kún títì àpù",
+  "lockSetPinPromptBody": "Pokopay máa ń tì lẹ́yìn ìṣẹ́jú 15 ní ẹ̀yìn. PIN jẹ́ kí o ṣí i nígbà tí Face ID tàbí ìka kò bá sí.",
+  "lockSetPinPromptAction": "Ṣètò PIN",
+  "lockNotNow": "Kì í ṣe báyìí",
+  "lockNoPinHint": "Kò sí PIN fún àpù yìí. Ṣí pẹ̀lú Face ID tàbí ìka, tàbí fi PIN kún un ní Ètò › Ààbò.",
+  "lockUnlockWithBiometrics": "Ṣí"
 }

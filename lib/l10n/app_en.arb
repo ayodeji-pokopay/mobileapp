@@ -837,5 +837,91 @@
         "type": "String"
       }
     }
-  }
+  },
+  "commonToday": "today",
+  "dashboardTakingsToday": "Today's takings",
+  "dashboardQuickSendReceipt": "Send receipt",
+  "dashboardQuickPrintLast": "Print last receipt",
+  "dashboardQuickPaymentLink": "Payment link",
+  "dashboardQuickCallSupport": "Call support",
+  "dashboardNoReceiptsYet": "No approved sales yet today to send.",
+  "terminalOnline": "online",
+  "terminalIdle": "idle",
+  "terminalOffline": "offline",
+  "settlementStepBatched": "Sales batched",
+  "settlementStepSent": "Sent to bank",
+  "settlementStepPaid": "Paid",
+  "settlementStepNone": "No sales to settle yet",
+  "settlementStepFailed": "Payout failed. Tap for details.",
+  "settlementStepPostponed": "Postponed to the next cycle",
+  "dashboardExpectedBy": "Expected {when}",
+  "@dashboardExpectedBy": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardVsLastWeekday": "{delta} vs last {day}",
+  "@dashboardVsLastWeekday": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardApprovalWarningTitle": "More declines than usual",
+  "dashboardApprovalWarningBody": "{today}% of sales approved today, usually {usual}%. Check the card machine and network.",
+  "@dashboardApprovalWarningBody": {
+    "placeholders": {
+      "today": {
+        "type": "int"
+      },
+      "usual": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardApprovalTopReason": "Most common reason: {reason}",
+  "@dashboardApprovalTopReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardGoalSet": "Set a sales target",
+  "dashboardGoalProgress": "{done} of {target} today",
+  "@dashboardGoalProgress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "goalSheetTitle": "Sales targets",
+  "goalSheetHint": "Kept on this phone only. Leave blank to remove a target.",
+  "goalDaily": "Daily target",
+  "goalMonthly": "Monthly target",
+  "goalClear": "Remove targets",
+  "activityFilterAll": "All",
+  "activityFilterApproved": "Approved",
+  "activityFilterDeclined": "Declined",
+  "activityFilterReversed": "Reversed",
+  "deviceCompromisedTitle": "This phone looks rooted or jailbroken",
+  "deviceCompromisedBody": "Pokopay can't guarantee your data is safe on it. Use a standard phone for your business account.",
+  "deviceBlockedTitle": "Pokopay can't run on this phone",
+  "deviceBlockedBody": "This phone appears to be rooted or jailbroken, which puts your business account at risk. Please use a standard phone.",
+  "lockSetPinPromptTitle": "Add a PIN for the app lock",
+  "lockSetPinPromptBody": "Pokopay locks after 15 minutes in the background. A PIN lets you unlock when Face ID or fingerprint isn't available.",
+  "lockSetPinPromptAction": "Set PIN",
+  "lockNotNow": "Not now",
+  "lockNoPinHint": "No PIN is set for this app. Unlock with Face ID or fingerprint, or add a PIN in Settings › Security.",
+  "lockUnlockWithBiometrics": "Unlock"
 }

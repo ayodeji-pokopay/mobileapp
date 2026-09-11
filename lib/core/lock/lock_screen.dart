@@ -80,7 +80,11 @@ class _LockScreenState extends ConsumerState<LockScreen> {
                   Text(l10n.lockTitle, style: AppText.display(size: 26)),
                   const SizedBox(height: 6),
                   Text(
-                    _error ? l10n.lockWrongPin(left) : l10n.lockSubtitle,
+                    _error
+                        ? l10n.lockWrongPin(left)
+                        : lock.hasPin
+                        ? l10n.lockSubtitle
+                        : '',
                     style: AppText.body(
                       size: 14,
                       color: _error
@@ -89,36 +93,59 @@ class _LockScreenState extends ConsumerState<LockScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (var i = 0; i < 4; i++)
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 120),
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          width: 14,
-                          height: 14,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: i < _pin.length
-                                ? AppColors.primary
-                                : AppColors.surfaceAlt,
+                  if (lock.hasPin)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (var i = 0; i < 4; i++)
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 120),
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            width: 14,
+                            height: 14,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: i < _pin.length
+                                  ? AppColors.primary
+                                  : AppColors.surfaceAlt,
+                            ),
                           ),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 28),
-                  _Keypad(
-                    onDigit: _tap,
-                    onDelete: () => setState(
-                      () => _pin = _pin.isEmpty
-                          ? ''
-                          : _pin.substring(0, _pin.length - 1),
+                      ],
                     ),
-                    onBiometric: bio && lock.settings.useBiometrics
-                        ? _tryBiometrics
-                        : null,
-                  ),
+                  const SizedBox(height: 28),
+                  if (!lock.hasPin) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        l10n.lockNoPinHint,
+                        textAlign: TextAlign.center,
+                        style: AppText.body(
+                          size: 13,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: bio ? _tryBiometrics : null,
+                      icon: const Icon(
+                        LucideIcons.fingerprintPattern,
+                        size: 18,
+                      ),
+                      label: Text(l10n.lockUnlockWithBiometrics),
+                    ),
+                  ] else
+                    _Keypad(
+                      onDigit: _tap,
+                      onDelete: () => setState(
+                        () => _pin = _pin.isEmpty
+                            ? ''
+                            : _pin.substring(0, _pin.length - 1),
+                      ),
+                      onBiometric: bio && lock.settings.useBiometrics
+                          ? _tryBiometrics
+                          : null,
+                    ),
                   const Spacer(),
                   TextButton(
                     onPressed: () =>
