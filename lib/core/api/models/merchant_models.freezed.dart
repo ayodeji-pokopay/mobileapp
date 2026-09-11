@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MerchantSettlementSummary {
 
- String? get mid; int? get totalSettlements; num? get totalSettledAmount; num? get pendingAmount; int? get todayTransactions; num? get todaySales; num? get yesterdaySales; int? get yesterdayTransactions; num? get monthToDateSales; TodaySettlement? get todaySettlement; int? get activeTerminals; int? get instantTerminals;
+ String? get mid; int? get totalSettlements; num? get totalSettledAmount; num? get pendingAmount; int? get todayTransactions; num? get todaySales; num? get yesterdaySales; int? get yesterdayTransactions; num? get sameWeekdayLastWeekSales; num? get monthToDateSales; TodaySettlement? get todaySettlement; int? get activeTerminals; int? get instantTerminals;
 /// Create a copy of MerchantSettlementSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $MerchantSettlementSummaryCopyWith<MerchantSettlementSummary> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MerchantSettlementSummary&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.totalSettlements, totalSettlements) || other.totalSettlements == totalSettlements)&&(identical(other.totalSettledAmount, totalSettledAmount) || other.totalSettledAmount == totalSettledAmount)&&(identical(other.pendingAmount, pendingAmount) || other.pendingAmount == pendingAmount)&&(identical(other.todayTransactions, todayTransactions) || other.todayTransactions == todayTransactions)&&(identical(other.todaySales, todaySales) || other.todaySales == todaySales)&&(identical(other.yesterdaySales, yesterdaySales) || other.yesterdaySales == yesterdaySales)&&(identical(other.yesterdayTransactions, yesterdayTransactions) || other.yesterdayTransactions == yesterdayTransactions)&&(identical(other.monthToDateSales, monthToDateSales) || other.monthToDateSales == monthToDateSales)&&(identical(other.todaySettlement, todaySettlement) || other.todaySettlement == todaySettlement)&&(identical(other.activeTerminals, activeTerminals) || other.activeTerminals == activeTerminals)&&(identical(other.instantTerminals, instantTerminals) || other.instantTerminals == instantTerminals));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MerchantSettlementSummary&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.totalSettlements, totalSettlements) || other.totalSettlements == totalSettlements)&&(identical(other.totalSettledAmount, totalSettledAmount) || other.totalSettledAmount == totalSettledAmount)&&(identical(other.pendingAmount, pendingAmount) || other.pendingAmount == pendingAmount)&&(identical(other.todayTransactions, todayTransactions) || other.todayTransactions == todayTransactions)&&(identical(other.todaySales, todaySales) || other.todaySales == todaySales)&&(identical(other.yesterdaySales, yesterdaySales) || other.yesterdaySales == yesterdaySales)&&(identical(other.yesterdayTransactions, yesterdayTransactions) || other.yesterdayTransactions == yesterdayTransactions)&&(identical(other.sameWeekdayLastWeekSales, sameWeekdayLastWeekSales) || other.sameWeekdayLastWeekSales == sameWeekdayLastWeekSales)&&(identical(other.monthToDateSales, monthToDateSales) || other.monthToDateSales == monthToDateSales)&&(identical(other.todaySettlement, todaySettlement) || other.todaySettlement == todaySettlement)&&(identical(other.activeTerminals, activeTerminals) || other.activeTerminals == activeTerminals)&&(identical(other.instantTerminals, instantTerminals) || other.instantTerminals == instantTerminals));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,mid,totalSettlements,totalSettledAmount,pendingAmount,todayTransactions,todaySales,yesterdaySales,yesterdayTransactions,monthToDateSales,todaySettlement,activeTerminals,instantTerminals);
+int get hashCode => Object.hash(runtimeType,mid,totalSettlements,totalSettledAmount,pendingAmount,todayTransactions,todaySales,yesterdaySales,yesterdayTransactions,sameWeekdayLastWeekSales,monthToDateSales,todaySettlement,activeTerminals,instantTerminals);
 
 @override
 String toString() {
-  return 'MerchantSettlementSummary(mid: $mid, totalSettlements: $totalSettlements, totalSettledAmount: $totalSettledAmount, pendingAmount: $pendingAmount, todayTransactions: $todayTransactions, todaySales: $todaySales, yesterdaySales: $yesterdaySales, yesterdayTransactions: $yesterdayTransactions, monthToDateSales: $monthToDateSales, todaySettlement: $todaySettlement, activeTerminals: $activeTerminals, instantTerminals: $instantTerminals)';
+  return 'MerchantSettlementSummary(mid: $mid, totalSettlements: $totalSettlements, totalSettledAmount: $totalSettledAmount, pendingAmount: $pendingAmount, todayTransactions: $todayTransactions, todaySales: $todaySales, yesterdaySales: $yesterdaySales, yesterdayTransactions: $yesterdayTransactions, sameWeekdayLastWeekSales: $sameWeekdayLastWeekSales, monthToDateSales: $monthToDateSales, todaySettlement: $todaySettlement, activeTerminals: $activeTerminals, instantTerminals: $instantTerminals)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $MerchantSettlementSummaryCopyWith<$Res>  {
   factory $MerchantSettlementSummaryCopyWith(MerchantSettlementSummary value, $Res Function(MerchantSettlementSummary) _then) = _$MerchantSettlementSummaryCopyWithImpl;
 @useResult
 $Res call({
- String? mid, int? totalSettlements, num? totalSettledAmount, num? pendingAmount, int? todayTransactions, num? todaySales, num? yesterdaySales, int? yesterdayTransactions, num? monthToDateSales, TodaySettlement? todaySettlement, int? activeTerminals, int? instantTerminals
+ String? mid, int? totalSettlements, num? totalSettledAmount, num? pendingAmount, int? todayTransactions, num? todaySales, num? yesterdaySales, int? yesterdayTransactions, num? sameWeekdayLastWeekSales, num? monthToDateSales, TodaySettlement? todaySettlement, int? activeTerminals, int? instantTerminals
 });
 
 
@@ -65,7 +65,7 @@ class _$MerchantSettlementSummaryCopyWithImpl<$Res>
 
 /// Create a copy of MerchantSettlementSummary
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? mid = freezed,Object? totalSettlements = freezed,Object? totalSettledAmount = freezed,Object? pendingAmount = freezed,Object? todayTransactions = freezed,Object? todaySales = freezed,Object? yesterdaySales = freezed,Object? yesterdayTransactions = freezed,Object? monthToDateSales = freezed,Object? todaySettlement = freezed,Object? activeTerminals = freezed,Object? instantTerminals = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? mid = freezed,Object? totalSettlements = freezed,Object? totalSettledAmount = freezed,Object? pendingAmount = freezed,Object? todayTransactions = freezed,Object? todaySales = freezed,Object? yesterdaySales = freezed,Object? yesterdayTransactions = freezed,Object? sameWeekdayLastWeekSales = freezed,Object? monthToDateSales = freezed,Object? todaySettlement = freezed,Object? activeTerminals = freezed,Object? instantTerminals = freezed,}) {
   return _then(_self.copyWith(
 mid: freezed == mid ? _self.mid : mid // ignore: cast_nullable_to_non_nullable
 as String?,totalSettlements: freezed == totalSettlements ? _self.totalSettlements : totalSettlements // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,8 @@ as num?,todayTransactions: freezed == todayTransactions ? _self.todayTransaction
 as int?,todaySales: freezed == todaySales ? _self.todaySales : todaySales // ignore: cast_nullable_to_non_nullable
 as num?,yesterdaySales: freezed == yesterdaySales ? _self.yesterdaySales : yesterdaySales // ignore: cast_nullable_to_non_nullable
 as num?,yesterdayTransactions: freezed == yesterdayTransactions ? _self.yesterdayTransactions : yesterdayTransactions // ignore: cast_nullable_to_non_nullable
-as int?,monthToDateSales: freezed == monthToDateSales ? _self.monthToDateSales : monthToDateSales // ignore: cast_nullable_to_non_nullable
+as int?,sameWeekdayLastWeekSales: freezed == sameWeekdayLastWeekSales ? _self.sameWeekdayLastWeekSales : sameWeekdayLastWeekSales // ignore: cast_nullable_to_non_nullable
+as num?,monthToDateSales: freezed == monthToDateSales ? _self.monthToDateSales : monthToDateSales // ignore: cast_nullable_to_non_nullable
 as num?,todaySettlement: freezed == todaySettlement ? _self.todaySettlement : todaySettlement // ignore: cast_nullable_to_non_nullable
 as TodaySettlement?,activeTerminals: freezed == activeTerminals ? _self.activeTerminals : activeTerminals // ignore: cast_nullable_to_non_nullable
 as int?,instantTerminals: freezed == instantTerminals ? _self.instantTerminals : instantTerminals // ignore: cast_nullable_to_non_nullable
@@ -176,10 +177,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? mid,  int? totalSettlements,  num? totalSettledAmount,  num? pendingAmount,  int? todayTransactions,  num? todaySales,  num? yesterdaySales,  int? yesterdayTransactions,  num? monthToDateSales,  TodaySettlement? todaySettlement,  int? activeTerminals,  int? instantTerminals)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? mid,  int? totalSettlements,  num? totalSettledAmount,  num? pendingAmount,  int? todayTransactions,  num? todaySales,  num? yesterdaySales,  int? yesterdayTransactions,  num? sameWeekdayLastWeekSales,  num? monthToDateSales,  TodaySettlement? todaySettlement,  int? activeTerminals,  int? instantTerminals)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MerchantSettlementSummary() when $default != null:
-return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.pendingAmount,_that.todayTransactions,_that.todaySales,_that.yesterdaySales,_that.yesterdayTransactions,_that.monthToDateSales,_that.todaySettlement,_that.activeTerminals,_that.instantTerminals);case _:
+return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.pendingAmount,_that.todayTransactions,_that.todaySales,_that.yesterdaySales,_that.yesterdayTransactions,_that.sameWeekdayLastWeekSales,_that.monthToDateSales,_that.todaySettlement,_that.activeTerminals,_that.instantTerminals);case _:
   return orElse();
 
 }
@@ -197,10 +198,10 @@ return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? mid,  int? totalSettlements,  num? totalSettledAmount,  num? pendingAmount,  int? todayTransactions,  num? todaySales,  num? yesterdaySales,  int? yesterdayTransactions,  num? monthToDateSales,  TodaySettlement? todaySettlement,  int? activeTerminals,  int? instantTerminals)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? mid,  int? totalSettlements,  num? totalSettledAmount,  num? pendingAmount,  int? todayTransactions,  num? todaySales,  num? yesterdaySales,  int? yesterdayTransactions,  num? sameWeekdayLastWeekSales,  num? monthToDateSales,  TodaySettlement? todaySettlement,  int? activeTerminals,  int? instantTerminals)  $default,) {final _that = this;
 switch (_that) {
 case _MerchantSettlementSummary():
-return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.pendingAmount,_that.todayTransactions,_that.todaySales,_that.yesterdaySales,_that.yesterdayTransactions,_that.monthToDateSales,_that.todaySettlement,_that.activeTerminals,_that.instantTerminals);case _:
+return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.pendingAmount,_that.todayTransactions,_that.todaySales,_that.yesterdaySales,_that.yesterdayTransactions,_that.sameWeekdayLastWeekSales,_that.monthToDateSales,_that.todaySettlement,_that.activeTerminals,_that.instantTerminals);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -217,10 +218,10 @@ return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? mid,  int? totalSettlements,  num? totalSettledAmount,  num? pendingAmount,  int? todayTransactions,  num? todaySales,  num? yesterdaySales,  int? yesterdayTransactions,  num? monthToDateSales,  TodaySettlement? todaySettlement,  int? activeTerminals,  int? instantTerminals)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? mid,  int? totalSettlements,  num? totalSettledAmount,  num? pendingAmount,  int? todayTransactions,  num? todaySales,  num? yesterdaySales,  int? yesterdayTransactions,  num? sameWeekdayLastWeekSales,  num? monthToDateSales,  TodaySettlement? todaySettlement,  int? activeTerminals,  int? instantTerminals)?  $default,) {final _that = this;
 switch (_that) {
 case _MerchantSettlementSummary() when $default != null:
-return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.pendingAmount,_that.todayTransactions,_that.todaySales,_that.yesterdaySales,_that.yesterdayTransactions,_that.monthToDateSales,_that.todaySettlement,_that.activeTerminals,_that.instantTerminals);case _:
+return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.pendingAmount,_that.todayTransactions,_that.todaySales,_that.yesterdaySales,_that.yesterdayTransactions,_that.sameWeekdayLastWeekSales,_that.monthToDateSales,_that.todaySettlement,_that.activeTerminals,_that.instantTerminals);case _:
   return null;
 
 }
@@ -232,7 +233,7 @@ return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.
 @JsonSerializable()
 
 class _MerchantSettlementSummary implements MerchantSettlementSummary {
-  const _MerchantSettlementSummary({this.mid, this.totalSettlements, this.totalSettledAmount, this.pendingAmount, this.todayTransactions, this.todaySales, this.yesterdaySales, this.yesterdayTransactions, this.monthToDateSales, this.todaySettlement, this.activeTerminals, this.instantTerminals});
+  const _MerchantSettlementSummary({this.mid, this.totalSettlements, this.totalSettledAmount, this.pendingAmount, this.todayTransactions, this.todaySales, this.yesterdaySales, this.yesterdayTransactions, this.sameWeekdayLastWeekSales, this.monthToDateSales, this.todaySettlement, this.activeTerminals, this.instantTerminals});
   factory _MerchantSettlementSummary.fromJson(Map<String, dynamic> json) => _$MerchantSettlementSummaryFromJson(json);
 
 @override final  String? mid;
@@ -243,6 +244,7 @@ class _MerchantSettlementSummary implements MerchantSettlementSummary {
 @override final  num? todaySales;
 @override final  num? yesterdaySales;
 @override final  int? yesterdayTransactions;
+@override final  num? sameWeekdayLastWeekSales;
 @override final  num? monthToDateSales;
 @override final  TodaySettlement? todaySettlement;
 @override final  int? activeTerminals;
@@ -261,16 +263,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MerchantSettlementSummary&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.totalSettlements, totalSettlements) || other.totalSettlements == totalSettlements)&&(identical(other.totalSettledAmount, totalSettledAmount) || other.totalSettledAmount == totalSettledAmount)&&(identical(other.pendingAmount, pendingAmount) || other.pendingAmount == pendingAmount)&&(identical(other.todayTransactions, todayTransactions) || other.todayTransactions == todayTransactions)&&(identical(other.todaySales, todaySales) || other.todaySales == todaySales)&&(identical(other.yesterdaySales, yesterdaySales) || other.yesterdaySales == yesterdaySales)&&(identical(other.yesterdayTransactions, yesterdayTransactions) || other.yesterdayTransactions == yesterdayTransactions)&&(identical(other.monthToDateSales, monthToDateSales) || other.monthToDateSales == monthToDateSales)&&(identical(other.todaySettlement, todaySettlement) || other.todaySettlement == todaySettlement)&&(identical(other.activeTerminals, activeTerminals) || other.activeTerminals == activeTerminals)&&(identical(other.instantTerminals, instantTerminals) || other.instantTerminals == instantTerminals));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MerchantSettlementSummary&&(identical(other.mid, mid) || other.mid == mid)&&(identical(other.totalSettlements, totalSettlements) || other.totalSettlements == totalSettlements)&&(identical(other.totalSettledAmount, totalSettledAmount) || other.totalSettledAmount == totalSettledAmount)&&(identical(other.pendingAmount, pendingAmount) || other.pendingAmount == pendingAmount)&&(identical(other.todayTransactions, todayTransactions) || other.todayTransactions == todayTransactions)&&(identical(other.todaySales, todaySales) || other.todaySales == todaySales)&&(identical(other.yesterdaySales, yesterdaySales) || other.yesterdaySales == yesterdaySales)&&(identical(other.yesterdayTransactions, yesterdayTransactions) || other.yesterdayTransactions == yesterdayTransactions)&&(identical(other.sameWeekdayLastWeekSales, sameWeekdayLastWeekSales) || other.sameWeekdayLastWeekSales == sameWeekdayLastWeekSales)&&(identical(other.monthToDateSales, monthToDateSales) || other.monthToDateSales == monthToDateSales)&&(identical(other.todaySettlement, todaySettlement) || other.todaySettlement == todaySettlement)&&(identical(other.activeTerminals, activeTerminals) || other.activeTerminals == activeTerminals)&&(identical(other.instantTerminals, instantTerminals) || other.instantTerminals == instantTerminals));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,mid,totalSettlements,totalSettledAmount,pendingAmount,todayTransactions,todaySales,yesterdaySales,yesterdayTransactions,monthToDateSales,todaySettlement,activeTerminals,instantTerminals);
+int get hashCode => Object.hash(runtimeType,mid,totalSettlements,totalSettledAmount,pendingAmount,todayTransactions,todaySales,yesterdaySales,yesterdayTransactions,sameWeekdayLastWeekSales,monthToDateSales,todaySettlement,activeTerminals,instantTerminals);
 
 @override
 String toString() {
-  return 'MerchantSettlementSummary(mid: $mid, totalSettlements: $totalSettlements, totalSettledAmount: $totalSettledAmount, pendingAmount: $pendingAmount, todayTransactions: $todayTransactions, todaySales: $todaySales, yesterdaySales: $yesterdaySales, yesterdayTransactions: $yesterdayTransactions, monthToDateSales: $monthToDateSales, todaySettlement: $todaySettlement, activeTerminals: $activeTerminals, instantTerminals: $instantTerminals)';
+  return 'MerchantSettlementSummary(mid: $mid, totalSettlements: $totalSettlements, totalSettledAmount: $totalSettledAmount, pendingAmount: $pendingAmount, todayTransactions: $todayTransactions, todaySales: $todaySales, yesterdaySales: $yesterdaySales, yesterdayTransactions: $yesterdayTransactions, sameWeekdayLastWeekSales: $sameWeekdayLastWeekSales, monthToDateSales: $monthToDateSales, todaySettlement: $todaySettlement, activeTerminals: $activeTerminals, instantTerminals: $instantTerminals)';
 }
 
 
@@ -281,7 +283,7 @@ abstract mixin class _$MerchantSettlementSummaryCopyWith<$Res> implements $Merch
   factory _$MerchantSettlementSummaryCopyWith(_MerchantSettlementSummary value, $Res Function(_MerchantSettlementSummary) _then) = __$MerchantSettlementSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String? mid, int? totalSettlements, num? totalSettledAmount, num? pendingAmount, int? todayTransactions, num? todaySales, num? yesterdaySales, int? yesterdayTransactions, num? monthToDateSales, TodaySettlement? todaySettlement, int? activeTerminals, int? instantTerminals
+ String? mid, int? totalSettlements, num? totalSettledAmount, num? pendingAmount, int? todayTransactions, num? todaySales, num? yesterdaySales, int? yesterdayTransactions, num? sameWeekdayLastWeekSales, num? monthToDateSales, TodaySettlement? todaySettlement, int? activeTerminals, int? instantTerminals
 });
 
 
@@ -298,7 +300,7 @@ class __$MerchantSettlementSummaryCopyWithImpl<$Res>
 
 /// Create a copy of MerchantSettlementSummary
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? mid = freezed,Object? totalSettlements = freezed,Object? totalSettledAmount = freezed,Object? pendingAmount = freezed,Object? todayTransactions = freezed,Object? todaySales = freezed,Object? yesterdaySales = freezed,Object? yesterdayTransactions = freezed,Object? monthToDateSales = freezed,Object? todaySettlement = freezed,Object? activeTerminals = freezed,Object? instantTerminals = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? mid = freezed,Object? totalSettlements = freezed,Object? totalSettledAmount = freezed,Object? pendingAmount = freezed,Object? todayTransactions = freezed,Object? todaySales = freezed,Object? yesterdaySales = freezed,Object? yesterdayTransactions = freezed,Object? sameWeekdayLastWeekSales = freezed,Object? monthToDateSales = freezed,Object? todaySettlement = freezed,Object? activeTerminals = freezed,Object? instantTerminals = freezed,}) {
   return _then(_MerchantSettlementSummary(
 mid: freezed == mid ? _self.mid : mid // ignore: cast_nullable_to_non_nullable
 as String?,totalSettlements: freezed == totalSettlements ? _self.totalSettlements : totalSettlements // ignore: cast_nullable_to_non_nullable
@@ -308,7 +310,8 @@ as num?,todayTransactions: freezed == todayTransactions ? _self.todayTransaction
 as int?,todaySales: freezed == todaySales ? _self.todaySales : todaySales // ignore: cast_nullable_to_non_nullable
 as num?,yesterdaySales: freezed == yesterdaySales ? _self.yesterdaySales : yesterdaySales // ignore: cast_nullable_to_non_nullable
 as num?,yesterdayTransactions: freezed == yesterdayTransactions ? _self.yesterdayTransactions : yesterdayTransactions // ignore: cast_nullable_to_non_nullable
-as int?,monthToDateSales: freezed == monthToDateSales ? _self.monthToDateSales : monthToDateSales // ignore: cast_nullable_to_non_nullable
+as int?,sameWeekdayLastWeekSales: freezed == sameWeekdayLastWeekSales ? _self.sameWeekdayLastWeekSales : sameWeekdayLastWeekSales // ignore: cast_nullable_to_non_nullable
+as num?,monthToDateSales: freezed == monthToDateSales ? _self.monthToDateSales : monthToDateSales // ignore: cast_nullable_to_non_nullable
 as num?,todaySettlement: freezed == todaySettlement ? _self.todaySettlement : todaySettlement // ignore: cast_nullable_to_non_nullable
 as TodaySettlement?,activeTerminals: freezed == activeTerminals ? _self.activeTerminals : activeTerminals // ignore: cast_nullable_to_non_nullable
 as int?,instantTerminals: freezed == instantTerminals ? _self.instantTerminals : instantTerminals // ignore: cast_nullable_to_non_nullable
@@ -335,7 +338,7 @@ $TodaySettlementCopyWith<$Res>? get todaySettlement {
 /// @nodoc
 mixin _$TodaySettlement {
 
- num? get amount; String? get status; String? get expectedDate;
+ num? get amount; String? get status; String? get expectedDate; String? get settledAt; String? get failureReason;
 /// Create a copy of TodaySettlement
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -348,16 +351,16 @@ $TodaySettlementCopyWith<TodaySettlement> get copyWith => _$TodaySettlementCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodaySettlement&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.status, status) || other.status == status)&&(identical(other.expectedDate, expectedDate) || other.expectedDate == expectedDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodaySettlement&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.status, status) || other.status == status)&&(identical(other.expectedDate, expectedDate) || other.expectedDate == expectedDate)&&(identical(other.settledAt, settledAt) || other.settledAt == settledAt)&&(identical(other.failureReason, failureReason) || other.failureReason == failureReason));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,amount,status,expectedDate);
+int get hashCode => Object.hash(runtimeType,amount,status,expectedDate,settledAt,failureReason);
 
 @override
 String toString() {
-  return 'TodaySettlement(amount: $amount, status: $status, expectedDate: $expectedDate)';
+  return 'TodaySettlement(amount: $amount, status: $status, expectedDate: $expectedDate, settledAt: $settledAt, failureReason: $failureReason)';
 }
 
 
@@ -368,7 +371,7 @@ abstract mixin class $TodaySettlementCopyWith<$Res>  {
   factory $TodaySettlementCopyWith(TodaySettlement value, $Res Function(TodaySettlement) _then) = _$TodaySettlementCopyWithImpl;
 @useResult
 $Res call({
- num? amount, String? status, String? expectedDate
+ num? amount, String? status, String? expectedDate, String? settledAt, String? failureReason
 });
 
 
@@ -385,11 +388,13 @@ class _$TodaySettlementCopyWithImpl<$Res>
 
 /// Create a copy of TodaySettlement
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? amount = freezed,Object? status = freezed,Object? expectedDate = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? amount = freezed,Object? status = freezed,Object? expectedDate = freezed,Object? settledAt = freezed,Object? failureReason = freezed,}) {
   return _then(_self.copyWith(
 amount: freezed == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as num?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String?,expectedDate: freezed == expectedDate ? _self.expectedDate : expectedDate // ignore: cast_nullable_to_non_nullable
+as String?,settledAt: freezed == settledAt ? _self.settledAt : settledAt // ignore: cast_nullable_to_non_nullable
+as String?,failureReason: freezed == failureReason ? _self.failureReason : failureReason // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -475,10 +480,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( num? amount,  String? status,  String? expectedDate)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( num? amount,  String? status,  String? expectedDate,  String? settledAt,  String? failureReason)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TodaySettlement() when $default != null:
-return $default(_that.amount,_that.status,_that.expectedDate);case _:
+return $default(_that.amount,_that.status,_that.expectedDate,_that.settledAt,_that.failureReason);case _:
   return orElse();
 
 }
@@ -496,10 +501,10 @@ return $default(_that.amount,_that.status,_that.expectedDate);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( num? amount,  String? status,  String? expectedDate)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( num? amount,  String? status,  String? expectedDate,  String? settledAt,  String? failureReason)  $default,) {final _that = this;
 switch (_that) {
 case _TodaySettlement():
-return $default(_that.amount,_that.status,_that.expectedDate);case _:
+return $default(_that.amount,_that.status,_that.expectedDate,_that.settledAt,_that.failureReason);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -516,10 +521,10 @@ return $default(_that.amount,_that.status,_that.expectedDate);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( num? amount,  String? status,  String? expectedDate)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( num? amount,  String? status,  String? expectedDate,  String? settledAt,  String? failureReason)?  $default,) {final _that = this;
 switch (_that) {
 case _TodaySettlement() when $default != null:
-return $default(_that.amount,_that.status,_that.expectedDate);case _:
+return $default(_that.amount,_that.status,_that.expectedDate,_that.settledAt,_that.failureReason);case _:
   return null;
 
 }
@@ -531,12 +536,14 @@ return $default(_that.amount,_that.status,_that.expectedDate);case _:
 @JsonSerializable()
 
 class _TodaySettlement implements TodaySettlement {
-  const _TodaySettlement({this.amount, this.status, this.expectedDate});
+  const _TodaySettlement({this.amount, this.status, this.expectedDate, this.settledAt, this.failureReason});
   factory _TodaySettlement.fromJson(Map<String, dynamic> json) => _$TodaySettlementFromJson(json);
 
 @override final  num? amount;
 @override final  String? status;
 @override final  String? expectedDate;
+@override final  String? settledAt;
+@override final  String? failureReason;
 
 /// Create a copy of TodaySettlement
 /// with the given fields replaced by the non-null parameter values.
@@ -551,16 +558,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TodaySettlement&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.status, status) || other.status == status)&&(identical(other.expectedDate, expectedDate) || other.expectedDate == expectedDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TodaySettlement&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.status, status) || other.status == status)&&(identical(other.expectedDate, expectedDate) || other.expectedDate == expectedDate)&&(identical(other.settledAt, settledAt) || other.settledAt == settledAt)&&(identical(other.failureReason, failureReason) || other.failureReason == failureReason));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,amount,status,expectedDate);
+int get hashCode => Object.hash(runtimeType,amount,status,expectedDate,settledAt,failureReason);
 
 @override
 String toString() {
-  return 'TodaySettlement(amount: $amount, status: $status, expectedDate: $expectedDate)';
+  return 'TodaySettlement(amount: $amount, status: $status, expectedDate: $expectedDate, settledAt: $settledAt, failureReason: $failureReason)';
 }
 
 
@@ -571,7 +578,7 @@ abstract mixin class _$TodaySettlementCopyWith<$Res> implements $TodaySettlement
   factory _$TodaySettlementCopyWith(_TodaySettlement value, $Res Function(_TodaySettlement) _then) = __$TodaySettlementCopyWithImpl;
 @override @useResult
 $Res call({
- num? amount, String? status, String? expectedDate
+ num? amount, String? status, String? expectedDate, String? settledAt, String? failureReason
 });
 
 
@@ -588,11 +595,13 @@ class __$TodaySettlementCopyWithImpl<$Res>
 
 /// Create a copy of TodaySettlement
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? amount = freezed,Object? status = freezed,Object? expectedDate = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? amount = freezed,Object? status = freezed,Object? expectedDate = freezed,Object? settledAt = freezed,Object? failureReason = freezed,}) {
   return _then(_TodaySettlement(
 amount: freezed == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as num?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String?,expectedDate: freezed == expectedDate ? _self.expectedDate : expectedDate // ignore: cast_nullable_to_non_nullable
+as String?,settledAt: freezed == settledAt ? _self.settledAt : settledAt // ignore: cast_nullable_to_non_nullable
+as String?,failureReason: freezed == failureReason ? _self.failureReason : failureReason // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

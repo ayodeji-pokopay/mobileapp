@@ -640,5 +640,45 @@
   "lockSetPinPromptAction": "Saita PIN",
   "lockNotNow": "Ba yanzu ba",
   "lockNoPinHint": "Ba a saita PIN don wannan manhaja ba. Buɗe da Face ID ko yatsa, ko ƙara PIN a Saituna › Tsaro.",
-  "lockUnlockWithBiometrics": "Buɗe"
+  "lockUnlockWithBiometrics": "Buɗe",
+  "settlementPaidAt": "An biya {when}",
+  "@settlementPaidAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "staffTitle": "Ma'aikata",
+  "staffSettingsHint": "Gayyaci masu karɓar kuɗi da manajoji, saita abin da za su iya gani",
+  "staffHint": "Mutanen da za su iya shiga wannan kasuwanci. Masu karɓar kuɗi suna ganin kuɗin yau da rasit kawai.",
+  "staffInvite": "Gayyaci ma'aikaci",
+  "staffInviteTitle": "Gayyaci memba",
+  "staffInviteHint": "Za su sami imel don saita kalmar sirri.",
+  "staffSendInvite": "Aika gayyata",
+  "staffName": "Suna",
+  "staffEmail": "Adireshin imel",
+  "staffEmailInvalid": "Shigar da adireshin imel mai inganci.",
+  "staffRole": "Matsayi",
+  "roleOwner": "Mai shi",
+  "roleManager": "Manaja",
+  "roleCashier": "Mai karɓar kuɗi",
+  "roleManagerHint": "Yana ganin tallace-tallace, ma'auni da biyan kuɗi, kuma yana iya canza saituna. Ba zai iya sarrafa ma'aikata ba.",
+  "roleCashierHint": "Yana ganin kuɗin yau da rasit. Babu ma'auni, biyan kuɗi ko saituna.",
+  "staffActive": "Yana aiki",
+  "staffInactive": "An kashe shiga",
+  "staffInvited": "An gayyata",
+  "staffEmpty": "Babu ma'aikata tukuna",
+  "staffEmptyHint": "Gayyaci mai karɓar kuɗi ko manaja ka zaɓi abin da za su iya gani.",
+  "staffInviteSent": "An aika gayyata zuwa {email}",
+  "@staffInviteSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "staffUpdated": "An sabunta ma'aikaci",
+  "staffAccessOn": "Zai iya shiga",
+  "staffAccessHint": "Kashe don hana wannan mutum ba tare da goge shi ba"
 }

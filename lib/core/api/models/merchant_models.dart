@@ -14,6 +14,7 @@ abstract class MerchantSettlementSummary with _$MerchantSettlementSummary {
     num? todaySales,
     num? yesterdaySales,
     int? yesterdayTransactions,
+    num? sameWeekdayLastWeekSales,
     num? monthToDateSales,
     TodaySettlement? todaySettlement,
     int? activeTerminals,
@@ -30,6 +31,8 @@ abstract class TodaySettlement with _$TodaySettlement {
     num? amount,
     String? status,
     String? expectedDate,
+    String? settledAt,
+    String? failureReason,
   }) = _TodaySettlement;
 
   factory TodaySettlement.fromJson(Map<String, dynamic> json) =>

@@ -57,9 +57,17 @@ class SettlementTracker extends StatelessWidget {
         pending ? _Step.batched : ((amount ?? 0) > 0 ? _Step.paid : _Step.none),
     };
     final expected = ts?.expectedDate;
+    final settledAt = ts?.settledAt;
+    final reason = ts?.failureReason;
     final footer = switch (step) {
-      _Step.failed => l10n.settlementStepFailed,
-      _Step.paid => l10n.dashboardSettled,
+      _Step.failed =>
+        reason != null && reason.isNotEmpty
+            ? reason
+            : l10n.settlementStepFailed,
+      _Step.paid =>
+        settledAt != null && settledAt.isNotEmpty
+            ? l10n.settlementPaidAt(_expectedLabel(settledAt, context))
+            : l10n.dashboardSettled,
       _Step.none => l10n.settlementStepNone,
       _ when status == 'POSTPONED' => l10n.settlementStepPostponed,
       _ when expected != null && expected.isNotEmpty =>

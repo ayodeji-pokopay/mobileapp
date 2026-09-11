@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/models/business_models.dart';
 import '../../../core/api/models/insights_models.dart';
+import '../../../core/api/models/staff_models.dart';
 import '../../../core/api/models/merchant_models.dart';
 import '../../../core/api/models/transaction_models.dart';
 import '../../../core/api/models/wallet_models.dart';
@@ -276,6 +277,8 @@ class PreferencesController extends AsyncNotifier<MerchantPreferences> {
     List<String>? reportRecipients,
     String? language,
     bool? pushEnabled,
+    num? dailyTarget,
+    num? monthlyTarget,
   }) async {
     final mid = ref.read(_midProvider);
     if (mid == null || mid.isEmpty) throw _noMerchant();
@@ -283,6 +286,8 @@ class PreferencesController extends AsyncNotifier<MerchantPreferences> {
     if (previous != null) {
       state = AsyncData(
         previous.copyWith(
+          dailyTarget: dailyTarget ?? previous.dailyTarget,
+          monthlyTarget: monthlyTarget ?? previous.monthlyTarget,
           dailySettlementReport:
               dailySettlementReport ?? previous.dailySettlementReport,
           monthlySettlementReport:
@@ -303,6 +308,8 @@ class PreferencesController extends AsyncNotifier<MerchantPreferences> {
             reportRecipients: reportRecipients,
             language: language,
             pushEnabled: pushEnabled,
+            dailyTarget: dailyTarget,
+            monthlyTarget: monthlyTarget,
           );
       state = AsyncData(saved);
     } catch (e) {
@@ -603,4 +610,10 @@ final insightsProvider = FutureProvider.family<InsightsStats, int>((
     final txns = await ref.watch(allTransactionsProvider(days).future);
     return InsightsStats.compute(txns, days, now: now);
   }
+});
+
+final staffProvider = FutureProvider<List<StaffMember>>((ref) {
+  final mid = ref.watch(_midProvider);
+  if (mid == null || mid.isEmpty) return Future.error(_noMerchant());
+  return ref.watch(merchantRepositoryProvider).fetchStaff(mid: mid);
 });

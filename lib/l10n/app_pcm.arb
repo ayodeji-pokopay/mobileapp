@@ -640,5 +640,45 @@
   "lockSetPinPromptAction": "Set PIN",
   "lockNotNow": "Not now",
   "lockNoPinHint": "No PIN dey for this app. Open with Face ID or finger, or add PIN for Settings › Security.",
-  "lockUnlockWithBiometrics": "Open"
+  "lockUnlockWithBiometrics": "Open",
+  "settlementPaidAt": "Don pay {when}",
+  "@settlementPaidAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "staffTitle": "Staff",
+  "staffSettingsHint": "Invite cashiers and managers, set wetin dem fit see",
+  "staffHint": "People wey fit sign in for this business. Cashiers dey see today money and receipts only.",
+  "staffInvite": "Invite staff",
+  "staffInviteTitle": "Invite team member",
+  "staffInviteHint": "Dem go get email to set password.",
+  "staffSendInvite": "Send invite",
+  "staffName": "Name",
+  "staffEmail": "Email address",
+  "staffEmailInvalid": "Put correct email address.",
+  "staffRole": "Role",
+  "roleOwner": "Owner",
+  "roleManager": "Manager",
+  "roleCashier": "Cashier",
+  "roleManagerHint": "Dey see sales, balance and payouts, and fit change settings. No fit manage staff.",
+  "roleCashierHint": "Dey see today money and receipts. No balance, payouts or settings.",
+  "staffActive": "Active",
+  "staffInactive": "Access off",
+  "staffInvited": "Invited",
+  "staffEmpty": "No staff yet",
+  "staffEmptyHint": "Invite cashier or manager and choose wetin dem fit see.",
+  "staffInviteSent": "Invite don go to {email}",
+  "@staffInviteSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "staffUpdated": "Staff member don update",
+  "staffAccessOn": "Fit sign in",
+  "staffAccessHint": "Off am to block this person without deleting am"
 }

@@ -923,5 +923,45 @@
   "lockSetPinPromptAction": "Set PIN",
   "lockNotNow": "Not now",
   "lockNoPinHint": "No PIN is set for this app. Unlock with Face ID or fingerprint, or add a PIN in Settings › Security.",
-  "lockUnlockWithBiometrics": "Unlock"
+  "lockUnlockWithBiometrics": "Unlock",
+  "settlementPaidAt": "Paid {when}",
+  "@settlementPaidAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "staffTitle": "Staff",
+  "staffSettingsHint": "Invite cashiers and managers, set what they can see",
+  "staffHint": "People who can sign in to this business. Cashiers see today's takings and receipts only.",
+  "staffInvite": "Invite staff",
+  "staffInviteTitle": "Invite a team member",
+  "staffInviteHint": "They'll get an email to set a password.",
+  "staffSendInvite": "Send invite",
+  "staffName": "Name",
+  "staffEmail": "Email address",
+  "staffEmailInvalid": "Enter a valid email address.",
+  "staffRole": "Role",
+  "roleOwner": "Owner",
+  "roleManager": "Manager",
+  "roleCashier": "Cashier",
+  "roleManagerHint": "Sees sales, balances and payouts, and can change settings. Can't manage staff.",
+  "roleCashierHint": "Sees today's takings and receipts. No balances, payouts or settings.",
+  "staffActive": "Active",
+  "staffInactive": "Access off",
+  "staffInvited": "Invited",
+  "staffEmpty": "No staff yet",
+  "staffEmptyHint": "Invite a cashier or manager and choose what they can see.",
+  "staffInviteSent": "Invitation sent to {email}",
+  "@staffInviteSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "staffUpdated": "Staff member updated",
+  "staffAccessOn": "Can sign in",
+  "staffAccessHint": "Turn off to block this person without deleting them"
 }

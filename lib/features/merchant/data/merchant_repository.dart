@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import '../../../core/api/api_client.dart';
 import '../../../core/api/models/business_models.dart';
 import '../../../core/api/models/insights_models.dart';
+import '../../../core/api/models/staff_models.dart';
 import '../../../core/api/models/merchant_models.dart';
 import '../../../core/api/models/transaction_models.dart';
 import '../../../core/api/models/wallet_models.dart';
@@ -384,11 +385,15 @@ class MerchantRepository {
     List<String>? reportRecipients,
     String? language,
     bool? pushEnabled,
+    num? dailyTarget,
+    num? monthlyTarget,
   }) async {
     final res = await _api.dio.put<Map<String, dynamic>>(
       '/api/v1/merchant/preferences',
       queryParameters: {'mid': mid},
       data: {
+        if (dailyTarget != null) 'dailyTarget': dailyTarget,
+        if (monthlyTarget != null) 'monthlyTarget': monthlyTarget,
         if (dailySettlementReport != null)
           'dailySettlementReport': dailySettlementReport,
         if (monthlySettlementReport != null)
@@ -472,6 +477,60 @@ class MerchantRepository {
     _window(mid, start, end),
     (d) => parseList(d, DayPoint.fromJson),
   );
+
+  Future<List<DeclineReason>> fetchDeclineReasons({
+    required String mid,
+    required DateTime start,
+    required DateTime end,
+  }) => _report(
+    'by-decline-reason',
+    _window(mid, start, end),
+    (d) => parseList(d, DeclineReason.fromJson),
+  );
+
+  // ── Staff ───────────────────────────────────────────────────────────
+
+  List<StaffMember> _staffList(Object? data) {
+    final list = data is Map ? data['content'] : data;
+    return parseList(list, StaffMember.fromJson);
+  }
+
+  Future<List<StaffMember>> fetchStaff({required String mid}) async {
+    final res = await _api.dio.get<Object>(
+      '/api/v1/merchant/staff',
+      queryParameters: {'mid': mid},
+    );
+    return _staffList(res.data);
+  }
+
+  Future<void> inviteStaff({
+    required String mid,
+    required String email,
+    required String name,
+    required String role,
+  }) async {
+    await _api.dio.post<void>(
+      '/api/v1/merchant/staff',
+      queryParameters: {'mid': mid},
+      data: {'email': email, 'name': name, 'role': role},
+    );
+  }
+
+  Future<void> updateStaff({
+    required String mid,
+    required String id,
+    String? role,
+    bool? active,
+  }) async {
+    await _api.dio.put<void>(
+      '/api/v1/merchant/staff/$id',
+      queryParameters: {'mid': mid},
+      data: {
+        if (role != null) 'role': role,
+        if (active != null) 'active': active,
+      },
+    );
+  }
 
   // ── Notifications ───────────────────────────────────────────────────
 

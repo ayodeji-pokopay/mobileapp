@@ -161,6 +161,13 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: l10n.settingsSettlementsHint,
                   onTap: () => context.push(AppRoutes.settlements),
                 ),
+              if (auth.hasPermission(Permissions.manageStaff))
+                ListRow(
+                  leading: const _RowIcon(LucideIcons.users),
+                  title: l10n.staffTitle,
+                  subtitle: l10n.staffSettingsHint,
+                  onTap: () => context.push(AppRoutes.staff),
+                ),
               ListRow(
                 leading: const _RowIcon(LucideIcons.chartNoAxesColumn),
                 title: l10n.insightsTitle,

@@ -17,6 +17,7 @@ _MerchantSettlementSummary _$MerchantSettlementSummaryFromJson(
   todaySales: json['todaySales'] as num?,
   yesterdaySales: json['yesterdaySales'] as num?,
   yesterdayTransactions: (json['yesterdayTransactions'] as num?)?.toInt(),
+  sameWeekdayLastWeekSales: json['sameWeekdayLastWeekSales'] as num?,
   monthToDateSales: json['monthToDateSales'] as num?,
   todaySettlement: json['todaySettlement'] == null
       ? null
@@ -38,6 +39,7 @@ Map<String, dynamic> _$MerchantSettlementSummaryToJson(
   'todaySales': instance.todaySales,
   'yesterdaySales': instance.yesterdaySales,
   'yesterdayTransactions': instance.yesterdayTransactions,
+  'sameWeekdayLastWeekSales': instance.sameWeekdayLastWeekSales,
   'monthToDateSales': instance.monthToDateSales,
   'todaySettlement': instance.todaySettlement,
   'activeTerminals': instance.activeTerminals,
@@ -49,6 +51,8 @@ _TodaySettlement _$TodaySettlementFromJson(Map<String, dynamic> json) =>
       amount: json['amount'] as num?,
       status: json['status'] as String?,
       expectedDate: json['expectedDate'] as String?,
+      settledAt: json['settledAt'] as String?,
+      failureReason: json['failureReason'] as String?,
     );
 
 Map<String, dynamic> _$TodaySettlementToJson(_TodaySettlement instance) =>
@@ -56,6 +60,8 @@ Map<String, dynamic> _$TodaySettlementToJson(_TodaySettlement instance) =>
       'amount': instance.amount,
       'status': instance.status,
       'expectedDate': instance.expectedDate,
+      'settledAt': instance.settledAt,
+      'failureReason': instance.failureReason,
     };
 
 _PeriodTotals _$PeriodTotalsFromJson(Map<String, dynamic> json) =>

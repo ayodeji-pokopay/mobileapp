@@ -14,6 +14,13 @@ import '../../merchant/presentation/merchant_providers.dart';
 final sameWeekdayLastWeekProvider = FutureProvider<double?>((ref) async {
   final mid = ref.watch(authControllerProvider).mid;
   if (mid == null) return null;
+  // Current backends carry it on the summary; older ones need timeseries.
+  final fromSummary = ref
+      .watch(summaryProvider)
+      .asData
+      ?.value
+      .sameWeekdayLastWeekSales;
+  if (fromSummary != null) return fromSummary.toDouble();
   final now = DateTime.now();
   final day = DateTime(
     now.year,
@@ -61,8 +68,9 @@ class ApprovalHealth {
 
   static ApprovalHealth compute(
     List<TransactionResponse> today,
-    double? baselineRate,
-  ) {
+    double? baselineRate, {
+    String? topReasonOverride,
+  }) {
     var approved = 0;
     final reasons = <String, int>{};
     for (final t in today) {
@@ -87,7 +95,7 @@ class ApprovalHealth {
       todayCount: today.length,
       todayRate: today.isEmpty ? 1 : approved / today.length,
       baselineRate: baselineRate,
-      topReason: top,
+      topReason: topReasonOverride ?? top,
     );
   }
 }
@@ -117,7 +125,26 @@ final approvalHealthProvider = FutureProvider<ApprovalHealth>((ref) async {
       if (c.current.total >= 20) baseline = c.current.approvalRate / 100;
     } catch (_) {}
   }
-  return ApprovalHealth.compute(today, baseline);
+  String? serverReason;
+  if (mid != null) {
+    try {
+      final now = DateTime.now();
+      final day = DateTime(now.year, now.month, now.day);
+      final reasons = await ref
+          .watch(merchantRepositoryProvider)
+          .fetchDeclineReasons(mid: mid, start: day, end: day);
+      reasons.sort((a, b) => b.count.compareTo(a.count));
+      final top = reasons.isEmpty ? null : reasons.first;
+      if (top != null && top.description.isNotEmpty && top.count > 0) {
+        serverReason = top.description;
+      }
+    } catch (_) {}
+  }
+  return ApprovalHealth.compute(
+    today,
+    baseline,
+    topReasonOverride: serverReason,
+  );
 });
 
 // ── Terminal health ──────────────────────────────────────────────────
@@ -142,15 +169,30 @@ class SalesGoal {
   bool get isSet => daily != null || monthly != null;
 }
 
+/// Targets live in merchant preferences (`dailyTarget`, `monthlyTarget`)
+/// so every device and staff member sees the same goal; a local copy
+/// keeps the ring working offline and on older backends.
 class SalesGoalController extends Notifier<SalesGoal> {
   static const _dailyKey = 'goal_daily';
   static const _monthlyKey = 'goal_monthly';
 
   @override
   SalesGoal build() {
+    final prefs = ref.watch(preferencesProvider).asData?.value;
+    if (prefs != null &&
+        (prefs.dailyTarget != null || prefs.monthlyTarget != null)) {
+      final g = SalesGoal(
+        daily: _positive(prefs.dailyTarget),
+        monthly: _positive(prefs.monthlyTarget),
+      );
+      _mirror(g);
+      return g;
+    }
     _load();
     return const SalesGoal();
   }
+
+  static double? _positive(num? v) => v == null || v <= 0 ? null : v.toDouble();
 
   Future<void> _load() async {
     final p = await SharedPreferences.getInstance();
@@ -160,22 +202,32 @@ class SalesGoalController extends Notifier<SalesGoal> {
     );
   }
 
-  Future<void> save({double? daily, double? monthly}) async {
+  Future<void> _mirror(SalesGoal g) async {
     final p = await SharedPreferences.getInstance();
-    if (daily == null || daily <= 0) {
+    if (g.daily == null) {
       await p.remove(_dailyKey);
     } else {
-      await p.setDouble(_dailyKey, daily);
+      await p.setDouble(_dailyKey, g.daily!);
     }
-    if (monthly == null || monthly <= 0) {
+    if (g.monthly == null) {
       await p.remove(_monthlyKey);
     } else {
-      await p.setDouble(_monthlyKey, monthly);
+      await p.setDouble(_monthlyKey, g.monthly!);
     }
-    state = SalesGoal(
-      daily: daily == null || daily <= 0 ? null : daily,
-      monthly: monthly == null || monthly <= 0 ? null : monthly,
-    );
+  }
+
+  Future<void> save({double? daily, double? monthly}) async {
+    final g = SalesGoal(daily: _positive(daily), monthly: _positive(monthly));
+    await _mirror(g);
+    state = g;
+    try {
+      // 0 clears a target server-side (null would leave it untouched).
+      await ref
+          .read(preferencesProvider.notifier)
+          .save(dailyTarget: g.daily ?? 0, monthlyTarget: g.monthly ?? 0);
+    } catch (_) {
+      // Keep the local value; it syncs on the next successful save.
+    }
   }
 }
 

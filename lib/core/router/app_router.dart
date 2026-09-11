@@ -17,6 +17,7 @@ import '../../features/sessions/presentation/sessions_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/settlements/presentation/settlements_screen.dart';
 import '../../features/splash/splash_screen.dart';
+import '../../features/staff/presentation/staff_screen.dart';
 import '../../features/stores/presentation/stores_screen.dart';
 import '../../features/wallet/presentation/wallet_screen.dart';
 
@@ -38,6 +39,7 @@ class AppRoutes {
   static const security = '/settings/security';
   static const changePassword = '/settings/security/change-password';
   static const sessions = '/settings/sessions';
+  static const staff = '/settings/staff';
   static const insights = '/insights';
 }
 
@@ -137,6 +139,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.sessions,
         builder: (_, _) => const SessionsScreen(),
       ),
+      GoRoute(path: AppRoutes.staff, builder: (_, _) => const StaffScreen()),
       GoRoute(
         path: AppRoutes.insights,
         builder: (_, _) => const InsightsScreen(),

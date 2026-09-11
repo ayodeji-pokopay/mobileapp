@@ -640,5 +640,45 @@
   "lockSetPinPromptAction": "Ṣètò PIN",
   "lockNotNow": "Kì í ṣe báyìí",
   "lockNoPinHint": "Kò sí PIN fún àpù yìí. Ṣí pẹ̀lú Face ID tàbí ìka, tàbí fi PIN kún un ní Ètò › Ààbò.",
-  "lockUnlockWithBiometrics": "Ṣí"
+  "lockUnlockWithBiometrics": "Ṣí",
+  "settlementPaidAt": "A san {when}",
+  "@settlementPaidAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "staffTitle": "Òṣìṣẹ́",
+  "staffSettingsHint": "Pe àwọn agbowó àti alákòóso, ṣètò ohun tí wọ́n lè rí",
+  "staffHint": "Àwọn ènìyàn tí ó lè wọlé sí iṣẹ́ yìí. Àwọn agbowó rí owó tí a gbà lónìí àti ìwé-ẹ̀rí nìkan.",
+  "staffInvite": "Pe òṣìṣẹ́",
+  "staffInviteTitle": "Pe ọmọ ẹgbẹ́ kan",
+  "staffInviteHint": "Wọn yóò gba ímeèlì láti ṣètò ọ̀rọ̀ìpamọ́.",
+  "staffSendInvite": "Fi ìpè ránṣẹ́",
+  "staffName": "Orúkọ",
+  "staffEmail": "Àdírẹ́sì ímeèlì",
+  "staffEmailInvalid": "Tẹ àdírẹ́sì ímeèlì tó tọ́.",
+  "staffRole": "Ipò",
+  "roleOwner": "Olóhun",
+  "roleManager": "Alákòóso",
+  "roleCashier": "Agbowó",
+  "roleManagerHint": "Ó rí títà, ìwọ̀n owó àti ìsanwó, ó sì lè yí ètò padà. Kò lè ṣàkóso òṣìṣẹ́.",
+  "roleCashierHint": "Ó rí owó tí a gbà lónìí àti ìwé-ẹ̀rí. Kò sí ìwọ̀n owó, ìsanwó tàbí ètò.",
+  "staffActive": "Ń ṣiṣẹ́",
+  "staffInactive": "Ìwọlé ti pa",
+  "staffInvited": "A ti pè",
+  "staffEmpty": "Kò sí òṣìṣẹ́ síbẹ̀",
+  "staffEmptyHint": "Pe agbowó tàbí alákòóso kí o sì yan ohun tí wọ́n lè rí.",
+  "staffInviteSent": "A ti fi ìpè ránṣẹ́ sí {email}",
+  "@staffInviteSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "staffUpdated": "A ti ṣàtúnṣe òṣìṣẹ́",
+  "staffAccessOn": "Ó lè wọlé",
+  "staffAccessHint": "Pa á láti dí ẹni yìí lọ́wọ́ láìpa á rẹ́"
 }

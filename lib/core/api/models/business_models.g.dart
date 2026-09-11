@@ -47,6 +47,8 @@ _MerchantPreferences _$MerchantPreferencesFromJson(Map<String, dynamic> json) =>
           const <String>[],
       language: json['language'] as String?,
       pushEnabled: json['pushEnabled'] as bool?,
+      dailyTarget: json['dailyTarget'] as num?,
+      monthlyTarget: json['monthlyTarget'] as num?,
     );
 
 Map<String, dynamic> _$MerchantPreferencesToJson(
@@ -57,6 +59,8 @@ Map<String, dynamic> _$MerchantPreferencesToJson(
   'reportRecipients': instance.reportRecipients,
   'language': instance.language,
   'pushEnabled': instance.pushEnabled,
+  'dailyTarget': instance.dailyTarget,
+  'monthlyTarget': instance.monthlyTarget,
 };
 
 _StatementResponse _$StatementResponseFromJson(Map<String, dynamic> json) =>

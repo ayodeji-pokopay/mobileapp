@@ -640,5 +640,45 @@
   "lockSetPinPromptAction": "Tọọ PIN",
   "lockNotNow": "Ọ bụghị ugbu a",
   "lockNoPinHint": "Enweghị PIN maka ngwa a. Mepee na Face ID ma ọ bụ mkpịsị aka, ma ọ bụ tinye PIN na Ntọala › Nchekwa.",
-  "lockUnlockWithBiometrics": "Mepee"
+  "lockUnlockWithBiometrics": "Mepee",
+  "settlementPaidAt": "Akwụrụ {when}",
+  "@settlementPaidAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "staffTitle": "Ndị ọrụ",
+  "staffSettingsHint": "Kpọọ ndị na-anakọta ego na ndị njikwa, tọọ ihe ha nwere ike ịhụ",
+  "staffHint": "Ndị nwere ike ịbanye n'azụmahịa a. Ndị na-anakọta ego na-ahụ naanị ego e nwetara taa na nnata.",
+  "staffInvite": "Kpọọ onye ọrụ",
+  "staffInviteTitle": "Kpọọ onye otu",
+  "staffInviteHint": "Ha ga-enweta email iji tọọ okwuntughe.",
+  "staffSendInvite": "Ziga ọkpụkpọ",
+  "staffName": "Aha",
+  "staffEmail": "Adreesị email",
+  "staffEmailInvalid": "Tinye adreesị email ziri ezi.",
+  "staffRole": "Ọrụ",
+  "roleOwner": "Onye nwe",
+  "roleManager": "Onye njikwa",
+  "roleCashier": "Onye na-anakọta ego",
+  "roleManagerHint": "Na-ahụ ahịa, ego dị na ịkwụ ụgwọ, ma nwee ike gbanwee ntọala. Enweghị ike ijikwa ndị ọrụ.",
+  "roleCashierHint": "Na-ahụ ego e nwetara taa na nnata. Enweghị ego dị, ịkwụ ụgwọ ma ọ bụ ntọala.",
+  "staffActive": "Na-arụ ọrụ",
+  "staffInactive": "Mbanye agbanyụrụ",
+  "staffInvited": "Akpọrọ",
+  "staffEmpty": "Enwebeghị ndị ọrụ",
+  "staffEmptyHint": "Kpọọ onye na-anakọta ego ma ọ bụ onye njikwa ma họrọ ihe ha nwere ike ịhụ.",
+  "staffInviteSent": "Ezigara ọkpụkpọ na {email}",
+  "@staffInviteSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "staffUpdated": "Emelitere onye ọrụ",
+  "staffAccessOn": "Nwere ike ịbanye",
+  "staffAccessHint": "Gbanyụọ iji gbochie onye a n'ehichapụghị ya"
 }

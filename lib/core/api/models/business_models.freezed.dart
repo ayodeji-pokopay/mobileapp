@@ -308,7 +308,7 @@ as int?,
 /// @nodoc
 mixin _$MerchantPreferences {
 
- bool? get dailySettlementReport; bool? get monthlySettlementReport; List<String> get reportRecipients; String? get language; bool? get pushEnabled;
+ bool? get dailySettlementReport; bool? get monthlySettlementReport; List<String> get reportRecipients; String? get language; bool? get pushEnabled; num? get dailyTarget; num? get monthlyTarget;
 /// Create a copy of MerchantPreferences
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -321,16 +321,16 @@ $MerchantPreferencesCopyWith<MerchantPreferences> get copyWith => _$MerchantPref
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MerchantPreferences&&(identical(other.dailySettlementReport, dailySettlementReport) || other.dailySettlementReport == dailySettlementReport)&&(identical(other.monthlySettlementReport, monthlySettlementReport) || other.monthlySettlementReport == monthlySettlementReport)&&const DeepCollectionEquality().equals(other.reportRecipients, reportRecipients)&&(identical(other.language, language) || other.language == language)&&(identical(other.pushEnabled, pushEnabled) || other.pushEnabled == pushEnabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MerchantPreferences&&(identical(other.dailySettlementReport, dailySettlementReport) || other.dailySettlementReport == dailySettlementReport)&&(identical(other.monthlySettlementReport, monthlySettlementReport) || other.monthlySettlementReport == monthlySettlementReport)&&const DeepCollectionEquality().equals(other.reportRecipients, reportRecipients)&&(identical(other.language, language) || other.language == language)&&(identical(other.pushEnabled, pushEnabled) || other.pushEnabled == pushEnabled)&&(identical(other.dailyTarget, dailyTarget) || other.dailyTarget == dailyTarget)&&(identical(other.monthlyTarget, monthlyTarget) || other.monthlyTarget == monthlyTarget));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,dailySettlementReport,monthlySettlementReport,const DeepCollectionEquality().hash(reportRecipients),language,pushEnabled);
+int get hashCode => Object.hash(runtimeType,dailySettlementReport,monthlySettlementReport,const DeepCollectionEquality().hash(reportRecipients),language,pushEnabled,dailyTarget,monthlyTarget);
 
 @override
 String toString() {
-  return 'MerchantPreferences(dailySettlementReport: $dailySettlementReport, monthlySettlementReport: $monthlySettlementReport, reportRecipients: $reportRecipients, language: $language, pushEnabled: $pushEnabled)';
+  return 'MerchantPreferences(dailySettlementReport: $dailySettlementReport, monthlySettlementReport: $monthlySettlementReport, reportRecipients: $reportRecipients, language: $language, pushEnabled: $pushEnabled, dailyTarget: $dailyTarget, monthlyTarget: $monthlyTarget)';
 }
 
 
@@ -341,7 +341,7 @@ abstract mixin class $MerchantPreferencesCopyWith<$Res>  {
   factory $MerchantPreferencesCopyWith(MerchantPreferences value, $Res Function(MerchantPreferences) _then) = _$MerchantPreferencesCopyWithImpl;
 @useResult
 $Res call({
- bool? dailySettlementReport, bool? monthlySettlementReport, List<String> reportRecipients, String? language, bool? pushEnabled
+ bool? dailySettlementReport, bool? monthlySettlementReport, List<String> reportRecipients, String? language, bool? pushEnabled, num? dailyTarget, num? monthlyTarget
 });
 
 
@@ -358,14 +358,16 @@ class _$MerchantPreferencesCopyWithImpl<$Res>
 
 /// Create a copy of MerchantPreferences
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? dailySettlementReport = freezed,Object? monthlySettlementReport = freezed,Object? reportRecipients = null,Object? language = freezed,Object? pushEnabled = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? dailySettlementReport = freezed,Object? monthlySettlementReport = freezed,Object? reportRecipients = null,Object? language = freezed,Object? pushEnabled = freezed,Object? dailyTarget = freezed,Object? monthlyTarget = freezed,}) {
   return _then(_self.copyWith(
 dailySettlementReport: freezed == dailySettlementReport ? _self.dailySettlementReport : dailySettlementReport // ignore: cast_nullable_to_non_nullable
 as bool?,monthlySettlementReport: freezed == monthlySettlementReport ? _self.monthlySettlementReport : monthlySettlementReport // ignore: cast_nullable_to_non_nullable
 as bool?,reportRecipients: null == reportRecipients ? _self.reportRecipients : reportRecipients // ignore: cast_nullable_to_non_nullable
 as List<String>,language: freezed == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
 as String?,pushEnabled: freezed == pushEnabled ? _self.pushEnabled : pushEnabled // ignore: cast_nullable_to_non_nullable
-as bool?,
+as bool?,dailyTarget: freezed == dailyTarget ? _self.dailyTarget : dailyTarget // ignore: cast_nullable_to_non_nullable
+as num?,monthlyTarget: freezed == monthlyTarget ? _self.monthlyTarget : monthlyTarget // ignore: cast_nullable_to_non_nullable
+as num?,
   ));
 }
 
@@ -450,10 +452,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool? dailySettlementReport,  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language,  bool? pushEnabled)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool? dailySettlementReport,  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language,  bool? pushEnabled,  num? dailyTarget,  num? monthlyTarget)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MerchantPreferences() when $default != null:
-return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.reportRecipients,_that.language,_that.pushEnabled);case _:
+return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.reportRecipients,_that.language,_that.pushEnabled,_that.dailyTarget,_that.monthlyTarget);case _:
   return orElse();
 
 }
@@ -471,10 +473,10 @@ return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool? dailySettlementReport,  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language,  bool? pushEnabled)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool? dailySettlementReport,  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language,  bool? pushEnabled,  num? dailyTarget,  num? monthlyTarget)  $default,) {final _that = this;
 switch (_that) {
 case _MerchantPreferences():
-return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.reportRecipients,_that.language,_that.pushEnabled);case _:
+return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.reportRecipients,_that.language,_that.pushEnabled,_that.dailyTarget,_that.monthlyTarget);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -491,10 +493,10 @@ return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool? dailySettlementReport,  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language,  bool? pushEnabled)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool? dailySettlementReport,  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language,  bool? pushEnabled,  num? dailyTarget,  num? monthlyTarget)?  $default,) {final _that = this;
 switch (_that) {
 case _MerchantPreferences() when $default != null:
-return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.reportRecipients,_that.language,_that.pushEnabled);case _:
+return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.reportRecipients,_that.language,_that.pushEnabled,_that.dailyTarget,_that.monthlyTarget);case _:
   return null;
 
 }
@@ -506,7 +508,7 @@ return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.
 @JsonSerializable()
 
 class _MerchantPreferences implements MerchantPreferences {
-  const _MerchantPreferences({this.dailySettlementReport, this.monthlySettlementReport, final  List<String> reportRecipients = const <String>[], this.language, this.pushEnabled}): _reportRecipients = reportRecipients;
+  const _MerchantPreferences({this.dailySettlementReport, this.monthlySettlementReport, final  List<String> reportRecipients = const <String>[], this.language, this.pushEnabled, this.dailyTarget, this.monthlyTarget}): _reportRecipients = reportRecipients;
   factory _MerchantPreferences.fromJson(Map<String, dynamic> json) => _$MerchantPreferencesFromJson(json);
 
 @override final  bool? dailySettlementReport;
@@ -520,6 +522,8 @@ class _MerchantPreferences implements MerchantPreferences {
 
 @override final  String? language;
 @override final  bool? pushEnabled;
+@override final  num? dailyTarget;
+@override final  num? monthlyTarget;
 
 /// Create a copy of MerchantPreferences
 /// with the given fields replaced by the non-null parameter values.
@@ -534,16 +538,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MerchantPreferences&&(identical(other.dailySettlementReport, dailySettlementReport) || other.dailySettlementReport == dailySettlementReport)&&(identical(other.monthlySettlementReport, monthlySettlementReport) || other.monthlySettlementReport == monthlySettlementReport)&&const DeepCollectionEquality().equals(other._reportRecipients, _reportRecipients)&&(identical(other.language, language) || other.language == language)&&(identical(other.pushEnabled, pushEnabled) || other.pushEnabled == pushEnabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MerchantPreferences&&(identical(other.dailySettlementReport, dailySettlementReport) || other.dailySettlementReport == dailySettlementReport)&&(identical(other.monthlySettlementReport, monthlySettlementReport) || other.monthlySettlementReport == monthlySettlementReport)&&const DeepCollectionEquality().equals(other._reportRecipients, _reportRecipients)&&(identical(other.language, language) || other.language == language)&&(identical(other.pushEnabled, pushEnabled) || other.pushEnabled == pushEnabled)&&(identical(other.dailyTarget, dailyTarget) || other.dailyTarget == dailyTarget)&&(identical(other.monthlyTarget, monthlyTarget) || other.monthlyTarget == monthlyTarget));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,dailySettlementReport,monthlySettlementReport,const DeepCollectionEquality().hash(_reportRecipients),language,pushEnabled);
+int get hashCode => Object.hash(runtimeType,dailySettlementReport,monthlySettlementReport,const DeepCollectionEquality().hash(_reportRecipients),language,pushEnabled,dailyTarget,monthlyTarget);
 
 @override
 String toString() {
-  return 'MerchantPreferences(dailySettlementReport: $dailySettlementReport, monthlySettlementReport: $monthlySettlementReport, reportRecipients: $reportRecipients, language: $language, pushEnabled: $pushEnabled)';
+  return 'MerchantPreferences(dailySettlementReport: $dailySettlementReport, monthlySettlementReport: $monthlySettlementReport, reportRecipients: $reportRecipients, language: $language, pushEnabled: $pushEnabled, dailyTarget: $dailyTarget, monthlyTarget: $monthlyTarget)';
 }
 
 
@@ -554,7 +558,7 @@ abstract mixin class _$MerchantPreferencesCopyWith<$Res> implements $MerchantPre
   factory _$MerchantPreferencesCopyWith(_MerchantPreferences value, $Res Function(_MerchantPreferences) _then) = __$MerchantPreferencesCopyWithImpl;
 @override @useResult
 $Res call({
- bool? dailySettlementReport, bool? monthlySettlementReport, List<String> reportRecipients, String? language, bool? pushEnabled
+ bool? dailySettlementReport, bool? monthlySettlementReport, List<String> reportRecipients, String? language, bool? pushEnabled, num? dailyTarget, num? monthlyTarget
 });
 
 
@@ -571,14 +575,16 @@ class __$MerchantPreferencesCopyWithImpl<$Res>
 
 /// Create a copy of MerchantPreferences
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? dailySettlementReport = freezed,Object? monthlySettlementReport = freezed,Object? reportRecipients = null,Object? language = freezed,Object? pushEnabled = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? dailySettlementReport = freezed,Object? monthlySettlementReport = freezed,Object? reportRecipients = null,Object? language = freezed,Object? pushEnabled = freezed,Object? dailyTarget = freezed,Object? monthlyTarget = freezed,}) {
   return _then(_MerchantPreferences(
 dailySettlementReport: freezed == dailySettlementReport ? _self.dailySettlementReport : dailySettlementReport // ignore: cast_nullable_to_non_nullable
 as bool?,monthlySettlementReport: freezed == monthlySettlementReport ? _self.monthlySettlementReport : monthlySettlementReport // ignore: cast_nullable_to_non_nullable
 as bool?,reportRecipients: null == reportRecipients ? _self._reportRecipients : reportRecipients // ignore: cast_nullable_to_non_nullable
 as List<String>,language: freezed == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
 as String?,pushEnabled: freezed == pushEnabled ? _self.pushEnabled : pushEnabled // ignore: cast_nullable_to_non_nullable
-as bool?,
+as bool?,dailyTarget: freezed == dailyTarget ? _self.dailyTarget : dailyTarget // ignore: cast_nullable_to_non_nullable
+as num?,monthlyTarget: freezed == monthlyTarget ? _self.monthlyTarget : monthlyTarget // ignore: cast_nullable_to_non_nullable
+as num?,
   ));
 }
 

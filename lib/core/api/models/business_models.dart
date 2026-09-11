@@ -31,6 +31,8 @@ abstract class MerchantPreferences with _$MerchantPreferences {
     @Default(<String>[]) List<String> reportRecipients,
     String? language,
     bool? pushEnabled,
+    num? dailyTarget,
+    num? monthlyTarget,
   }) = _MerchantPreferences;
 
   factory MerchantPreferences.fromJson(Map<String, dynamic> json) =>
