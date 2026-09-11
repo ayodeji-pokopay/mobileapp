@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/api/models/merchant_models.dart';
 import '../../../core/api/models/transaction_models.dart';
+import '../../../core/config/app_config.dart';
+import '../../../core/config/app_config_provider.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
@@ -776,13 +779,14 @@ class _AlertBanner extends StatelessWidget {
   }
 }
 
-class _FeedbackBanner extends StatelessWidget {
+class _FeedbackBanner extends ConsumerWidget {
   const _FeedbackBanner({required this.onDismiss});
   final VoidCallback onDismiss;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final support = ref.watch(appConfigProvider).asData?.value.support;
     return SurfaceCard(
       radius: 14,
       padding: const EdgeInsets.all(12),
@@ -810,10 +814,28 @@ class _FeedbackBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 GestureDetector(
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.feedbackThanks)),
+                  onTap: () async {
+                    final email = support?.email ?? const SupportInfo().email;
+                    final version =
+                        ref.read(packageInfoProvider).asData?.value.version ??
+                        '';
+                    final uri = Uri(
+                      scheme: 'mailto',
+                      path: email,
+                      query:
+                          'subject=${Uri.encodeComponent('Pokopay app feedback ($version)')}',
                     );
+                    final ok = await launchUrl(
+                      uri,
+                      mode: LaunchMode.externalApplication,
+                    );
+                    if (!ok && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(l10n.feedbackEmailFailed(email)),
+                        ),
+                      );
+                    }
                   },
                   child: Text(
                     l10n.feedbackAction,

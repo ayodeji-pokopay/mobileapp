@@ -132,7 +132,7 @@
   "feedbackTitle": "Enjoying Pokopay Merchant?",
   "feedbackBody": "Tell us what to improve next.",
   "feedbackAction": "Send feedback ›",
-  "feedbackThanks": "Thanks! Coming soon.",
+  "feedbackThanks": "Opening your email app…",
   "feedbackDismiss": "Dismiss",
   "dashboardActivity": "Recent payouts",
   "dashboardNoActivity": "No payouts yet",
@@ -827,5 +827,15 @@
       }
     }
   },
-  "alertsBannerBody": "We spotted unusual activity on a card machine. Take a look and mark it reviewed."
+  "alertsBannerBody": "We spotted unusual activity on a card machine. Take a look and mark it reviewed.",
+  "loginInvalidCredentials": "That email or password isn't right.",
+  "errorServiceUnavailable": "Pokopay is temporarily unavailable. Please try again in a few minutes.",
+  "feedbackEmailFailed": "Couldn't open your email app. Write to {email}.",
+  "@feedbackEmailFailed": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  }
 }

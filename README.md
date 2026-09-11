@@ -189,6 +189,12 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 
 **Store assets.** Listing copy, privacy policy, data-safety answers, and screenshots are in `store/`.
 
+## Security posture
+
+The app never sees full card numbers: the backend returns `panMasked` only, and that is all the app displays, prints, or puts in a receipt. Access and refresh tokens live in the platform keychain / keystore (`flutter_secure_storage`, iOS accessibility `first_unlock_this_device` so they never sync via iCloud Keychain); passwords are never stored. All traffic is HTTPS: iOS App Transport Security is left at its defaults, and Android ships a network security config that forbids cleartext and trusts only system CAs. Android backups and device-to-device transfer are disabled (`allowBackup=false`, `data_extraction_rules.xml`). The debug-only Dio logger prints no bodies or headers; Sentry sends no request data or PII. Sign-in errors are mapped from codes to localised copy, so backend messages are never echoed verbatim to users. App lock (biometric or PIN, 5 attempts) covers the app in the switcher and re-authenticates after a timeout.
+
+Not yet done, and worth deciding before store release: certificate pinning (needs a rotation plan with the backend), root/jailbreak detection, blocking screenshots (`FLAG_SECURE`) on financial screens, encrypting the offline cache (it holds masked PANs and amounts in shared preferences), and a real release keystore for Android (still signed with the debug key).
+
 ## Backend endpoints used
 
 All paths are relative to `API_BASE_URL`.

@@ -69,7 +69,7 @@
   "feedbackTitle": "Kana jin daɗin Pokopay Ɗan kasuwa?",
   "feedbackBody": "Faɗa mana abin da za mu inganta.",
   "feedbackAction": "Aika ra'ayi ›",
-  "feedbackThanks": "Na gode! Nan ba da daɗewa ba.",
+  "feedbackThanks": "Ana buɗe manhajar imel ɗinka…",
   "feedbackDismiss": "Rufe",
   "dashboardActivity": "Biyan kuɗi na kwanan nan",
   "dashboardNoActivity": "Babu biyan kuɗi tukuna",
@@ -544,5 +544,15 @@
       }
     }
   },
-  "alertsBannerBody": "Mun lura da ayyuka marasa kyau a na'urar kati. Duba ka yi mata alamar an duba."
+  "alertsBannerBody": "Mun lura da ayyuka marasa kyau a na'urar kati. Duba ka yi mata alamar an duba.",
+  "loginInvalidCredentials": "Wannan imel ko kalmar sirri ba daidai ba ne.",
+  "errorServiceUnavailable": "Pokopay ba ya samuwa na ɗan lokaci. Da fatan za a sake gwadawa nan da mintuna kaɗan.",
+  "feedbackEmailFailed": "Ba a iya buɗe manhajar imel ɗinka ba. Rubuta zuwa {email}.",
+  "@feedbackEmailFailed": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  }
 }

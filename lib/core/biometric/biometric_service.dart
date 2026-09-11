@@ -16,9 +16,7 @@ class BiometricService {
     }
   }
 
-  Future<bool> authenticate({
-    String reason = 'Authenticate to continue',
-  }) async {
+  Future<bool> authenticate({required String reason}) async {
     try {
       return await _auth.authenticate(
         localizedReason: reason,

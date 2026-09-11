@@ -80,6 +80,10 @@ class AuthException implements Exception {
   final String? code;
 
   static const deviceReenrol = 'DEVICE_REENROL';
+  // Codes the app assigns when the backend sends none.
+  static const invalidCredentials = 'INVALID_CREDENTIALS';
+  static const serverUnavailable = 'SERVER_UNAVAILABLE';
+  static const network = 'NETWORK';
 
   @override
   String toString() => message;
@@ -356,6 +360,10 @@ class AuthRepository {
       final c = data['code'];
       if (c is String && c.isNotEmpty) return c;
     }
+    final status = e.response?.statusCode;
+    if (status == 401) return AuthException.invalidCredentials;
+    if (status != null && status >= 500) return AuthException.serverUnavailable;
+    if (e.response == null) return AuthException.network;
     return null;
   }
 

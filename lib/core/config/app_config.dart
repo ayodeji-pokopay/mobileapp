@@ -12,6 +12,7 @@ class AppConfig {
     this.support = const SupportInfo(),
     this.features = const FeatureFlags(),
     this.currency = const CurrencyInfo(),
+    this.dialCode = '234',
   });
 
   final String? minSupportedVersion;
@@ -20,6 +21,10 @@ class AppConfig {
   final String? storeUrl;
   final MaintenanceInfo maintenance;
   final SupportInfo support;
+
+  /// Country calling code used to normalise customer phone numbers
+  /// (`region.dialCode` in remote config; Nigeria by default).
+  final String dialCode;
   final FeatureFlags features;
   final CurrencyInfo currency;
 
@@ -36,6 +41,9 @@ class AppConfig {
       storeUrl: json['storeUrl']?.toString(),
       maintenance: MaintenanceInfo.fromJson(obj('maintenance')),
       support: SupportInfo.fromJson(obj('support')),
+      dialCode: (obj('region')['dialCode'] ?? json['dialCode'] ?? '234')
+          .toString()
+          .replaceAll(RegExp(r'\D'), ''),
       features: FeatureFlags.fromJson(obj('features')),
       currency: CurrencyInfo.fromJson(obj('currency')),
     );

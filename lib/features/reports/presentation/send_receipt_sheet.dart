@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/api/models/transaction_models.dart';
+import '../../../core/config/app_config_provider.dart';
 import '../../../core/printing/receipt_printer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
@@ -66,10 +67,12 @@ class _SendReceiptSheetState extends ConsumerState<SendReceiptSheet> {
     super.dispose();
   }
 
-  /// Nigerian numbers: "0803…" → "234803…", keeps digits only.
+  /// Local numbers ("0803…") become international ("234803…") using the
+  /// dial code from remote config; keeps digits only.
   String _normalised() {
+    final dial = ref.read(appConfigProvider).asData?.value.dialCode ?? '234';
     var digits = _phone.text.replaceAll(RegExp(r'\D'), '');
-    if (digits.startsWith('0')) digits = '234${digits.substring(1)}';
+    if (digits.startsWith('0')) digits = '$dial${digits.substring(1)}';
     return digits;
   }
 

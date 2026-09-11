@@ -69,7 +69,7 @@
   "feedbackTitle": "You dey enjoy Pokopay Merchant?",
   "feedbackBody": "Tell us wetin we go fix next.",
   "feedbackAction": "Send feedback ›",
-  "feedbackThanks": "Thank you! E dey come soon.",
+  "feedbackThanks": "Dey open your email app…",
   "feedbackDismiss": "Close am",
   "dashboardActivity": "Recent payouts",
   "dashboardNoActivity": "No payout yet",
@@ -544,5 +544,15 @@
       }
     }
   },
-  "alertsBannerBody": "We see strange activity for one card machine. Check am and mark am reviewed."
+  "alertsBannerBody": "We see strange activity for one card machine. Check am and mark am reviewed.",
+  "loginInvalidCredentials": "That email or password no correct.",
+  "errorServiceUnavailable": "Pokopay no dey available for now. Abeg try again after some minutes.",
+  "feedbackEmailFailed": "No fit open your email app. Write to {email}.",
+  "@feedbackEmailFailed": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  }
 }

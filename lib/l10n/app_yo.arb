@@ -69,7 +69,7 @@
   "feedbackTitle": "Ṣé Pokopay Oníṣòwò ń wù ọ́?",
   "feedbackBody": "Sọ ohun tí a lè tún ṣe fún wa.",
   "feedbackAction": "Fi èsì ránṣẹ́ ›",
-  "feedbackThanks": "O ṣeun! Ń bọ̀ láìpẹ́.",
+  "feedbackThanks": "Ń ṣí àpù ímeèlì rẹ…",
   "feedbackDismiss": "Pa",
   "dashboardActivity": "Ìsanwó àìpẹ́",
   "dashboardNoActivity": "Kò tíì sí ìsanwó",
@@ -544,5 +544,15 @@
       }
     }
   },
-  "alertsBannerBody": "A rí ìṣe àìdàbí lórí ẹ̀rọ káàdì kan. Wò ó kí o sì sàmì sí àyẹ̀wò."
+  "alertsBannerBody": "A rí ìṣe àìdàbí lórí ẹ̀rọ káàdì kan. Wò ó kí o sì sàmì sí àyẹ̀wò.",
+  "loginInvalidCredentials": "Ímeèlì tàbí ọ̀rọ̀ìpamọ́ yẹn kò tọ́.",
+  "errorServiceUnavailable": "Pokopay kò sí fún ìgbà díẹ̀. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kansí ní ìṣẹ́jú díẹ̀.",
+  "feedbackEmailFailed": "Kò lè ṣí àpù ímeèlì rẹ. Kọ̀wé sí {email}.",
+  "@feedbackEmailFailed": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  }
 }

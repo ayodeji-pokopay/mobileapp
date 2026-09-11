@@ -270,7 +270,7 @@ class _BalanceCard extends StatelessWidget {
               Expanded(
                 child: _StatTile(
                   icon: LucideIcons.clock,
-                  iconColor: const Color(0xFFFFD166),
+                  iconColor: AppColors.warning,
                   label: l10n.walletPending,
                   value: formatMoneyCompact(wallet.pendingNaira),
                 ),

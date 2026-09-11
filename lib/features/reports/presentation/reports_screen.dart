@@ -1158,7 +1158,7 @@ class _TxnRow extends StatelessWidget {
               decoration: BoxDecoration(
                 color: switch (style.tone) {
                   PillTone.success => AppColors.primary,
-                  PillTone.reversed => const Color(0xFF6B4FD0),
+                  PillTone.reversed => AppColors.reversed,
                   _ => AppColors.danger,
                 },
                 shape: BoxShape.circle,

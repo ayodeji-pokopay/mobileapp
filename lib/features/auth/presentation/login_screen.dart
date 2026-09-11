@@ -82,10 +82,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!mounted) return;
     setState(() => _submitting = false);
     if (!ok) {
-      _showError(
-        ref.read(authControllerProvider).error ??
-            AppLocalizations.of(context).loginFailed,
-      );
+      final auth = ref.read(authControllerProvider);
+      final l10n = AppLocalizations.of(context);
+      // Prefer localised copy keyed on the error code; the backend message
+      // is the fallback for codes we don't know.
+      final message = switch (auth.errorCode) {
+        AuthException.invalidCredentials => l10n.loginInvalidCredentials,
+        AuthException.serverUnavailable => l10n.errorServiceUnavailable,
+        AuthException.network => l10n.errorNetwork,
+        'ACCOUNT_LOCKED' => l10n.errorAccountLocked,
+        'RATE_LIMITED' => l10n.errorRateLimited,
+        _ => auth.error ?? l10n.loginFailed,
+      };
+      _showError(message);
     }
   }
 

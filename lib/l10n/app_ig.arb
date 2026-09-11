@@ -69,7 +69,7 @@
   "feedbackTitle": "Ị na-anụ ụtọ Pokopay Onye ahịa?",
   "feedbackBody": "Gwa anyị ihe anyị ga-emezi.",
   "feedbackAction": "Zipu nzaghachi ›",
-  "feedbackThanks": "Daalụ! Ọ na-abịa n'oge na-adịghị anya.",
+  "feedbackThanks": "Na-emepe ngwa email gị…",
   "feedbackDismiss": "Mechie",
   "dashboardActivity": "Ịkwụ ụgwọ nso nso a",
   "dashboardNoActivity": "Enwebeghị ịkwụ ụgwọ",
@@ -544,5 +544,15 @@
       }
     }
   },
-  "alertsBannerBody": "Anyị hụrụ omume na-adịghị mma na igwe kaadị. Lee ya ma kaa ya akara dịka enyochara."
+  "alertsBannerBody": "Anyị hụrụ omume na-adịghị mma na igwe kaadị. Lee ya ma kaa ya akara dịka enyochara.",
+  "loginInvalidCredentials": "Email ma ọ bụ okwuntughe ahụ ezighi ezi.",
+  "errorServiceUnavailable": "Pokopay adịghị nwa oge. Biko nwaa ọzọ n'ime nkeji ole na ole.",
+  "feedbackEmailFailed": "Enweghị ike imepe ngwa email gị. Dee na {email}.",
+  "@feedbackEmailFailed": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  }
 }
