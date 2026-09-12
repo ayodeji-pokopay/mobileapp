@@ -16,8 +16,9 @@ import '../../../shared/widgets/offline_banner.dart';
 import '../../../shared/widgets/pills.dart';
 import '../../../shared/widgets/section_label.dart';
 import '../../auth/presentation/auth_controller.dart';
+import '../../dashboard/presentation/dashboard_providers.dart';
 import '../../merchant/presentation/merchant_providers.dart';
-import 'rename_terminal_sheet.dart';
+import 'terminal_detail_sheet.dart';
 
 /// Lists the merchant's business and its POS terminals.
 class StoresScreen extends ConsumerWidget {
@@ -141,6 +142,16 @@ class _TerminalRow extends StatelessWidget {
       _ => (PillTone.neutral, status.isEmpty ? l10n.statusActive : status),
     };
     final seen = DateTime.tryParse(t.lastHeartbeat ?? '');
+    final health = terminalHealth(t);
+    final (hTone, hLabel) = switch (health) {
+      TerminalHealth.online => (PillTone.success, l10n.terminalHealthy),
+      TerminalHealth.degraded => (PillTone.warning, l10n.terminalDegraded),
+      TerminalHealth.idle => (PillTone.warning, l10n.terminalIdle),
+      TerminalHealth.offline => (PillTone.danger, l10n.terminalOffline),
+    };
+    final reason = t.healthReasons.isEmpty || health == TerminalHealth.online
+        ? null
+        : terminalReasonLabel(t.healthReasons.first, l10n);
     final title = (t.label ?? '').isNotEmpty
         ? t.label!
         : (t.model ?? '').isNotEmpty
@@ -157,13 +168,17 @@ class _TerminalRow extends StatelessWidget {
         if ((t.tid ?? '').isNotEmpty) l10n.tidLabel(t.tid!),
         if ((t.serialNumber ?? '').isNotEmpty)
           l10n.terminalSerial(t.serialNumber!),
+        if (reason != null) reason,
         seen == null
             ? l10n.terminalNeverSeen
             : l10n.terminalLastSeen(formatRelativeTime(seen)),
       ].join(' · '),
-      trailing: StatusPill(label: label, tone: tone),
+      trailing: StatusPill(
+        label: status == 'ACTIVE' ? hLabel : label,
+        tone: status == 'ACTIVE' ? hTone : tone,
+      ),
       chevron: false,
-      onTap: canRename ? () => showRenameTerminalSheet(context, t) : null,
+      onTap: () => showTerminalDetailSheet(context, t),
     );
   }
 }

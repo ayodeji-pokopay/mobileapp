@@ -17,6 +17,16 @@ abstract class TerminalResponse with _$TerminalResponse {
     String? lastHeartbeat,
     num? todaySales,
     int? todayTransactions,
+    // Terminal health (backend verdict + raw telemetry from heartbeats).
+    String? connectivity,
+    String? health,
+    @Default(<String>[]) List<String> healthReasons,
+    int? batteryPercent,
+    bool? charging,
+    String? connectionType,
+    int? signal,
+    String? printerStatus,
+    String? appVersion,
   }) = _TerminalResponse;
 
   factory TerminalResponse.fromJson(Map<String, dynamic> json) =>

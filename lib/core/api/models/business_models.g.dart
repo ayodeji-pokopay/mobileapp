@@ -19,6 +19,19 @@ _TerminalResponse _$TerminalResponseFromJson(Map<String, dynamic> json) =>
       lastHeartbeat: json['lastHeartbeat'] as String?,
       todaySales: json['todaySales'] as num?,
       todayTransactions: (json['todayTransactions'] as num?)?.toInt(),
+      connectivity: json['connectivity'] as String?,
+      health: json['health'] as String?,
+      healthReasons:
+          (json['healthReasons'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
+      batteryPercent: (json['batteryPercent'] as num?)?.toInt(),
+      charging: json['charging'] as bool?,
+      connectionType: json['connectionType'] as String?,
+      signal: (json['signal'] as num?)?.toInt(),
+      printerStatus: json['printerStatus'] as String?,
+      appVersion: json['appVersion'] as String?,
     );
 
 Map<String, dynamic> _$TerminalResponseToJson(_TerminalResponse instance) =>
@@ -34,6 +47,15 @@ Map<String, dynamic> _$TerminalResponseToJson(_TerminalResponse instance) =>
       'lastHeartbeat': instance.lastHeartbeat,
       'todaySales': instance.todaySales,
       'todayTransactions': instance.todayTransactions,
+      'connectivity': instance.connectivity,
+      'health': instance.health,
+      'healthReasons': instance.healthReasons,
+      'batteryPercent': instance.batteryPercent,
+      'charging': instance.charging,
+      'connectionType': instance.connectionType,
+      'signal': instance.signal,
+      'printerStatus': instance.printerStatus,
+      'appVersion': instance.appVersion,
     };
 
 _MerchantPreferences _$MerchantPreferencesFromJson(Map<String, dynamic> json) =>

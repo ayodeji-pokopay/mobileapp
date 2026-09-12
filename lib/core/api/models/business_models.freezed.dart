@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TerminalResponse {
 
- String? get id; String? get tid; String? get serialNumber; String? get model; String? get label; String? get status; bool? get instantSettlement; String? get activatedAt; String? get lastHeartbeat; num? get todaySales; int? get todayTransactions;
+ String? get id; String? get tid; String? get serialNumber; String? get model; String? get label; String? get status; bool? get instantSettlement; String? get activatedAt; String? get lastHeartbeat; num? get todaySales; int? get todayTransactions;// Terminal health (backend verdict + raw telemetry from heartbeats).
+ String? get connectivity; String? get health; List<String> get healthReasons; int? get batteryPercent; bool? get charging; String? get connectionType; int? get signal; String? get printerStatus; String? get appVersion;
 /// Create a copy of TerminalResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $TerminalResponseCopyWith<TerminalResponse> get copyWith => _$TerminalResponseCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TerminalResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.tid, tid) || other.tid == tid)&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.model, model) || other.model == model)&&(identical(other.label, label) || other.label == label)&&(identical(other.status, status) || other.status == status)&&(identical(other.instantSettlement, instantSettlement) || other.instantSettlement == instantSettlement)&&(identical(other.activatedAt, activatedAt) || other.activatedAt == activatedAt)&&(identical(other.lastHeartbeat, lastHeartbeat) || other.lastHeartbeat == lastHeartbeat)&&(identical(other.todaySales, todaySales) || other.todaySales == todaySales)&&(identical(other.todayTransactions, todayTransactions) || other.todayTransactions == todayTransactions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TerminalResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.tid, tid) || other.tid == tid)&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.model, model) || other.model == model)&&(identical(other.label, label) || other.label == label)&&(identical(other.status, status) || other.status == status)&&(identical(other.instantSettlement, instantSettlement) || other.instantSettlement == instantSettlement)&&(identical(other.activatedAt, activatedAt) || other.activatedAt == activatedAt)&&(identical(other.lastHeartbeat, lastHeartbeat) || other.lastHeartbeat == lastHeartbeat)&&(identical(other.todaySales, todaySales) || other.todaySales == todaySales)&&(identical(other.todayTransactions, todayTransactions) || other.todayTransactions == todayTransactions)&&(identical(other.connectivity, connectivity) || other.connectivity == connectivity)&&(identical(other.health, health) || other.health == health)&&const DeepCollectionEquality().equals(other.healthReasons, healthReasons)&&(identical(other.batteryPercent, batteryPercent) || other.batteryPercent == batteryPercent)&&(identical(other.charging, charging) || other.charging == charging)&&(identical(other.connectionType, connectionType) || other.connectionType == connectionType)&&(identical(other.signal, signal) || other.signal == signal)&&(identical(other.printerStatus, printerStatus) || other.printerStatus == printerStatus)&&(identical(other.appVersion, appVersion) || other.appVersion == appVersion));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,tid,serialNumber,model,label,status,instantSettlement,activatedAt,lastHeartbeat,todaySales,todayTransactions);
+int get hashCode => Object.hashAll([runtimeType,id,tid,serialNumber,model,label,status,instantSettlement,activatedAt,lastHeartbeat,todaySales,todayTransactions,connectivity,health,const DeepCollectionEquality().hash(healthReasons),batteryPercent,charging,connectionType,signal,printerStatus,appVersion]);
 
 @override
 String toString() {
-  return 'TerminalResponse(id: $id, tid: $tid, serialNumber: $serialNumber, model: $model, label: $label, status: $status, instantSettlement: $instantSettlement, activatedAt: $activatedAt, lastHeartbeat: $lastHeartbeat, todaySales: $todaySales, todayTransactions: $todayTransactions)';
+  return 'TerminalResponse(id: $id, tid: $tid, serialNumber: $serialNumber, model: $model, label: $label, status: $status, instantSettlement: $instantSettlement, activatedAt: $activatedAt, lastHeartbeat: $lastHeartbeat, todaySales: $todaySales, todayTransactions: $todayTransactions, connectivity: $connectivity, health: $health, healthReasons: $healthReasons, batteryPercent: $batteryPercent, charging: $charging, connectionType: $connectionType, signal: $signal, printerStatus: $printerStatus, appVersion: $appVersion)';
 }
 
 
@@ -48,7 +49,7 @@ abstract mixin class $TerminalResponseCopyWith<$Res>  {
   factory $TerminalResponseCopyWith(TerminalResponse value, $Res Function(TerminalResponse) _then) = _$TerminalResponseCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? tid, String? serialNumber, String? model, String? label, String? status, bool? instantSettlement, String? activatedAt, String? lastHeartbeat, num? todaySales, int? todayTransactions
+ String? id, String? tid, String? serialNumber, String? model, String? label, String? status, bool? instantSettlement, String? activatedAt, String? lastHeartbeat, num? todaySales, int? todayTransactions, String? connectivity, String? health, List<String> healthReasons, int? batteryPercent, bool? charging, String? connectionType, int? signal, String? printerStatus, String? appVersion
 });
 
 
@@ -65,7 +66,7 @@ class _$TerminalResponseCopyWithImpl<$Res>
 
 /// Create a copy of TerminalResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? tid = freezed,Object? serialNumber = freezed,Object? model = freezed,Object? label = freezed,Object? status = freezed,Object? instantSettlement = freezed,Object? activatedAt = freezed,Object? lastHeartbeat = freezed,Object? todaySales = freezed,Object? todayTransactions = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? tid = freezed,Object? serialNumber = freezed,Object? model = freezed,Object? label = freezed,Object? status = freezed,Object? instantSettlement = freezed,Object? activatedAt = freezed,Object? lastHeartbeat = freezed,Object? todaySales = freezed,Object? todayTransactions = freezed,Object? connectivity = freezed,Object? health = freezed,Object? healthReasons = null,Object? batteryPercent = freezed,Object? charging = freezed,Object? connectionType = freezed,Object? signal = freezed,Object? printerStatus = freezed,Object? appVersion = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,tid: freezed == tid ? _self.tid : tid // ignore: cast_nullable_to_non_nullable
@@ -78,7 +79,16 @@ as bool?,activatedAt: freezed == activatedAt ? _self.activatedAt : activatedAt /
 as String?,lastHeartbeat: freezed == lastHeartbeat ? _self.lastHeartbeat : lastHeartbeat // ignore: cast_nullable_to_non_nullable
 as String?,todaySales: freezed == todaySales ? _self.todaySales : todaySales // ignore: cast_nullable_to_non_nullable
 as num?,todayTransactions: freezed == todayTransactions ? _self.todayTransactions : todayTransactions // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,connectivity: freezed == connectivity ? _self.connectivity : connectivity // ignore: cast_nullable_to_non_nullable
+as String?,health: freezed == health ? _self.health : health // ignore: cast_nullable_to_non_nullable
+as String?,healthReasons: null == healthReasons ? _self.healthReasons : healthReasons // ignore: cast_nullable_to_non_nullable
+as List<String>,batteryPercent: freezed == batteryPercent ? _self.batteryPercent : batteryPercent // ignore: cast_nullable_to_non_nullable
+as int?,charging: freezed == charging ? _self.charging : charging // ignore: cast_nullable_to_non_nullable
+as bool?,connectionType: freezed == connectionType ? _self.connectionType : connectionType // ignore: cast_nullable_to_non_nullable
+as String?,signal: freezed == signal ? _self.signal : signal // ignore: cast_nullable_to_non_nullable
+as int?,printerStatus: freezed == printerStatus ? _self.printerStatus : printerStatus // ignore: cast_nullable_to_non_nullable
+as String?,appVersion: freezed == appVersion ? _self.appVersion : appVersion // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -163,10 +173,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status,  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat,  num? todaySales,  int? todayTransactions)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status,  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat,  num? todaySales,  int? todayTransactions,  String? connectivity,  String? health,  List<String> healthReasons,  int? batteryPercent,  bool? charging,  String? connectionType,  int? signal,  String? printerStatus,  String? appVersion)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TerminalResponse() when $default != null:
-return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_that.status,_that.instantSettlement,_that.activatedAt,_that.lastHeartbeat,_that.todaySales,_that.todayTransactions);case _:
+return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_that.status,_that.instantSettlement,_that.activatedAt,_that.lastHeartbeat,_that.todaySales,_that.todayTransactions,_that.connectivity,_that.health,_that.healthReasons,_that.batteryPercent,_that.charging,_that.connectionType,_that.signal,_that.printerStatus,_that.appVersion);case _:
   return orElse();
 
 }
@@ -184,10 +194,10 @@ return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status,  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat,  num? todaySales,  int? todayTransactions)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status,  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat,  num? todaySales,  int? todayTransactions,  String? connectivity,  String? health,  List<String> healthReasons,  int? batteryPercent,  bool? charging,  String? connectionType,  int? signal,  String? printerStatus,  String? appVersion)  $default,) {final _that = this;
 switch (_that) {
 case _TerminalResponse():
-return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_that.status,_that.instantSettlement,_that.activatedAt,_that.lastHeartbeat,_that.todaySales,_that.todayTransactions);case _:
+return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_that.status,_that.instantSettlement,_that.activatedAt,_that.lastHeartbeat,_that.todaySales,_that.todayTransactions,_that.connectivity,_that.health,_that.healthReasons,_that.batteryPercent,_that.charging,_that.connectionType,_that.signal,_that.printerStatus,_that.appVersion);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +214,10 @@ return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status,  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat,  num? todaySales,  int? todayTransactions)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status,  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat,  num? todaySales,  int? todayTransactions,  String? connectivity,  String? health,  List<String> healthReasons,  int? batteryPercent,  bool? charging,  String? connectionType,  int? signal,  String? printerStatus,  String? appVersion)?  $default,) {final _that = this;
 switch (_that) {
 case _TerminalResponse() when $default != null:
-return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_that.status,_that.instantSettlement,_that.activatedAt,_that.lastHeartbeat,_that.todaySales,_that.todayTransactions);case _:
+return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_that.status,_that.instantSettlement,_that.activatedAt,_that.lastHeartbeat,_that.todaySales,_that.todayTransactions,_that.connectivity,_that.health,_that.healthReasons,_that.batteryPercent,_that.charging,_that.connectionType,_that.signal,_that.printerStatus,_that.appVersion);case _:
   return null;
 
 }
@@ -219,7 +229,7 @@ return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_t
 @JsonSerializable()
 
 class _TerminalResponse implements TerminalResponse {
-  const _TerminalResponse({this.id, this.tid, this.serialNumber, this.model, this.label, this.status, this.instantSettlement, this.activatedAt, this.lastHeartbeat, this.todaySales, this.todayTransactions});
+  const _TerminalResponse({this.id, this.tid, this.serialNumber, this.model, this.label, this.status, this.instantSettlement, this.activatedAt, this.lastHeartbeat, this.todaySales, this.todayTransactions, this.connectivity, this.health, final  List<String> healthReasons = const <String>[], this.batteryPercent, this.charging, this.connectionType, this.signal, this.printerStatus, this.appVersion}): _healthReasons = healthReasons;
   factory _TerminalResponse.fromJson(Map<String, dynamic> json) => _$TerminalResponseFromJson(json);
 
 @override final  String? id;
@@ -233,6 +243,22 @@ class _TerminalResponse implements TerminalResponse {
 @override final  String? lastHeartbeat;
 @override final  num? todaySales;
 @override final  int? todayTransactions;
+// Terminal health (backend verdict + raw telemetry from heartbeats).
+@override final  String? connectivity;
+@override final  String? health;
+ final  List<String> _healthReasons;
+@override@JsonKey() List<String> get healthReasons {
+  if (_healthReasons is EqualUnmodifiableListView) return _healthReasons;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_healthReasons);
+}
+
+@override final  int? batteryPercent;
+@override final  bool? charging;
+@override final  String? connectionType;
+@override final  int? signal;
+@override final  String? printerStatus;
+@override final  String? appVersion;
 
 /// Create a copy of TerminalResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -247,16 +273,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TerminalResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.tid, tid) || other.tid == tid)&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.model, model) || other.model == model)&&(identical(other.label, label) || other.label == label)&&(identical(other.status, status) || other.status == status)&&(identical(other.instantSettlement, instantSettlement) || other.instantSettlement == instantSettlement)&&(identical(other.activatedAt, activatedAt) || other.activatedAt == activatedAt)&&(identical(other.lastHeartbeat, lastHeartbeat) || other.lastHeartbeat == lastHeartbeat)&&(identical(other.todaySales, todaySales) || other.todaySales == todaySales)&&(identical(other.todayTransactions, todayTransactions) || other.todayTransactions == todayTransactions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TerminalResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.tid, tid) || other.tid == tid)&&(identical(other.serialNumber, serialNumber) || other.serialNumber == serialNumber)&&(identical(other.model, model) || other.model == model)&&(identical(other.label, label) || other.label == label)&&(identical(other.status, status) || other.status == status)&&(identical(other.instantSettlement, instantSettlement) || other.instantSettlement == instantSettlement)&&(identical(other.activatedAt, activatedAt) || other.activatedAt == activatedAt)&&(identical(other.lastHeartbeat, lastHeartbeat) || other.lastHeartbeat == lastHeartbeat)&&(identical(other.todaySales, todaySales) || other.todaySales == todaySales)&&(identical(other.todayTransactions, todayTransactions) || other.todayTransactions == todayTransactions)&&(identical(other.connectivity, connectivity) || other.connectivity == connectivity)&&(identical(other.health, health) || other.health == health)&&const DeepCollectionEquality().equals(other._healthReasons, _healthReasons)&&(identical(other.batteryPercent, batteryPercent) || other.batteryPercent == batteryPercent)&&(identical(other.charging, charging) || other.charging == charging)&&(identical(other.connectionType, connectionType) || other.connectionType == connectionType)&&(identical(other.signal, signal) || other.signal == signal)&&(identical(other.printerStatus, printerStatus) || other.printerStatus == printerStatus)&&(identical(other.appVersion, appVersion) || other.appVersion == appVersion));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,tid,serialNumber,model,label,status,instantSettlement,activatedAt,lastHeartbeat,todaySales,todayTransactions);
+int get hashCode => Object.hashAll([runtimeType,id,tid,serialNumber,model,label,status,instantSettlement,activatedAt,lastHeartbeat,todaySales,todayTransactions,connectivity,health,const DeepCollectionEquality().hash(_healthReasons),batteryPercent,charging,connectionType,signal,printerStatus,appVersion]);
 
 @override
 String toString() {
-  return 'TerminalResponse(id: $id, tid: $tid, serialNumber: $serialNumber, model: $model, label: $label, status: $status, instantSettlement: $instantSettlement, activatedAt: $activatedAt, lastHeartbeat: $lastHeartbeat, todaySales: $todaySales, todayTransactions: $todayTransactions)';
+  return 'TerminalResponse(id: $id, tid: $tid, serialNumber: $serialNumber, model: $model, label: $label, status: $status, instantSettlement: $instantSettlement, activatedAt: $activatedAt, lastHeartbeat: $lastHeartbeat, todaySales: $todaySales, todayTransactions: $todayTransactions, connectivity: $connectivity, health: $health, healthReasons: $healthReasons, batteryPercent: $batteryPercent, charging: $charging, connectionType: $connectionType, signal: $signal, printerStatus: $printerStatus, appVersion: $appVersion)';
 }
 
 
@@ -267,7 +293,7 @@ abstract mixin class _$TerminalResponseCopyWith<$Res> implements $TerminalRespon
   factory _$TerminalResponseCopyWith(_TerminalResponse value, $Res Function(_TerminalResponse) _then) = __$TerminalResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? tid, String? serialNumber, String? model, String? label, String? status, bool? instantSettlement, String? activatedAt, String? lastHeartbeat, num? todaySales, int? todayTransactions
+ String? id, String? tid, String? serialNumber, String? model, String? label, String? status, bool? instantSettlement, String? activatedAt, String? lastHeartbeat, num? todaySales, int? todayTransactions, String? connectivity, String? health, List<String> healthReasons, int? batteryPercent, bool? charging, String? connectionType, int? signal, String? printerStatus, String? appVersion
 });
 
 
@@ -284,7 +310,7 @@ class __$TerminalResponseCopyWithImpl<$Res>
 
 /// Create a copy of TerminalResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? tid = freezed,Object? serialNumber = freezed,Object? model = freezed,Object? label = freezed,Object? status = freezed,Object? instantSettlement = freezed,Object? activatedAt = freezed,Object? lastHeartbeat = freezed,Object? todaySales = freezed,Object? todayTransactions = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? tid = freezed,Object? serialNumber = freezed,Object? model = freezed,Object? label = freezed,Object? status = freezed,Object? instantSettlement = freezed,Object? activatedAt = freezed,Object? lastHeartbeat = freezed,Object? todaySales = freezed,Object? todayTransactions = freezed,Object? connectivity = freezed,Object? health = freezed,Object? healthReasons = null,Object? batteryPercent = freezed,Object? charging = freezed,Object? connectionType = freezed,Object? signal = freezed,Object? printerStatus = freezed,Object? appVersion = freezed,}) {
   return _then(_TerminalResponse(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,tid: freezed == tid ? _self.tid : tid // ignore: cast_nullable_to_non_nullable
@@ -297,7 +323,16 @@ as bool?,activatedAt: freezed == activatedAt ? _self.activatedAt : activatedAt /
 as String?,lastHeartbeat: freezed == lastHeartbeat ? _self.lastHeartbeat : lastHeartbeat // ignore: cast_nullable_to_non_nullable
 as String?,todaySales: freezed == todaySales ? _self.todaySales : todaySales // ignore: cast_nullable_to_non_nullable
 as num?,todayTransactions: freezed == todayTransactions ? _self.todayTransactions : todayTransactions // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,connectivity: freezed == connectivity ? _self.connectivity : connectivity // ignore: cast_nullable_to_non_nullable
+as String?,health: freezed == health ? _self.health : health // ignore: cast_nullable_to_non_nullable
+as String?,healthReasons: null == healthReasons ? _self._healthReasons : healthReasons // ignore: cast_nullable_to_non_nullable
+as List<String>,batteryPercent: freezed == batteryPercent ? _self.batteryPercent : batteryPercent // ignore: cast_nullable_to_non_nullable
+as int?,charging: freezed == charging ? _self.charging : charging // ignore: cast_nullable_to_non_nullable
+as bool?,connectionType: freezed == connectionType ? _self.connectionType : connectionType // ignore: cast_nullable_to_non_nullable
+as String?,signal: freezed == signal ? _self.signal : signal // ignore: cast_nullable_to_non_nullable
+as int?,printerStatus: freezed == printerStatus ? _self.printerStatus : printerStatus // ignore: cast_nullable_to_non_nullable
+as String?,appVersion: freezed == appVersion ? _self.appVersion : appVersion // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

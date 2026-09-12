@@ -149,9 +149,21 @@ final approvalHealthProvider = FutureProvider<ApprovalHealth>((ref) async {
 
 // ── Terminal health ──────────────────────────────────────────────────
 
-enum TerminalHealth { online, idle, offline }
+enum TerminalHealth { online, degraded, idle, offline }
 
+/// The backend's verdict when it sends one (thresholds live server-side
+/// so app and console agree); otherwise judged from heartbeat age.
 TerminalHealth terminalHealth(TerminalResponse t, {DateTime? now}) {
+  switch ((t.health ?? '').toUpperCase()) {
+    case 'HEALTHY':
+      return TerminalHealth.online;
+    case 'DEGRADED':
+      return t.healthReasons.contains('STALE')
+          ? TerminalHealth.idle
+          : TerminalHealth.degraded;
+    case 'OFFLINE':
+      return TerminalHealth.offline;
+  }
   final seen = DateTime.tryParse(t.lastHeartbeat ?? '');
   if (seen == null) return TerminalHealth.offline;
   final age = (now ?? DateTime.now()).difference(seen.toLocal());

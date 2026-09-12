@@ -25,6 +25,7 @@ import '../../merchant/presentation/merchant_providers.dart';
 import '../../reports/presentation/send_receipt_sheet.dart';
 import '../../reports/presentation/transaction_style.dart';
 import '../../settings/presentation/security_screen.dart';
+import '../../stores/presentation/terminal_detail_sheet.dart';
 import 'dashboard_providers.dart';
 
 // ── Settlement tracker ───────────────────────────────────────────────
@@ -249,11 +250,21 @@ class TerminalStrip extends ConsumerWidget {
         itemBuilder: (context, i) {
           final t = list[i];
           final h = terminalHealth(t);
-          final (color, text) = switch (h) {
+          final (color, status) = switch (h) {
             TerminalHealth.online => (AppColors.primary, l10n.terminalOnline),
+            TerminalHealth.degraded => (
+              AppColors.warning,
+              l10n.terminalDegraded,
+            ),
             TerminalHealth.idle => (AppColors.warning, l10n.terminalIdle),
             TerminalHealth.offline => (AppColors.danger, l10n.terminalOffline),
           };
+          final reason = t.healthReasons.isEmpty
+              ? null
+              : terminalReasonLabel(t.healthReasons.first, l10n);
+          final text = reason != null && h != TerminalHealth.online
+              ? reason
+              : status;
           final name = (t.label ?? '').isNotEmpty
               ? t.label!
               : (t.tid ?? t.model ?? l10n.storesTerminal);
@@ -265,7 +276,7 @@ class TerminalStrip extends ConsumerWidget {
               borderRadius: BorderRadius.circular(999),
               child: InkWell(
                 borderRadius: BorderRadius.circular(999),
-                onTap: () => context.push(AppRoutes.stores),
+                onTap: () => showTerminalDetailSheet(context, t),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
