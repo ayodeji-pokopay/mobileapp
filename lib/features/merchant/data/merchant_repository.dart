@@ -508,12 +508,47 @@ class MerchantRepository {
     required String email,
     required String name,
     required String role,
+    List<String>? terminalIds,
   }) async {
     await _api.dio.post<void>(
       '/api/v1/merchant/staff',
       queryParameters: {'mid': mid},
-      data: {'email': email, 'name': name, 'role': role},
+      data: {
+        'email': email,
+        'name': name,
+        'role': role,
+        if (terminalIds != null) 'terminalIds': terminalIds,
+      },
     );
+  }
+
+  Future<void> resendStaffInvite({
+    required String mid,
+    required String id,
+  }) async {
+    await _api.dio.post<void>(
+      '/api/v1/merchant/staff/$id/resend-invite',
+      queryParameters: {'mid': mid},
+    );
+  }
+
+  Future<void> removeStaff({required String mid, required String id}) async {
+    await _api.dio.delete<void>(
+      '/api/v1/merchant/staff/$id',
+      queryParameters: {'mid': mid},
+    );
+  }
+
+  Future<StaffActivityPage> fetchStaffActivity({
+    required String mid,
+    int page = 0,
+    int size = 30,
+  }) async {
+    final res = await _api.dio.get<Object>(
+      '/api/v1/merchant/staff/activity',
+      queryParameters: {'mid': mid, 'page': page, 'size': size},
+    );
+    return StaffActivityPage.fromJson(res.data);
   }
 
   Future<void> updateStaff({
@@ -521,6 +556,7 @@ class MerchantRepository {
     required String id,
     String? role,
     bool? active,
+    List<String>? terminalIds,
   }) async {
     await _api.dio.put<void>(
       '/api/v1/merchant/staff/$id',
@@ -528,6 +564,7 @@ class MerchantRepository {
       data: {
         if (role != null) 'role': role,
         if (active != null) 'active': active,
+        if (terminalIds != null) 'terminalIds': terminalIds,
       },
     );
   }

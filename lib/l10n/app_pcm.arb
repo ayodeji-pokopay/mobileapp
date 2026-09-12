@@ -685,5 +685,54 @@
   "sendReceiptImageHint": "WhatsApp, email, or save for Photos",
   "sendReceiptPdf": "Share as PDF",
   "sendReceiptPdfHint": "For email and record keeping",
-  "sendReceiptPhoneSms": "Customer phone for SMS (optional)"
+  "sendReceiptPhoneSms": "Customer phone for SMS (optional)",
+  "inviteTitle": "Join your\nbusiness",
+  "inviteSubtitle": "Put the code from your invitation email and choose password.",
+  "inviteCodeLabel": "Invitation code",
+  "inviteCodeHint": "Paste the code or the whole link",
+  "inviteCodeRequired": "Put your invitation code.",
+  "inviteFirstName": "First name",
+  "inviteLastName": "Last name",
+  "inviteNameRequired": "E dey required",
+  "inviteButton": "Create my account",
+  "inviteAccepted": "Your account don ready. Sign in to continue.",
+  "inviteInvalid": "That invitation code no correct or e don expire. Ask the business owner to resend am.",
+  "loginHaveInvite": "Dem invite you join business? Put your code",
+  "staffActivityTitle": "Staff activity",
+  "staffActivityHint": "Invites, role changes and access changes, newest first.",
+  "staffActivityEmpty": "No staff changes yet",
+  "staffActivityEnd": "Na everything be that",
+  "staffActivityBy": "by {actor}",
+  "@staffActivityBy": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "staffActionInvited": "Invited",
+  "staffActionResent": "Invite resent",
+  "staffActionAccepted": "Accept invite",
+  "staffActionRoleChanged": "Role changed",
+  "staffActionActivated": "Access on",
+  "staffActionDeactivated": "Access off",
+  "staffActionRemoved": "Removed",
+  "staffActivityButton": "Activity",
+  "staffTerminals": "Card machines",
+  "staffTerminalsHint": "No select any one to allow every machine.",
+  "staffResendInvite": "Resend invite",
+  "staffInviteResent": "Invitation don resend",
+  "staffRemove": "Remove from business",
+  "staffRemoveConfirmTitle": "Remove {name}?",
+  "@staffRemoveConfirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "staffRemoveConfirmBody": "Dem go sign out sharp sharp and go need new invite to come back.",
+  "staffRemoved": "Removed",
+  "roleViewer": "Viewer",
+  "commonRemove": "Remove"
 }

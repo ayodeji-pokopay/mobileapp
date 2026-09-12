@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../core/api/models/business_models.dart';
 import '../../../core/api/models/staff_models.dart';
+import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -14,6 +17,7 @@ import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/pill_tabs.dart';
 import '../../../shared/widgets/pills.dart';
+import '../../../shared/widgets/round_icon_button.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/data/merchant_repository.dart';
 import '../../merchant/presentation/merchant_providers.dart';
@@ -22,6 +26,7 @@ String roleLabel(String role, AppLocalizations l10n) => switch (role) {
   StaffRoles.owner => l10n.roleOwner,
   StaffRoles.manager => l10n.roleManager,
   StaffRoles.cashier => l10n.roleCashier,
+  StaffRoles.viewer => l10n.roleViewer,
   _ => role,
 };
 
@@ -36,6 +41,11 @@ class StaffScreen extends ConsumerWidget {
     return BackScaffold(
       title: l10n.staffTitle,
       subtitle: l10n.staffHint,
+      trailing: RoundIconButton(
+        icon: LucideIcons.history,
+        semanticLabel: l10n.staffActivityButton,
+        onTap: () => context.push(AppRoutes.staffActivity),
+      ),
       child: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(staffProvider);
@@ -69,17 +79,19 @@ class StaffScreen extends ConsumerWidget {
                       ListRow(
                         leading: InitialsTile(
                           text: initialsOf(m.name.isEmpty ? m.email : m.name),
-                          background: m.active
-                              ? AppColors.primaryLight
-                              : AppColors.surfaceAlt,
-                          foreground: m.active
-                              ? AppColors.primary
-                              : AppColors.textTertiary,
+                          background: m.disabled
+                              ? AppColors.surfaceAlt
+                              : AppColors.primaryLight,
+                          foreground: m.disabled
+                              ? AppColors.textTertiary
+                              : AppColors.primary,
                         ),
                         title: m.name.isEmpty ? m.email : m.name,
                         subtitle: [
                           if (m.name.isNotEmpty) m.email,
                           roleLabel(m.role, l10n),
+                          if (m.terminalIds.isNotEmpty)
+                            m.terminalIds.join(', '),
                           if (m.lastActiveAt != null)
                             l10n.sessionsLastActive(
                               formatRelativeTime(m.lastActiveAt!),
@@ -88,19 +100,19 @@ class StaffScreen extends ConsumerWidget {
                         trailing: StatusPill(
                           label: m.pendingInvite
                               ? l10n.staffInvited
-                              : m.active
-                              ? l10n.staffActive
-                              : l10n.staffInactive,
+                              : m.disabled
+                              ? l10n.staffInactive
+                              : l10n.staffActive,
                           tone: m.pendingInvite
                               ? PillTone.warning
-                              : m.active
-                              ? PillTone.success
-                              : PillTone.neutral,
+                              : m.disabled
+                              ? PillTone.neutral
+                              : PillTone.success,
                         ),
-                        titleColor: m.active
-                            ? AppColors.navy
-                            : AppColors.textTertiary,
-                        onTap: m.role == StaffRoles.owner
+                        titleColor: m.disabled
+                            ? AppColors.textTertiary
+                            : AppColors.navy,
+                        onTap: m.isOwner
                             ? null
                             : () => showEditStaffSheet(context, m),
                       ),
@@ -179,6 +191,51 @@ class _RolePicker extends StatelessWidget {
   }
 }
 
+/// Multi-select of the merchant's card machines (cashier scope).
+class _TerminalPicker extends ConsumerWidget {
+  const _TerminalPicker({required this.selected, required this.onChanged});
+  final Set<String> selected;
+  final ValueChanged<Set<String>> onChanged;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final terminals =
+        ref.watch(terminalsProvider).asData?.value ??
+        const <TerminalResponse>[];
+    if (terminals.isEmpty) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.staffTerminals, style: AppText.label()),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final t in terminals)
+              if ((t.tid ?? '').isNotEmpty)
+                PillChip(
+                  label: (t.label ?? '').isNotEmpty ? t.label! : t.tid!,
+                  selected: selected.contains(t.tid),
+                  onTap: () {
+                    final next = {...selected};
+                    if (!next.remove(t.tid!)) next.add(t.tid!);
+                    onChanged(next);
+                  },
+                ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Text(
+          l10n.staffTerminalsHint,
+          style: AppText.body(size: 12.5, color: AppColors.textTertiary),
+        ),
+      ],
+    );
+  }
+}
+
 class _InviteSheet extends ConsumerStatefulWidget {
   const _InviteSheet();
   @override
@@ -189,6 +246,7 @@ class _InviteSheetState extends ConsumerState<_InviteSheet> {
   final _name = TextEditingController();
   final _email = TextEditingController();
   String _role = StaffRoles.cashier;
+  Set<String> _terminals = {};
   bool _busy = false;
   String? _error;
 
@@ -220,6 +278,9 @@ class _InviteSheetState extends ConsumerState<_InviteSheet> {
             email: email,
             name: _name.text.trim(),
             role: _role,
+            terminalIds: _role == StaffRoles.cashier
+                ? _terminals.toList()
+                : null,
           );
       ref.invalidate(staffProvider);
       if (!mounted) return;
@@ -285,6 +346,13 @@ class _InviteSheetState extends ConsumerState<_InviteSheet> {
               role: _role,
               onChanged: (r) => setState(() => _role = r),
             ),
+            if (_role == StaffRoles.cashier) ...[
+              const SizedBox(height: 16),
+              _TerminalPicker(
+                selected: _terminals,
+                onChanged: (s) => setState(() => _terminals = s),
+              ),
+            ],
             if (_error != null) ...[
               const SizedBox(height: 10),
               Text(
@@ -323,10 +391,15 @@ class _EditSheet extends ConsumerStatefulWidget {
 class _EditSheetState extends ConsumerState<_EditSheet> {
   late String _role = widget.m.role;
   late bool _active = widget.m.active;
+  late Set<String> _terminals = widget.m.terminalIds.toSet();
   bool _busy = false;
   String? _error;
 
-  Future<void> _save() async {
+  Future<void> _run(
+    Future<void> Function(String mid) action, {
+    required String success,
+    bool close = true,
+  }) async {
     final l10n = AppLocalizations.of(context);
     final mid = ref.read(authControllerProvider).mid;
     if (mid == null) return;
@@ -334,26 +407,80 @@ class _EditSheetState extends ConsumerState<_EditSheet> {
       _busy = true;
       _error = null;
     });
+    final messenger = ScaffoldMessenger.of(context);
     try {
-      await ref
-          .read(merchantRepositoryProvider)
-          .updateStaff(
-            mid: mid,
-            id: widget.m.id,
-            role: _role == widget.m.role ? null : _role,
-            active: _active == widget.m.active ? null : _active,
-          );
+      await action(mid);
       ref.invalidate(staffProvider);
       if (!mounted) return;
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.staffUpdated)));
+      if (close) Navigator.of(context).pop();
+      messenger.showSnackBar(SnackBar(content: Text(success)));
     } catch (e) {
       setState(() => _error = describeError(e, l10n));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  Future<void> _save() {
+    final l10n = AppLocalizations.of(context);
+    final m = widget.m;
+    final sameTerminals =
+        _terminals.length == m.terminalIds.length &&
+        _terminals.containsAll(m.terminalIds);
+    return _run(
+      (mid) => ref
+          .read(merchantRepositoryProvider)
+          .updateStaff(
+            mid: mid,
+            id: m.id,
+            role: _role == m.role ? null : _role,
+            active: _active == m.active ? null : _active,
+            terminalIds: sameTerminals ? null : _terminals.toList(),
+          ),
+      success: l10n.staffUpdated,
+    );
+  }
+
+  Future<void> _resend() {
+    final l10n = AppLocalizations.of(context);
+    return _run(
+      (mid) => ref
+          .read(merchantRepositoryProvider)
+          .resendStaffInvite(mid: mid, id: widget.m.id),
+      success: l10n.staffInviteResent,
+      close: false,
+    );
+  }
+
+  Future<void> _remove() async {
+    final l10n = AppLocalizations.of(context);
+    final m = widget.m;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          l10n.staffRemoveConfirmTitle(m.name.isEmpty ? m.email : m.name),
+        ),
+        content: Text(l10n.staffRemoveConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: TextButton.styleFrom(foregroundColor: AppColors.danger),
+            child: Text(l10n.commonRemove),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    await _run(
+      (mid) =>
+          ref.read(merchantRepositoryProvider).removeStaff(mid: mid, id: m.id),
+      success: l10n.staffRemoved,
+    );
   }
 
   @override
@@ -363,59 +490,98 @@ class _EditSheetState extends ConsumerState<_EditSheet> {
     final m = widget.m;
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 12, 20, 16 + bottom),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const _Handle(),
-          const SizedBox(height: 18),
-          Text(
-            m.name.isEmpty ? m.email : m.name,
-            style: AppText.money(size: 17),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            m.email,
-            style: AppText.body(size: 13, color: AppColors.textTertiary),
-          ),
-          const SizedBox(height: 16),
-          _RolePicker(role: _role, onChanged: (r) => setState(() => _role = r)),
-          const SizedBox(height: 12),
-          ListCard(
-            children: [
-              ListRow(
-                title: l10n.staffAccessOn,
-                subtitle: l10n.staffAccessHint,
-                chevron: false,
-                trailing: Switch(
-                  value: _active,
-                  onChanged: (v) => setState(() => _active = v),
-                ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const _Handle(),
+            const SizedBox(height: 18),
+            Text(
+              m.name.isEmpty ? m.email : m.name,
+              style: AppText.money(size: 17),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              [
+                m.email,
+                if ((m.invitedBy ?? '').isNotEmpty)
+                  l10n.staffActivityBy(m.invitedBy!),
+              ].join(' · '),
+              style: AppText.body(size: 13, color: AppColors.textTertiary),
+            ),
+            const SizedBox(height: 16),
+            _RolePicker(
+              role: _role,
+              onChanged: (r) => setState(() => _role = r),
+            ),
+            if (_role == StaffRoles.cashier) ...[
+              const SizedBox(height: 16),
+              _TerminalPicker(
+                selected: _terminals,
+                onChanged: (s) => setState(() => _terminals = s),
               ),
             ],
-          ),
-          if (_error != null) ...[
-            const SizedBox(height: 10),
-            Text(
-              _error!,
-              style: AppText.body(size: 13, color: AppColors.danger),
+            const SizedBox(height: 12),
+            ListCard(
+              children: [
+                ListRow(
+                  title: l10n.staffAccessOn,
+                  subtitle: l10n.staffAccessHint,
+                  chevron: false,
+                  trailing: Switch(
+                    value: _active,
+                    onChanged: (v) => setState(() => _active = v),
+                  ),
+                ),
+                if (m.pendingInvite)
+                  ListRow(
+                    leading: Icon(
+                      LucideIcons.mailCheck,
+                      size: 20,
+                      color: AppColors.textSecondary,
+                    ),
+                    title: l10n.staffResendInvite,
+                    chevron: false,
+                    onTap: _busy ? null : _resend,
+                  ),
+                if (m.pendingInvite || m.disabled)
+                  ListRow(
+                    leading: Icon(
+                      LucideIcons.trash2,
+                      size: 20,
+                      color: AppColors.danger,
+                    ),
+                    title: l10n.staffRemove,
+                    titleColor: AppColors.danger,
+                    chevron: false,
+                    onTap: _busy ? null : _remove,
+                  ),
+              ],
+            ),
+            if (_error != null) ...[
+              const SizedBox(height: 10),
+              Text(
+                _error!,
+                style: AppText.body(size: 13, color: AppColors.danger),
+              ),
+            ],
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _busy ? null : _save,
+              child: _busy
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Text(l10n.commonSave),
             ),
           ],
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _busy ? null : _save,
-            child: _busy
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : Text(l10n.commonSave),
-          ),
-        ],
+        ),
       ),
     );
   }

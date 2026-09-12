@@ -106,6 +106,11 @@ _UserInfoResponse _$UserInfoResponseFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],
+      terminalIds:
+          (json['terminalIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
       tenants:
           (json['tenants'] as List<dynamic>?)
               ?.map((e) => TenantInfo.fromJson(e as Map<String, dynamic>))
@@ -126,5 +131,6 @@ Map<String, dynamic> _$UserInfoResponseToJson(_UserInfoResponse instance) =>
       'merchantName': instance.merchantName,
       'phone': instance.phone,
       'permissions': instance.permissions,
+      'terminalIds': instance.terminalIds,
       'tenants': instance.tenants,
     };

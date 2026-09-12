@@ -685,5 +685,54 @@
   "sendReceiptImageHint": "WhatsApp, imel, ko ajiye a Hotuna",
   "sendReceiptPdf": "Raba a matsayin PDF",
   "sendReceiptPdfHint": "Don imel da adana bayanai",
-  "sendReceiptPhoneSms": "Wayar abokin ciniki don SMS (na zaɓi)"
+  "sendReceiptPhoneSms": "Wayar abokin ciniki don SMS (na zaɓi)",
+  "inviteTitle": "Shiga\nkasuwancinka",
+  "inviteSubtitle": "Shigar da lambar daga imel ɗin gayyata ka zaɓi kalmar sirri.",
+  "inviteCodeLabel": "Lambar gayyata",
+  "inviteCodeHint": "Liƙa lambar ko dukkan hanyar haɗi",
+  "inviteCodeRequired": "Shigar da lambar gayyatarka.",
+  "inviteFirstName": "Sunan farko",
+  "inviteLastName": "Sunan mahaifi",
+  "inviteNameRequired": "Ana buƙata",
+  "inviteButton": "Ƙirƙiri asusuna",
+  "inviteAccepted": "Asusunka ya shirya. Shiga don ci gaba.",
+  "inviteInvalid": "Wannan lambar gayyata ba ta da inganci ko ta ƙare. Tambayi mai kasuwancin ya sake aikawa.",
+  "loginHaveInvite": "An gayyace ka ka shiga kasuwanci? Shigar da lambarka",
+  "staffActivityTitle": "Ayyukan ma'aikata",
+  "staffActivityHint": "Gayyata, canje-canjen matsayi da na shiga, sabo da farko.",
+  "staffActivityEmpty": "Babu canje-canjen ma'aikata tukuna",
+  "staffActivityEnd": "Shi ke nan",
+  "staffActivityBy": "daga {actor}",
+  "@staffActivityBy": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "staffActionInvited": "An gayyata",
+  "staffActionResent": "An sake aika gayyata",
+  "staffActionAccepted": "An karɓi gayyata",
+  "staffActionRoleChanged": "An canza matsayi",
+  "staffActionActivated": "An kunna shiga",
+  "staffActionDeactivated": "An kashe shiga",
+  "staffActionRemoved": "An cire",
+  "staffActivityButton": "Ayyuka",
+  "staffTerminals": "Na'urorin kati",
+  "staffTerminalsHint": "Kada ka zaɓi kowanne don ba da damar kowace na'ura.",
+  "staffResendInvite": "Sake aika gayyata",
+  "staffInviteResent": "An sake aika gayyata",
+  "staffRemove": "Cire daga kasuwanci",
+  "staffRemoveConfirmTitle": "Cire {name}?",
+  "@staffRemoveConfirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "staffRemoveConfirmBody": "Za a fitar da su nan take kuma za su buƙaci sabuwar gayyata don dawowa.",
+  "staffRemoved": "An cire",
+  "roleViewer": "Mai kallo",
+  "commonRemove": "Cire"
 }

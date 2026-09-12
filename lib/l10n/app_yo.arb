@@ -685,5 +685,54 @@
   "sendReceiptImageHint": "WhatsApp, ímeèlì, tàbí fi pamọ́ sí Fọ́tò",
   "sendReceiptPdf": "Pín gẹ́gẹ́ bí PDF",
   "sendReceiptPdfHint": "Fún ímeèlì àti ìkọ̀sílẹ̀",
-  "sendReceiptPhoneSms": "Fóònù oníbàárà fún SMS (àṣàyàn)"
+  "sendReceiptPhoneSms": "Fóònù oníbàárà fún SMS (àṣàyàn)",
+  "inviteTitle": "Darapọ̀ mọ́\niṣẹ́ rẹ",
+  "inviteSubtitle": "Tẹ kóòdù láti inú ímeèlì ìpè rẹ kí o sì yan ọ̀rọ̀ìpamọ́.",
+  "inviteCodeLabel": "Kóòdù ìpè",
+  "inviteCodeHint": "Lẹ kóòdù tàbí gbogbo ọ̀nà asopọ̀",
+  "inviteCodeRequired": "Tẹ kóòdù ìpè rẹ.",
+  "inviteFirstName": "Orúkọ àkọ́kọ́",
+  "inviteLastName": "Orúkọ ìdílé",
+  "inviteNameRequired": "A nílò rẹ̀",
+  "inviteButton": "Ṣẹ̀dá àkáǹtì mi",
+  "inviteAccepted": "Àkáǹtì rẹ ti ṣetán. Wọlé láti tẹ̀síwájú.",
+  "inviteInvalid": "Kóòdù ìpè yẹn kò tọ́ tàbí ó ti pari. Béèrè lọ́wọ́ olóhun iṣẹ́ láti tún fi ránṣẹ́.",
+  "loginHaveInvite": "A pè ọ́ láti darapọ̀ mọ́ iṣẹ́ kan? Tẹ kóòdù rẹ",
+  "staffActivityTitle": "Ìṣe òṣìṣẹ́",
+  "staffActivityHint": "Ìpè, ìyípadà ipò àti ìyípadà ìwọlé, tuntun jù lákọ̀ọ́kọ́.",
+  "staffActivityEmpty": "Kò sí ìyípadà òṣìṣẹ́ síbẹ̀",
+  "staffActivityEnd": "Ìyẹn ni gbogbo rẹ̀",
+  "staffActivityBy": "láti ọwọ́ {actor}",
+  "@staffActivityBy": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "staffActionInvited": "A pè",
+  "staffActionResent": "A tún fi ìpè ránṣẹ́",
+  "staffActionAccepted": "Ó gba ìpè",
+  "staffActionRoleChanged": "Ipò yípadà",
+  "staffActionActivated": "Ìwọlé tan",
+  "staffActionDeactivated": "Ìwọlé pa",
+  "staffActionRemoved": "A yọ kúrò",
+  "staffActivityButton": "Ìṣe",
+  "staffTerminals": "Àwọn ẹ̀rọ káàdì",
+  "staffTerminalsHint": "Má yan ìkankan láti gba gbogbo ẹ̀rọ láàyè.",
+  "staffResendInvite": "Tún fi ìpè ránṣẹ́",
+  "staffInviteResent": "A tún fi ìpè ránṣẹ́",
+  "staffRemove": "Yọ kúrò nínú iṣẹ́",
+  "staffRemoveConfirmTitle": "Yọ {name} kúrò?",
+  "@staffRemoveConfirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "staffRemoveConfirmBody": "A ó jáde wọn lẹ́sẹ̀kẹsẹ̀, wọn yóò sì nílò ìpè tuntun láti padà.",
+  "staffRemoved": "A ti yọ kúrò",
+  "roleViewer": "Olùwò",
+  "commonRemove": "Yọ kúrò"
 }

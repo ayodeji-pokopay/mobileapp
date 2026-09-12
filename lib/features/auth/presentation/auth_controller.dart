@@ -16,6 +16,10 @@ abstract final class Permissions {
   static const viewSettlements = 'VIEW_SETTLEMENTS';
   static const managePreferences = 'MANAGE_PREFERENCES';
   static const manageStaff = 'MANAGE_STAFF';
+  static const shareReceipts = 'SHARE_RECEIPTS';
+  static const exportReports = 'EXPORT_REPORTS';
+  static const manageTerminals = 'MANAGE_TERMINALS';
+  static const viewBankDetails = 'VIEW_BANK_DETAILS';
 }
 
 class AuthState {
@@ -62,6 +66,15 @@ class AuthState {
   bool get canViewSales => hasPermission(Permissions.viewSales);
   bool get canManagePreferences => hasPermission(Permissions.managePreferences);
   bool get isStaffView => !canViewMoney;
+  bool get canShareReceipts => hasPermission(Permissions.shareReceipts);
+  bool get canExportReports => hasPermission(Permissions.exportReports);
+  bool get canManageTerminals => hasPermission(Permissions.manageTerminals);
+  bool get canManageStaff => hasPermission(Permissions.manageStaff);
+
+  /// Card machines a cashier is scoped to; empty means all.
+  List<String> get terminalScope => user?.terminalIds ?? const [];
+  bool inScope(String? tid) =>
+      terminalScope.isEmpty || (tid != null && terminalScope.contains(tid));
 
   AuthState copyWith({
     AuthStatus? status,

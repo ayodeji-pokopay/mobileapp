@@ -22,6 +22,7 @@ import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/offline_banner.dart';
 import '../../../shared/widgets/pill_tabs.dart';
 import '../../../shared/widgets/pills.dart';
+import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
 import 'receipt_sheet.dart';
 import 'transaction_style.dart';
@@ -160,7 +161,11 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                   },
                   onRetry: () => ref.invalidate(salesReportProvider),
                   onGoTransactions: () => setState(() => _tab = 1),
-                  onExport: _exporting ? null : _export,
+                  onExport:
+                      _exporting ||
+                          !ref.watch(authControllerProvider).canExportReports
+                      ? null
+                      : _export,
                 ),
                 1 => const _Transactions(),
                 _ => const _PaymentLinks(),

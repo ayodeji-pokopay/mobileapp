@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/auth_controller.dart';
+import '../../features/auth/presentation/accept_invite_screen.dart';
 import '../../features/auth/presentation/change_password_screen.dart';
 import '../../features/auth/presentation/forgot_password_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
@@ -17,6 +18,7 @@ import '../../features/sessions/presentation/sessions_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/settlements/presentation/settlements_screen.dart';
 import '../../features/splash/splash_screen.dart';
+import '../../features/staff/presentation/staff_activity_screen.dart';
 import '../../features/staff/presentation/staff_screen.dart';
 import '../../features/stores/presentation/stores_screen.dart';
 import '../../features/wallet/presentation/wallet_screen.dart';
@@ -27,6 +29,7 @@ class AppRoutes {
   static const login = '/login';
   static const forgotPassword = '/forgot-password';
   static const resetPassword = '/reset-password';
+  static const acceptInvite = '/accept-invite';
   static const dashboard = '/dashboard';
   static const reports = '/reports';
   static const settlements = '/settlements';
@@ -40,6 +43,7 @@ class AppRoutes {
   static const changePassword = '/settings/security/change-password';
   static const sessions = '/settings/sessions';
   static const staff = '/settings/staff';
+  static const staffActivity = '/settings/staff/activity';
   static const insights = '/insights';
 }
 
@@ -63,6 +67,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         AppRoutes.login,
         AppRoutes.forgotPassword,
         AppRoutes.resetPassword,
+        AppRoutes.acceptInvite,
       };
       if (isUnauthed && !public.contains(loc)) return AppRoutes.login;
       if (isAuthed && (loc == AppRoutes.login || loc == AppRoutes.splash)) {
@@ -140,6 +145,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const SessionsScreen(),
       ),
       GoRoute(path: AppRoutes.staff, builder: (_, _) => const StaffScreen()),
+      GoRoute(
+        path: AppRoutes.staffActivity,
+        builder: (_, _) => const StaffActivityScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.acceptInvite,
+        builder: (_, state) =>
+            AcceptInviteScreen(code: state.uri.queryParameters['code']),
+      ),
       GoRoute(
         path: AppRoutes.insights,
         builder: (_, _) => const InsightsScreen(),

@@ -295,6 +295,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 )
                               : Text(l10n.loginButton),
                         ),
+                        const SizedBox(height: 12),
+                        Center(
+                          child: TextButton(
+                            onPressed: () =>
+                                context.push(AppRoutes.acceptInvite),
+                            child: Text(
+                              l10n.loginHaveInvite,
+                              textAlign: TextAlign.center,
+                              style: AppText.body(
+                                size: 13,
+                                weight: FontWeight.w600,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                        ),
                         if (showBiometricButton) ...[
                           const SizedBox(height: 24),
                           Row(

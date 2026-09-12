@@ -231,6 +231,30 @@ class AuthRepository {
     }
   }
 
+  /// Staff invited from the Staff screen finish sign-up here with the
+  /// code from their email.
+  Future<void> acceptInvite({
+    required String code,
+    required String password,
+    required String firstName,
+    required String lastName,
+  }) async {
+    try {
+      await _api.dio.post<void>(
+        '/api/v1/auth/accept-invite',
+        data: {
+          'code': code,
+          'password': password,
+          'firstName': firstName,
+          'lastName': lastName,
+        },
+        options: Options(extra: const {'skipAuth': true}),
+      );
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e), code: _extractCode(e));
+    }
+  }
+
   Future<void> resetPassword({
     required String token,
     required String newPassword,

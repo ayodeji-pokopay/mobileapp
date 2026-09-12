@@ -107,8 +107,13 @@ class StoresScreen extends ConsumerWidget {
                     subtitle: l10n.storesNoTerminalsHint,
                   );
                 }
+                final auth = ref.watch(authControllerProvider);
+                final visible = list.where((t) => auth.inScope(t.tid)).toList();
                 return ListCard(
-                  children: [for (final t in list) _TerminalRow(t: t)],
+                  children: [
+                    for (final t in visible)
+                      _TerminalRow(t: t, canRename: auth.canManageTerminals),
+                  ],
                 );
               },
             ),
@@ -120,8 +125,9 @@ class StoresScreen extends ConsumerWidget {
 }
 
 class _TerminalRow extends StatelessWidget {
-  const _TerminalRow({required this.t});
+  const _TerminalRow({required this.t, required this.canRename});
   final TerminalResponse t;
+  final bool canRename;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +163,7 @@ class _TerminalRow extends StatelessWidget {
       ].join(' · '),
       trailing: StatusPill(label: label, tone: tone),
       chevron: false,
-      onTap: () => showRenameTerminalSheet(context, t),
+      onTap: canRename ? () => showRenameTerminalSheet(context, t) : null,
     );
   }
 }

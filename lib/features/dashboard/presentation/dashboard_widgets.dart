@@ -20,6 +20,7 @@ import '../../../shared/widgets/list_card.dart';
 import '../../../shared/widgets/pill_tabs.dart';
 import '../../../shared/widgets/pills.dart';
 import '../../../shared/widgets/skeleton.dart';
+import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
 import '../../reports/presentation/send_receipt_sheet.dart';
 import '../../reports/presentation/transaction_style.dart';
@@ -234,7 +235,10 @@ class TerminalStrip extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final list = ref.watch(terminalsProvider).asData?.value ?? const [];
+    final auth = ref.watch(authControllerProvider);
+    final list = (ref.watch(terminalsProvider).asData?.value ?? const [])
+        .where((t) => auth.inScope(t.tid))
+        .toList();
     if (list.isEmpty) return const SizedBox.shrink();
     return SizedBox(
       height: 40,
@@ -423,21 +427,24 @@ class QuickActionsRow extends ConsumerWidget {
       }
     }
 
+    final canShare = ref.watch(authControllerProvider).canShareReceipts;
     final actions = <(IconData, String, VoidCallback)>[
-      (
-        LucideIcons.send,
-        l10n.dashboardQuickSendReceipt,
-        () {
-          if (last == null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.dashboardNoReceiptsYet)),
-            );
-          } else {
-            showSendReceiptSheet(context, last);
-          }
-        },
-      ),
-      (LucideIcons.printer, l10n.dashboardQuickPrintLast, printLast),
+      if (canShare)
+        (
+          LucideIcons.send,
+          l10n.dashboardQuickSendReceipt,
+          () {
+            if (last == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(l10n.dashboardNoReceiptsYet)),
+              );
+            } else {
+              showSendReceiptSheet(context, last);
+            }
+          },
+        ),
+      if (canShare)
+        (LucideIcons.printer, l10n.dashboardQuickPrintLast, printLast),
       if (links)
         (
           LucideIcons.link,

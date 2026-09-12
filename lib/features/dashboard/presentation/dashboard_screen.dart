@@ -71,7 +71,21 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final goal = ref.watch(salesGoalProvider);
     final lastWeek = ref.watch(sameWeekdayLastWeekProvider).asData?.value;
     final filter = ref.watch(activityFilterProvider);
-    final todaySales = (summary.asData?.value.todaySales ?? 0).toDouble();
+    // A cashier scoped to specific machines sees only their takings.
+    final scopedToday = auth.terminalScope.isEmpty
+        ? null
+        : ref
+              .watch(allTransactionsProvider(1))
+              .asData
+              ?.value
+              .where(
+                (t) =>
+                    auth.inScope(t.tid) &&
+                    (t.status ?? '').toUpperCase() == 'APPROVED',
+              )
+              .fold<double>(0, (a, t) => a + (t.amount ?? 0));
+    final todaySales =
+        scopedToday ?? (summary.asData?.value.todaySales ?? 0).toDouble();
 
     final balance =
         wallet.asData?.value.availableNaira ??
@@ -206,6 +220,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 onRetry: () => ref.invalidate(recentTransactionsProvider),
                 data: (page) {
                   final items = page.content
+                      .where((t) => auth.inScope(t.tid))
                       .where((t) => matchesActivityFilter(t, filter))
                       .take(8)
                       .toList();

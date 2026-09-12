@@ -12,6 +12,7 @@ import '../../../shared/pdf_share.dart';
 import '../../../shared/widgets/card_brand_logo.dart';
 import '../../../shared/widgets/pills.dart';
 import '../../../shared/widgets/pokopay_logo.dart';
+import '../../auth/presentation/auth_controller.dart';
 import '../../merchant/presentation/merchant_providers.dart';
 import 'send_receipt_sheet.dart';
 import 'transaction_style.dart';
@@ -102,12 +103,14 @@ class _ReceiptSheetState extends ConsumerState<ReceiptSheet> {
             icon: const Icon(LucideIcons.share2, size: 18),
             label: Text(l10n.receiptShare),
           ),
-          const SizedBox(height: 10),
-          OutlinedButton.icon(
-            onPressed: () => showSendReceiptSheet(context, t),
-            icon: const Icon(LucideIcons.send, size: 18),
-            label: Text(l10n.sendReceiptTitle),
-          ),
+          if (ref.watch(authControllerProvider).canShareReceipts) ...[
+            const SizedBox(height: 10),
+            OutlinedButton.icon(
+              onPressed: () => showSendReceiptSheet(context, t),
+              icon: const Icon(LucideIcons.send, size: 18),
+              label: Text(l10n.sendReceiptTitle),
+            ),
+          ],
         ],
       ),
     );

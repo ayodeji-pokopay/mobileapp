@@ -685,5 +685,54 @@
   "sendReceiptImageHint": "WhatsApp, email, ma ọ bụ chekwaa na Foto",
   "sendReceiptPdf": "Kesaa dịka PDF",
   "sendReceiptPdfHint": "Maka email na ndekọ",
-  "sendReceiptPhoneSms": "Ekwentị onye ahịa maka SMS (nhọrọ)"
+  "sendReceiptPhoneSms": "Ekwentị onye ahịa maka SMS (nhọrọ)",
+  "inviteTitle": "Sonye\nazụmahịa gị",
+  "inviteSubtitle": "Tinye koodu sitere na email ọkpụkpọ gị ma họrọ okwuntughe.",
+  "inviteCodeLabel": "Koodu ọkpụkpọ",
+  "inviteCodeHint": "Mado koodu ma ọ bụ njikọ ahụ dum",
+  "inviteCodeRequired": "Tinye koodu ọkpụkpọ gị.",
+  "inviteFirstName": "Aha mbụ",
+  "inviteLastName": "Aha ikpeazụ",
+  "inviteNameRequired": "A chọrọ ya",
+  "inviteButton": "Mepụta akaụntụ m",
+  "inviteAccepted": "Akaụntụ gị adịla njikere. Banye iji gaa n'ihu.",
+  "inviteInvalid": "Koodu ọkpụkpọ ahụ ezighi ezi ma ọ bụ agwụla. Gwa onye nwe azụmahịa ka o zigharịa ya.",
+  "loginHaveInvite": "A kpọrọ gị ka ị sonye azụmahịa? Tinye koodu gị",
+  "staffActivityTitle": "Ihe ndị ọrụ mere",
+  "staffActivityHint": "Ọkpụkpọ, mgbanwe ọrụ na mgbanwe mbanye, nke ọhụrụ mbụ.",
+  "staffActivityEmpty": "Enwebeghị mgbanwe ndị ọrụ",
+  "staffActivityEnd": "Nke ahụ bụ ihe niile",
+  "staffActivityBy": "site na {actor}",
+  "@staffActivityBy": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "staffActionInvited": "Akpọrọ",
+  "staffActionResent": "Ezigharịrị ọkpụkpọ",
+  "staffActionAccepted": "Nabatara ọkpụkpọ",
+  "staffActionRoleChanged": "Ọrụ gbanwere",
+  "staffActionActivated": "Agbanyere mbanye",
+  "staffActionDeactivated": "Agbanyụrụ mbanye",
+  "staffActionRemoved": "Ewepụrụ",
+  "staffActivityButton": "Ihe emere",
+  "staffTerminals": "Igwe kaadị",
+  "staffTerminalsHint": "Ahọrọla nke ọ bụla iji kwe igwe niile.",
+  "staffResendInvite": "Zigharịa ọkpụkpọ",
+  "staffInviteResent": "Ezigharịrị ọkpụkpọ",
+  "staffRemove": "Wepụ n'azụmahịa",
+  "staffRemoveConfirmTitle": "Wepụ {name}?",
+  "@staffRemoveConfirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "staffRemoveConfirmBody": "A ga-apụ ha ozugbo ma ha ga-achọ ọkpụkpọ ọhụrụ iji laghachi.",
+  "staffRemoved": "Ewepụrụ",
+  "roleViewer": "Onye nlele",
+  "commonRemove": "Wepụ"
 }
