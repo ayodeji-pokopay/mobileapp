@@ -78,5 +78,22 @@ void main() {
     );
     expect(owner.inScope('anything'), isTrue);
     expect(owner.canManageStaff, isTrue);
+
+    // Admins get a partial list from the backend but must keep full access.
+    final admin = AuthState(
+      status: AuthStatus.authenticated,
+      user: const UserInfoResponse(
+        role: 'SUPER_ADMIN',
+        permissions: ['VIEW_SALES', 'VIEW_SETTLEMENTS', 'MANAGE_MERCHANTS'],
+      ),
+    );
+    expect(admin.canShareReceipts, isTrue);
+    expect(admin.canExportReports, isTrue);
+    expect(admin.canManageTerminals, isTrue);
+    final ownerRole = AuthState(
+      status: AuthStatus.authenticated,
+      user: const UserInfoResponse(role: 'OWNER', permissions: ['VIEW_SALES']),
+    );
+    expect(ownerRole.canViewMoney, isTrue);
   });
 }

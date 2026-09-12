@@ -58,7 +58,17 @@ class AuthState {
   /// backend) is treated as having all of them.
   bool hasPermission(String permission) {
     final perms = user?.permissions ?? const [];
-    return perms.isEmpty || perms.contains(permission);
+    if (perms.isEmpty || _fullAccess) return true;
+    return perms.contains(permission);
+  }
+
+  /// Owners and platform staff acting on a merchant have every permission,
+  /// whatever subset the backend happens to list for them.
+  bool get _fullAccess {
+    final role = (user?.role ?? '').toUpperCase();
+    const all = {'OWNER', 'SUPER_ADMIN', 'ADMIN', 'CSA'};
+    return all.contains(role) ||
+        (user?.permissions ?? const []).contains('MANAGE_MERCHANTS');
   }
 
   /// Staff who may not see balances or payouts (cashier view).
