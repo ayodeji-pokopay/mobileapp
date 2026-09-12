@@ -192,7 +192,7 @@ final recentTransactionsProvider = FutureProvider<PageTransactionResponse>((
         mid: mid,
         startDate: now.subtract(const Duration(days: 30)),
         endDate: now,
-        size: 8,
+        size: 40, // Home shows 8 after role/terminal scoping
       );
 });
 

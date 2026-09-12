@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'core/api/api_error.dart';
 import 'core/config/app_config_provider.dart';
 import 'core/config/app_gate.dart';
 import 'core/connectivity/offline_status.dart';
@@ -50,7 +52,7 @@ Future<void> main() async {
     }
   }
 
-  const app = ProviderScope(child: PokopayApp());
+  final app = ProviderScope(retry: _retryPolicy, child: const PokopayApp());
   if (_sentryDsn.isEmpty) {
     runApp(app);
     return;
@@ -170,4 +172,21 @@ class PokopayApp extends ConsumerWidget {
       },
     );
   }
+}
+
+/// Riverpod retries failed providers with back-off by default. That is
+/// right for flaky networks but wrong for definitive answers: a 4xx
+/// (forbidden for this role, not found, validation) would otherwise be
+/// hammered a dozen times per screen.
+Duration? _retryPolicy(int retryCount, Object error) {
+  if (error is DioException) {
+    final status = error.response?.statusCode;
+    if (status != null && status >= 400 && status < 500) return null;
+  }
+  if (error is ApiError) {
+    final status = error.status;
+    if (status != null && status >= 400 && status < 500) return null;
+  }
+  if (retryCount >= 3) return null;
+  return Duration(milliseconds: 500 * (1 << retryCount));
 }

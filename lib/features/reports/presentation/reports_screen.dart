@@ -37,7 +37,9 @@ class ReportsScreen extends ConsumerStatefulWidget {
 class _ReportsScreenState extends ConsumerState<ReportsScreen> {
   static const _periods = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'];
 
-  int _tab = 0;
+  // Cashiers land on Transactions: the Overview report is refused for
+  // their role by the backend today.
+  late int _tab = ref.read(authControllerProvider).isStaffView ? 1 : 0;
   bool _exporting = false;
 
   void _notYet(String what) {

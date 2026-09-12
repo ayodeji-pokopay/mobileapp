@@ -48,7 +48,10 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
   String _clean(String raw) {
     final v = raw.trim();
     final uri = Uri.tryParse(v);
-    final fromQuery = uri?.queryParameters['code'];
+    // The invitation email links to .../set-password?token=…; older
+    // templates used ?code=. Accept either, or a bare code.
+    final fromQuery =
+        uri?.queryParameters['code'] ?? uri?.queryParameters['token'];
     if (fromQuery != null && fromQuery.isNotEmpty) return fromQuery;
     return v;
   }
@@ -58,15 +61,22 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
     final l10n = AppLocalizations.of(context);
     FocusScope.of(context).unfocus();
     setState(() => _submitting = true);
+    final repo = ref.read(authRepositoryProvider);
+    final code = _clean(_codeCtrl.text);
     try {
-      await ref
-          .read(authRepositoryProvider)
-          .acceptInvite(
-            code: _clean(_codeCtrl.text),
-            password: _passCtrl.text,
-            firstName: _firstCtrl.text.trim(),
-            lastName: _lastCtrl.text.trim(),
-          );
+      try {
+        await repo.acceptInvite(
+          code: code,
+          password: _passCtrl.text,
+          firstName: _firstCtrl.text.trim(),
+          lastName: _lastCtrl.text.trim(),
+        );
+      } on AuthException catch (e) {
+        // The invitation email currently issues a set-password token; when
+        // accept-invite rejects it, finish through the reset flow instead.
+        if (e.code == AuthException.network) rethrow;
+        await repo.resetPassword(token: code, newPassword: _passCtrl.text);
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
