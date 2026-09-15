@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -81,6 +82,10 @@ class AppLockController extends Notifier<AppLockState>
   static const _bioKey = 'lock_biometrics';
   static const _pinHashKey = 'lock_pin_hash';
   static const _pinSaltKey = 'lock_pin_salt';
+  static const _pausedAtKey = 'lock_paused_at';
+
+  /// Debug builds only: `--dart-define=DEV_LOCK_MINUTES=1` for quick tests.
+  static const _devMinutes = int.fromEnvironment('DEV_LOCK_MINUTES');
   static const maxAttempts = 5;
 
   DateTime? _pausedAt;
@@ -89,6 +94,12 @@ class AppLockController extends Notifier<AppLockState>
   AppLockState build() {
     WidgetsBinding.instance.addObserver(this);
     ref.onDispose(() => WidgetsBinding.instance.removeObserver(this));
+    // Signing out clears any pending lock; signing in re-arms it.
+    ref.listen(authControllerProvider, (prev, next) {
+      if (next.status != AuthStatus.authenticated && state.locked) {
+        state = state.copyWith(locked: false, covered: false);
+      }
+    });
     _load();
     return const AppLockState();
   }
@@ -100,15 +111,27 @@ class AppLockController extends Notifier<AppLockState>
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
     final pin = await ref.read(secureStorageProvider).readValue(_pinHashKey);
+    final enabled = prefs.getBool(_enabledKey) ?? true;
+    // A cold start always asks to unlock (the previous process may have
+    // been killed in the background, taking its pause timestamp with it).
+    final locked = enabled;
+    prefs.remove(_pausedAtKey);
     // Lock is on by default; the user can change it in Settings › Security.
     state = state.copyWith(
       settings: AppLockSettings(
         enabled: prefs.getBool(_enabledKey) ?? true,
-        timeoutMinutes: prefs.getInt(_timeoutKey) ?? defaultTimeoutMinutes,
+        timeoutMinutes: kDebugMode && _devMinutes > 0
+            ? _devMinutes
+            : (prefs.getInt(_timeoutKey) ?? defaultTimeoutMinutes),
         useBiometrics: prefs.getBool(_bioKey) ?? true,
       ),
       loaded: true,
       hasPin: pin != null && pin.isNotEmpty,
+      locked: locked,
+    );
+    debugPrint(
+      'lock: loaded enabled=$enabled locked=$locked '
+      'timeout=${state.settings.timeoutMinutes}m pin=${state.hasPin}',
     );
   }
 
@@ -117,20 +140,36 @@ class AppLockController extends Notifier<AppLockState>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint(
+      'lock: lifecycle $state enabled=${this.state.settings.enabled} '
+      'auth=$_authenticated pausedAt=$_pausedAt',
+    );
     if (!this.state.settings.enabled || !_authenticated) return;
     switch (state) {
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.hidden:
-        _pausedAt ??= DateTime.now();
-        if (!this.state.covered)
+        if (_pausedAt == null) {
+          _pausedAt = DateTime.now();
+          // Survive the process being killed while in the background.
+          SharedPreferences.getInstance().then(
+            (p) => p.setInt(_pausedAtKey, _pausedAt!.millisecondsSinceEpoch),
+          );
+        }
+        if (!this.state.covered) {
           this.state = this.state.copyWith(covered: true);
+        }
       case AppLifecycleState.resumed:
         final since = _pausedAt;
         _pausedAt = null;
+        SharedPreferences.getInstance().then((p) => p.remove(_pausedAtKey));
         final timeout = Duration(minutes: this.state.settings.timeoutMinutes);
         final shouldLock =
             since != null && DateTime.now().difference(since) >= timeout;
+        debugPrint(
+          'lock: resumed after ${since == null ? '-' : DateTime.now().difference(since)} '
+          'timeout=$timeout → lock=$shouldLock',
+        );
         this.state = this.state.copyWith(
           covered: false,
           locked: this.state.locked || shouldLock,

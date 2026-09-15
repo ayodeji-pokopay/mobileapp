@@ -160,7 +160,10 @@ class PokopayApp extends ConsumerWidget {
           child: Consumer(
             builder: (context, ref, _) {
               final lock = ref.watch(appLockProvider);
-              final show = lock.locked || lock.covered;
+              final signedIn =
+                  ref.watch(authControllerProvider).status ==
+                  AuthStatus.authenticated;
+              final show = signedIn && (lock.locked || lock.covered);
               return Stack(
                 children: [
                   Listener(

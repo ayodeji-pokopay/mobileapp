@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +20,10 @@ bool idleSignOutDue(DateTime lastActive, DateTime now, int minutes) {
 class SessionTimeoutController extends Notifier<int>
     with WidgetsBindingObserver {
   static const _key = 'session_timeout_minutes';
+  static const _lastActiveKey = 'session_last_active';
+
+  /// Debug builds only: `--dart-define=DEV_SESSION_MINUTES=1`.
+  static const _devMinutes = int.fromEnvironment('DEV_SESSION_MINUTES');
   static const options = [15, 30, 60, 720, 0];
 
   /// Overridden from remote config (`security.sessionTimeoutMinutes`).
@@ -43,6 +48,20 @@ class SessionTimeoutController extends Notifier<int>
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getInt(_key);
     if (saved != null) state = saved;
+    if (kDebugMode && _devMinutes > 0) state = _devMinutes;
+    // Last activity from the previous process, so a relaunch after a long
+    // background stay still signs out.
+    final last = prefs.getInt(_lastActiveKey);
+    if (last != null) {
+      _lastActive = DateTime.fromMillisecondsSinceEpoch(last);
+    }
+    debugPrint('session: loaded timeout=${state}m lastActive=$_lastActive');
+    _check();
+  }
+
+  Future<void> _persist() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_lastActiveKey, _lastActive.millisecondsSinceEpoch);
   }
 
   Future<void> setMinutes(int minutes) async {
@@ -56,7 +75,11 @@ class SessionTimeoutController extends Notifier<int>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState lifecycle) {
-    if (lifecycle == AppLifecycleState.resumed) _check();
+    if (lifecycle == AppLifecycleState.resumed) {
+      _check();
+    } else {
+      _persist();
+    }
   }
 
   void _check() {
@@ -65,9 +88,15 @@ class SessionTimeoutController extends Notifier<int>
       _lastActive = DateTime.now();
       return;
     }
+    final idleFor = DateTime.now().difference(_lastActive);
+    debugPrint('session: check idle=$idleFor timeout=${state}m');
     if (idleSignOutDue(_lastActive, DateTime.now(), state)) {
       _lastActive = DateTime.now();
+      _persist();
+      debugPrint('session: signing out for inactivity');
       ref.read(authControllerProvider.notifier).logout(idle: true);
+    } else {
+      _persist();
     }
   }
 }
