@@ -1037,5 +1037,17 @@
   "terminalConnection": "Connection",
   "terminalPrinter": "Printer",
   "terminalAppVersion": "App version",
-  "terminalNoTelemetry": "This machine hasn't reported battery, connection or printer details yet. It will after its next check-in."
+  "terminalNoTelemetry": "This machine hasn't reported battery, connection or printer details yet. It will after its next check-in.",
+  "loginIdleSignedOut": "You were signed out after a period of inactivity.",
+  "sessionTimeoutTitle": "Auto sign-out",
+  "sessionTimeoutHint": "Sign out after this long without using the app. The app lock still covers the screen sooner.",
+  "sessionTimeoutNever": "Never",
+  "sessionTimeoutHours": "{count, plural, =1{1 hour} other{{count} hours}}",
+  "@sessionTimeoutHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

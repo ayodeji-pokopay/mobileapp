@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../core/biometric/biometric_service.dart';
 import '../../../core/lock/app_lock.dart';
 import '../../../core/router/app_router.dart';
+import '../../../core/session/session_timeout.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -180,6 +181,44 @@ class SecurityScreen extends ConsumerWidget {
                   },
                 ),
               ],
+            ],
+          ),
+          const SizedBox(height: 22),
+          SectionLabel(
+            l10n.sessionTimeoutTitle,
+            color: AppColors.textSecondary,
+          ),
+          ListCard(
+            children: [
+              ListRow(
+                leading: const _RowIcon(LucideIcons.logOut),
+                title: l10n.sessionTimeoutTitle,
+                subtitle: l10n.sessionTimeoutHint,
+                chevron: false,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+                child: PillTabs(
+                  scrollable: true,
+                  items: [
+                    for (final m in SessionTimeoutController.options)
+                      m == 0
+                          ? l10n.sessionTimeoutNever
+                          : m >= 60
+                          ? l10n.sessionTimeoutHours(m ~/ 60)
+                          : l10n.lockTimeoutMinutes(m),
+                  ],
+                  selected: () {
+                    final i = SessionTimeoutController.options.indexOf(
+                      ref.watch(sessionTimeoutProvider),
+                    );
+                    return i < 0 ? 2 : i;
+                  }(),
+                  onChanged: (i) => ref
+                      .read(sessionTimeoutProvider.notifier)
+                      .setMinutes(SessionTimeoutController.options[i]),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),

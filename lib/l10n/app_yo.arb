@@ -754,5 +754,17 @@
   "terminalConnection": "Ìsopọ̀",
   "terminalPrinter": "Ẹ̀rọ ìtẹ̀wé",
   "terminalAppVersion": "Ẹ̀yà àpù",
-  "terminalNoTelemetry": "Ẹ̀rọ yìí kò tíì ròyìn bátìrì, ìsopọ̀ tàbí ẹ̀rọ ìtẹ̀wé. Yóò ṣe bẹ́ẹ̀ lẹ́yìn ìforúkọsílẹ̀ tó kàn."
+  "terminalNoTelemetry": "Ẹ̀rọ yìí kò tíì ròyìn bátìrì, ìsopọ̀ tàbí ẹ̀rọ ìtẹ̀wé. Yóò ṣe bẹ́ẹ̀ lẹ́yìn ìforúkọsílẹ̀ tó kàn.",
+  "loginIdleSignedOut": "A jáde rẹ lẹ́yìn ìgbà tí o kò lo àpù náà.",
+  "sessionTimeoutTitle": "Ìjáde aládàáṣe",
+  "sessionTimeoutHint": "Jáde lẹ́yìn ìgbà yìí láìlo àpù. Títì àpù ṣì ń bo ojú ìbojú ní kíákíá.",
+  "sessionTimeoutNever": "Láéláé",
+  "sessionTimeoutHours": "{count, plural, =1{wákàtí 1} other{wákàtí {count}}}",
+  "@sessionTimeoutHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

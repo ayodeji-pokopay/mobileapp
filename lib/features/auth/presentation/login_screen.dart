@@ -127,6 +127,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final bioAvailable =
         ref.watch(biometricAvailableProvider).asData?.value ?? false;
     final sessionExpired = ref.watch(authControllerProvider).sessionExpired;
+    final idleSignedOut = ref.watch(authControllerProvider).idleSignedOut;
     final showBiometricButton = bioAvailable && _hasDeviceToken;
 
     return Scaffold(
@@ -162,6 +163,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         if (sessionExpired) ...[
                           const SizedBox(height: 16),
                           _Notice(text: l10n.loginSessionExpired),
+                        ] else if (idleSignedOut) ...[
+                          const SizedBox(height: 16),
+                          _Notice(text: l10n.loginIdleSignedOut),
                         ],
                         const SizedBox(height: 32),
                         _FieldLabel(l10n.loginEmailLabel),

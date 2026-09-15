@@ -14,6 +14,7 @@ import 'core/lock/app_lock.dart';
 import 'core/lock/lock_screen.dart';
 import 'core/push/push_registrar.dart';
 import 'core/push/push_service.dart';
+import 'core/session/session_timeout.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
@@ -83,9 +84,12 @@ class PokopayApp extends ConsumerWidget {
     ref.watch(appLockProvider);
     ref.listen(appConfigProvider, (_, next) {
       final s = next.asData?.value.security;
-      if (s != null)
+      if (s != null) {
         AppLockController.defaultTimeoutMinutes = s.lockTimeoutMinutes;
+        SessionTimeoutController.defaultMinutes = s.sessionTimeoutMinutes;
+      }
     });
+    ref.watch(sessionTimeoutProvider);
     ref.watch(pushRegistrarProvider);
     ref.watch(pushMessagesProvider);
     final router = ref.watch(routerProvider);
@@ -159,7 +163,12 @@ class PokopayApp extends ConsumerWidget {
               final show = lock.locked || lock.covered;
               return Stack(
                 children: [
-                  child ?? const SizedBox.shrink(),
+                  Listener(
+                    behavior: HitTestBehavior.translucent,
+                    onPointerDown: (_) =>
+                        ref.read(sessionTimeoutProvider.notifier).touch(),
+                    child: child ?? const SizedBox.shrink(),
+                  ),
                   if (show)
                     Positioned.fill(
                       child: LockScreen(covered: lock.covered && !lock.locked),

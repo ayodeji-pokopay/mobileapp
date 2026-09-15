@@ -31,6 +31,7 @@ class AuthState {
     this.error,
     this.errorCode,
     this.sessionExpired = false,
+    this.idleSignedOut = false,
   });
 
   final AuthStatus status;
@@ -43,6 +44,9 @@ class AuthState {
   /// True when the app signed the user out because the session could not
   /// be refreshed; the login screen shows a hint.
   final bool sessionExpired;
+
+  /// Signed out by the inactivity timeout (Settings › Security).
+  final bool idleSignedOut;
 
   String? get mid {
     final fromUser = user?.mid;
@@ -94,6 +98,7 @@ class AuthState {
     String? error,
     String? errorCode,
     bool? sessionExpired,
+    bool? idleSignedOut,
   }) => AuthState(
     status: status ?? this.status,
     user: user ?? this.user,
@@ -102,6 +107,7 @@ class AuthState {
     error: error,
     errorCode: errorCode,
     sessionExpired: sessionExpired ?? this.sessionExpired,
+    idleSignedOut: idleSignedOut ?? this.idleSignedOut,
   );
 }
 
@@ -211,7 +217,11 @@ class AuthController extends Notifier<AuthState> {
     String password, {
     bool enableBiometric = false,
   }) async {
-    state = state.copyWith(error: null, sessionExpired: false);
+    state = state.copyWith(
+      error: null,
+      sessionExpired: false,
+      idleSignedOut: false,
+    );
     try {
       await _repo.login(email: email, password: password);
       return _finishLogin(enableBiometric: enableBiometric);
@@ -228,7 +238,11 @@ class AuthController extends Notifier<AuthState> {
   /// Signs in with the enrolled device token. The caller must have passed
   /// the OS biometric prompt first.
   Future<bool> loginWithDevice() async {
-    state = state.copyWith(error: null, sessionExpired: false);
+    state = state.copyWith(
+      error: null,
+      sessionExpired: false,
+      idleSignedOut: false,
+    );
     try {
       await _repo.deviceLogin();
       return _finishLogin();
@@ -262,13 +276,13 @@ class AuthController extends Notifier<AuthState> {
     );
   }
 
-  Future<void> logout() async {
+  Future<void> logout({bool idle = false}) async {
     final mid = state.mid;
     if (mid != null) {
       await ref.read(pushServiceProvider).unregister(mid: mid);
     }
     await _repo.logout();
-    state = const AuthState(status: AuthStatus.unauthenticated);
+    state = AuthState(status: AuthStatus.unauthenticated, idleSignedOut: idle);
   }
 }
 

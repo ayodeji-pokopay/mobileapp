@@ -754,5 +754,17 @@
   "terminalConnection": "Connection",
   "terminalPrinter": "Printer",
   "terminalAppVersion": "App version",
-  "terminalNoTelemetry": "This machine never report battery, connection or printer yet. E go do am after e next check-in."
+  "terminalNoTelemetry": "This machine never report battery, connection or printer yet. E go do am after e next check-in.",
+  "loginIdleSignedOut": "We sign you out because you no use the app for some time.",
+  "sessionTimeoutTitle": "Auto sign-out",
+  "sessionTimeoutHint": "Sign out after this time wey you no use the app. App lock still dey cover the screen before that.",
+  "sessionTimeoutNever": "Never",
+  "sessionTimeoutHours": "{count, plural, =1{1 hour} other{{count} hours}}",
+  "@sessionTimeoutHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

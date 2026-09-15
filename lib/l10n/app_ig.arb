@@ -754,5 +754,17 @@
   "terminalConnection": "Njikọ",
   "terminalPrinter": "Ngwa mbipụta",
   "terminalAppVersion": "Ụdị ngwa",
-  "terminalNoTelemetry": "Igwe a akọbeghị batrị, njikọ ma ọ bụ ngwa mbipụta. Ọ ga-eme ya mgbe ọ banyere ọzọ."
+  "terminalNoTelemetry": "Igwe a akọbeghị batrị, njikọ ma ọ bụ ngwa mbipụta. Ọ ga-eme ya mgbe ọ banyere ọzọ.",
+  "loginIdleSignedOut": "A pụọ gị mgbe oge gasịrị na-ejighị ngwa ahụ.",
+  "sessionTimeoutTitle": "Ọpụpụ akpaka",
+  "sessionTimeoutHint": "Pụọ mgbe oge a gasịrị na-ejighị ngwa ahụ. Mkpọchi ngwa ka na-ekpuchi ihuenyo tupu mgbe ahụ.",
+  "sessionTimeoutNever": "Ọ dịghị mgbe",
+  "sessionTimeoutHours": "{count, plural, =1{awa 1} other{awa {count}}}",
+  "@sessionTimeoutHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

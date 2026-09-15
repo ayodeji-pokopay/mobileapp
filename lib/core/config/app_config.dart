@@ -118,7 +118,11 @@ class SecurityInfo {
   const SecurityInfo({
     this.blockCompromisedDevices = false,
     this.lockTimeoutMinutes = 15,
+    this.sessionTimeoutMinutes = 60,
   });
+
+  /// Default inactivity sign-out for users who haven't chosen one; 0 = never.
+  final int sessionTimeoutMinutes;
 
   /// Refuse to run on rooted / jailbroken devices instead of warning.
   final bool blockCompromisedDevices;
@@ -129,6 +133,8 @@ class SecurityInfo {
   factory SecurityInfo.fromJson(Map<String, dynamic> json) => SecurityInfo(
     blockCompromisedDevices: json['blockCompromisedDevices'] == true,
     lockTimeoutMinutes: (json['lockTimeoutMinutes'] as num?)?.toInt() ?? 15,
+    sessionTimeoutMinutes:
+        (json['sessionTimeoutMinutes'] as num?)?.toInt() ?? 60,
   );
 }
 

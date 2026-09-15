@@ -754,5 +754,17 @@
   "terminalConnection": "Haɗi",
   "terminalPrinter": "Firinta",
   "terminalAppVersion": "Sigar manhaja",
-  "terminalNoTelemetry": "Wannan na'ura ba ta ba da rahoton batir, haɗi ko firinta ba tukuna. Za ta yi bayan shiga ta gaba."
+  "terminalNoTelemetry": "Wannan na'ura ba ta ba da rahoton batir, haɗi ko firinta ba tukuna. Za ta yi bayan shiga ta gaba.",
+  "loginIdleSignedOut": "An fitar da kai bayan ɗan lokaci ba tare da amfani ba.",
+  "sessionTimeoutTitle": "Fita ta atomatik",
+  "sessionTimeoutHint": "Fita bayan wannan lokaci ba tare da amfani da manhajar ba. Kulle manhaja na rufe allon tun da wuri.",
+  "sessionTimeoutNever": "Ba taɓa",
+  "sessionTimeoutHours": "{count, plural, =1{awa 1} other{awanni {count}}}",
+  "@sessionTimeoutHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
