@@ -37,6 +37,7 @@ The app talks to `https://api.pokopayng.com` by default. Everything environment-
 | `START_ROUTE` | Screen to open right after sign-in, for screenshots | empty (dashboard) |
 | `DEV_LOGIN_EMAIL`, `DEV_LOGIN_PASSWORD` | Debug builds only: prefill and submit the login form | empty |
 | `DEV_MID` | Debug builds only: pin platform users (no merchant of their own) to this merchant | empty |
+| `DEV_LOCK_MINUTES`, `DEV_SESSION_MINUTES` | Debug builds only: override the app-lock and auto sign-out timeouts to test them quickly | empty |
 
 ```bash
 flutter run --dart-define=API_BASE_URL=https://staging.api.example.com \
