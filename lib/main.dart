@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
@@ -140,6 +141,15 @@ class PokopayApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: theme,
       routerConfig: router,
+      // Let a mouse or trackpad drag scroll too (simulator, desktop testing).
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.trackpad,
+          PointerDeviceKind.stylus,
+        },
+      ),
       locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
