@@ -7,6 +7,7 @@ import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../password_policy.dart';
 import '../../../shared/widgets/back_scaffold.dart';
 import '../data/auth_repository.dart';
 
@@ -45,7 +46,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     } on AuthException catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message), backgroundColor: AppColors.danger),
+        SnackBar(
+          content: Text(authMessage(e, AppLocalizations.of(context))),
+          backgroundColor: AppColors.danger,
+        ),
       );
     } finally {
       if (mounted) setState(() => _sending = false);
@@ -311,7 +315,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 if (v == null || v.isEmpty) {
                   return l10n.validationNewPasswordRequired;
                 }
-                if (v.length < 8) return l10n.validationPasswordLength;
+                final policy = validateNewPassword(v, l10n);
+                if (policy != null) return policy;
                 return null;
               },
             ),

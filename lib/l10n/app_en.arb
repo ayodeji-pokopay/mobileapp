@@ -381,7 +381,7 @@
   "changePasswordUpdated": "Password updated",
   "validationCurrentPasswordRequired": "Current password required",
   "validationNewPasswordRequired": "New password required",
-  "validationPasswordLength": "At least 8 characters",
+  "validationPasswordLength": "At least 12 characters",
   "validationPasswordsMismatch": "Passwords don't match",
   "errorNetwork": "You're offline. Check your connection and try again.",
   "errorValidation": "Some details need attention.",
@@ -390,7 +390,7 @@
   "errorForbidden": "You don't have access to this.",
   "errorConflict": "That conflicts with an existing record.",
   "errorAccountLocked": "This account is locked. Contact support to unlock it.",
-  "errorRateLimited": "Too many requests. Please wait a moment.",
+  "errorRateLimited": "Too many attempts. Try again shortly.",
   "errorNotImplemented": "This feature isn't available yet.",
   "errorInternal": "Something went wrong on our side. Please try again.",
   "errorUnknown": "Something went wrong. Please try again.",
@@ -1049,5 +1049,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "validationPasswordComplexity": "Use upper and lower case letters, a number and a symbol."
 }

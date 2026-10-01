@@ -235,7 +235,7 @@
   "changePasswordUpdated": "A ti yí ọ̀rọ̀ìgbaniwọlé padà",
   "validationCurrentPasswordRequired": "Ọ̀rọ̀ìgbaniwọlé lọ́wọ́lọ́wọ́ pọndandan",
   "validationNewPasswordRequired": "Ọ̀rọ̀ìgbaniwọlé tuntun pọndandan",
-  "validationPasswordLength": "Ó kéré tán lẹ́tà 8",
+  "validationPasswordLength": "Ó kéré jù, àmì 12",
   "validationPasswordsMismatch": "Àwọn ọ̀rọ̀ìgbaniwọlé kò bára mu",
   "errorNetwork": "O kò ní ìsopọ̀. Ṣàyẹ̀wò ìsopọ̀ rẹ kí o sì gbìyànjú lẹ́ẹ̀kansí.",
   "errorValidation": "Àwọn àlàyé kan nílò àtúnṣe.",
@@ -244,7 +244,7 @@
   "errorForbidden": "O kò ní àǹfààní sí èyí.",
   "errorConflict": "Èyí bá àkọsílẹ̀ mìíràn jà.",
   "errorAccountLocked": "A ti tì àkàǹtì yìí. Kàn sí ìrànlọ́wọ́ láti ṣí i.",
-  "errorRateLimited": "Ìbéèrè pọ̀ jù. Jọ̀wọ́ dúró díẹ̀.",
+  "errorRateLimited": "Ìgbìyànjú pọ̀ jù. Gbìyànjú lẹ́ẹ̀kansí láìpẹ́.",
   "errorNotImplemented": "Ẹ̀yà yìí kò tíì wà.",
   "errorInternal": "Àṣìṣe kan wáyé lọ́dọ̀ wa. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kansí.",
   "errorUnknown": "Àṣìṣe kan wáyé. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kansí.",
@@ -766,5 +766,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "validationPasswordComplexity": "Lo lẹ́tà ńlá àti kékeré, nọ́mbà kan àti àmì kan."
 }

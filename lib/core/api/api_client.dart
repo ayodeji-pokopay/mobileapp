@@ -161,6 +161,9 @@ class AuthInterceptor extends QueuedInterceptor {
       final response = await _dio.fetch<dynamic>(o);
       handler.resolve(response);
     } on DioException catch (e) {
+      // Fresh token still refused: the account was disabled, locked or
+      // signed out everywhere. Treat it as an expired session.
+      if (e.response?.statusCode == 401) await _expire();
       handler.next(e);
     }
   }

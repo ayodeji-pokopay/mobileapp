@@ -84,6 +84,9 @@ class AuthException implements Exception {
   static const invalidCredentials = 'INVALID_CREDENTIALS';
   static const serverUnavailable = 'SERVER_UNAVAILABLE';
   static const network = 'NETWORK';
+  static const accountLocked = 'ACCOUNT_LOCKED';
+  static const rateLimited = 'RATE_LIMITED';
+  static const invalidRequest = 'INVALID_REQUEST';
 
   @override
   String toString() => message;
@@ -386,6 +389,9 @@ class AuthRepository {
     }
     final status = e.response?.statusCode;
     if (status == 401) return AuthException.invalidCredentials;
+    if (status == 423) return AuthException.accountLocked;
+    if (status == 429) return AuthException.rateLimited;
+    if (status == 400) return AuthException.invalidRequest;
     if (status != null && status >= 500) return AuthException.serverUnavailable;
     if (e.response == null) return AuthException.network;
     return null;

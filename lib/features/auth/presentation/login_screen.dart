@@ -86,12 +86,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final l10n = AppLocalizations.of(context);
       // Prefer localised copy keyed on the error code; the backend message
       // is the fallback for codes we don't know.
+      final backendMsg = auth.error ?? '';
+      // The backend's own copy carries the attempts-remaining count and the
+      // 30-minute lockout; prefer it when it says so.
+      final informative = RegExp(
+        r'attempt|lock',
+        caseSensitive: false,
+      ).hasMatch(backendMsg);
       final message = switch (auth.errorCode) {
-        AuthException.invalidCredentials => l10n.loginInvalidCredentials,
+        AuthException.invalidCredentials =>
+          informative ? backendMsg : l10n.loginInvalidCredentials,
+        AuthException.accountLocked =>
+          backendMsg.isNotEmpty ? backendMsg : l10n.errorAccountLocked,
         AuthException.serverUnavailable => l10n.errorServiceUnavailable,
         AuthException.network => l10n.errorNetwork,
-        'ACCOUNT_LOCKED' => l10n.errorAccountLocked,
-        'RATE_LIMITED' => l10n.errorRateLimited,
+        AuthException.rateLimited => l10n.errorRateLimited,
         _ => auth.error ?? l10n.loginFailed,
       };
       _showError(message);

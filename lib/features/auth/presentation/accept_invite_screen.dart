@@ -7,6 +7,7 @@ import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../password_policy.dart';
 import '../../../shared/widgets/back_scaffold.dart';
 import '../data/auth_repository.dart';
 
@@ -72,9 +73,18 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
           lastName: _lastCtrl.text.trim(),
         );
       } on AuthException catch (e) {
-        // The invitation email currently issues a set-password token; when
-        // accept-invite rejects it, finish through the reset flow instead.
-        if (e.code == AuthException.network) rethrow;
+        if (e.code == AuthException.network ||
+            e.code == AuthException.rateLimited ||
+            e.code == AuthException.serverUnavailable) {
+          rethrow;
+        }
+        // The invitation email carries a set-password token rather than an
+        // invite code; when it is one, finish through the reset flow.
+        try {
+          await repo.verifyResetToken(code); // throws when not a valid token
+        } on AuthException {
+          rethrow; // genuinely invalid or expired (400)
+        }
         await repo.resetPassword(token: code, newPassword: _passCtrl.text);
       }
       if (!mounted) return;
@@ -91,7 +101,9 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
                 ? l10n.errorNetwork
                 : e.code == AuthException.serverUnavailable
                 ? l10n.errorServiceUnavailable
-                : (e.message.isNotEmpty ? e.message : l10n.inviteInvalid),
+                : e.code == AuthException.rateLimited
+                ? l10n.errorRateLimited
+                : l10n.inviteInvalid,
           ),
           backgroundColor: AppColors.danger,
         ),
@@ -200,7 +212,8 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
               validator: (v) {
                 if (v == null || v.isEmpty)
                   return l10n.validationNewPasswordRequired;
-                if (v.length < 8) return l10n.validationPasswordLength;
+                final policy = validateNewPassword(v, l10n);
+                if (policy != null) return policy;
                 return null;
               },
             ),

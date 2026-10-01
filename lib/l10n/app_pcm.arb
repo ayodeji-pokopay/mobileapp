@@ -235,7 +235,7 @@
   "changePasswordUpdated": "Password don update",
   "validationCurrentPasswordRequired": "Put your current password",
   "validationNewPasswordRequired": "Put new password",
-  "validationPasswordLength": "At least 8 characters",
+  "validationPasswordLength": "At least 12 characters",
   "validationPasswordsMismatch": "The passwords no match",
   "errorNetwork": "You dey offline. Check your network and try again.",
   "errorValidation": "Some details need correction.",
@@ -244,7 +244,7 @@
   "errorForbidden": "You no get access to dis one.",
   "errorConflict": "Dis one clash with another record.",
   "errorAccountLocked": "Dem don lock dis account. Contact support make dem open am.",
-  "errorRateLimited": "Too many requests. Abeg wait small.",
+  "errorRateLimited": "Too many tries. Try again small time.",
   "errorNotImplemented": "Dis feature never ready.",
   "errorInternal": "Something spoil for our side. Abeg try again.",
   "errorUnknown": "Something spoil. Abeg try again.",
@@ -766,5 +766,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "validationPasswordComplexity": "Use big and small letters, one number and one symbol."
 }

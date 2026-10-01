@@ -235,7 +235,7 @@
   "changePasswordUpdated": "An sabunta kalmar sirri",
   "validationCurrentPasswordRequired": "Ana buƙatar kalmar sirri ta yanzu",
   "validationNewPasswordRequired": "Ana buƙatar sabuwar kalmar sirri",
-  "validationPasswordLength": "Aƙalla haruffa 8",
+  "validationPasswordLength": "Aƙalla haruffa 12",
   "validationPasswordsMismatch": "Kalmomin sirri ba su daidaita ba",
   "errorNetwork": "Ba ka da intanet. Duba haɗin ka ka sake gwadawa.",
   "errorValidation": "Wasu bayanai suna buƙatar gyara.",
@@ -244,7 +244,7 @@
   "errorForbidden": "Ba ka da izinin wannan.",
   "errorConflict": "Wannan ya ci karo da wani rikodi.",
   "errorAccountLocked": "An kulle wannan asusu. Tuntuɓi tallafi don buɗe shi.",
-  "errorRateLimited": "Buƙatu sun yi yawa. Don Allah jira kaɗan.",
+  "errorRateLimited": "Yunƙuri da yawa. Sake gwadawa nan ba da jimawa ba.",
   "errorNotImplemented": "Wannan fasalin babu shi tukuna.",
   "errorInternal": "Wani kuskure ya faru a gare mu. Don Allah sake gwadawa.",
   "errorUnknown": "Wani kuskure ya faru. Don Allah sake gwadawa.",
@@ -766,5 +766,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "validationPasswordComplexity": "Yi amfani da manyan da ƙananan haruffa, lamba da alama."
 }

@@ -235,7 +235,7 @@
   "changePasswordUpdated": "Emelitela okwuntughe",
   "validationCurrentPasswordRequired": "Achọrọ okwuntughe ugbu a",
   "validationNewPasswordRequired": "Achọrọ okwuntughe ọhụrụ",
-  "validationPasswordLength": "Opekata mpe mkpụrụedemede 8",
+  "validationPasswordLength": "Opekata mpe mkpụrụ 12",
   "validationPasswordsMismatch": "Okwuntughe adabaghị",
   "errorNetwork": "Ị nọghị n'ịntanetị. Lelee njikọ gị ma nwaa ọzọ.",
   "errorValidation": "Ụfọdụ nkọwa chọrọ mmezi.",
@@ -244,7 +244,7 @@
   "errorForbidden": "Ị nweghị ohere na nke a.",
   "errorConflict": "Nke a na-emegide ndekọ dị adị.",
   "errorAccountLocked": "Akpọchiela akaụntụ a. Kpọtụrụ nkwado ka e mepee ya.",
-  "errorRateLimited": "Arịrịọ dị ukwuu. Biko chere ntakịrị.",
+  "errorRateLimited": "Mgbalị karịrị akarị. Nwaa ọzọ n'oge na-adịghị anya.",
   "errorNotImplemented": "Njirimara a adịbeghị.",
   "errorInternal": "Nsogbu mere n'akụkụ anyị. Biko nwaa ọzọ.",
   "errorUnknown": "Nsogbu mere. Biko nwaa ọzọ.",
@@ -766,5 +766,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "validationPasswordComplexity": "Jiri mkpụrụedemede ukwu na obere, ọnụọgụ na akara."
 }
