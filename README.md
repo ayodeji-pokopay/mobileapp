@@ -171,6 +171,8 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 
 **Lists.** Transactions and settlements page through `TransactionsList` / `SettlementsList` (`AsyncNotifier` families keyed by filter) with `loadMore()` triggered near the end of the scroll, and a `DateWindowChips` control offering 7/30/90-day presets or a custom range from the Material date-range picker.
 
+**Password policy.** `lib/features/auth/password_policy.dart` enforces the backend's rule since 30 Sep 2026 (12+ characters with upper, lower, digit and symbol) on change, reset and invite screens, and `authMessage` picks localised copy for network, outage and rate-limit (429) failures while passing the backend's own message through for everything else, such as reuse of the last four passwords or the 30-minute lockout after five wrong attempts. A 401 after a successful token refresh ends the session.
+
 **Password reset.** Login › "Forgot?" requests `POST /auth/forgot-password`; the user pastes the code (or the whole link) from the email, which the app verifies with `POST /auth/verify-reset-token?token=` before `POST /auth/reset-password`.
 
 **App lock.** `lib/core/lock/` holds `AppLockController` (a `Notifier` that is also a `WidgetsBindingObserver`) and `LockScreen`. When enabled from Settings › Security, the app covers its content whenever it leaves the foreground and, after the chosen timeout (right away, 1, 5 or 15 minutes), demands Face ID / fingerprint or a 4-digit PIN. The PIN is stored only as a salted SHA-256 hash in secure storage; five wrong PINs sign the user out. The overlay is mounted from the `MaterialApp.builder` in `main.dart`, so it sits above every route.
