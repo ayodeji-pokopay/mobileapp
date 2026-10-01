@@ -221,7 +221,7 @@ class AppLockController extends Notifier<AppLockState>
   }
 
   Future<void> setTimeout(int minutes) =>
-      _save(state.settings.copyWith(timeoutMinutes: minutes));
+      _save(state.settings.copyWith(timeoutMinutes: minutes.clamp(0, 24 * 60)));
 
   Future<void> setUseBiometrics(bool v) =>
       _save(state.settings.copyWith(useBiometrics: v));

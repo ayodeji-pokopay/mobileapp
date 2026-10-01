@@ -195,6 +195,8 @@ The router listens to `authControllerProvider`. Unauthenticated users are always
 
 **Accessibility.** Icon-only buttons carry semantic labels, touch targets are at least 44 pt, body text never drops below 12 pt, and tertiary text uses a grey that passes WCAG AA on white.
 
+**Adversarial tests.** `test/adversarial/` feeds the app what a misbehaving backend or user would: wrongly-typed JSON (every freezed model uses the `Lenient*` converters in `lib/core/api/models/lenient.dart`, so a stringly-typed number degrades to null instead of crashing a screen), garbage dates and locales, bursts of 401s, a refresh endpoint that is down (tokens survive; only a 4xx on refresh ends the session), refused retries (retries go through a bare Dio because a queued interceptor cannot re-enter itself), bad PINs, negative timeouts, mis-cased permissions, translation parity across the five ARB files, and route guards for cashiers and signed-out visitors.
+
 **CI.** `.github/workflows/ci.yml` runs analyze, tests, and a debug APK build on every push and PR, plus an unsigned iOS build on `main`.
 
 **Store assets.** Listing copy, privacy policy, data-safety answers, and screenshots are in `store/`.

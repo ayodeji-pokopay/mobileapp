@@ -14,11 +14,13 @@ _TerminalResponse _$TerminalResponseFromJson(Map<String, dynamic> json) =>
       model: json['model'] as String?,
       label: json['label'] as String?,
       status: json['status'] as String?,
-      instantSettlement: json['instantSettlement'] as bool?,
+      instantSettlement: const LenientBool().fromJson(
+        json['instantSettlement'],
+      ),
       activatedAt: json['activatedAt'] as String?,
       lastHeartbeat: json['lastHeartbeat'] as String?,
-      todaySales: json['todaySales'] as num?,
-      todayTransactions: (json['todayTransactions'] as num?)?.toInt(),
+      todaySales: const LenientNum().fromJson(json['todaySales']),
+      todayTransactions: const LenientInt().fromJson(json['todayTransactions']),
       connectivity: json['connectivity'] as String?,
       health: json['health'] as String?,
       healthReasons:
@@ -26,73 +28,82 @@ _TerminalResponse _$TerminalResponseFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],
-      batteryPercent: (json['batteryPercent'] as num?)?.toInt(),
-      charging: json['charging'] as bool?,
+      batteryPercent: const LenientInt().fromJson(json['batteryPercent']),
+      charging: const LenientBool().fromJson(json['charging']),
       connectionType: json['connectionType'] as String?,
-      signal: (json['signal'] as num?)?.toInt(),
+      signal: const LenientInt().fromJson(json['signal']),
       printerStatus: json['printerStatus'] as String?,
       appVersion: json['appVersion'] as String?,
     );
 
-Map<String, dynamic> _$TerminalResponseToJson(_TerminalResponse instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'tid': instance.tid,
-      'serialNumber': instance.serialNumber,
-      'model': instance.model,
-      'label': instance.label,
-      'status': instance.status,
-      'instantSettlement': instance.instantSettlement,
-      'activatedAt': instance.activatedAt,
-      'lastHeartbeat': instance.lastHeartbeat,
-      'todaySales': instance.todaySales,
-      'todayTransactions': instance.todayTransactions,
-      'connectivity': instance.connectivity,
-      'health': instance.health,
-      'healthReasons': instance.healthReasons,
-      'batteryPercent': instance.batteryPercent,
-      'charging': instance.charging,
-      'connectionType': instance.connectionType,
-      'signal': instance.signal,
-      'printerStatus': instance.printerStatus,
-      'appVersion': instance.appVersion,
-    };
+Map<String, dynamic> _$TerminalResponseToJson(
+  _TerminalResponse instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'tid': instance.tid,
+  'serialNumber': instance.serialNumber,
+  'model': instance.model,
+  'label': instance.label,
+  'status': instance.status,
+  'instantSettlement': const LenientBool().toJson(instance.instantSettlement),
+  'activatedAt': instance.activatedAt,
+  'lastHeartbeat': instance.lastHeartbeat,
+  'todaySales': const LenientNum().toJson(instance.todaySales),
+  'todayTransactions': const LenientInt().toJson(instance.todayTransactions),
+  'connectivity': instance.connectivity,
+  'health': instance.health,
+  'healthReasons': instance.healthReasons,
+  'batteryPercent': const LenientInt().toJson(instance.batteryPercent),
+  'charging': const LenientBool().toJson(instance.charging),
+  'connectionType': instance.connectionType,
+  'signal': const LenientInt().toJson(instance.signal),
+  'printerStatus': instance.printerStatus,
+  'appVersion': instance.appVersion,
+};
 
 _MerchantPreferences _$MerchantPreferencesFromJson(Map<String, dynamic> json) =>
     _MerchantPreferences(
-      dailySettlementReport: json['dailySettlementReport'] as bool?,
-      monthlySettlementReport: json['monthlySettlementReport'] as bool?,
+      dailySettlementReport: const LenientBool().fromJson(
+        json['dailySettlementReport'],
+      ),
+      monthlySettlementReport: const LenientBool().fromJson(
+        json['monthlySettlementReport'],
+      ),
       reportRecipients:
           (json['reportRecipients'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],
       language: json['language'] as String?,
-      pushEnabled: json['pushEnabled'] as bool?,
-      dailyTarget: json['dailyTarget'] as num?,
-      monthlyTarget: json['monthlyTarget'] as num?,
+      pushEnabled: const LenientBool().fromJson(json['pushEnabled']),
+      dailyTarget: const LenientNum().fromJson(json['dailyTarget']),
+      monthlyTarget: const LenientNum().fromJson(json['monthlyTarget']),
     );
 
 Map<String, dynamic> _$MerchantPreferencesToJson(
   _MerchantPreferences instance,
 ) => <String, dynamic>{
-  'dailySettlementReport': instance.dailySettlementReport,
-  'monthlySettlementReport': instance.monthlySettlementReport,
+  'dailySettlementReport': const LenientBool().toJson(
+    instance.dailySettlementReport,
+  ),
+  'monthlySettlementReport': const LenientBool().toJson(
+    instance.monthlySettlementReport,
+  ),
   'reportRecipients': instance.reportRecipients,
   'language': instance.language,
-  'pushEnabled': instance.pushEnabled,
-  'dailyTarget': instance.dailyTarget,
-  'monthlyTarget': instance.monthlyTarget,
+  'pushEnabled': const LenientBool().toJson(instance.pushEnabled),
+  'dailyTarget': const LenientNum().toJson(instance.dailyTarget),
+  'monthlyTarget': const LenientNum().toJson(instance.monthlyTarget),
 };
 
 _StatementResponse _$StatementResponseFromJson(Map<String, dynamic> json) =>
     _StatementResponse(
       id: json['id'] as String?,
       period: json['period'] as String?,
-      grossSales: json['grossSales'] as num?,
-      fees: json['fees'] as num?,
-      netSettled: json['netSettled'] as num?,
-      settlementCount: (json['settlementCount'] as num?)?.toInt(),
+      grossSales: const LenientNum().fromJson(json['grossSales']),
+      fees: const LenientNum().fromJson(json['fees']),
+      netSettled: const LenientNum().fromJson(json['netSettled']),
+      settlementCount: const LenientInt().fromJson(json['settlementCount']),
       generatedAt: json['generatedAt'] as String?,
     );
 
@@ -100,10 +111,10 @@ Map<String, dynamic> _$StatementResponseToJson(_StatementResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
       'period': instance.period,
-      'grossSales': instance.grossSales,
-      'fees': instance.fees,
-      'netSettled': instance.netSettled,
-      'settlementCount': instance.settlementCount,
+      'grossSales': const LenientNum().toJson(instance.grossSales),
+      'fees': const LenientNum().toJson(instance.fees),
+      'netSettled': const LenientNum().toJson(instance.netSettled),
+      'settlementCount': const LenientInt().toJson(instance.settlementCount),
       'generatedAt': instance.generatedAt,
     };
 
@@ -114,12 +125,16 @@ _NotificationItem _$NotificationItemFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String?,
       body: json['body'] as String?,
       reference: json['reference'] as String?,
-      read: json['read'] as bool? ?? false,
+      read: json['read'] == null
+          ? false
+          : const LenientFlag().fromJson(json['read']),
       createdAt: json['createdAt'] as String?,
       severity: json['severity'] as String?,
       rule: json['rule'] as String?,
-      evidence: json['evidence'] as Map<String, dynamic>?,
-      acknowledged: json['acknowledged'] as bool? ?? false,
+      evidence: const LenientMap().fromJson(json['evidence']),
+      acknowledged: json['acknowledged'] == null
+          ? false
+          : const LenientFlag().fromJson(json['acknowledged']),
     );
 
 Map<String, dynamic> _$NotificationItemToJson(_NotificationItem instance) =>
@@ -129,12 +144,12 @@ Map<String, dynamic> _$NotificationItemToJson(_NotificationItem instance) =>
       'title': instance.title,
       'body': instance.body,
       'reference': instance.reference,
-      'read': instance.read,
+      'read': const LenientFlag().toJson(instance.read),
       'createdAt': instance.createdAt,
       'severity': instance.severity,
       'rule': instance.rule,
-      'evidence': instance.evidence,
-      'acknowledged': instance.acknowledged,
+      'evidence': const LenientMap().toJson(instance.evidence),
+      'acknowledged': const LenientFlag().toJson(instance.acknowledged),
     };
 
 _NotificationFeed _$NotificationFeedFromJson(Map<String, dynamic> json) =>
@@ -145,18 +160,18 @@ _NotificationFeed _$NotificationFeedFromJson(Map<String, dynamic> json) =>
               ?.map((e) => NotificationItem.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <NotificationItem>[],
-      totalElements: (json['totalElements'] as num?)?.toInt(),
-      number: (json['number'] as num?)?.toInt(),
-      size: (json['size'] as num?)?.toInt(),
-      last: json['last'] as bool?,
+      totalElements: const LenientInt().fromJson(json['totalElements']),
+      number: const LenientInt().fromJson(json['number']),
+      size: const LenientInt().fromJson(json['size']),
+      last: const LenientBool().fromJson(json['last']),
     );
 
 Map<String, dynamic> _$NotificationFeedToJson(_NotificationFeed instance) =>
     <String, dynamic>{
       'unreadCount': instance.unreadCount,
       'content': instance.content,
-      'totalElements': instance.totalElements,
-      'number': instance.number,
-      'size': instance.size,
-      'last': instance.last,
+      'totalElements': const LenientInt().toJson(instance.totalElements),
+      'number': const LenientInt().toJson(instance.number),
+      'size': const LenientInt().toJson(instance.size),
+      'last': const LenientBool().toJson(instance.last),
     };

@@ -24,7 +24,7 @@ void main() {
       AuthInterceptor(
         storage: storage,
         refresher: TokenRefresher(dio: bare, storage: storage),
-        dio: dio,
+        retryDio: bare,
         onSessionExpired: () => expired++,
       ),
     );

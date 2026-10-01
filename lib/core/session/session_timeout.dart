@@ -47,7 +47,7 @@ class SessionTimeoutController extends Notifier<int>
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getInt(_key);
-    if (saved != null) state = saved;
+    if (saved != null) state = saved.clamp(0, 30 * 24 * 60);
     if (kDebugMode && _devMinutes > 0) state = _devMinutes;
     // Last activity from the previous process, so a relaunch after a long
     // background stay still signs out.
@@ -65,7 +65,7 @@ class SessionTimeoutController extends Notifier<int>
   }
 
   Future<void> setMinutes(int minutes) async {
-    state = minutes;
+    state = minutes.clamp(0, 30 * 24 * 60);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_key, minutes);
   }

@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'lenient.dart';
+
 part 'auth_models.freezed.dart';
 part 'auth_models.g.dart';
 
@@ -40,13 +42,13 @@ abstract class AuthResponse with _$AuthResponse {
     String? accessToken,
     String? refreshToken,
     String? tokenType,
-    int? expiresIn,
+    @LenientInt() int? expiresIn,
     String? userId,
     String? email,
     String? firstName,
     String? lastName,
     String? role,
-    bool? emailVerified,
+    @LenientBool() bool? emailVerified,
     String? selectedTenantId,
     String? selectedTenantName,
     String? mid,
@@ -64,7 +66,7 @@ abstract class TenantInfo with _$TenantInfo {
     String? name,
     String? slug,
     String? role,
-    bool? primary,
+    @LenientBool() bool? primary,
   }) = _TenantInfo;
 
   factory TenantInfo.fromJson(Map<String, dynamic> json) =>
@@ -79,7 +81,7 @@ abstract class UserInfoResponse with _$UserInfoResponse {
     String? firstName,
     String? lastName,
     String? role,
-    bool? emailVerified,
+    @LenientBool() bool? emailVerified,
     String? primaryTenantId,
     String? mid,
     String? merchantName,

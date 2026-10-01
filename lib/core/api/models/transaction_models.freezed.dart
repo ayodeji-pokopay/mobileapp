@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TransactionResponse {
 
- String? get id; String? get transactionRef; String? get tid; String? get mid; String? get merchantEmail; String? get storeName; String? get transactionType; String? get panMasked; String? get cardScheme; String? get cardBank; String? get cardBrand; String? get cardType; String? get cardCountryCode; num? get amount; num? get feeAmount; String? get currencyCode; String? get status; String? get responseCode; String? get responseCodeDescription; String? get authCode; String? get processorHost; int? get durationMs; String? get errorMessage; String? get initiatedAt; String? get completedAt; String? get settlementReference; String? get settlementStatus; String? get originalReference; String? get receiptUrl;
+ String? get id; String? get transactionRef; String? get tid; String? get mid; String? get merchantEmail; String? get storeName; String? get transactionType; String? get panMasked; String? get cardScheme; String? get cardBank; String? get cardBrand; String? get cardType; String? get cardCountryCode;@LenientNum() num? get amount;@LenientNum() num? get feeAmount; String? get currencyCode; String? get status; String? get responseCode; String? get responseCodeDescription; String? get authCode; String? get processorHost;@LenientInt() int? get durationMs; String? get errorMessage; String? get initiatedAt; String? get completedAt; String? get settlementReference; String? get settlementStatus; String? get originalReference; String? get receiptUrl;
 /// Create a copy of TransactionResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $TransactionResponseCopyWith<$Res>  {
   factory $TransactionResponseCopyWith(TransactionResponse value, $Res Function(TransactionResponse) _then) = _$TransactionResponseCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? transactionRef, String? tid, String? mid, String? merchantEmail, String? storeName, String? transactionType, String? panMasked, String? cardScheme, String? cardBank, String? cardBrand, String? cardType, String? cardCountryCode, num? amount, num? feeAmount, String? currencyCode, String? status, String? responseCode, String? responseCodeDescription, String? authCode, String? processorHost, int? durationMs, String? errorMessage, String? initiatedAt, String? completedAt, String? settlementReference, String? settlementStatus, String? originalReference, String? receiptUrl
+ String? id, String? transactionRef, String? tid, String? mid, String? merchantEmail, String? storeName, String? transactionType, String? panMasked, String? cardScheme, String? cardBank, String? cardBrand, String? cardType, String? cardCountryCode,@LenientNum() num? amount,@LenientNum() num? feeAmount, String? currencyCode, String? status, String? responseCode, String? responseCodeDescription, String? authCode, String? processorHost,@LenientInt() int? durationMs, String? errorMessage, String? initiatedAt, String? completedAt, String? settlementReference, String? settlementStatus, String? originalReference, String? receiptUrl
 });
 
 
@@ -181,7 +181,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? transactionRef,  String? tid,  String? mid,  String? merchantEmail,  String? storeName,  String? transactionType,  String? panMasked,  String? cardScheme,  String? cardBank,  String? cardBrand,  String? cardType,  String? cardCountryCode,  num? amount,  num? feeAmount,  String? currencyCode,  String? status,  String? responseCode,  String? responseCodeDescription,  String? authCode,  String? processorHost,  int? durationMs,  String? errorMessage,  String? initiatedAt,  String? completedAt,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? transactionRef,  String? tid,  String? mid,  String? merchantEmail,  String? storeName,  String? transactionType,  String? panMasked,  String? cardScheme,  String? cardBank,  String? cardBrand,  String? cardType,  String? cardCountryCode, @LenientNum()  num? amount, @LenientNum()  num? feeAmount,  String? currencyCode,  String? status,  String? responseCode,  String? responseCodeDescription,  String? authCode,  String? processorHost, @LenientInt()  int? durationMs,  String? errorMessage,  String? initiatedAt,  String? completedAt,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TransactionResponse() when $default != null:
 return $default(_that.id,_that.transactionRef,_that.tid,_that.mid,_that.merchantEmail,_that.storeName,_that.transactionType,_that.panMasked,_that.cardScheme,_that.cardBank,_that.cardBrand,_that.cardType,_that.cardCountryCode,_that.amount,_that.feeAmount,_that.currencyCode,_that.status,_that.responseCode,_that.responseCodeDescription,_that.authCode,_that.processorHost,_that.durationMs,_that.errorMessage,_that.initiatedAt,_that.completedAt,_that.settlementReference,_that.settlementStatus,_that.originalReference,_that.receiptUrl);case _:
@@ -202,7 +202,7 @@ return $default(_that.id,_that.transactionRef,_that.tid,_that.mid,_that.merchant
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? transactionRef,  String? tid,  String? mid,  String? merchantEmail,  String? storeName,  String? transactionType,  String? panMasked,  String? cardScheme,  String? cardBank,  String? cardBrand,  String? cardType,  String? cardCountryCode,  num? amount,  num? feeAmount,  String? currencyCode,  String? status,  String? responseCode,  String? responseCodeDescription,  String? authCode,  String? processorHost,  int? durationMs,  String? errorMessage,  String? initiatedAt,  String? completedAt,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? transactionRef,  String? tid,  String? mid,  String? merchantEmail,  String? storeName,  String? transactionType,  String? panMasked,  String? cardScheme,  String? cardBank,  String? cardBrand,  String? cardType,  String? cardCountryCode, @LenientNum()  num? amount, @LenientNum()  num? feeAmount,  String? currencyCode,  String? status,  String? responseCode,  String? responseCodeDescription,  String? authCode,  String? processorHost, @LenientInt()  int? durationMs,  String? errorMessage,  String? initiatedAt,  String? completedAt,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)  $default,) {final _that = this;
 switch (_that) {
 case _TransactionResponse():
 return $default(_that.id,_that.transactionRef,_that.tid,_that.mid,_that.merchantEmail,_that.storeName,_that.transactionType,_that.panMasked,_that.cardScheme,_that.cardBank,_that.cardBrand,_that.cardType,_that.cardCountryCode,_that.amount,_that.feeAmount,_that.currencyCode,_that.status,_that.responseCode,_that.responseCodeDescription,_that.authCode,_that.processorHost,_that.durationMs,_that.errorMessage,_that.initiatedAt,_that.completedAt,_that.settlementReference,_that.settlementStatus,_that.originalReference,_that.receiptUrl);case _:
@@ -222,7 +222,7 @@ return $default(_that.id,_that.transactionRef,_that.tid,_that.mid,_that.merchant
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? transactionRef,  String? tid,  String? mid,  String? merchantEmail,  String? storeName,  String? transactionType,  String? panMasked,  String? cardScheme,  String? cardBank,  String? cardBrand,  String? cardType,  String? cardCountryCode,  num? amount,  num? feeAmount,  String? currencyCode,  String? status,  String? responseCode,  String? responseCodeDescription,  String? authCode,  String? processorHost,  int? durationMs,  String? errorMessage,  String? initiatedAt,  String? completedAt,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? transactionRef,  String? tid,  String? mid,  String? merchantEmail,  String? storeName,  String? transactionType,  String? panMasked,  String? cardScheme,  String? cardBank,  String? cardBrand,  String? cardType,  String? cardCountryCode, @LenientNum()  num? amount, @LenientNum()  num? feeAmount,  String? currencyCode,  String? status,  String? responseCode,  String? responseCodeDescription,  String? authCode,  String? processorHost, @LenientInt()  int? durationMs,  String? errorMessage,  String? initiatedAt,  String? completedAt,  String? settlementReference,  String? settlementStatus,  String? originalReference,  String? receiptUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _TransactionResponse() when $default != null:
 return $default(_that.id,_that.transactionRef,_that.tid,_that.mid,_that.merchantEmail,_that.storeName,_that.transactionType,_that.panMasked,_that.cardScheme,_that.cardBank,_that.cardBrand,_that.cardType,_that.cardCountryCode,_that.amount,_that.feeAmount,_that.currencyCode,_that.status,_that.responseCode,_that.responseCodeDescription,_that.authCode,_that.processorHost,_that.durationMs,_that.errorMessage,_that.initiatedAt,_that.completedAt,_that.settlementReference,_that.settlementStatus,_that.originalReference,_that.receiptUrl);case _:
@@ -237,7 +237,7 @@ return $default(_that.id,_that.transactionRef,_that.tid,_that.mid,_that.merchant
 @JsonSerializable()
 
 class _TransactionResponse extends TransactionResponse {
-  const _TransactionResponse({this.id, this.transactionRef, this.tid, this.mid, this.merchantEmail, this.storeName, this.transactionType, this.panMasked, this.cardScheme, this.cardBank, this.cardBrand, this.cardType, this.cardCountryCode, this.amount, this.feeAmount, this.currencyCode, this.status, this.responseCode, this.responseCodeDescription, this.authCode, this.processorHost, this.durationMs, this.errorMessage, this.initiatedAt, this.completedAt, this.settlementReference, this.settlementStatus, this.originalReference, this.receiptUrl}): super._();
+  const _TransactionResponse({this.id, this.transactionRef, this.tid, this.mid, this.merchantEmail, this.storeName, this.transactionType, this.panMasked, this.cardScheme, this.cardBank, this.cardBrand, this.cardType, this.cardCountryCode, @LenientNum() this.amount, @LenientNum() this.feeAmount, this.currencyCode, this.status, this.responseCode, this.responseCodeDescription, this.authCode, this.processorHost, @LenientInt() this.durationMs, this.errorMessage, this.initiatedAt, this.completedAt, this.settlementReference, this.settlementStatus, this.originalReference, this.receiptUrl}): super._();
   factory _TransactionResponse.fromJson(Map<String, dynamic> json) => _$TransactionResponseFromJson(json);
 
 @override final  String? id;
@@ -253,15 +253,15 @@ class _TransactionResponse extends TransactionResponse {
 @override final  String? cardBrand;
 @override final  String? cardType;
 @override final  String? cardCountryCode;
-@override final  num? amount;
-@override final  num? feeAmount;
+@override@LenientNum() final  num? amount;
+@override@LenientNum() final  num? feeAmount;
 @override final  String? currencyCode;
 @override final  String? status;
 @override final  String? responseCode;
 @override final  String? responseCodeDescription;
 @override final  String? authCode;
 @override final  String? processorHost;
-@override final  int? durationMs;
+@override@LenientInt() final  int? durationMs;
 @override final  String? errorMessage;
 @override final  String? initiatedAt;
 @override final  String? completedAt;
@@ -303,7 +303,7 @@ abstract mixin class _$TransactionResponseCopyWith<$Res> implements $Transaction
   factory _$TransactionResponseCopyWith(_TransactionResponse value, $Res Function(_TransactionResponse) _then) = __$TransactionResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? transactionRef, String? tid, String? mid, String? merchantEmail, String? storeName, String? transactionType, String? panMasked, String? cardScheme, String? cardBank, String? cardBrand, String? cardType, String? cardCountryCode, num? amount, num? feeAmount, String? currencyCode, String? status, String? responseCode, String? responseCodeDescription, String? authCode, String? processorHost, int? durationMs, String? errorMessage, String? initiatedAt, String? completedAt, String? settlementReference, String? settlementStatus, String? originalReference, String? receiptUrl
+ String? id, String? transactionRef, String? tid, String? mid, String? merchantEmail, String? storeName, String? transactionType, String? panMasked, String? cardScheme, String? cardBank, String? cardBrand, String? cardType, String? cardCountryCode,@LenientNum() num? amount,@LenientNum() num? feeAmount, String? currencyCode, String? status, String? responseCode, String? responseCodeDescription, String? authCode, String? processorHost,@LenientInt() int? durationMs, String? errorMessage, String? initiatedAt, String? completedAt, String? settlementReference, String? settlementStatus, String? originalReference, String? receiptUrl
 });
 
 
@@ -362,7 +362,7 @@ as String?,
 /// @nodoc
 mixin _$PageTransactionResponse {
 
- List<TransactionResponse> get content; int? get totalElements; int? get totalPages; int? get number; int? get size; bool? get first; bool? get last;
+ List<TransactionResponse> get content;@LenientInt() int? get totalElements;@LenientInt() int? get totalPages;@LenientInt() int? get number;@LenientInt() int? get size;@LenientBool() bool? get first;@LenientBool() bool? get last;
 /// Create a copy of PageTransactionResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -395,7 +395,7 @@ abstract mixin class $PageTransactionResponseCopyWith<$Res>  {
   factory $PageTransactionResponseCopyWith(PageTransactionResponse value, $Res Function(PageTransactionResponse) _then) = _$PageTransactionResponseCopyWithImpl;
 @useResult
 $Res call({
- List<TransactionResponse> content, int? totalElements, int? totalPages, int? number, int? size, bool? first, bool? last
+ List<TransactionResponse> content,@LenientInt() int? totalElements,@LenientInt() int? totalPages,@LenientInt() int? number,@LenientInt() int? size,@LenientBool() bool? first,@LenientBool() bool? last
 });
 
 
@@ -506,7 +506,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<TransactionResponse> content,  int? totalElements,  int? totalPages,  int? number,  int? size,  bool? first,  bool? last)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<TransactionResponse> content, @LenientInt()  int? totalElements, @LenientInt()  int? totalPages, @LenientInt()  int? number, @LenientInt()  int? size, @LenientBool()  bool? first, @LenientBool()  bool? last)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PageTransactionResponse() when $default != null:
 return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,_that.size,_that.first,_that.last);case _:
@@ -527,7 +527,7 @@ return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<TransactionResponse> content,  int? totalElements,  int? totalPages,  int? number,  int? size,  bool? first,  bool? last)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<TransactionResponse> content, @LenientInt()  int? totalElements, @LenientInt()  int? totalPages, @LenientInt()  int? number, @LenientInt()  int? size, @LenientBool()  bool? first, @LenientBool()  bool? last)  $default,) {final _that = this;
 switch (_that) {
 case _PageTransactionResponse():
 return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,_that.size,_that.first,_that.last);case _:
@@ -547,7 +547,7 @@ return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<TransactionResponse> content,  int? totalElements,  int? totalPages,  int? number,  int? size,  bool? first,  bool? last)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<TransactionResponse> content, @LenientInt()  int? totalElements, @LenientInt()  int? totalPages, @LenientInt()  int? number, @LenientInt()  int? size, @LenientBool()  bool? first, @LenientBool()  bool? last)?  $default,) {final _that = this;
 switch (_that) {
 case _PageTransactionResponse() when $default != null:
 return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,_that.size,_that.first,_that.last);case _:
@@ -562,7 +562,7 @@ return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,
 @JsonSerializable()
 
 class _PageTransactionResponse implements PageTransactionResponse {
-  const _PageTransactionResponse({final  List<TransactionResponse> content = const <TransactionResponse>[], this.totalElements, this.totalPages, this.number, this.size, this.first, this.last}): _content = content;
+  const _PageTransactionResponse({final  List<TransactionResponse> content = const <TransactionResponse>[], @LenientInt() this.totalElements, @LenientInt() this.totalPages, @LenientInt() this.number, @LenientInt() this.size, @LenientBool() this.first, @LenientBool() this.last}): _content = content;
   factory _PageTransactionResponse.fromJson(Map<String, dynamic> json) => _$PageTransactionResponseFromJson(json);
 
  final  List<TransactionResponse> _content;
@@ -572,12 +572,12 @@ class _PageTransactionResponse implements PageTransactionResponse {
   return EqualUnmodifiableListView(_content);
 }
 
-@override final  int? totalElements;
-@override final  int? totalPages;
-@override final  int? number;
-@override final  int? size;
-@override final  bool? first;
-@override final  bool? last;
+@override@LenientInt() final  int? totalElements;
+@override@LenientInt() final  int? totalPages;
+@override@LenientInt() final  int? number;
+@override@LenientInt() final  int? size;
+@override@LenientBool() final  bool? first;
+@override@LenientBool() final  bool? last;
 
 /// Create a copy of PageTransactionResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -612,7 +612,7 @@ abstract mixin class _$PageTransactionResponseCopyWith<$Res> implements $PageTra
   factory _$PageTransactionResponseCopyWith(_PageTransactionResponse value, $Res Function(_PageTransactionResponse) _then) = __$PageTransactionResponseCopyWithImpl;
 @override @useResult
 $Res call({
- List<TransactionResponse> content, int? totalElements, int? totalPages, int? number, int? size, bool? first, bool? last
+ List<TransactionResponse> content,@LenientInt() int? totalElements,@LenientInt() int? totalPages,@LenientInt() int? number,@LenientInt() int? size,@LenientBool() bool? first,@LenientBool() bool? last
 });
 
 

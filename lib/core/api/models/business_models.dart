@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'lenient.dart';
+
 part 'business_models.freezed.dart';
 part 'business_models.g.dart';
 
@@ -12,19 +14,19 @@ abstract class TerminalResponse with _$TerminalResponse {
     String? model,
     String? label,
     String? status,
-    bool? instantSettlement,
+    @LenientBool() bool? instantSettlement,
     String? activatedAt,
     String? lastHeartbeat,
-    num? todaySales,
-    int? todayTransactions,
+    @LenientNum() num? todaySales,
+    @LenientInt() int? todayTransactions,
     // Terminal health (backend verdict + raw telemetry from heartbeats).
     String? connectivity,
     String? health,
     @Default(<String>[]) List<String> healthReasons,
-    int? batteryPercent,
-    bool? charging,
+    @LenientInt() int? batteryPercent,
+    @LenientBool() bool? charging,
     String? connectionType,
-    int? signal,
+    @LenientInt() int? signal,
     String? printerStatus,
     String? appVersion,
   }) = _TerminalResponse;
@@ -36,13 +38,13 @@ abstract class TerminalResponse with _$TerminalResponse {
 @freezed
 abstract class MerchantPreferences with _$MerchantPreferences {
   const factory MerchantPreferences({
-    bool? dailySettlementReport,
-    bool? monthlySettlementReport,
+    @LenientBool() bool? dailySettlementReport,
+    @LenientBool() bool? monthlySettlementReport,
     @Default(<String>[]) List<String> reportRecipients,
     String? language,
-    bool? pushEnabled,
-    num? dailyTarget,
-    num? monthlyTarget,
+    @LenientBool() bool? pushEnabled,
+    @LenientNum() num? dailyTarget,
+    @LenientNum() num? monthlyTarget,
   }) = _MerchantPreferences;
 
   factory MerchantPreferences.fromJson(Map<String, dynamic> json) =>
@@ -54,10 +56,10 @@ abstract class StatementResponse with _$StatementResponse {
   const factory StatementResponse({
     String? id,
     String? period,
-    num? grossSales,
-    num? fees,
-    num? netSettled,
-    int? settlementCount,
+    @LenientNum() num? grossSales,
+    @LenientNum() num? fees,
+    @LenientNum() num? netSettled,
+    @LenientInt() int? settlementCount,
     String? generatedAt,
   }) = _StatementResponse;
 
@@ -73,13 +75,13 @@ abstract class NotificationItem with _$NotificationItem {
     String? title,
     String? body,
     String? reference,
-    @Default(false) bool read,
+    @LenientFlag() @Default(false) bool read,
     String? createdAt,
     // Suspicious-activity alerts (type == SUSPICIOUS_ACTIVITY) only.
     String? severity,
     String? rule,
-    Map<String, dynamic>? evidence,
-    @Default(false) bool acknowledged,
+    @LenientMap() Map<String, dynamic>? evidence,
+    @LenientFlag() @Default(false) bool acknowledged,
   }) = _NotificationItem;
 
   const NotificationItem._();
@@ -96,10 +98,10 @@ abstract class NotificationFeed with _$NotificationFeed {
   const factory NotificationFeed({
     @Default(0) int unreadCount,
     @Default(<NotificationItem>[]) List<NotificationItem> content,
-    int? totalElements,
-    int? number,
-    int? size,
-    bool? last,
+    @LenientInt() int? totalElements,
+    @LenientInt() int? number,
+    @LenientInt() int? size,
+    @LenientBool() bool? last,
   }) = _NotificationFeed;
 
   factory NotificationFeed.fromJson(Map<String, dynamic> json) =>

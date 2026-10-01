@@ -810,7 +810,7 @@ as String,
 /// @nodoc
 mixin _$AuthResponse {
 
- String? get accessToken; String? get refreshToken; String? get tokenType; int? get expiresIn; String? get userId; String? get email; String? get firstName; String? get lastName; String? get role; bool? get emailVerified; String? get selectedTenantId; String? get selectedTenantName; String? get mid; String? get message;
+ String? get accessToken; String? get refreshToken; String? get tokenType;@LenientInt() int? get expiresIn; String? get userId; String? get email; String? get firstName; String? get lastName; String? get role;@LenientBool() bool? get emailVerified; String? get selectedTenantId; String? get selectedTenantName; String? get mid; String? get message;
 /// Create a copy of AuthResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -843,7 +843,7 @@ abstract mixin class $AuthResponseCopyWith<$Res>  {
   factory $AuthResponseCopyWith(AuthResponse value, $Res Function(AuthResponse) _then) = _$AuthResponseCopyWithImpl;
 @useResult
 $Res call({
- String? accessToken, String? refreshToken, String? tokenType, int? expiresIn, String? userId, String? email, String? firstName, String? lastName, String? role, bool? emailVerified, String? selectedTenantId, String? selectedTenantName, String? mid, String? message
+ String? accessToken, String? refreshToken, String? tokenType,@LenientInt() int? expiresIn, String? userId, String? email, String? firstName, String? lastName, String? role,@LenientBool() bool? emailVerified, String? selectedTenantId, String? selectedTenantName, String? mid, String? message
 });
 
 
@@ -961,7 +961,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? accessToken,  String? refreshToken,  String? tokenType,  int? expiresIn,  String? userId,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? selectedTenantId,  String? selectedTenantName,  String? mid,  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? accessToken,  String? refreshToken,  String? tokenType, @LenientInt()  int? expiresIn,  String? userId,  String? email,  String? firstName,  String? lastName,  String? role, @LenientBool()  bool? emailVerified,  String? selectedTenantId,  String? selectedTenantName,  String? mid,  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthResponse() when $default != null:
 return $default(_that.accessToken,_that.refreshToken,_that.tokenType,_that.expiresIn,_that.userId,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.selectedTenantId,_that.selectedTenantName,_that.mid,_that.message);case _:
@@ -982,7 +982,7 @@ return $default(_that.accessToken,_that.refreshToken,_that.tokenType,_that.expir
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? accessToken,  String? refreshToken,  String? tokenType,  int? expiresIn,  String? userId,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? selectedTenantId,  String? selectedTenantName,  String? mid,  String? message)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? accessToken,  String? refreshToken,  String? tokenType, @LenientInt()  int? expiresIn,  String? userId,  String? email,  String? firstName,  String? lastName,  String? role, @LenientBool()  bool? emailVerified,  String? selectedTenantId,  String? selectedTenantName,  String? mid,  String? message)  $default,) {final _that = this;
 switch (_that) {
 case _AuthResponse():
 return $default(_that.accessToken,_that.refreshToken,_that.tokenType,_that.expiresIn,_that.userId,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.selectedTenantId,_that.selectedTenantName,_that.mid,_that.message);case _:
@@ -1002,7 +1002,7 @@ return $default(_that.accessToken,_that.refreshToken,_that.tokenType,_that.expir
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? accessToken,  String? refreshToken,  String? tokenType,  int? expiresIn,  String? userId,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? selectedTenantId,  String? selectedTenantName,  String? mid,  String? message)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? accessToken,  String? refreshToken,  String? tokenType, @LenientInt()  int? expiresIn,  String? userId,  String? email,  String? firstName,  String? lastName,  String? role, @LenientBool()  bool? emailVerified,  String? selectedTenantId,  String? selectedTenantName,  String? mid,  String? message)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthResponse() when $default != null:
 return $default(_that.accessToken,_that.refreshToken,_that.tokenType,_that.expiresIn,_that.userId,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.selectedTenantId,_that.selectedTenantName,_that.mid,_that.message);case _:
@@ -1017,19 +1017,19 @@ return $default(_that.accessToken,_that.refreshToken,_that.tokenType,_that.expir
 @JsonSerializable()
 
 class _AuthResponse implements AuthResponse {
-  const _AuthResponse({this.accessToken, this.refreshToken, this.tokenType, this.expiresIn, this.userId, this.email, this.firstName, this.lastName, this.role, this.emailVerified, this.selectedTenantId, this.selectedTenantName, this.mid, this.message});
+  const _AuthResponse({this.accessToken, this.refreshToken, this.tokenType, @LenientInt() this.expiresIn, this.userId, this.email, this.firstName, this.lastName, this.role, @LenientBool() this.emailVerified, this.selectedTenantId, this.selectedTenantName, this.mid, this.message});
   factory _AuthResponse.fromJson(Map<String, dynamic> json) => _$AuthResponseFromJson(json);
 
 @override final  String? accessToken;
 @override final  String? refreshToken;
 @override final  String? tokenType;
-@override final  int? expiresIn;
+@override@LenientInt() final  int? expiresIn;
 @override final  String? userId;
 @override final  String? email;
 @override final  String? firstName;
 @override final  String? lastName;
 @override final  String? role;
-@override final  bool? emailVerified;
+@override@LenientBool() final  bool? emailVerified;
 @override final  String? selectedTenantId;
 @override final  String? selectedTenantName;
 @override final  String? mid;
@@ -1068,7 +1068,7 @@ abstract mixin class _$AuthResponseCopyWith<$Res> implements $AuthResponseCopyWi
   factory _$AuthResponseCopyWith(_AuthResponse value, $Res Function(_AuthResponse) _then) = __$AuthResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? accessToken, String? refreshToken, String? tokenType, int? expiresIn, String? userId, String? email, String? firstName, String? lastName, String? role, bool? emailVerified, String? selectedTenantId, String? selectedTenantName, String? mid, String? message
+ String? accessToken, String? refreshToken, String? tokenType,@LenientInt() int? expiresIn, String? userId, String? email, String? firstName, String? lastName, String? role,@LenientBool() bool? emailVerified, String? selectedTenantId, String? selectedTenantName, String? mid, String? message
 });
 
 
@@ -1112,7 +1112,7 @@ as String?,
 /// @nodoc
 mixin _$TenantInfo {
 
- String? get id; String? get name; String? get slug; String? get role; bool? get primary;
+ String? get id; String? get name; String? get slug; String? get role;@LenientBool() bool? get primary;
 /// Create a copy of TenantInfo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1145,7 +1145,7 @@ abstract mixin class $TenantInfoCopyWith<$Res>  {
   factory $TenantInfoCopyWith(TenantInfo value, $Res Function(TenantInfo) _then) = _$TenantInfoCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? name, String? slug, String? role, bool? primary
+ String? id, String? name, String? slug, String? role,@LenientBool() bool? primary
 });
 
 
@@ -1254,7 +1254,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? name,  String? slug,  String? role,  bool? primary)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? name,  String? slug,  String? role, @LenientBool()  bool? primary)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TenantInfo() when $default != null:
 return $default(_that.id,_that.name,_that.slug,_that.role,_that.primary);case _:
@@ -1275,7 +1275,7 @@ return $default(_that.id,_that.name,_that.slug,_that.role,_that.primary);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? name,  String? slug,  String? role,  bool? primary)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? name,  String? slug,  String? role, @LenientBool()  bool? primary)  $default,) {final _that = this;
 switch (_that) {
 case _TenantInfo():
 return $default(_that.id,_that.name,_that.slug,_that.role,_that.primary);case _:
@@ -1295,7 +1295,7 @@ return $default(_that.id,_that.name,_that.slug,_that.role,_that.primary);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? name,  String? slug,  String? role,  bool? primary)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? name,  String? slug,  String? role, @LenientBool()  bool? primary)?  $default,) {final _that = this;
 switch (_that) {
 case _TenantInfo() when $default != null:
 return $default(_that.id,_that.name,_that.slug,_that.role,_that.primary);case _:
@@ -1310,14 +1310,14 @@ return $default(_that.id,_that.name,_that.slug,_that.role,_that.primary);case _:
 @JsonSerializable()
 
 class _TenantInfo implements TenantInfo {
-  const _TenantInfo({this.id, this.name, this.slug, this.role, this.primary});
+  const _TenantInfo({this.id, this.name, this.slug, this.role, @LenientBool() this.primary});
   factory _TenantInfo.fromJson(Map<String, dynamic> json) => _$TenantInfoFromJson(json);
 
 @override final  String? id;
 @override final  String? name;
 @override final  String? slug;
 @override final  String? role;
-@override final  bool? primary;
+@override@LenientBool() final  bool? primary;
 
 /// Create a copy of TenantInfo
 /// with the given fields replaced by the non-null parameter values.
@@ -1352,7 +1352,7 @@ abstract mixin class _$TenantInfoCopyWith<$Res> implements $TenantInfoCopyWith<$
   factory _$TenantInfoCopyWith(_TenantInfo value, $Res Function(_TenantInfo) _then) = __$TenantInfoCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? name, String? slug, String? role, bool? primary
+ String? id, String? name, String? slug, String? role,@LenientBool() bool? primary
 });
 
 
@@ -1387,7 +1387,7 @@ as bool?,
 /// @nodoc
 mixin _$UserInfoResponse {
 
- String? get id; String? get email; String? get firstName; String? get lastName; String? get role; bool? get emailVerified; String? get primaryTenantId; String? get mid; String? get merchantName; String? get phone; List<String> get permissions; List<String> get terminalIds; List<TenantInfo> get tenants;
+ String? get id; String? get email; String? get firstName; String? get lastName; String? get role;@LenientBool() bool? get emailVerified; String? get primaryTenantId; String? get mid; String? get merchantName; String? get phone; List<String> get permissions; List<String> get terminalIds; List<TenantInfo> get tenants;
 /// Create a copy of UserInfoResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1420,7 +1420,7 @@ abstract mixin class $UserInfoResponseCopyWith<$Res>  {
   factory $UserInfoResponseCopyWith(UserInfoResponse value, $Res Function(UserInfoResponse) _then) = _$UserInfoResponseCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? email, String? firstName, String? lastName, String? role, bool? emailVerified, String? primaryTenantId, String? mid, String? merchantName, String? phone, List<String> permissions, List<String> terminalIds, List<TenantInfo> tenants
+ String? id, String? email, String? firstName, String? lastName, String? role,@LenientBool() bool? emailVerified, String? primaryTenantId, String? mid, String? merchantName, String? phone, List<String> permissions, List<String> terminalIds, List<TenantInfo> tenants
 });
 
 
@@ -1537,7 +1537,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? primaryTenantId,  String? mid,  String? merchantName,  String? phone,  List<String> permissions,  List<String> terminalIds,  List<TenantInfo> tenants)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role, @LenientBool()  bool? emailVerified,  String? primaryTenantId,  String? mid,  String? merchantName,  String? phone,  List<String> permissions,  List<String> terminalIds,  List<TenantInfo> tenants)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserInfoResponse() when $default != null:
 return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.primaryTenantId,_that.mid,_that.merchantName,_that.phone,_that.permissions,_that.terminalIds,_that.tenants);case _:
@@ -1558,7 +1558,7 @@ return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? primaryTenantId,  String? mid,  String? merchantName,  String? phone,  List<String> permissions,  List<String> terminalIds,  List<TenantInfo> tenants)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role, @LenientBool()  bool? emailVerified,  String? primaryTenantId,  String? mid,  String? merchantName,  String? phone,  List<String> permissions,  List<String> terminalIds,  List<TenantInfo> tenants)  $default,) {final _that = this;
 switch (_that) {
 case _UserInfoResponse():
 return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.primaryTenantId,_that.mid,_that.merchantName,_that.phone,_that.permissions,_that.terminalIds,_that.tenants);case _:
@@ -1578,7 +1578,7 @@ return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role,  bool? emailVerified,  String? primaryTenantId,  String? mid,  String? merchantName,  String? phone,  List<String> permissions,  List<String> terminalIds,  List<TenantInfo> tenants)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? email,  String? firstName,  String? lastName,  String? role, @LenientBool()  bool? emailVerified,  String? primaryTenantId,  String? mid,  String? merchantName,  String? phone,  List<String> permissions,  List<String> terminalIds,  List<TenantInfo> tenants)?  $default,) {final _that = this;
 switch (_that) {
 case _UserInfoResponse() when $default != null:
 return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_that.emailVerified,_that.primaryTenantId,_that.mid,_that.merchantName,_that.phone,_that.permissions,_that.terminalIds,_that.tenants);case _:
@@ -1593,7 +1593,7 @@ return $default(_that.id,_that.email,_that.firstName,_that.lastName,_that.role,_
 @JsonSerializable()
 
 class _UserInfoResponse implements UserInfoResponse {
-  const _UserInfoResponse({this.id, this.email, this.firstName, this.lastName, this.role, this.emailVerified, this.primaryTenantId, this.mid, this.merchantName, this.phone, final  List<String> permissions = const <String>[], final  List<String> terminalIds = const <String>[], final  List<TenantInfo> tenants = const <TenantInfo>[]}): _permissions = permissions,_terminalIds = terminalIds,_tenants = tenants;
+  const _UserInfoResponse({this.id, this.email, this.firstName, this.lastName, this.role, @LenientBool() this.emailVerified, this.primaryTenantId, this.mid, this.merchantName, this.phone, final  List<String> permissions = const <String>[], final  List<String> terminalIds = const <String>[], final  List<TenantInfo> tenants = const <TenantInfo>[]}): _permissions = permissions,_terminalIds = terminalIds,_tenants = tenants;
   factory _UserInfoResponse.fromJson(Map<String, dynamic> json) => _$UserInfoResponseFromJson(json);
 
 @override final  String? id;
@@ -1601,7 +1601,7 @@ class _UserInfoResponse implements UserInfoResponse {
 @override final  String? firstName;
 @override final  String? lastName;
 @override final  String? role;
-@override final  bool? emailVerified;
+@override@LenientBool() final  bool? emailVerified;
 @override final  String? primaryTenantId;
 @override final  String? mid;
 @override final  String? merchantName;
@@ -1661,7 +1661,7 @@ abstract mixin class _$UserInfoResponseCopyWith<$Res> implements $UserInfoRespon
   factory _$UserInfoResponseCopyWith(_UserInfoResponse value, $Res Function(_UserInfoResponse) _then) = __$UserInfoResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? email, String? firstName, String? lastName, String? role, bool? emailVerified, String? primaryTenantId, String? mid, String? merchantName, String? phone, List<String> permissions, List<String> terminalIds, List<TenantInfo> tenants
+ String? id, String? email, String? firstName, String? lastName, String? role,@LenientBool() bool? emailVerified, String? primaryTenantId, String? mid, String? merchantName, String? phone, List<String> permissions, List<String> terminalIds, List<TenantInfo> tenants
 });
 
 

@@ -15,8 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TerminalResponse {
 
- String? get id; String? get tid; String? get serialNumber; String? get model; String? get label; String? get status; bool? get instantSettlement; String? get activatedAt; String? get lastHeartbeat; num? get todaySales; int? get todayTransactions;// Terminal health (backend verdict + raw telemetry from heartbeats).
- String? get connectivity; String? get health; List<String> get healthReasons; int? get batteryPercent; bool? get charging; String? get connectionType; int? get signal; String? get printerStatus; String? get appVersion;
+ String? get id; String? get tid; String? get serialNumber; String? get model; String? get label; String? get status;@LenientBool() bool? get instantSettlement; String? get activatedAt; String? get lastHeartbeat;@LenientNum() num? get todaySales;@LenientInt() int? get todayTransactions;// Terminal health (backend verdict + raw telemetry from heartbeats).
+ String? get connectivity; String? get health; List<String> get healthReasons;@LenientInt() int? get batteryPercent;@LenientBool() bool? get charging; String? get connectionType;@LenientInt() int? get signal; String? get printerStatus; String? get appVersion;
 /// Create a copy of TerminalResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $TerminalResponseCopyWith<$Res>  {
   factory $TerminalResponseCopyWith(TerminalResponse value, $Res Function(TerminalResponse) _then) = _$TerminalResponseCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? tid, String? serialNumber, String? model, String? label, String? status, bool? instantSettlement, String? activatedAt, String? lastHeartbeat, num? todaySales, int? todayTransactions, String? connectivity, String? health, List<String> healthReasons, int? batteryPercent, bool? charging, String? connectionType, int? signal, String? printerStatus, String? appVersion
+ String? id, String? tid, String? serialNumber, String? model, String? label, String? status,@LenientBool() bool? instantSettlement, String? activatedAt, String? lastHeartbeat,@LenientNum() num? todaySales,@LenientInt() int? todayTransactions, String? connectivity, String? health, List<String> healthReasons,@LenientInt() int? batteryPercent,@LenientBool() bool? charging, String? connectionType,@LenientInt() int? signal, String? printerStatus, String? appVersion
 });
 
 
@@ -173,7 +173,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status,  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat,  num? todaySales,  int? todayTransactions,  String? connectivity,  String? health,  List<String> healthReasons,  int? batteryPercent,  bool? charging,  String? connectionType,  int? signal,  String? printerStatus,  String? appVersion)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status, @LenientBool()  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat, @LenientNum()  num? todaySales, @LenientInt()  int? todayTransactions,  String? connectivity,  String? health,  List<String> healthReasons, @LenientInt()  int? batteryPercent, @LenientBool()  bool? charging,  String? connectionType, @LenientInt()  int? signal,  String? printerStatus,  String? appVersion)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TerminalResponse() when $default != null:
 return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_that.status,_that.instantSettlement,_that.activatedAt,_that.lastHeartbeat,_that.todaySales,_that.todayTransactions,_that.connectivity,_that.health,_that.healthReasons,_that.batteryPercent,_that.charging,_that.connectionType,_that.signal,_that.printerStatus,_that.appVersion);case _:
@@ -194,7 +194,7 @@ return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status,  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat,  num? todaySales,  int? todayTransactions,  String? connectivity,  String? health,  List<String> healthReasons,  int? batteryPercent,  bool? charging,  String? connectionType,  int? signal,  String? printerStatus,  String? appVersion)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status, @LenientBool()  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat, @LenientNum()  num? todaySales, @LenientInt()  int? todayTransactions,  String? connectivity,  String? health,  List<String> healthReasons, @LenientInt()  int? batteryPercent, @LenientBool()  bool? charging,  String? connectionType, @LenientInt()  int? signal,  String? printerStatus,  String? appVersion)  $default,) {final _that = this;
 switch (_that) {
 case _TerminalResponse():
 return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_that.status,_that.instantSettlement,_that.activatedAt,_that.lastHeartbeat,_that.todaySales,_that.todayTransactions,_that.connectivity,_that.health,_that.healthReasons,_that.batteryPercent,_that.charging,_that.connectionType,_that.signal,_that.printerStatus,_that.appVersion);case _:
@@ -214,7 +214,7 @@ return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status,  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat,  num? todaySales,  int? todayTransactions,  String? connectivity,  String? health,  List<String> healthReasons,  int? batteryPercent,  bool? charging,  String? connectionType,  int? signal,  String? printerStatus,  String? appVersion)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? tid,  String? serialNumber,  String? model,  String? label,  String? status, @LenientBool()  bool? instantSettlement,  String? activatedAt,  String? lastHeartbeat, @LenientNum()  num? todaySales, @LenientInt()  int? todayTransactions,  String? connectivity,  String? health,  List<String> healthReasons, @LenientInt()  int? batteryPercent, @LenientBool()  bool? charging,  String? connectionType, @LenientInt()  int? signal,  String? printerStatus,  String? appVersion)?  $default,) {final _that = this;
 switch (_that) {
 case _TerminalResponse() when $default != null:
 return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_that.status,_that.instantSettlement,_that.activatedAt,_that.lastHeartbeat,_that.todaySales,_that.todayTransactions,_that.connectivity,_that.health,_that.healthReasons,_that.batteryPercent,_that.charging,_that.connectionType,_that.signal,_that.printerStatus,_that.appVersion);case _:
@@ -229,7 +229,7 @@ return $default(_that.id,_that.tid,_that.serialNumber,_that.model,_that.label,_t
 @JsonSerializable()
 
 class _TerminalResponse implements TerminalResponse {
-  const _TerminalResponse({this.id, this.tid, this.serialNumber, this.model, this.label, this.status, this.instantSettlement, this.activatedAt, this.lastHeartbeat, this.todaySales, this.todayTransactions, this.connectivity, this.health, final  List<String> healthReasons = const <String>[], this.batteryPercent, this.charging, this.connectionType, this.signal, this.printerStatus, this.appVersion}): _healthReasons = healthReasons;
+  const _TerminalResponse({this.id, this.tid, this.serialNumber, this.model, this.label, this.status, @LenientBool() this.instantSettlement, this.activatedAt, this.lastHeartbeat, @LenientNum() this.todaySales, @LenientInt() this.todayTransactions, this.connectivity, this.health, final  List<String> healthReasons = const <String>[], @LenientInt() this.batteryPercent, @LenientBool() this.charging, this.connectionType, @LenientInt() this.signal, this.printerStatus, this.appVersion}): _healthReasons = healthReasons;
   factory _TerminalResponse.fromJson(Map<String, dynamic> json) => _$TerminalResponseFromJson(json);
 
 @override final  String? id;
@@ -238,11 +238,11 @@ class _TerminalResponse implements TerminalResponse {
 @override final  String? model;
 @override final  String? label;
 @override final  String? status;
-@override final  bool? instantSettlement;
+@override@LenientBool() final  bool? instantSettlement;
 @override final  String? activatedAt;
 @override final  String? lastHeartbeat;
-@override final  num? todaySales;
-@override final  int? todayTransactions;
+@override@LenientNum() final  num? todaySales;
+@override@LenientInt() final  int? todayTransactions;
 // Terminal health (backend verdict + raw telemetry from heartbeats).
 @override final  String? connectivity;
 @override final  String? health;
@@ -253,10 +253,10 @@ class _TerminalResponse implements TerminalResponse {
   return EqualUnmodifiableListView(_healthReasons);
 }
 
-@override final  int? batteryPercent;
-@override final  bool? charging;
+@override@LenientInt() final  int? batteryPercent;
+@override@LenientBool() final  bool? charging;
 @override final  String? connectionType;
-@override final  int? signal;
+@override@LenientInt() final  int? signal;
 @override final  String? printerStatus;
 @override final  String? appVersion;
 
@@ -293,7 +293,7 @@ abstract mixin class _$TerminalResponseCopyWith<$Res> implements $TerminalRespon
   factory _$TerminalResponseCopyWith(_TerminalResponse value, $Res Function(_TerminalResponse) _then) = __$TerminalResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? tid, String? serialNumber, String? model, String? label, String? status, bool? instantSettlement, String? activatedAt, String? lastHeartbeat, num? todaySales, int? todayTransactions, String? connectivity, String? health, List<String> healthReasons, int? batteryPercent, bool? charging, String? connectionType, int? signal, String? printerStatus, String? appVersion
+ String? id, String? tid, String? serialNumber, String? model, String? label, String? status,@LenientBool() bool? instantSettlement, String? activatedAt, String? lastHeartbeat,@LenientNum() num? todaySales,@LenientInt() int? todayTransactions, String? connectivity, String? health, List<String> healthReasons,@LenientInt() int? batteryPercent,@LenientBool() bool? charging, String? connectionType,@LenientInt() int? signal, String? printerStatus, String? appVersion
 });
 
 
@@ -343,7 +343,7 @@ as String?,
 /// @nodoc
 mixin _$MerchantPreferences {
 
- bool? get dailySettlementReport; bool? get monthlySettlementReport; List<String> get reportRecipients; String? get language; bool? get pushEnabled; num? get dailyTarget; num? get monthlyTarget;
+@LenientBool() bool? get dailySettlementReport;@LenientBool() bool? get monthlySettlementReport; List<String> get reportRecipients; String? get language;@LenientBool() bool? get pushEnabled;@LenientNum() num? get dailyTarget;@LenientNum() num? get monthlyTarget;
 /// Create a copy of MerchantPreferences
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -376,7 +376,7 @@ abstract mixin class $MerchantPreferencesCopyWith<$Res>  {
   factory $MerchantPreferencesCopyWith(MerchantPreferences value, $Res Function(MerchantPreferences) _then) = _$MerchantPreferencesCopyWithImpl;
 @useResult
 $Res call({
- bool? dailySettlementReport, bool? monthlySettlementReport, List<String> reportRecipients, String? language, bool? pushEnabled, num? dailyTarget, num? monthlyTarget
+@LenientBool() bool? dailySettlementReport,@LenientBool() bool? monthlySettlementReport, List<String> reportRecipients, String? language,@LenientBool() bool? pushEnabled,@LenientNum() num? dailyTarget,@LenientNum() num? monthlyTarget
 });
 
 
@@ -487,7 +487,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool? dailySettlementReport,  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language,  bool? pushEnabled,  num? dailyTarget,  num? monthlyTarget)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@LenientBool()  bool? dailySettlementReport, @LenientBool()  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language, @LenientBool()  bool? pushEnabled, @LenientNum()  num? dailyTarget, @LenientNum()  num? monthlyTarget)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MerchantPreferences() when $default != null:
 return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.reportRecipients,_that.language,_that.pushEnabled,_that.dailyTarget,_that.monthlyTarget);case _:
@@ -508,7 +508,7 @@ return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool? dailySettlementReport,  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language,  bool? pushEnabled,  num? dailyTarget,  num? monthlyTarget)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@LenientBool()  bool? dailySettlementReport, @LenientBool()  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language, @LenientBool()  bool? pushEnabled, @LenientNum()  num? dailyTarget, @LenientNum()  num? monthlyTarget)  $default,) {final _that = this;
 switch (_that) {
 case _MerchantPreferences():
 return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.reportRecipients,_that.language,_that.pushEnabled,_that.dailyTarget,_that.monthlyTarget);case _:
@@ -528,7 +528,7 @@ return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool? dailySettlementReport,  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language,  bool? pushEnabled,  num? dailyTarget,  num? monthlyTarget)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@LenientBool()  bool? dailySettlementReport, @LenientBool()  bool? monthlySettlementReport,  List<String> reportRecipients,  String? language, @LenientBool()  bool? pushEnabled, @LenientNum()  num? dailyTarget, @LenientNum()  num? monthlyTarget)?  $default,) {final _that = this;
 switch (_that) {
 case _MerchantPreferences() when $default != null:
 return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.reportRecipients,_that.language,_that.pushEnabled,_that.dailyTarget,_that.monthlyTarget);case _:
@@ -543,11 +543,11 @@ return $default(_that.dailySettlementReport,_that.monthlySettlementReport,_that.
 @JsonSerializable()
 
 class _MerchantPreferences implements MerchantPreferences {
-  const _MerchantPreferences({this.dailySettlementReport, this.monthlySettlementReport, final  List<String> reportRecipients = const <String>[], this.language, this.pushEnabled, this.dailyTarget, this.monthlyTarget}): _reportRecipients = reportRecipients;
+  const _MerchantPreferences({@LenientBool() this.dailySettlementReport, @LenientBool() this.monthlySettlementReport, final  List<String> reportRecipients = const <String>[], this.language, @LenientBool() this.pushEnabled, @LenientNum() this.dailyTarget, @LenientNum() this.monthlyTarget}): _reportRecipients = reportRecipients;
   factory _MerchantPreferences.fromJson(Map<String, dynamic> json) => _$MerchantPreferencesFromJson(json);
 
-@override final  bool? dailySettlementReport;
-@override final  bool? monthlySettlementReport;
+@override@LenientBool() final  bool? dailySettlementReport;
+@override@LenientBool() final  bool? monthlySettlementReport;
  final  List<String> _reportRecipients;
 @override@JsonKey() List<String> get reportRecipients {
   if (_reportRecipients is EqualUnmodifiableListView) return _reportRecipients;
@@ -556,9 +556,9 @@ class _MerchantPreferences implements MerchantPreferences {
 }
 
 @override final  String? language;
-@override final  bool? pushEnabled;
-@override final  num? dailyTarget;
-@override final  num? monthlyTarget;
+@override@LenientBool() final  bool? pushEnabled;
+@override@LenientNum() final  num? dailyTarget;
+@override@LenientNum() final  num? monthlyTarget;
 
 /// Create a copy of MerchantPreferences
 /// with the given fields replaced by the non-null parameter values.
@@ -593,7 +593,7 @@ abstract mixin class _$MerchantPreferencesCopyWith<$Res> implements $MerchantPre
   factory _$MerchantPreferencesCopyWith(_MerchantPreferences value, $Res Function(_MerchantPreferences) _then) = __$MerchantPreferencesCopyWithImpl;
 @override @useResult
 $Res call({
- bool? dailySettlementReport, bool? monthlySettlementReport, List<String> reportRecipients, String? language, bool? pushEnabled, num? dailyTarget, num? monthlyTarget
+@LenientBool() bool? dailySettlementReport,@LenientBool() bool? monthlySettlementReport, List<String> reportRecipients, String? language,@LenientBool() bool? pushEnabled,@LenientNum() num? dailyTarget,@LenientNum() num? monthlyTarget
 });
 
 
@@ -630,7 +630,7 @@ as num?,
 /// @nodoc
 mixin _$StatementResponse {
 
- String? get id; String? get period; num? get grossSales; num? get fees; num? get netSettled; int? get settlementCount; String? get generatedAt;
+ String? get id; String? get period;@LenientNum() num? get grossSales;@LenientNum() num? get fees;@LenientNum() num? get netSettled;@LenientInt() int? get settlementCount; String? get generatedAt;
 /// Create a copy of StatementResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -663,7 +663,7 @@ abstract mixin class $StatementResponseCopyWith<$Res>  {
   factory $StatementResponseCopyWith(StatementResponse value, $Res Function(StatementResponse) _then) = _$StatementResponseCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? period, num? grossSales, num? fees, num? netSettled, int? settlementCount, String? generatedAt
+ String? id, String? period,@LenientNum() num? grossSales,@LenientNum() num? fees,@LenientNum() num? netSettled,@LenientInt() int? settlementCount, String? generatedAt
 });
 
 
@@ -774,7 +774,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? period,  num? grossSales,  num? fees,  num? netSettled,  int? settlementCount,  String? generatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? period, @LenientNum()  num? grossSales, @LenientNum()  num? fees, @LenientNum()  num? netSettled, @LenientInt()  int? settlementCount,  String? generatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StatementResponse() when $default != null:
 return $default(_that.id,_that.period,_that.grossSales,_that.fees,_that.netSettled,_that.settlementCount,_that.generatedAt);case _:
@@ -795,7 +795,7 @@ return $default(_that.id,_that.period,_that.grossSales,_that.fees,_that.netSettl
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? period,  num? grossSales,  num? fees,  num? netSettled,  int? settlementCount,  String? generatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? period, @LenientNum()  num? grossSales, @LenientNum()  num? fees, @LenientNum()  num? netSettled, @LenientInt()  int? settlementCount,  String? generatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _StatementResponse():
 return $default(_that.id,_that.period,_that.grossSales,_that.fees,_that.netSettled,_that.settlementCount,_that.generatedAt);case _:
@@ -815,7 +815,7 @@ return $default(_that.id,_that.period,_that.grossSales,_that.fees,_that.netSettl
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? period,  num? grossSales,  num? fees,  num? netSettled,  int? settlementCount,  String? generatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? period, @LenientNum()  num? grossSales, @LenientNum()  num? fees, @LenientNum()  num? netSettled, @LenientInt()  int? settlementCount,  String? generatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _StatementResponse() when $default != null:
 return $default(_that.id,_that.period,_that.grossSales,_that.fees,_that.netSettled,_that.settlementCount,_that.generatedAt);case _:
@@ -830,15 +830,15 @@ return $default(_that.id,_that.period,_that.grossSales,_that.fees,_that.netSettl
 @JsonSerializable()
 
 class _StatementResponse implements StatementResponse {
-  const _StatementResponse({this.id, this.period, this.grossSales, this.fees, this.netSettled, this.settlementCount, this.generatedAt});
+  const _StatementResponse({this.id, this.period, @LenientNum() this.grossSales, @LenientNum() this.fees, @LenientNum() this.netSettled, @LenientInt() this.settlementCount, this.generatedAt});
   factory _StatementResponse.fromJson(Map<String, dynamic> json) => _$StatementResponseFromJson(json);
 
 @override final  String? id;
 @override final  String? period;
-@override final  num? grossSales;
-@override final  num? fees;
-@override final  num? netSettled;
-@override final  int? settlementCount;
+@override@LenientNum() final  num? grossSales;
+@override@LenientNum() final  num? fees;
+@override@LenientNum() final  num? netSettled;
+@override@LenientInt() final  int? settlementCount;
 @override final  String? generatedAt;
 
 /// Create a copy of StatementResponse
@@ -874,7 +874,7 @@ abstract mixin class _$StatementResponseCopyWith<$Res> implements $StatementResp
   factory _$StatementResponseCopyWith(_StatementResponse value, $Res Function(_StatementResponse) _then) = __$StatementResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? period, num? grossSales, num? fees, num? netSettled, int? settlementCount, String? generatedAt
+ String? id, String? period,@LenientNum() num? grossSales,@LenientNum() num? fees,@LenientNum() num? netSettled,@LenientInt() int? settlementCount, String? generatedAt
 });
 
 
@@ -911,8 +911,8 @@ as String?,
 /// @nodoc
 mixin _$NotificationItem {
 
- String? get id; String? get type; String? get title; String? get body; String? get reference; bool get read; String? get createdAt;// Suspicious-activity alerts (type == SUSPICIOUS_ACTIVITY) only.
- String? get severity; String? get rule; Map<String, dynamic>? get evidence; bool get acknowledged;
+ String? get id; String? get type; String? get title; String? get body; String? get reference;@LenientFlag() bool get read; String? get createdAt;// Suspicious-activity alerts (type == SUSPICIOUS_ACTIVITY) only.
+ String? get severity; String? get rule;@LenientMap() Map<String, dynamic>? get evidence;@LenientFlag() bool get acknowledged;
 /// Create a copy of NotificationItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -945,7 +945,7 @@ abstract mixin class $NotificationItemCopyWith<$Res>  {
   factory $NotificationItemCopyWith(NotificationItem value, $Res Function(NotificationItem) _then) = _$NotificationItemCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? type, String? title, String? body, String? reference, bool read, String? createdAt, String? severity, String? rule, Map<String, dynamic>? evidence, bool acknowledged
+ String? id, String? type, String? title, String? body, String? reference,@LenientFlag() bool read, String? createdAt, String? severity, String? rule,@LenientMap() Map<String, dynamic>? evidence,@LenientFlag() bool acknowledged
 });
 
 
@@ -1060,7 +1060,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? type,  String? title,  String? body,  String? reference,  bool read,  String? createdAt,  String? severity,  String? rule,  Map<String, dynamic>? evidence,  bool acknowledged)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? type,  String? title,  String? body,  String? reference, @LenientFlag()  bool read,  String? createdAt,  String? severity,  String? rule, @LenientMap()  Map<String, dynamic>? evidence, @LenientFlag()  bool acknowledged)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NotificationItem() when $default != null:
 return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that.read,_that.createdAt,_that.severity,_that.rule,_that.evidence,_that.acknowledged);case _:
@@ -1081,7 +1081,7 @@ return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? type,  String? title,  String? body,  String? reference,  bool read,  String? createdAt,  String? severity,  String? rule,  Map<String, dynamic>? evidence,  bool acknowledged)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? type,  String? title,  String? body,  String? reference, @LenientFlag()  bool read,  String? createdAt,  String? severity,  String? rule, @LenientMap()  Map<String, dynamic>? evidence, @LenientFlag()  bool acknowledged)  $default,) {final _that = this;
 switch (_that) {
 case _NotificationItem():
 return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that.read,_that.createdAt,_that.severity,_that.rule,_that.evidence,_that.acknowledged);case _:
@@ -1101,7 +1101,7 @@ return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? type,  String? title,  String? body,  String? reference,  bool read,  String? createdAt,  String? severity,  String? rule,  Map<String, dynamic>? evidence,  bool acknowledged)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? type,  String? title,  String? body,  String? reference, @LenientFlag()  bool read,  String? createdAt,  String? severity,  String? rule, @LenientMap()  Map<String, dynamic>? evidence, @LenientFlag()  bool acknowledged)?  $default,) {final _that = this;
 switch (_that) {
 case _NotificationItem() when $default != null:
 return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that.read,_that.createdAt,_that.severity,_that.rule,_that.evidence,_that.acknowledged);case _:
@@ -1116,7 +1116,7 @@ return $default(_that.id,_that.type,_that.title,_that.body,_that.reference,_that
 @JsonSerializable()
 
 class _NotificationItem extends NotificationItem {
-  const _NotificationItem({this.id, this.type, this.title, this.body, this.reference, this.read = false, this.createdAt, this.severity, this.rule, final  Map<String, dynamic>? evidence, this.acknowledged = false}): _evidence = evidence,super._();
+  const _NotificationItem({this.id, this.type, this.title, this.body, this.reference, @LenientFlag() this.read = false, this.createdAt, this.severity, this.rule, @LenientMap() final  Map<String, dynamic>? evidence, @LenientFlag() this.acknowledged = false}): _evidence = evidence,super._();
   factory _NotificationItem.fromJson(Map<String, dynamic> json) => _$NotificationItemFromJson(json);
 
 @override final  String? id;
@@ -1124,13 +1124,13 @@ class _NotificationItem extends NotificationItem {
 @override final  String? title;
 @override final  String? body;
 @override final  String? reference;
-@override@JsonKey() final  bool read;
+@override@JsonKey()@LenientFlag() final  bool read;
 @override final  String? createdAt;
 // Suspicious-activity alerts (type == SUSPICIOUS_ACTIVITY) only.
 @override final  String? severity;
 @override final  String? rule;
  final  Map<String, dynamic>? _evidence;
-@override Map<String, dynamic>? get evidence {
+@override@LenientMap() Map<String, dynamic>? get evidence {
   final value = _evidence;
   if (value == null) return null;
   if (_evidence is EqualUnmodifiableMapView) return _evidence;
@@ -1138,7 +1138,7 @@ class _NotificationItem extends NotificationItem {
   return EqualUnmodifiableMapView(value);
 }
 
-@override@JsonKey() final  bool acknowledged;
+@override@JsonKey()@LenientFlag() final  bool acknowledged;
 
 /// Create a copy of NotificationItem
 /// with the given fields replaced by the non-null parameter values.
@@ -1173,7 +1173,7 @@ abstract mixin class _$NotificationItemCopyWith<$Res> implements $NotificationIt
   factory _$NotificationItemCopyWith(_NotificationItem value, $Res Function(_NotificationItem) _then) = __$NotificationItemCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? type, String? title, String? body, String? reference, bool read, String? createdAt, String? severity, String? rule, Map<String, dynamic>? evidence, bool acknowledged
+ String? id, String? type, String? title, String? body, String? reference,@LenientFlag() bool read, String? createdAt, String? severity, String? rule,@LenientMap() Map<String, dynamic>? evidence,@LenientFlag() bool acknowledged
 });
 
 
@@ -1214,7 +1214,7 @@ as bool,
 /// @nodoc
 mixin _$NotificationFeed {
 
- int get unreadCount; List<NotificationItem> get content; int? get totalElements; int? get number; int? get size; bool? get last;
+ int get unreadCount; List<NotificationItem> get content;@LenientInt() int? get totalElements;@LenientInt() int? get number;@LenientInt() int? get size;@LenientBool() bool? get last;
 /// Create a copy of NotificationFeed
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1247,7 +1247,7 @@ abstract mixin class $NotificationFeedCopyWith<$Res>  {
   factory $NotificationFeedCopyWith(NotificationFeed value, $Res Function(NotificationFeed) _then) = _$NotificationFeedCopyWithImpl;
 @useResult
 $Res call({
- int unreadCount, List<NotificationItem> content, int? totalElements, int? number, int? size, bool? last
+ int unreadCount, List<NotificationItem> content,@LenientInt() int? totalElements,@LenientInt() int? number,@LenientInt() int? size,@LenientBool() bool? last
 });
 
 
@@ -1357,7 +1357,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int unreadCount,  List<NotificationItem> content,  int? totalElements,  int? number,  int? size,  bool? last)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int unreadCount,  List<NotificationItem> content, @LenientInt()  int? totalElements, @LenientInt()  int? number, @LenientInt()  int? size, @LenientBool()  bool? last)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NotificationFeed() when $default != null:
 return $default(_that.unreadCount,_that.content,_that.totalElements,_that.number,_that.size,_that.last);case _:
@@ -1378,7 +1378,7 @@ return $default(_that.unreadCount,_that.content,_that.totalElements,_that.number
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int unreadCount,  List<NotificationItem> content,  int? totalElements,  int? number,  int? size,  bool? last)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int unreadCount,  List<NotificationItem> content, @LenientInt()  int? totalElements, @LenientInt()  int? number, @LenientInt()  int? size, @LenientBool()  bool? last)  $default,) {final _that = this;
 switch (_that) {
 case _NotificationFeed():
 return $default(_that.unreadCount,_that.content,_that.totalElements,_that.number,_that.size,_that.last);case _:
@@ -1398,7 +1398,7 @@ return $default(_that.unreadCount,_that.content,_that.totalElements,_that.number
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int unreadCount,  List<NotificationItem> content,  int? totalElements,  int? number,  int? size,  bool? last)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int unreadCount,  List<NotificationItem> content, @LenientInt()  int? totalElements, @LenientInt()  int? number, @LenientInt()  int? size, @LenientBool()  bool? last)?  $default,) {final _that = this;
 switch (_that) {
 case _NotificationFeed() when $default != null:
 return $default(_that.unreadCount,_that.content,_that.totalElements,_that.number,_that.size,_that.last);case _:
@@ -1413,7 +1413,7 @@ return $default(_that.unreadCount,_that.content,_that.totalElements,_that.number
 @JsonSerializable()
 
 class _NotificationFeed implements NotificationFeed {
-  const _NotificationFeed({this.unreadCount = 0, final  List<NotificationItem> content = const <NotificationItem>[], this.totalElements, this.number, this.size, this.last}): _content = content;
+  const _NotificationFeed({this.unreadCount = 0, final  List<NotificationItem> content = const <NotificationItem>[], @LenientInt() this.totalElements, @LenientInt() this.number, @LenientInt() this.size, @LenientBool() this.last}): _content = content;
   factory _NotificationFeed.fromJson(Map<String, dynamic> json) => _$NotificationFeedFromJson(json);
 
 @override@JsonKey() final  int unreadCount;
@@ -1424,10 +1424,10 @@ class _NotificationFeed implements NotificationFeed {
   return EqualUnmodifiableListView(_content);
 }
 
-@override final  int? totalElements;
-@override final  int? number;
-@override final  int? size;
-@override final  bool? last;
+@override@LenientInt() final  int? totalElements;
+@override@LenientInt() final  int? number;
+@override@LenientInt() final  int? size;
+@override@LenientBool() final  bool? last;
 
 /// Create a copy of NotificationFeed
 /// with the given fields replaced by the non-null parameter values.
@@ -1462,7 +1462,7 @@ abstract mixin class _$NotificationFeedCopyWith<$Res> implements $NotificationFe
   factory _$NotificationFeedCopyWith(_NotificationFeed value, $Res Function(_NotificationFeed) _then) = __$NotificationFeedCopyWithImpl;
 @override @useResult
 $Res call({
- int unreadCount, List<NotificationItem> content, int? totalElements, int? number, int? size, bool? last
+ int unreadCount, List<NotificationItem> content,@LenientInt() int? totalElements,@LenientInt() int? number,@LenientInt() int? size,@LenientBool() bool? last
 });
 
 

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$WalletResponse {
 
- String? get id; String? get walletId; String? get accountNumber; String? get accountName; String? get bankCode; String? get bankName; String? get status; String? get settlementType; bool? get autoSettlement; num? get availableBalance; num? get ledgerBalance; num? get pendingSettlement; bool? get frozen; String? get merchantMid; String? get merchantName; String? get currency; String? get createdAt; String? get updatedAt;
+ String? get id; String? get walletId; String? get accountNumber; String? get accountName; String? get bankCode; String? get bankName; String? get status; String? get settlementType;@LenientBool() bool? get autoSettlement;@LenientNum() num? get availableBalance;@LenientNum() num? get ledgerBalance;@LenientNum() num? get pendingSettlement;@LenientBool() bool? get frozen; String? get merchantMid; String? get merchantName; String? get currency; String? get createdAt; String? get updatedAt;
 /// Create a copy of WalletResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $WalletResponseCopyWith<$Res>  {
   factory $WalletResponseCopyWith(WalletResponse value, $Res Function(WalletResponse) _then) = _$WalletResponseCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? walletId, String? accountNumber, String? accountName, String? bankCode, String? bankName, String? status, String? settlementType, bool? autoSettlement, num? availableBalance, num? ledgerBalance, num? pendingSettlement, bool? frozen, String? merchantMid, String? merchantName, String? currency, String? createdAt, String? updatedAt
+ String? id, String? walletId, String? accountNumber, String? accountName, String? bankCode, String? bankName, String? status, String? settlementType,@LenientBool() bool? autoSettlement,@LenientNum() num? availableBalance,@LenientNum() num? ledgerBalance,@LenientNum() num? pendingSettlement,@LenientBool() bool? frozen, String? merchantMid, String? merchantName, String? currency, String? createdAt, String? updatedAt
 });
 
 
@@ -170,7 +170,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? walletId,  String? accountNumber,  String? accountName,  String? bankCode,  String? bankName,  String? status,  String? settlementType,  bool? autoSettlement,  num? availableBalance,  num? ledgerBalance,  num? pendingSettlement,  bool? frozen,  String? merchantMid,  String? merchantName,  String? currency,  String? createdAt,  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? walletId,  String? accountNumber,  String? accountName,  String? bankCode,  String? bankName,  String? status,  String? settlementType, @LenientBool()  bool? autoSettlement, @LenientNum()  num? availableBalance, @LenientNum()  num? ledgerBalance, @LenientNum()  num? pendingSettlement, @LenientBool()  bool? frozen,  String? merchantMid,  String? merchantName,  String? currency,  String? createdAt,  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WalletResponse() when $default != null:
 return $default(_that.id,_that.walletId,_that.accountNumber,_that.accountName,_that.bankCode,_that.bankName,_that.status,_that.settlementType,_that.autoSettlement,_that.availableBalance,_that.ledgerBalance,_that.pendingSettlement,_that.frozen,_that.merchantMid,_that.merchantName,_that.currency,_that.createdAt,_that.updatedAt);case _:
@@ -191,7 +191,7 @@ return $default(_that.id,_that.walletId,_that.accountNumber,_that.accountName,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? walletId,  String? accountNumber,  String? accountName,  String? bankCode,  String? bankName,  String? status,  String? settlementType,  bool? autoSettlement,  num? availableBalance,  num? ledgerBalance,  num? pendingSettlement,  bool? frozen,  String? merchantMid,  String? merchantName,  String? currency,  String? createdAt,  String? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? walletId,  String? accountNumber,  String? accountName,  String? bankCode,  String? bankName,  String? status,  String? settlementType, @LenientBool()  bool? autoSettlement, @LenientNum()  num? availableBalance, @LenientNum()  num? ledgerBalance, @LenientNum()  num? pendingSettlement, @LenientBool()  bool? frozen,  String? merchantMid,  String? merchantName,  String? currency,  String? createdAt,  String? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _WalletResponse():
 return $default(_that.id,_that.walletId,_that.accountNumber,_that.accountName,_that.bankCode,_that.bankName,_that.status,_that.settlementType,_that.autoSettlement,_that.availableBalance,_that.ledgerBalance,_that.pendingSettlement,_that.frozen,_that.merchantMid,_that.merchantName,_that.currency,_that.createdAt,_that.updatedAt);case _:
@@ -211,7 +211,7 @@ return $default(_that.id,_that.walletId,_that.accountNumber,_that.accountName,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? walletId,  String? accountNumber,  String? accountName,  String? bankCode,  String? bankName,  String? status,  String? settlementType,  bool? autoSettlement,  num? availableBalance,  num? ledgerBalance,  num? pendingSettlement,  bool? frozen,  String? merchantMid,  String? merchantName,  String? currency,  String? createdAt,  String? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? walletId,  String? accountNumber,  String? accountName,  String? bankCode,  String? bankName,  String? status,  String? settlementType, @LenientBool()  bool? autoSettlement, @LenientNum()  num? availableBalance, @LenientNum()  num? ledgerBalance, @LenientNum()  num? pendingSettlement, @LenientBool()  bool? frozen,  String? merchantMid,  String? merchantName,  String? currency,  String? createdAt,  String? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _WalletResponse() when $default != null:
 return $default(_that.id,_that.walletId,_that.accountNumber,_that.accountName,_that.bankCode,_that.bankName,_that.status,_that.settlementType,_that.autoSettlement,_that.availableBalance,_that.ledgerBalance,_that.pendingSettlement,_that.frozen,_that.merchantMid,_that.merchantName,_that.currency,_that.createdAt,_that.updatedAt);case _:
@@ -226,7 +226,7 @@ return $default(_that.id,_that.walletId,_that.accountNumber,_that.accountName,_t
 @JsonSerializable()
 
 class _WalletResponse extends WalletResponse {
-  const _WalletResponse({this.id, this.walletId, this.accountNumber, this.accountName, this.bankCode, this.bankName, this.status, this.settlementType, this.autoSettlement, this.availableBalance, this.ledgerBalance, this.pendingSettlement, this.frozen, this.merchantMid, this.merchantName, this.currency, this.createdAt, this.updatedAt}): super._();
+  const _WalletResponse({this.id, this.walletId, this.accountNumber, this.accountName, this.bankCode, this.bankName, this.status, this.settlementType, @LenientBool() this.autoSettlement, @LenientNum() this.availableBalance, @LenientNum() this.ledgerBalance, @LenientNum() this.pendingSettlement, @LenientBool() this.frozen, this.merchantMid, this.merchantName, this.currency, this.createdAt, this.updatedAt}): super._();
   factory _WalletResponse.fromJson(Map<String, dynamic> json) => _$WalletResponseFromJson(json);
 
 @override final  String? id;
@@ -237,11 +237,11 @@ class _WalletResponse extends WalletResponse {
 @override final  String? bankName;
 @override final  String? status;
 @override final  String? settlementType;
-@override final  bool? autoSettlement;
-@override final  num? availableBalance;
-@override final  num? ledgerBalance;
-@override final  num? pendingSettlement;
-@override final  bool? frozen;
+@override@LenientBool() final  bool? autoSettlement;
+@override@LenientNum() final  num? availableBalance;
+@override@LenientNum() final  num? ledgerBalance;
+@override@LenientNum() final  num? pendingSettlement;
+@override@LenientBool() final  bool? frozen;
 @override final  String? merchantMid;
 @override final  String? merchantName;
 @override final  String? currency;
@@ -281,7 +281,7 @@ abstract mixin class _$WalletResponseCopyWith<$Res> implements $WalletResponseCo
   factory _$WalletResponseCopyWith(_WalletResponse value, $Res Function(_WalletResponse) _then) = __$WalletResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? walletId, String? accountNumber, String? accountName, String? bankCode, String? bankName, String? status, String? settlementType, bool? autoSettlement, num? availableBalance, num? ledgerBalance, num? pendingSettlement, bool? frozen, String? merchantMid, String? merchantName, String? currency, String? createdAt, String? updatedAt
+ String? id, String? walletId, String? accountNumber, String? accountName, String? bankCode, String? bankName, String? status, String? settlementType,@LenientBool() bool? autoSettlement,@LenientNum() num? availableBalance,@LenientNum() num? ledgerBalance,@LenientNum() num? pendingSettlement,@LenientBool() bool? frozen, String? merchantMid, String? merchantName, String? currency, String? createdAt, String? updatedAt
 });
 
 

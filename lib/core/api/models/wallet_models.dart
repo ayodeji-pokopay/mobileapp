@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'lenient.dart';
+
 part 'wallet_models.freezed.dart';
 part 'wallet_models.g.dart';
 
@@ -19,11 +21,11 @@ abstract class WalletResponse with _$WalletResponse {
     String? bankName,
     String? status,
     String? settlementType,
-    bool? autoSettlement,
-    num? availableBalance,
-    num? ledgerBalance,
-    num? pendingSettlement,
-    bool? frozen,
+    @LenientBool() bool? autoSettlement,
+    @LenientNum() num? availableBalance,
+    @LenientNum() num? ledgerBalance,
+    @LenientNum() num? pendingSettlement,
+    @LenientBool() bool? frozen,
     String? merchantMid,
     String? merchantName,
     String? currency,

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MerchantSettlementSummary {
 
- String? get mid; int? get totalSettlements; num? get totalSettledAmount; num? get pendingAmount; int? get todayTransactions; num? get todaySales; num? get yesterdaySales; int? get yesterdayTransactions; num? get sameWeekdayLastWeekSales; num? get monthToDateSales; TodaySettlement? get todaySettlement; int? get activeTerminals; int? get instantTerminals;
+ String? get mid;@LenientInt() int? get totalSettlements;@LenientNum() num? get totalSettledAmount;@LenientNum() num? get pendingAmount;@LenientInt() int? get todayTransactions;@LenientNum() num? get todaySales;@LenientNum() num? get yesterdaySales;@LenientInt() int? get yesterdayTransactions;@LenientNum() num? get sameWeekdayLastWeekSales;@LenientNum() num? get monthToDateSales; TodaySettlement? get todaySettlement;@LenientInt() int? get activeTerminals;@LenientInt() int? get instantTerminals;
 /// Create a copy of MerchantSettlementSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $MerchantSettlementSummaryCopyWith<$Res>  {
   factory $MerchantSettlementSummaryCopyWith(MerchantSettlementSummary value, $Res Function(MerchantSettlementSummary) _then) = _$MerchantSettlementSummaryCopyWithImpl;
 @useResult
 $Res call({
- String? mid, int? totalSettlements, num? totalSettledAmount, num? pendingAmount, int? todayTransactions, num? todaySales, num? yesterdaySales, int? yesterdayTransactions, num? sameWeekdayLastWeekSales, num? monthToDateSales, TodaySettlement? todaySettlement, int? activeTerminals, int? instantTerminals
+ String? mid,@LenientInt() int? totalSettlements,@LenientNum() num? totalSettledAmount,@LenientNum() num? pendingAmount,@LenientInt() int? todayTransactions,@LenientNum() num? todaySales,@LenientNum() num? yesterdaySales,@LenientInt() int? yesterdayTransactions,@LenientNum() num? sameWeekdayLastWeekSales,@LenientNum() num? monthToDateSales, TodaySettlement? todaySettlement,@LenientInt() int? activeTerminals,@LenientInt() int? instantTerminals
 });
 
 
@@ -177,7 +177,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? mid,  int? totalSettlements,  num? totalSettledAmount,  num? pendingAmount,  int? todayTransactions,  num? todaySales,  num? yesterdaySales,  int? yesterdayTransactions,  num? sameWeekdayLastWeekSales,  num? monthToDateSales,  TodaySettlement? todaySettlement,  int? activeTerminals,  int? instantTerminals)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? mid, @LenientInt()  int? totalSettlements, @LenientNum()  num? totalSettledAmount, @LenientNum()  num? pendingAmount, @LenientInt()  int? todayTransactions, @LenientNum()  num? todaySales, @LenientNum()  num? yesterdaySales, @LenientInt()  int? yesterdayTransactions, @LenientNum()  num? sameWeekdayLastWeekSales, @LenientNum()  num? monthToDateSales,  TodaySettlement? todaySettlement, @LenientInt()  int? activeTerminals, @LenientInt()  int? instantTerminals)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MerchantSettlementSummary() when $default != null:
 return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.pendingAmount,_that.todayTransactions,_that.todaySales,_that.yesterdaySales,_that.yesterdayTransactions,_that.sameWeekdayLastWeekSales,_that.monthToDateSales,_that.todaySettlement,_that.activeTerminals,_that.instantTerminals);case _:
@@ -198,7 +198,7 @@ return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? mid,  int? totalSettlements,  num? totalSettledAmount,  num? pendingAmount,  int? todayTransactions,  num? todaySales,  num? yesterdaySales,  int? yesterdayTransactions,  num? sameWeekdayLastWeekSales,  num? monthToDateSales,  TodaySettlement? todaySettlement,  int? activeTerminals,  int? instantTerminals)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? mid, @LenientInt()  int? totalSettlements, @LenientNum()  num? totalSettledAmount, @LenientNum()  num? pendingAmount, @LenientInt()  int? todayTransactions, @LenientNum()  num? todaySales, @LenientNum()  num? yesterdaySales, @LenientInt()  int? yesterdayTransactions, @LenientNum()  num? sameWeekdayLastWeekSales, @LenientNum()  num? monthToDateSales,  TodaySettlement? todaySettlement, @LenientInt()  int? activeTerminals, @LenientInt()  int? instantTerminals)  $default,) {final _that = this;
 switch (_that) {
 case _MerchantSettlementSummary():
 return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.pendingAmount,_that.todayTransactions,_that.todaySales,_that.yesterdaySales,_that.yesterdayTransactions,_that.sameWeekdayLastWeekSales,_that.monthToDateSales,_that.todaySettlement,_that.activeTerminals,_that.instantTerminals);case _:
@@ -218,7 +218,7 @@ return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? mid,  int? totalSettlements,  num? totalSettledAmount,  num? pendingAmount,  int? todayTransactions,  num? todaySales,  num? yesterdaySales,  int? yesterdayTransactions,  num? sameWeekdayLastWeekSales,  num? monthToDateSales,  TodaySettlement? todaySettlement,  int? activeTerminals,  int? instantTerminals)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? mid, @LenientInt()  int? totalSettlements, @LenientNum()  num? totalSettledAmount, @LenientNum()  num? pendingAmount, @LenientInt()  int? todayTransactions, @LenientNum()  num? todaySales, @LenientNum()  num? yesterdaySales, @LenientInt()  int? yesterdayTransactions, @LenientNum()  num? sameWeekdayLastWeekSales, @LenientNum()  num? monthToDateSales,  TodaySettlement? todaySettlement, @LenientInt()  int? activeTerminals, @LenientInt()  int? instantTerminals)?  $default,) {final _that = this;
 switch (_that) {
 case _MerchantSettlementSummary() when $default != null:
 return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.pendingAmount,_that.todayTransactions,_that.todaySales,_that.yesterdaySales,_that.yesterdayTransactions,_that.sameWeekdayLastWeekSales,_that.monthToDateSales,_that.todaySettlement,_that.activeTerminals,_that.instantTerminals);case _:
@@ -233,22 +233,22 @@ return $default(_that.mid,_that.totalSettlements,_that.totalSettledAmount,_that.
 @JsonSerializable()
 
 class _MerchantSettlementSummary implements MerchantSettlementSummary {
-  const _MerchantSettlementSummary({this.mid, this.totalSettlements, this.totalSettledAmount, this.pendingAmount, this.todayTransactions, this.todaySales, this.yesterdaySales, this.yesterdayTransactions, this.sameWeekdayLastWeekSales, this.monthToDateSales, this.todaySettlement, this.activeTerminals, this.instantTerminals});
+  const _MerchantSettlementSummary({this.mid, @LenientInt() this.totalSettlements, @LenientNum() this.totalSettledAmount, @LenientNum() this.pendingAmount, @LenientInt() this.todayTransactions, @LenientNum() this.todaySales, @LenientNum() this.yesterdaySales, @LenientInt() this.yesterdayTransactions, @LenientNum() this.sameWeekdayLastWeekSales, @LenientNum() this.monthToDateSales, this.todaySettlement, @LenientInt() this.activeTerminals, @LenientInt() this.instantTerminals});
   factory _MerchantSettlementSummary.fromJson(Map<String, dynamic> json) => _$MerchantSettlementSummaryFromJson(json);
 
 @override final  String? mid;
-@override final  int? totalSettlements;
-@override final  num? totalSettledAmount;
-@override final  num? pendingAmount;
-@override final  int? todayTransactions;
-@override final  num? todaySales;
-@override final  num? yesterdaySales;
-@override final  int? yesterdayTransactions;
-@override final  num? sameWeekdayLastWeekSales;
-@override final  num? monthToDateSales;
+@override@LenientInt() final  int? totalSettlements;
+@override@LenientNum() final  num? totalSettledAmount;
+@override@LenientNum() final  num? pendingAmount;
+@override@LenientInt() final  int? todayTransactions;
+@override@LenientNum() final  num? todaySales;
+@override@LenientNum() final  num? yesterdaySales;
+@override@LenientInt() final  int? yesterdayTransactions;
+@override@LenientNum() final  num? sameWeekdayLastWeekSales;
+@override@LenientNum() final  num? monthToDateSales;
 @override final  TodaySettlement? todaySettlement;
-@override final  int? activeTerminals;
-@override final  int? instantTerminals;
+@override@LenientInt() final  int? activeTerminals;
+@override@LenientInt() final  int? instantTerminals;
 
 /// Create a copy of MerchantSettlementSummary
 /// with the given fields replaced by the non-null parameter values.
@@ -283,7 +283,7 @@ abstract mixin class _$MerchantSettlementSummaryCopyWith<$Res> implements $Merch
   factory _$MerchantSettlementSummaryCopyWith(_MerchantSettlementSummary value, $Res Function(_MerchantSettlementSummary) _then) = __$MerchantSettlementSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String? mid, int? totalSettlements, num? totalSettledAmount, num? pendingAmount, int? todayTransactions, num? todaySales, num? yesterdaySales, int? yesterdayTransactions, num? sameWeekdayLastWeekSales, num? monthToDateSales, TodaySettlement? todaySettlement, int? activeTerminals, int? instantTerminals
+ String? mid,@LenientInt() int? totalSettlements,@LenientNum() num? totalSettledAmount,@LenientNum() num? pendingAmount,@LenientInt() int? todayTransactions,@LenientNum() num? todaySales,@LenientNum() num? yesterdaySales,@LenientInt() int? yesterdayTransactions,@LenientNum() num? sameWeekdayLastWeekSales,@LenientNum() num? monthToDateSales, TodaySettlement? todaySettlement,@LenientInt() int? activeTerminals,@LenientInt() int? instantTerminals
 });
 
 
@@ -338,7 +338,7 @@ $TodaySettlementCopyWith<$Res>? get todaySettlement {
 /// @nodoc
 mixin _$TodaySettlement {
 
- num? get amount; String? get status; String? get expectedDate; String? get settledAt; String? get failureReason;
+@LenientNum() num? get amount; String? get status; String? get expectedDate; String? get settledAt; String? get failureReason;
 /// Create a copy of TodaySettlement
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -371,7 +371,7 @@ abstract mixin class $TodaySettlementCopyWith<$Res>  {
   factory $TodaySettlementCopyWith(TodaySettlement value, $Res Function(TodaySettlement) _then) = _$TodaySettlementCopyWithImpl;
 @useResult
 $Res call({
- num? amount, String? status, String? expectedDate, String? settledAt, String? failureReason
+@LenientNum() num? amount, String? status, String? expectedDate, String? settledAt, String? failureReason
 });
 
 
@@ -480,7 +480,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( num? amount,  String? status,  String? expectedDate,  String? settledAt,  String? failureReason)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@LenientNum()  num? amount,  String? status,  String? expectedDate,  String? settledAt,  String? failureReason)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TodaySettlement() when $default != null:
 return $default(_that.amount,_that.status,_that.expectedDate,_that.settledAt,_that.failureReason);case _:
@@ -501,7 +501,7 @@ return $default(_that.amount,_that.status,_that.expectedDate,_that.settledAt,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( num? amount,  String? status,  String? expectedDate,  String? settledAt,  String? failureReason)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@LenientNum()  num? amount,  String? status,  String? expectedDate,  String? settledAt,  String? failureReason)  $default,) {final _that = this;
 switch (_that) {
 case _TodaySettlement():
 return $default(_that.amount,_that.status,_that.expectedDate,_that.settledAt,_that.failureReason);case _:
@@ -521,7 +521,7 @@ return $default(_that.amount,_that.status,_that.expectedDate,_that.settledAt,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( num? amount,  String? status,  String? expectedDate,  String? settledAt,  String? failureReason)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@LenientNum()  num? amount,  String? status,  String? expectedDate,  String? settledAt,  String? failureReason)?  $default,) {final _that = this;
 switch (_that) {
 case _TodaySettlement() when $default != null:
 return $default(_that.amount,_that.status,_that.expectedDate,_that.settledAt,_that.failureReason);case _:
@@ -536,10 +536,10 @@ return $default(_that.amount,_that.status,_that.expectedDate,_that.settledAt,_th
 @JsonSerializable()
 
 class _TodaySettlement implements TodaySettlement {
-  const _TodaySettlement({this.amount, this.status, this.expectedDate, this.settledAt, this.failureReason});
+  const _TodaySettlement({@LenientNum() this.amount, this.status, this.expectedDate, this.settledAt, this.failureReason});
   factory _TodaySettlement.fromJson(Map<String, dynamic> json) => _$TodaySettlementFromJson(json);
 
-@override final  num? amount;
+@override@LenientNum() final  num? amount;
 @override final  String? status;
 @override final  String? expectedDate;
 @override final  String? settledAt;
@@ -578,7 +578,7 @@ abstract mixin class _$TodaySettlementCopyWith<$Res> implements $TodaySettlement
   factory _$TodaySettlementCopyWith(_TodaySettlement value, $Res Function(_TodaySettlement) _then) = __$TodaySettlementCopyWithImpl;
 @override @useResult
 $Res call({
- num? amount, String? status, String? expectedDate, String? settledAt, String? failureReason
+@LenientNum() num? amount, String? status, String? expectedDate, String? settledAt, String? failureReason
 });
 
 
@@ -613,7 +613,7 @@ as String?,
 /// @nodoc
 mixin _$PeriodTotals {
 
- String? get startDate; String? get endDate; num? get totalSales; int? get totalTransactionCount; num? get totalFees; num? get netAmount;
+ String? get startDate; String? get endDate;@LenientNum() num? get totalSales;@LenientInt() int? get totalTransactionCount;@LenientNum() num? get totalFees;@LenientNum() num? get netAmount;
 /// Create a copy of PeriodTotals
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -646,7 +646,7 @@ abstract mixin class $PeriodTotalsCopyWith<$Res>  {
   factory $PeriodTotalsCopyWith(PeriodTotals value, $Res Function(PeriodTotals) _then) = _$PeriodTotalsCopyWithImpl;
 @useResult
 $Res call({
- String? startDate, String? endDate, num? totalSales, int? totalTransactionCount, num? totalFees, num? netAmount
+ String? startDate, String? endDate,@LenientNum() num? totalSales,@LenientInt() int? totalTransactionCount,@LenientNum() num? totalFees,@LenientNum() num? netAmount
 });
 
 
@@ -756,7 +756,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? startDate,  String? endDate,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? startDate,  String? endDate, @LenientNum()  num? totalSales, @LenientInt()  int? totalTransactionCount, @LenientNum()  num? totalFees, @LenientNum()  num? netAmount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PeriodTotals() when $default != null:
 return $default(_that.startDate,_that.endDate,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount);case _:
@@ -777,7 +777,7 @@ return $default(_that.startDate,_that.endDate,_that.totalSales,_that.totalTransa
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? startDate,  String? endDate,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? startDate,  String? endDate, @LenientNum()  num? totalSales, @LenientInt()  int? totalTransactionCount, @LenientNum()  num? totalFees, @LenientNum()  num? netAmount)  $default,) {final _that = this;
 switch (_that) {
 case _PeriodTotals():
 return $default(_that.startDate,_that.endDate,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount);case _:
@@ -797,7 +797,7 @@ return $default(_that.startDate,_that.endDate,_that.totalSales,_that.totalTransa
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? startDate,  String? endDate,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? startDate,  String? endDate, @LenientNum()  num? totalSales, @LenientInt()  int? totalTransactionCount, @LenientNum()  num? totalFees, @LenientNum()  num? netAmount)?  $default,) {final _that = this;
 switch (_that) {
 case _PeriodTotals() when $default != null:
 return $default(_that.startDate,_that.endDate,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount);case _:
@@ -812,15 +812,15 @@ return $default(_that.startDate,_that.endDate,_that.totalSales,_that.totalTransa
 @JsonSerializable()
 
 class _PeriodTotals implements PeriodTotals {
-  const _PeriodTotals({this.startDate, this.endDate, this.totalSales, this.totalTransactionCount, this.totalFees, this.netAmount});
+  const _PeriodTotals({this.startDate, this.endDate, @LenientNum() this.totalSales, @LenientInt() this.totalTransactionCount, @LenientNum() this.totalFees, @LenientNum() this.netAmount});
   factory _PeriodTotals.fromJson(Map<String, dynamic> json) => _$PeriodTotalsFromJson(json);
 
 @override final  String? startDate;
 @override final  String? endDate;
-@override final  num? totalSales;
-@override final  int? totalTransactionCount;
-@override final  num? totalFees;
-@override final  num? netAmount;
+@override@LenientNum() final  num? totalSales;
+@override@LenientInt() final  int? totalTransactionCount;
+@override@LenientNum() final  num? totalFees;
+@override@LenientNum() final  num? netAmount;
 
 /// Create a copy of PeriodTotals
 /// with the given fields replaced by the non-null parameter values.
@@ -855,7 +855,7 @@ abstract mixin class _$PeriodTotalsCopyWith<$Res> implements $PeriodTotalsCopyWi
   factory _$PeriodTotalsCopyWith(_PeriodTotals value, $Res Function(_PeriodTotals) _then) = __$PeriodTotalsCopyWithImpl;
 @override @useResult
 $Res call({
- String? startDate, String? endDate, num? totalSales, int? totalTransactionCount, num? totalFees, num? netAmount
+ String? startDate, String? endDate,@LenientNum() num? totalSales,@LenientInt() int? totalTransactionCount,@LenientNum() num? totalFees,@LenientNum() num? netAmount
 });
 
 
@@ -891,7 +891,7 @@ as num?,
 /// @nodoc
 mixin _$ChannelSummary {
 
- String? get channel; num? get totalAmount; int? get transactionCount;
+ String? get channel;@LenientNum() num? get totalAmount;@LenientInt() int? get transactionCount;
 /// Create a copy of ChannelSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -924,7 +924,7 @@ abstract mixin class $ChannelSummaryCopyWith<$Res>  {
   factory $ChannelSummaryCopyWith(ChannelSummary value, $Res Function(ChannelSummary) _then) = _$ChannelSummaryCopyWithImpl;
 @useResult
 $Res call({
- String? channel, num? totalAmount, int? transactionCount
+ String? channel,@LenientNum() num? totalAmount,@LenientInt() int? transactionCount
 });
 
 
@@ -1031,7 +1031,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? channel,  num? totalAmount,  int? transactionCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? channel, @LenientNum()  num? totalAmount, @LenientInt()  int? transactionCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChannelSummary() when $default != null:
 return $default(_that.channel,_that.totalAmount,_that.transactionCount);case _:
@@ -1052,7 +1052,7 @@ return $default(_that.channel,_that.totalAmount,_that.transactionCount);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? channel,  num? totalAmount,  int? transactionCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? channel, @LenientNum()  num? totalAmount, @LenientInt()  int? transactionCount)  $default,) {final _that = this;
 switch (_that) {
 case _ChannelSummary():
 return $default(_that.channel,_that.totalAmount,_that.transactionCount);case _:
@@ -1072,7 +1072,7 @@ return $default(_that.channel,_that.totalAmount,_that.transactionCount);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? channel,  num? totalAmount,  int? transactionCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? channel, @LenientNum()  num? totalAmount, @LenientInt()  int? transactionCount)?  $default,) {final _that = this;
 switch (_that) {
 case _ChannelSummary() when $default != null:
 return $default(_that.channel,_that.totalAmount,_that.transactionCount);case _:
@@ -1087,12 +1087,12 @@ return $default(_that.channel,_that.totalAmount,_that.transactionCount);case _:
 @JsonSerializable()
 
 class _ChannelSummary implements ChannelSummary {
-  const _ChannelSummary({this.channel, this.totalAmount, this.transactionCount});
+  const _ChannelSummary({this.channel, @LenientNum() this.totalAmount, @LenientInt() this.transactionCount});
   factory _ChannelSummary.fromJson(Map<String, dynamic> json) => _$ChannelSummaryFromJson(json);
 
 @override final  String? channel;
-@override final  num? totalAmount;
-@override final  int? transactionCount;
+@override@LenientNum() final  num? totalAmount;
+@override@LenientInt() final  int? transactionCount;
 
 /// Create a copy of ChannelSummary
 /// with the given fields replaced by the non-null parameter values.
@@ -1127,7 +1127,7 @@ abstract mixin class _$ChannelSummaryCopyWith<$Res> implements $ChannelSummaryCo
   factory _$ChannelSummaryCopyWith(_ChannelSummary value, $Res Function(_ChannelSummary) _then) = __$ChannelSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String? channel, num? totalAmount, int? transactionCount
+ String? channel,@LenientNum() num? totalAmount,@LenientInt() int? transactionCount
 });
 
 
@@ -1160,7 +1160,7 @@ as int?,
 /// @nodoc
 mixin _$TerminalSummary {
 
- String? get tid; String? get terminalLocation; num? get totalSales; int? get transactionCount; num? get fees;
+ String? get tid; String? get terminalLocation;@LenientNum() num? get totalSales;@LenientInt() int? get transactionCount;@LenientNum() num? get fees;
 /// Create a copy of TerminalSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1193,7 +1193,7 @@ abstract mixin class $TerminalSummaryCopyWith<$Res>  {
   factory $TerminalSummaryCopyWith(TerminalSummary value, $Res Function(TerminalSummary) _then) = _$TerminalSummaryCopyWithImpl;
 @useResult
 $Res call({
- String? tid, String? terminalLocation, num? totalSales, int? transactionCount, num? fees
+ String? tid, String? terminalLocation,@LenientNum() num? totalSales,@LenientInt() int? transactionCount,@LenientNum() num? fees
 });
 
 
@@ -1302,7 +1302,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? tid,  String? terminalLocation,  num? totalSales,  int? transactionCount,  num? fees)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? tid,  String? terminalLocation, @LenientNum()  num? totalSales, @LenientInt()  int? transactionCount, @LenientNum()  num? fees)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TerminalSummary() when $default != null:
 return $default(_that.tid,_that.terminalLocation,_that.totalSales,_that.transactionCount,_that.fees);case _:
@@ -1323,7 +1323,7 @@ return $default(_that.tid,_that.terminalLocation,_that.totalSales,_that.transact
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? tid,  String? terminalLocation,  num? totalSales,  int? transactionCount,  num? fees)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? tid,  String? terminalLocation, @LenientNum()  num? totalSales, @LenientInt()  int? transactionCount, @LenientNum()  num? fees)  $default,) {final _that = this;
 switch (_that) {
 case _TerminalSummary():
 return $default(_that.tid,_that.terminalLocation,_that.totalSales,_that.transactionCount,_that.fees);case _:
@@ -1343,7 +1343,7 @@ return $default(_that.tid,_that.terminalLocation,_that.totalSales,_that.transact
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? tid,  String? terminalLocation,  num? totalSales,  int? transactionCount,  num? fees)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? tid,  String? terminalLocation, @LenientNum()  num? totalSales, @LenientInt()  int? transactionCount, @LenientNum()  num? fees)?  $default,) {final _that = this;
 switch (_that) {
 case _TerminalSummary() when $default != null:
 return $default(_that.tid,_that.terminalLocation,_that.totalSales,_that.transactionCount,_that.fees);case _:
@@ -1358,14 +1358,14 @@ return $default(_that.tid,_that.terminalLocation,_that.totalSales,_that.transact
 @JsonSerializable()
 
 class _TerminalSummary implements TerminalSummary {
-  const _TerminalSummary({this.tid, this.terminalLocation, this.totalSales, this.transactionCount, this.fees});
+  const _TerminalSummary({this.tid, this.terminalLocation, @LenientNum() this.totalSales, @LenientInt() this.transactionCount, @LenientNum() this.fees});
   factory _TerminalSummary.fromJson(Map<String, dynamic> json) => _$TerminalSummaryFromJson(json);
 
 @override final  String? tid;
 @override final  String? terminalLocation;
-@override final  num? totalSales;
-@override final  int? transactionCount;
-@override final  num? fees;
+@override@LenientNum() final  num? totalSales;
+@override@LenientInt() final  int? transactionCount;
+@override@LenientNum() final  num? fees;
 
 /// Create a copy of TerminalSummary
 /// with the given fields replaced by the non-null parameter values.
@@ -1400,7 +1400,7 @@ abstract mixin class _$TerminalSummaryCopyWith<$Res> implements $TerminalSummary
   factory _$TerminalSummaryCopyWith(_TerminalSummary value, $Res Function(_TerminalSummary) _then) = __$TerminalSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String? tid, String? terminalLocation, num? totalSales, int? transactionCount, num? fees
+ String? tid, String? terminalLocation,@LenientNum() num? totalSales,@LenientInt() int? transactionCount,@LenientNum() num? fees
 });
 
 
@@ -1701,7 +1701,7 @@ as num?,
 /// @nodoc
 mixin _$CardSchemeSummary {
 
- String? get cardScheme; int? get transactionCount; num? get totalAmount; num? get totalSales; num? get totalFees; num? get fees; num? get netAmount; num? get averageTransactionValue;
+ String? get cardScheme;@LenientInt() int? get transactionCount;@LenientNum() num? get totalAmount;@LenientNum() num? get totalSales;@LenientNum() num? get totalFees;@LenientNum() num? get fees;@LenientNum() num? get netAmount;@LenientNum() num? get averageTransactionValue;
 /// Create a copy of CardSchemeSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1734,7 +1734,7 @@ abstract mixin class $CardSchemeSummaryCopyWith<$Res>  {
   factory $CardSchemeSummaryCopyWith(CardSchemeSummary value, $Res Function(CardSchemeSummary) _then) = _$CardSchemeSummaryCopyWithImpl;
 @useResult
 $Res call({
- String? cardScheme, int? transactionCount, num? totalAmount, num? totalSales, num? totalFees, num? fees, num? netAmount, num? averageTransactionValue
+ String? cardScheme,@LenientInt() int? transactionCount,@LenientNum() num? totalAmount,@LenientNum() num? totalSales,@LenientNum() num? totalFees,@LenientNum() num? fees,@LenientNum() num? netAmount,@LenientNum() num? averageTransactionValue
 });
 
 
@@ -1846,7 +1846,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? cardScheme,  int? transactionCount,  num? totalAmount,  num? totalSales,  num? totalFees,  num? fees,  num? netAmount,  num? averageTransactionValue)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? cardScheme, @LenientInt()  int? transactionCount, @LenientNum()  num? totalAmount, @LenientNum()  num? totalSales, @LenientNum()  num? totalFees, @LenientNum()  num? fees, @LenientNum()  num? netAmount, @LenientNum()  num? averageTransactionValue)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CardSchemeSummary() when $default != null:
 return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.totalSales,_that.totalFees,_that.fees,_that.netAmount,_that.averageTransactionValue);case _:
@@ -1867,7 +1867,7 @@ return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? cardScheme,  int? transactionCount,  num? totalAmount,  num? totalSales,  num? totalFees,  num? fees,  num? netAmount,  num? averageTransactionValue)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? cardScheme, @LenientInt()  int? transactionCount, @LenientNum()  num? totalAmount, @LenientNum()  num? totalSales, @LenientNum()  num? totalFees, @LenientNum()  num? fees, @LenientNum()  num? netAmount, @LenientNum()  num? averageTransactionValue)  $default,) {final _that = this;
 switch (_that) {
 case _CardSchemeSummary():
 return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.totalSales,_that.totalFees,_that.fees,_that.netAmount,_that.averageTransactionValue);case _:
@@ -1887,7 +1887,7 @@ return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? cardScheme,  int? transactionCount,  num? totalAmount,  num? totalSales,  num? totalFees,  num? fees,  num? netAmount,  num? averageTransactionValue)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? cardScheme, @LenientInt()  int? transactionCount, @LenientNum()  num? totalAmount, @LenientNum()  num? totalSales, @LenientNum()  num? totalFees, @LenientNum()  num? fees, @LenientNum()  num? netAmount, @LenientNum()  num? averageTransactionValue)?  $default,) {final _that = this;
 switch (_that) {
 case _CardSchemeSummary() when $default != null:
 return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.totalSales,_that.totalFees,_that.fees,_that.netAmount,_that.averageTransactionValue);case _:
@@ -1902,17 +1902,17 @@ return $default(_that.cardScheme,_that.transactionCount,_that.totalAmount,_that.
 @JsonSerializable()
 
 class _CardSchemeSummary extends CardSchemeSummary {
-  const _CardSchemeSummary({this.cardScheme, this.transactionCount, this.totalAmount, this.totalSales, this.totalFees, this.fees, this.netAmount, this.averageTransactionValue}): super._();
+  const _CardSchemeSummary({this.cardScheme, @LenientInt() this.transactionCount, @LenientNum() this.totalAmount, @LenientNum() this.totalSales, @LenientNum() this.totalFees, @LenientNum() this.fees, @LenientNum() this.netAmount, @LenientNum() this.averageTransactionValue}): super._();
   factory _CardSchemeSummary.fromJson(Map<String, dynamic> json) => _$CardSchemeSummaryFromJson(json);
 
 @override final  String? cardScheme;
-@override final  int? transactionCount;
-@override final  num? totalAmount;
-@override final  num? totalSales;
-@override final  num? totalFees;
-@override final  num? fees;
-@override final  num? netAmount;
-@override final  num? averageTransactionValue;
+@override@LenientInt() final  int? transactionCount;
+@override@LenientNum() final  num? totalAmount;
+@override@LenientNum() final  num? totalSales;
+@override@LenientNum() final  num? totalFees;
+@override@LenientNum() final  num? fees;
+@override@LenientNum() final  num? netAmount;
+@override@LenientNum() final  num? averageTransactionValue;
 
 /// Create a copy of CardSchemeSummary
 /// with the given fields replaced by the non-null parameter values.
@@ -1947,7 +1947,7 @@ abstract mixin class _$CardSchemeSummaryCopyWith<$Res> implements $CardSchemeSum
   factory _$CardSchemeSummaryCopyWith(_CardSchemeSummary value, $Res Function(_CardSchemeSummary) _then) = __$CardSchemeSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String? cardScheme, int? transactionCount, num? totalAmount, num? totalSales, num? totalFees, num? fees, num? netAmount, num? averageTransactionValue
+ String? cardScheme,@LenientInt() int? transactionCount,@LenientNum() num? totalAmount,@LenientNum() num? totalSales,@LenientNum() num? totalFees,@LenientNum() num? fees,@LenientNum() num? netAmount,@LenientNum() num? averageTransactionValue
 });
 
 
@@ -1985,7 +1985,7 @@ as num?,
 /// @nodoc
 mixin _$DailyBreakdown {
 
- String? get date; int? get transactionCount; num? get totalAmount; num? get totalFees; num? get netAmount;
+ String? get date;@LenientInt() int? get transactionCount;@LenientNum() num? get totalAmount;@LenientNum() num? get totalFees;@LenientNum() num? get netAmount;
 /// Create a copy of DailyBreakdown
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2018,7 +2018,7 @@ abstract mixin class $DailyBreakdownCopyWith<$Res>  {
   factory $DailyBreakdownCopyWith(DailyBreakdown value, $Res Function(DailyBreakdown) _then) = _$DailyBreakdownCopyWithImpl;
 @useResult
 $Res call({
- String? date, int? transactionCount, num? totalAmount, num? totalFees, num? netAmount
+ String? date,@LenientInt() int? transactionCount,@LenientNum() num? totalAmount,@LenientNum() num? totalFees,@LenientNum() num? netAmount
 });
 
 
@@ -2127,7 +2127,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? date,  int? transactionCount,  num? totalAmount,  num? totalFees,  num? netAmount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? date, @LenientInt()  int? transactionCount, @LenientNum()  num? totalAmount, @LenientNum()  num? totalFees, @LenientNum()  num? netAmount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DailyBreakdown() when $default != null:
 return $default(_that.date,_that.transactionCount,_that.totalAmount,_that.totalFees,_that.netAmount);case _:
@@ -2148,7 +2148,7 @@ return $default(_that.date,_that.transactionCount,_that.totalAmount,_that.totalF
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? date,  int? transactionCount,  num? totalAmount,  num? totalFees,  num? netAmount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? date, @LenientInt()  int? transactionCount, @LenientNum()  num? totalAmount, @LenientNum()  num? totalFees, @LenientNum()  num? netAmount)  $default,) {final _that = this;
 switch (_that) {
 case _DailyBreakdown():
 return $default(_that.date,_that.transactionCount,_that.totalAmount,_that.totalFees,_that.netAmount);case _:
@@ -2168,7 +2168,7 @@ return $default(_that.date,_that.transactionCount,_that.totalAmount,_that.totalF
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? date,  int? transactionCount,  num? totalAmount,  num? totalFees,  num? netAmount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? date, @LenientInt()  int? transactionCount, @LenientNum()  num? totalAmount, @LenientNum()  num? totalFees, @LenientNum()  num? netAmount)?  $default,) {final _that = this;
 switch (_that) {
 case _DailyBreakdown() when $default != null:
 return $default(_that.date,_that.transactionCount,_that.totalAmount,_that.totalFees,_that.netAmount);case _:
@@ -2183,14 +2183,14 @@ return $default(_that.date,_that.transactionCount,_that.totalAmount,_that.totalF
 @JsonSerializable()
 
 class _DailyBreakdown implements DailyBreakdown {
-  const _DailyBreakdown({this.date, this.transactionCount, this.totalAmount, this.totalFees, this.netAmount});
+  const _DailyBreakdown({this.date, @LenientInt() this.transactionCount, @LenientNum() this.totalAmount, @LenientNum() this.totalFees, @LenientNum() this.netAmount});
   factory _DailyBreakdown.fromJson(Map<String, dynamic> json) => _$DailyBreakdownFromJson(json);
 
 @override final  String? date;
-@override final  int? transactionCount;
-@override final  num? totalAmount;
-@override final  num? totalFees;
-@override final  num? netAmount;
+@override@LenientInt() final  int? transactionCount;
+@override@LenientNum() final  num? totalAmount;
+@override@LenientNum() final  num? totalFees;
+@override@LenientNum() final  num? netAmount;
 
 /// Create a copy of DailyBreakdown
 /// with the given fields replaced by the non-null parameter values.
@@ -2225,7 +2225,7 @@ abstract mixin class _$DailyBreakdownCopyWith<$Res> implements $DailyBreakdownCo
   factory _$DailyBreakdownCopyWith(_DailyBreakdown value, $Res Function(_DailyBreakdown) _then) = __$DailyBreakdownCopyWithImpl;
 @override @useResult
 $Res call({
- String? date, int? transactionCount, num? totalAmount, num? totalFees, num? netAmount
+ String? date,@LenientInt() int? transactionCount,@LenientNum() num? totalAmount,@LenientNum() num? totalFees,@LenientNum() num? netAmount
 });
 
 
@@ -2260,7 +2260,7 @@ as num?,
 /// @nodoc
 mixin _$MerchantSalesReportResponse {
 
- String? get mid; String? get merchantName; String? get businessName; String? get merchantAddress; String? get merchantPhone; String? get merchantEmail; String? get startDate; String? get endDate; String? get reportPeriod; num? get totalSales; int? get totalTransactionCount; num? get totalFees; num? get netAmount; List<CardSchemeSummary> get cardSchemeBreakdown; List<DailyBreakdown> get dailyBreakdown; PeriodTotals? get previousPeriod; List<ChannelSummary> get channelBreakdown; List<TerminalSummary> get terminalBreakdown; CountAmount? get refunds; CountAmount? get chargebacks; num? get totalSettled; num? get pendingSettlement; int? get settlementCount; String? get generatedAt;
+ String? get mid; String? get merchantName; String? get businessName; String? get merchantAddress; String? get merchantPhone; String? get merchantEmail; String? get startDate; String? get endDate; String? get reportPeriod;@LenientNum() num? get totalSales;@LenientInt() int? get totalTransactionCount;@LenientNum() num? get totalFees;@LenientNum() num? get netAmount; List<CardSchemeSummary> get cardSchemeBreakdown; List<DailyBreakdown> get dailyBreakdown; PeriodTotals? get previousPeriod; List<ChannelSummary> get channelBreakdown; List<TerminalSummary> get terminalBreakdown; CountAmount? get refunds; CountAmount? get chargebacks;@LenientNum() num? get totalSettled;@LenientNum() num? get pendingSettlement;@LenientInt() int? get settlementCount; String? get generatedAt;
 /// Create a copy of MerchantSalesReportResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2293,7 +2293,7 @@ abstract mixin class $MerchantSalesReportResponseCopyWith<$Res>  {
   factory $MerchantSalesReportResponseCopyWith(MerchantSalesReportResponse value, $Res Function(MerchantSalesReportResponse) _then) = _$MerchantSalesReportResponseCopyWithImpl;
 @useResult
 $Res call({
- String? mid, String? merchantName, String? businessName, String? merchantAddress, String? merchantPhone, String? merchantEmail, String? startDate, String? endDate, String? reportPeriod, num? totalSales, int? totalTransactionCount, num? totalFees, num? netAmount, List<CardSchemeSummary> cardSchemeBreakdown, List<DailyBreakdown> dailyBreakdown, PeriodTotals? previousPeriod, List<ChannelSummary> channelBreakdown, List<TerminalSummary> terminalBreakdown, CountAmount? refunds, CountAmount? chargebacks, num? totalSettled, num? pendingSettlement, int? settlementCount, String? generatedAt
+ String? mid, String? merchantName, String? businessName, String? merchantAddress, String? merchantPhone, String? merchantEmail, String? startDate, String? endDate, String? reportPeriod,@LenientNum() num? totalSales,@LenientInt() int? totalTransactionCount,@LenientNum() num? totalFees,@LenientNum() num? netAmount, List<CardSchemeSummary> cardSchemeBreakdown, List<DailyBreakdown> dailyBreakdown, PeriodTotals? previousPeriod, List<ChannelSummary> channelBreakdown, List<TerminalSummary> terminalBreakdown, CountAmount? refunds, CountAmount? chargebacks,@LenientNum() num? totalSettled,@LenientNum() num? pendingSettlement,@LenientInt() int? settlementCount, String? generatedAt
 });
 
 
@@ -2457,7 +2457,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  List<TerminalSummary> terminalBreakdown,  CountAmount? refunds,  CountAmount? chargebacks,  num? totalSettled,  num? pendingSettlement,  int? settlementCount,  String? generatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod, @LenientNum()  num? totalSales, @LenientInt()  int? totalTransactionCount, @LenientNum()  num? totalFees, @LenientNum()  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  List<TerminalSummary> terminalBreakdown,  CountAmount? refunds,  CountAmount? chargebacks, @LenientNum()  num? totalSettled, @LenientNum()  num? pendingSettlement, @LenientInt()  int? settlementCount,  String? generatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MerchantSalesReportResponse() when $default != null:
 return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAddress,_that.merchantPhone,_that.merchantEmail,_that.startDate,_that.endDate,_that.reportPeriod,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount,_that.cardSchemeBreakdown,_that.dailyBreakdown,_that.previousPeriod,_that.channelBreakdown,_that.terminalBreakdown,_that.refunds,_that.chargebacks,_that.totalSettled,_that.pendingSettlement,_that.settlementCount,_that.generatedAt);case _:
@@ -2478,7 +2478,7 @@ return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAd
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  List<TerminalSummary> terminalBreakdown,  CountAmount? refunds,  CountAmount? chargebacks,  num? totalSettled,  num? pendingSettlement,  int? settlementCount,  String? generatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod, @LenientNum()  num? totalSales, @LenientInt()  int? totalTransactionCount, @LenientNum()  num? totalFees, @LenientNum()  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  List<TerminalSummary> terminalBreakdown,  CountAmount? refunds,  CountAmount? chargebacks, @LenientNum()  num? totalSettled, @LenientNum()  num? pendingSettlement, @LenientInt()  int? settlementCount,  String? generatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _MerchantSalesReportResponse():
 return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAddress,_that.merchantPhone,_that.merchantEmail,_that.startDate,_that.endDate,_that.reportPeriod,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount,_that.cardSchemeBreakdown,_that.dailyBreakdown,_that.previousPeriod,_that.channelBreakdown,_that.terminalBreakdown,_that.refunds,_that.chargebacks,_that.totalSettled,_that.pendingSettlement,_that.settlementCount,_that.generatedAt);case _:
@@ -2498,7 +2498,7 @@ return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAd
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod,  num? totalSales,  int? totalTransactionCount,  num? totalFees,  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  List<TerminalSummary> terminalBreakdown,  CountAmount? refunds,  CountAmount? chargebacks,  num? totalSettled,  num? pendingSettlement,  int? settlementCount,  String? generatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? mid,  String? merchantName,  String? businessName,  String? merchantAddress,  String? merchantPhone,  String? merchantEmail,  String? startDate,  String? endDate,  String? reportPeriod, @LenientNum()  num? totalSales, @LenientInt()  int? totalTransactionCount, @LenientNum()  num? totalFees, @LenientNum()  num? netAmount,  List<CardSchemeSummary> cardSchemeBreakdown,  List<DailyBreakdown> dailyBreakdown,  PeriodTotals? previousPeriod,  List<ChannelSummary> channelBreakdown,  List<TerminalSummary> terminalBreakdown,  CountAmount? refunds,  CountAmount? chargebacks, @LenientNum()  num? totalSettled, @LenientNum()  num? pendingSettlement, @LenientInt()  int? settlementCount,  String? generatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _MerchantSalesReportResponse() when $default != null:
 return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAddress,_that.merchantPhone,_that.merchantEmail,_that.startDate,_that.endDate,_that.reportPeriod,_that.totalSales,_that.totalTransactionCount,_that.totalFees,_that.netAmount,_that.cardSchemeBreakdown,_that.dailyBreakdown,_that.previousPeriod,_that.channelBreakdown,_that.terminalBreakdown,_that.refunds,_that.chargebacks,_that.totalSettled,_that.pendingSettlement,_that.settlementCount,_that.generatedAt);case _:
@@ -2513,7 +2513,7 @@ return $default(_that.mid,_that.merchantName,_that.businessName,_that.merchantAd
 @JsonSerializable()
 
 class _MerchantSalesReportResponse implements MerchantSalesReportResponse {
-  const _MerchantSalesReportResponse({this.mid, this.merchantName, this.businessName, this.merchantAddress, this.merchantPhone, this.merchantEmail, this.startDate, this.endDate, this.reportPeriod, this.totalSales, this.totalTransactionCount, this.totalFees, this.netAmount, final  List<CardSchemeSummary> cardSchemeBreakdown = const <CardSchemeSummary>[], final  List<DailyBreakdown> dailyBreakdown = const <DailyBreakdown>[], this.previousPeriod, final  List<ChannelSummary> channelBreakdown = const <ChannelSummary>[], final  List<TerminalSummary> terminalBreakdown = const <TerminalSummary>[], this.refunds, this.chargebacks, this.totalSettled, this.pendingSettlement, this.settlementCount, this.generatedAt}): _cardSchemeBreakdown = cardSchemeBreakdown,_dailyBreakdown = dailyBreakdown,_channelBreakdown = channelBreakdown,_terminalBreakdown = terminalBreakdown;
+  const _MerchantSalesReportResponse({this.mid, this.merchantName, this.businessName, this.merchantAddress, this.merchantPhone, this.merchantEmail, this.startDate, this.endDate, this.reportPeriod, @LenientNum() this.totalSales, @LenientInt() this.totalTransactionCount, @LenientNum() this.totalFees, @LenientNum() this.netAmount, final  List<CardSchemeSummary> cardSchemeBreakdown = const <CardSchemeSummary>[], final  List<DailyBreakdown> dailyBreakdown = const <DailyBreakdown>[], this.previousPeriod, final  List<ChannelSummary> channelBreakdown = const <ChannelSummary>[], final  List<TerminalSummary> terminalBreakdown = const <TerminalSummary>[], this.refunds, this.chargebacks, @LenientNum() this.totalSettled, @LenientNum() this.pendingSettlement, @LenientInt() this.settlementCount, this.generatedAt}): _cardSchemeBreakdown = cardSchemeBreakdown,_dailyBreakdown = dailyBreakdown,_channelBreakdown = channelBreakdown,_terminalBreakdown = terminalBreakdown;
   factory _MerchantSalesReportResponse.fromJson(Map<String, dynamic> json) => _$MerchantSalesReportResponseFromJson(json);
 
 @override final  String? mid;
@@ -2525,10 +2525,10 @@ class _MerchantSalesReportResponse implements MerchantSalesReportResponse {
 @override final  String? startDate;
 @override final  String? endDate;
 @override final  String? reportPeriod;
-@override final  num? totalSales;
-@override final  int? totalTransactionCount;
-@override final  num? totalFees;
-@override final  num? netAmount;
+@override@LenientNum() final  num? totalSales;
+@override@LenientInt() final  int? totalTransactionCount;
+@override@LenientNum() final  num? totalFees;
+@override@LenientNum() final  num? netAmount;
  final  List<CardSchemeSummary> _cardSchemeBreakdown;
 @override@JsonKey() List<CardSchemeSummary> get cardSchemeBreakdown {
   if (_cardSchemeBreakdown is EqualUnmodifiableListView) return _cardSchemeBreakdown;
@@ -2560,9 +2560,9 @@ class _MerchantSalesReportResponse implements MerchantSalesReportResponse {
 
 @override final  CountAmount? refunds;
 @override final  CountAmount? chargebacks;
-@override final  num? totalSettled;
-@override final  num? pendingSettlement;
-@override final  int? settlementCount;
+@override@LenientNum() final  num? totalSettled;
+@override@LenientNum() final  num? pendingSettlement;
+@override@LenientInt() final  int? settlementCount;
 @override final  String? generatedAt;
 
 /// Create a copy of MerchantSalesReportResponse
@@ -2598,7 +2598,7 @@ abstract mixin class _$MerchantSalesReportResponseCopyWith<$Res> implements $Mer
   factory _$MerchantSalesReportResponseCopyWith(_MerchantSalesReportResponse value, $Res Function(_MerchantSalesReportResponse) _then) = __$MerchantSalesReportResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? mid, String? merchantName, String? businessName, String? merchantAddress, String? merchantPhone, String? merchantEmail, String? startDate, String? endDate, String? reportPeriod, num? totalSales, int? totalTransactionCount, num? totalFees, num? netAmount, List<CardSchemeSummary> cardSchemeBreakdown, List<DailyBreakdown> dailyBreakdown, PeriodTotals? previousPeriod, List<ChannelSummary> channelBreakdown, List<TerminalSummary> terminalBreakdown, CountAmount? refunds, CountAmount? chargebacks, num? totalSettled, num? pendingSettlement, int? settlementCount, String? generatedAt
+ String? mid, String? merchantName, String? businessName, String? merchantAddress, String? merchantPhone, String? merchantEmail, String? startDate, String? endDate, String? reportPeriod,@LenientNum() num? totalSales,@LenientInt() int? totalTransactionCount,@LenientNum() num? totalFees,@LenientNum() num? netAmount, List<CardSchemeSummary> cardSchemeBreakdown, List<DailyBreakdown> dailyBreakdown, PeriodTotals? previousPeriod, List<ChannelSummary> channelBreakdown, List<TerminalSummary> terminalBreakdown, CountAmount? refunds, CountAmount? chargebacks,@LenientNum() num? totalSettled,@LenientNum() num? pendingSettlement,@LenientInt() int? settlementCount, String? generatedAt
 });
 
 
@@ -2688,7 +2688,7 @@ $CountAmountCopyWith<$Res>? get chargebacks {
 /// @nodoc
 mixin _$SettlementResponse {
 
- String? get id; String? get settlementReference; String? get batchReference; String? get mid; String? get merchantName; String? get settlementDate; int? get transactionCount; num? get totalTransactionAmount; num? get totalTransactionFees; num? get grossAmount; num? get settlementFee; num? get netAmount; String? get accountNumber; String? get accountName; String? get bankName; String? get status; String? get settledAt; String? get failureReason; String? get cycle;
+ String? get id; String? get settlementReference; String? get batchReference; String? get mid; String? get merchantName; String? get settlementDate;@LenientInt() int? get transactionCount;@LenientNum() num? get totalTransactionAmount;@LenientNum() num? get totalTransactionFees;@LenientNum() num? get grossAmount;@LenientNum() num? get settlementFee;@LenientNum() num? get netAmount; String? get accountNumber; String? get accountName; String? get bankName; String? get status; String? get settledAt; String? get failureReason; String? get cycle;
 /// Create a copy of SettlementResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2721,7 +2721,7 @@ abstract mixin class $SettlementResponseCopyWith<$Res>  {
   factory $SettlementResponseCopyWith(SettlementResponse value, $Res Function(SettlementResponse) _then) = _$SettlementResponseCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? settlementReference, String? batchReference, String? mid, String? merchantName, String? settlementDate, int? transactionCount, num? totalTransactionAmount, num? totalTransactionFees, num? grossAmount, num? settlementFee, num? netAmount, String? accountNumber, String? accountName, String? bankName, String? status, String? settledAt, String? failureReason, String? cycle
+ String? id, String? settlementReference, String? batchReference, String? mid, String? merchantName, String? settlementDate,@LenientInt() int? transactionCount,@LenientNum() num? totalTransactionAmount,@LenientNum() num? totalTransactionFees,@LenientNum() num? grossAmount,@LenientNum() num? settlementFee,@LenientNum() num? netAmount, String? accountNumber, String? accountName, String? bankName, String? status, String? settledAt, String? failureReason, String? cycle
 });
 
 
@@ -2844,7 +2844,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? settlementReference,  String? batchReference,  String? mid,  String? merchantName,  String? settlementDate,  int? transactionCount,  num? totalTransactionAmount,  num? totalTransactionFees,  num? grossAmount,  num? settlementFee,  num? netAmount,  String? accountNumber,  String? accountName,  String? bankName,  String? status,  String? settledAt,  String? failureReason,  String? cycle)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? settlementReference,  String? batchReference,  String? mid,  String? merchantName,  String? settlementDate, @LenientInt()  int? transactionCount, @LenientNum()  num? totalTransactionAmount, @LenientNum()  num? totalTransactionFees, @LenientNum()  num? grossAmount, @LenientNum()  num? settlementFee, @LenientNum()  num? netAmount,  String? accountNumber,  String? accountName,  String? bankName,  String? status,  String? settledAt,  String? failureReason,  String? cycle)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SettlementResponse() when $default != null:
 return $default(_that.id,_that.settlementReference,_that.batchReference,_that.mid,_that.merchantName,_that.settlementDate,_that.transactionCount,_that.totalTransactionAmount,_that.totalTransactionFees,_that.grossAmount,_that.settlementFee,_that.netAmount,_that.accountNumber,_that.accountName,_that.bankName,_that.status,_that.settledAt,_that.failureReason,_that.cycle);case _:
@@ -2865,7 +2865,7 @@ return $default(_that.id,_that.settlementReference,_that.batchReference,_that.mi
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? settlementReference,  String? batchReference,  String? mid,  String? merchantName,  String? settlementDate,  int? transactionCount,  num? totalTransactionAmount,  num? totalTransactionFees,  num? grossAmount,  num? settlementFee,  num? netAmount,  String? accountNumber,  String? accountName,  String? bankName,  String? status,  String? settledAt,  String? failureReason,  String? cycle)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? settlementReference,  String? batchReference,  String? mid,  String? merchantName,  String? settlementDate, @LenientInt()  int? transactionCount, @LenientNum()  num? totalTransactionAmount, @LenientNum()  num? totalTransactionFees, @LenientNum()  num? grossAmount, @LenientNum()  num? settlementFee, @LenientNum()  num? netAmount,  String? accountNumber,  String? accountName,  String? bankName,  String? status,  String? settledAt,  String? failureReason,  String? cycle)  $default,) {final _that = this;
 switch (_that) {
 case _SettlementResponse():
 return $default(_that.id,_that.settlementReference,_that.batchReference,_that.mid,_that.merchantName,_that.settlementDate,_that.transactionCount,_that.totalTransactionAmount,_that.totalTransactionFees,_that.grossAmount,_that.settlementFee,_that.netAmount,_that.accountNumber,_that.accountName,_that.bankName,_that.status,_that.settledAt,_that.failureReason,_that.cycle);case _:
@@ -2885,7 +2885,7 @@ return $default(_that.id,_that.settlementReference,_that.batchReference,_that.mi
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? settlementReference,  String? batchReference,  String? mid,  String? merchantName,  String? settlementDate,  int? transactionCount,  num? totalTransactionAmount,  num? totalTransactionFees,  num? grossAmount,  num? settlementFee,  num? netAmount,  String? accountNumber,  String? accountName,  String? bankName,  String? status,  String? settledAt,  String? failureReason,  String? cycle)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? settlementReference,  String? batchReference,  String? mid,  String? merchantName,  String? settlementDate, @LenientInt()  int? transactionCount, @LenientNum()  num? totalTransactionAmount, @LenientNum()  num? totalTransactionFees, @LenientNum()  num? grossAmount, @LenientNum()  num? settlementFee, @LenientNum()  num? netAmount,  String? accountNumber,  String? accountName,  String? bankName,  String? status,  String? settledAt,  String? failureReason,  String? cycle)?  $default,) {final _that = this;
 switch (_that) {
 case _SettlementResponse() when $default != null:
 return $default(_that.id,_that.settlementReference,_that.batchReference,_that.mid,_that.merchantName,_that.settlementDate,_that.transactionCount,_that.totalTransactionAmount,_that.totalTransactionFees,_that.grossAmount,_that.settlementFee,_that.netAmount,_that.accountNumber,_that.accountName,_that.bankName,_that.status,_that.settledAt,_that.failureReason,_that.cycle);case _:
@@ -2900,7 +2900,7 @@ return $default(_that.id,_that.settlementReference,_that.batchReference,_that.mi
 @JsonSerializable()
 
 class _SettlementResponse implements SettlementResponse {
-  const _SettlementResponse({this.id, this.settlementReference, this.batchReference, this.mid, this.merchantName, this.settlementDate, this.transactionCount, this.totalTransactionAmount, this.totalTransactionFees, this.grossAmount, this.settlementFee, this.netAmount, this.accountNumber, this.accountName, this.bankName, this.status, this.settledAt, this.failureReason, this.cycle});
+  const _SettlementResponse({this.id, this.settlementReference, this.batchReference, this.mid, this.merchantName, this.settlementDate, @LenientInt() this.transactionCount, @LenientNum() this.totalTransactionAmount, @LenientNum() this.totalTransactionFees, @LenientNum() this.grossAmount, @LenientNum() this.settlementFee, @LenientNum() this.netAmount, this.accountNumber, this.accountName, this.bankName, this.status, this.settledAt, this.failureReason, this.cycle});
   factory _SettlementResponse.fromJson(Map<String, dynamic> json) => _$SettlementResponseFromJson(json);
 
 @override final  String? id;
@@ -2909,12 +2909,12 @@ class _SettlementResponse implements SettlementResponse {
 @override final  String? mid;
 @override final  String? merchantName;
 @override final  String? settlementDate;
-@override final  int? transactionCount;
-@override final  num? totalTransactionAmount;
-@override final  num? totalTransactionFees;
-@override final  num? grossAmount;
-@override final  num? settlementFee;
-@override final  num? netAmount;
+@override@LenientInt() final  int? transactionCount;
+@override@LenientNum() final  num? totalTransactionAmount;
+@override@LenientNum() final  num? totalTransactionFees;
+@override@LenientNum() final  num? grossAmount;
+@override@LenientNum() final  num? settlementFee;
+@override@LenientNum() final  num? netAmount;
 @override final  String? accountNumber;
 @override final  String? accountName;
 @override final  String? bankName;
@@ -2956,7 +2956,7 @@ abstract mixin class _$SettlementResponseCopyWith<$Res> implements $SettlementRe
   factory _$SettlementResponseCopyWith(_SettlementResponse value, $Res Function(_SettlementResponse) _then) = __$SettlementResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? settlementReference, String? batchReference, String? mid, String? merchantName, String? settlementDate, int? transactionCount, num? totalTransactionAmount, num? totalTransactionFees, num? grossAmount, num? settlementFee, num? netAmount, String? accountNumber, String? accountName, String? bankName, String? status, String? settledAt, String? failureReason, String? cycle
+ String? id, String? settlementReference, String? batchReference, String? mid, String? merchantName, String? settlementDate,@LenientInt() int? transactionCount,@LenientNum() num? totalTransactionAmount,@LenientNum() num? totalTransactionFees,@LenientNum() num? grossAmount,@LenientNum() num? settlementFee,@LenientNum() num? netAmount, String? accountNumber, String? accountName, String? bankName, String? status, String? settledAt, String? failureReason, String? cycle
 });
 
 
@@ -3005,7 +3005,7 @@ as String?,
 /// @nodoc
 mixin _$PageSettlementResponse {
 
- List<SettlementResponse> get content; int? get totalElements; int? get totalPages; int? get number; int? get size; bool? get first; bool? get last;
+ List<SettlementResponse> get content;@LenientInt() int? get totalElements;@LenientInt() int? get totalPages;@LenientInt() int? get number;@LenientInt() int? get size;@LenientBool() bool? get first;@LenientBool() bool? get last;
 /// Create a copy of PageSettlementResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -3038,7 +3038,7 @@ abstract mixin class $PageSettlementResponseCopyWith<$Res>  {
   factory $PageSettlementResponseCopyWith(PageSettlementResponse value, $Res Function(PageSettlementResponse) _then) = _$PageSettlementResponseCopyWithImpl;
 @useResult
 $Res call({
- List<SettlementResponse> content, int? totalElements, int? totalPages, int? number, int? size, bool? first, bool? last
+ List<SettlementResponse> content,@LenientInt() int? totalElements,@LenientInt() int? totalPages,@LenientInt() int? number,@LenientInt() int? size,@LenientBool() bool? first,@LenientBool() bool? last
 });
 
 
@@ -3149,7 +3149,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<SettlementResponse> content,  int? totalElements,  int? totalPages,  int? number,  int? size,  bool? first,  bool? last)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<SettlementResponse> content, @LenientInt()  int? totalElements, @LenientInt()  int? totalPages, @LenientInt()  int? number, @LenientInt()  int? size, @LenientBool()  bool? first, @LenientBool()  bool? last)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PageSettlementResponse() when $default != null:
 return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,_that.size,_that.first,_that.last);case _:
@@ -3170,7 +3170,7 @@ return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<SettlementResponse> content,  int? totalElements,  int? totalPages,  int? number,  int? size,  bool? first,  bool? last)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<SettlementResponse> content, @LenientInt()  int? totalElements, @LenientInt()  int? totalPages, @LenientInt()  int? number, @LenientInt()  int? size, @LenientBool()  bool? first, @LenientBool()  bool? last)  $default,) {final _that = this;
 switch (_that) {
 case _PageSettlementResponse():
 return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,_that.size,_that.first,_that.last);case _:
@@ -3190,7 +3190,7 @@ return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<SettlementResponse> content,  int? totalElements,  int? totalPages,  int? number,  int? size,  bool? first,  bool? last)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<SettlementResponse> content, @LenientInt()  int? totalElements, @LenientInt()  int? totalPages, @LenientInt()  int? number, @LenientInt()  int? size, @LenientBool()  bool? first, @LenientBool()  bool? last)?  $default,) {final _that = this;
 switch (_that) {
 case _PageSettlementResponse() when $default != null:
 return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,_that.size,_that.first,_that.last);case _:
@@ -3205,7 +3205,7 @@ return $default(_that.content,_that.totalElements,_that.totalPages,_that.number,
 @JsonSerializable()
 
 class _PageSettlementResponse implements PageSettlementResponse {
-  const _PageSettlementResponse({final  List<SettlementResponse> content = const <SettlementResponse>[], this.totalElements, this.totalPages, this.number, this.size, this.first, this.last}): _content = content;
+  const _PageSettlementResponse({final  List<SettlementResponse> content = const <SettlementResponse>[], @LenientInt() this.totalElements, @LenientInt() this.totalPages, @LenientInt() this.number, @LenientInt() this.size, @LenientBool() this.first, @LenientBool() this.last}): _content = content;
   factory _PageSettlementResponse.fromJson(Map<String, dynamic> json) => _$PageSettlementResponseFromJson(json);
 
  final  List<SettlementResponse> _content;
@@ -3215,12 +3215,12 @@ class _PageSettlementResponse implements PageSettlementResponse {
   return EqualUnmodifiableListView(_content);
 }
 
-@override final  int? totalElements;
-@override final  int? totalPages;
-@override final  int? number;
-@override final  int? size;
-@override final  bool? first;
-@override final  bool? last;
+@override@LenientInt() final  int? totalElements;
+@override@LenientInt() final  int? totalPages;
+@override@LenientInt() final  int? number;
+@override@LenientInt() final  int? size;
+@override@LenientBool() final  bool? first;
+@override@LenientBool() final  bool? last;
 
 /// Create a copy of PageSettlementResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -3255,7 +3255,7 @@ abstract mixin class _$PageSettlementResponseCopyWith<$Res> implements $PageSett
   factory _$PageSettlementResponseCopyWith(_PageSettlementResponse value, $Res Function(_PageSettlementResponse) _then) = __$PageSettlementResponseCopyWithImpl;
 @override @useResult
 $Res call({
- List<SettlementResponse> content, int? totalElements, int? totalPages, int? number, int? size, bool? first, bool? last
+ List<SettlementResponse> content,@LenientInt() int? totalElements,@LenientInt() int? totalPages,@LenientInt() int? number,@LenientInt() int? size,@LenientBool() bool? first,@LenientBool() bool? last
 });
 
 

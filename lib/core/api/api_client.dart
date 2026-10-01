@@ -72,9 +72,14 @@ class TokenRefresher {
       );
       return RefreshResult.ok;
     } on DioException catch (e) {
-      // Any HTTP answer (401 REFRESH_EXPIRED, 400, 5xx) means the refresh
-      // token is not usable; no answer at all means we are offline.
-      return e.response == null ? RefreshResult.network : RefreshResult.invalid;
+      // 4xx (401 REFRESH_EXPIRED, 400, 403) means the refresh token is not
+      // usable. No answer, a 5xx or a 429 is a transient failure: keep the
+      // tokens and let the caller retry later rather than signing out.
+      final status = e.response?.statusCode;
+      if (status == null || status >= 500 || status == 429) {
+        return RefreshResult.network;
+      }
+      return RefreshResult.invalid;
     }
   }
 }
@@ -83,14 +88,17 @@ class TokenRefresher {
 /// retries a request once after a 401. When the refresh token is dead the
 /// session is cleared and [SessionEvents.expire] fires.
 class AuthInterceptor extends QueuedInterceptor {
+  /// [retryDio] must be a Dio WITHOUT this interceptor: a queued
+  /// interceptor cannot re-enter itself, so a retry that went back through
+  /// it would wait on its own queue forever.
   AuthInterceptor({
     required SecureStorage storage,
     required TokenRefresher refresher,
-    required Dio dio,
+    required Dio retryDio,
     required VoidCallback onSessionExpired,
   }) : _storage = storage,
        _refresher = refresher,
-       _dio = dio,
+       _dio = retryDio,
        _onSessionExpired = onSessionExpired;
 
   final SecureStorage _storage;
@@ -191,7 +199,7 @@ final apiClientProvider = Provider<ApiClient>((ref) {
     AuthInterceptor(
       storage: storage,
       refresher: refresher,
-      dio: dio,
+      retryDio: Dio(options),
       onSessionExpired: session.expire,
     ),
   );

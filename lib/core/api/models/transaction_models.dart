@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'lenient.dart';
+
 part 'transaction_models.freezed.dart';
 part 'transaction_models.g.dart';
 
@@ -24,15 +26,15 @@ abstract class TransactionResponse with _$TransactionResponse {
     String? cardBrand,
     String? cardType,
     String? cardCountryCode,
-    num? amount,
-    num? feeAmount,
+    @LenientNum() num? amount,
+    @LenientNum() num? feeAmount,
     String? currencyCode,
     String? status,
     String? responseCode,
     String? responseCodeDescription,
     String? authCode,
     String? processorHost,
-    int? durationMs,
+    @LenientInt() int? durationMs,
     String? errorMessage,
     String? initiatedAt,
     String? completedAt,
@@ -55,8 +57,18 @@ abstract class TransactionResponse with _$TransactionResponse {
 
   /// `transactionRef` is "TID-STAN-RRN"; split it when the parts exist.
   List<String> get _refParts => (transactionRef ?? '').split('-');
-  String? get stan => _refParts.length >= 3 ? _refParts[1] : null;
-  String? get rrn => _refParts.length >= 3 ? _refParts[2] : null;
+  // "TID-STAN-RRN": only trust the parts when they look like a 6-digit
+  // STAN and a 12-digit RRN; other references yield nothing rather than
+  // a random word on the receipt.
+  String? get stan {
+    final p = _refParts;
+    return p.length >= 3 && RegExp(r'^\d{6}$').hasMatch(p[1]) ? p[1] : null;
+  }
+
+  String? get rrn {
+    final p = _refParts;
+    return p.length >= 3 && RegExp(r'^\d{12}$').hasMatch(p[2]) ? p[2] : null;
+  }
 
   String? get last4 {
     final p = panMasked ?? '';
@@ -68,12 +80,12 @@ abstract class TransactionResponse with _$TransactionResponse {
 abstract class PageTransactionResponse with _$PageTransactionResponse {
   const factory PageTransactionResponse({
     @Default(<TransactionResponse>[]) List<TransactionResponse> content,
-    int? totalElements,
-    int? totalPages,
-    int? number,
-    int? size,
-    bool? first,
-    bool? last,
+    @LenientInt() int? totalElements,
+    @LenientInt() int? totalPages,
+    @LenientInt() int? number,
+    @LenientInt() int? size,
+    @LenientBool() bool? first,
+    @LenientBool() bool? last,
   }) = _PageTransactionResponse;
 
   factory PageTransactionResponse.fromJson(Map<String, dynamic> json) =>

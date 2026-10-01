@@ -10,45 +10,53 @@ _MerchantSettlementSummary _$MerchantSettlementSummaryFromJson(
   Map<String, dynamic> json,
 ) => _MerchantSettlementSummary(
   mid: json['mid'] as String?,
-  totalSettlements: (json['totalSettlements'] as num?)?.toInt(),
-  totalSettledAmount: json['totalSettledAmount'] as num?,
-  pendingAmount: json['pendingAmount'] as num?,
-  todayTransactions: (json['todayTransactions'] as num?)?.toInt(),
-  todaySales: json['todaySales'] as num?,
-  yesterdaySales: json['yesterdaySales'] as num?,
-  yesterdayTransactions: (json['yesterdayTransactions'] as num?)?.toInt(),
-  sameWeekdayLastWeekSales: json['sameWeekdayLastWeekSales'] as num?,
-  monthToDateSales: json['monthToDateSales'] as num?,
+  totalSettlements: const LenientInt().fromJson(json['totalSettlements']),
+  totalSettledAmount: const LenientNum().fromJson(json['totalSettledAmount']),
+  pendingAmount: const LenientNum().fromJson(json['pendingAmount']),
+  todayTransactions: const LenientInt().fromJson(json['todayTransactions']),
+  todaySales: const LenientNum().fromJson(json['todaySales']),
+  yesterdaySales: const LenientNum().fromJson(json['yesterdaySales']),
+  yesterdayTransactions: const LenientInt().fromJson(
+    json['yesterdayTransactions'],
+  ),
+  sameWeekdayLastWeekSales: const LenientNum().fromJson(
+    json['sameWeekdayLastWeekSales'],
+  ),
+  monthToDateSales: const LenientNum().fromJson(json['monthToDateSales']),
   todaySettlement: json['todaySettlement'] == null
       ? null
       : TodaySettlement.fromJson(
           json['todaySettlement'] as Map<String, dynamic>,
         ),
-  activeTerminals: (json['activeTerminals'] as num?)?.toInt(),
-  instantTerminals: (json['instantTerminals'] as num?)?.toInt(),
+  activeTerminals: const LenientInt().fromJson(json['activeTerminals']),
+  instantTerminals: const LenientInt().fromJson(json['instantTerminals']),
 );
 
 Map<String, dynamic> _$MerchantSettlementSummaryToJson(
   _MerchantSettlementSummary instance,
 ) => <String, dynamic>{
   'mid': instance.mid,
-  'totalSettlements': instance.totalSettlements,
-  'totalSettledAmount': instance.totalSettledAmount,
-  'pendingAmount': instance.pendingAmount,
-  'todayTransactions': instance.todayTransactions,
-  'todaySales': instance.todaySales,
-  'yesterdaySales': instance.yesterdaySales,
-  'yesterdayTransactions': instance.yesterdayTransactions,
-  'sameWeekdayLastWeekSales': instance.sameWeekdayLastWeekSales,
-  'monthToDateSales': instance.monthToDateSales,
+  'totalSettlements': const LenientInt().toJson(instance.totalSettlements),
+  'totalSettledAmount': const LenientNum().toJson(instance.totalSettledAmount),
+  'pendingAmount': const LenientNum().toJson(instance.pendingAmount),
+  'todayTransactions': const LenientInt().toJson(instance.todayTransactions),
+  'todaySales': const LenientNum().toJson(instance.todaySales),
+  'yesterdaySales': const LenientNum().toJson(instance.yesterdaySales),
+  'yesterdayTransactions': const LenientInt().toJson(
+    instance.yesterdayTransactions,
+  ),
+  'sameWeekdayLastWeekSales': const LenientNum().toJson(
+    instance.sameWeekdayLastWeekSales,
+  ),
+  'monthToDateSales': const LenientNum().toJson(instance.monthToDateSales),
   'todaySettlement': instance.todaySettlement,
-  'activeTerminals': instance.activeTerminals,
-  'instantTerminals': instance.instantTerminals,
+  'activeTerminals': const LenientInt().toJson(instance.activeTerminals),
+  'instantTerminals': const LenientInt().toJson(instance.instantTerminals),
 };
 
 _TodaySettlement _$TodaySettlementFromJson(Map<String, dynamic> json) =>
     _TodaySettlement(
-      amount: json['amount'] as num?,
+      amount: const LenientNum().fromJson(json['amount']),
       status: json['status'] as String?,
       expectedDate: json['expectedDate'] as String?,
       settledAt: json['settledAt'] as String?,
@@ -57,7 +65,7 @@ _TodaySettlement _$TodaySettlementFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$TodaySettlementToJson(_TodaySettlement instance) =>
     <String, dynamic>{
-      'amount': instance.amount,
+      'amount': const LenientNum().toJson(instance.amount),
       'status': instance.status,
       'expectedDate': instance.expectedDate,
       'settledAt': instance.settledAt,
@@ -68,52 +76,56 @@ _PeriodTotals _$PeriodTotalsFromJson(Map<String, dynamic> json) =>
     _PeriodTotals(
       startDate: json['startDate'] as String?,
       endDate: json['endDate'] as String?,
-      totalSales: json['totalSales'] as num?,
-      totalTransactionCount: (json['totalTransactionCount'] as num?)?.toInt(),
-      totalFees: json['totalFees'] as num?,
-      netAmount: json['netAmount'] as num?,
+      totalSales: const LenientNum().fromJson(json['totalSales']),
+      totalTransactionCount: const LenientInt().fromJson(
+        json['totalTransactionCount'],
+      ),
+      totalFees: const LenientNum().fromJson(json['totalFees']),
+      netAmount: const LenientNum().fromJson(json['netAmount']),
     );
 
 Map<String, dynamic> _$PeriodTotalsToJson(_PeriodTotals instance) =>
     <String, dynamic>{
       'startDate': instance.startDate,
       'endDate': instance.endDate,
-      'totalSales': instance.totalSales,
-      'totalTransactionCount': instance.totalTransactionCount,
-      'totalFees': instance.totalFees,
-      'netAmount': instance.netAmount,
+      'totalSales': const LenientNum().toJson(instance.totalSales),
+      'totalTransactionCount': const LenientInt().toJson(
+        instance.totalTransactionCount,
+      ),
+      'totalFees': const LenientNum().toJson(instance.totalFees),
+      'netAmount': const LenientNum().toJson(instance.netAmount),
     };
 
 _ChannelSummary _$ChannelSummaryFromJson(Map<String, dynamic> json) =>
     _ChannelSummary(
       channel: json['channel'] as String?,
-      totalAmount: json['totalAmount'] as num?,
-      transactionCount: (json['transactionCount'] as num?)?.toInt(),
+      totalAmount: const LenientNum().fromJson(json['totalAmount']),
+      transactionCount: const LenientInt().fromJson(json['transactionCount']),
     );
 
 Map<String, dynamic> _$ChannelSummaryToJson(_ChannelSummary instance) =>
     <String, dynamic>{
       'channel': instance.channel,
-      'totalAmount': instance.totalAmount,
-      'transactionCount': instance.transactionCount,
+      'totalAmount': const LenientNum().toJson(instance.totalAmount),
+      'transactionCount': const LenientInt().toJson(instance.transactionCount),
     };
 
 _TerminalSummary _$TerminalSummaryFromJson(Map<String, dynamic> json) =>
     _TerminalSummary(
       tid: json['tid'] as String?,
       terminalLocation: json['terminalLocation'] as String?,
-      totalSales: json['totalSales'] as num?,
-      transactionCount: (json['transactionCount'] as num?)?.toInt(),
-      fees: json['fees'] as num?,
+      totalSales: const LenientNum().fromJson(json['totalSales']),
+      transactionCount: const LenientInt().fromJson(json['transactionCount']),
+      fees: const LenientNum().fromJson(json['fees']),
     );
 
 Map<String, dynamic> _$TerminalSummaryToJson(_TerminalSummary instance) =>
     <String, dynamic>{
       'tid': instance.tid,
       'terminalLocation': instance.terminalLocation,
-      'totalSales': instance.totalSales,
-      'transactionCount': instance.transactionCount,
-      'fees': instance.fees,
+      'totalSales': const LenientNum().toJson(instance.totalSales),
+      'transactionCount': const LenientInt().toJson(instance.transactionCount),
+      'fees': const LenientNum().toJson(instance.fees),
     };
 
 _CountAmount _$CountAmountFromJson(Map<String, dynamic> json) => _CountAmount(
@@ -127,43 +139,47 @@ Map<String, dynamic> _$CountAmountToJson(_CountAmount instance) =>
 _CardSchemeSummary _$CardSchemeSummaryFromJson(Map<String, dynamic> json) =>
     _CardSchemeSummary(
       cardScheme: json['cardScheme'] as String?,
-      transactionCount: (json['transactionCount'] as num?)?.toInt(),
-      totalAmount: json['totalAmount'] as num?,
-      totalSales: json['totalSales'] as num?,
-      totalFees: json['totalFees'] as num?,
-      fees: json['fees'] as num?,
-      netAmount: json['netAmount'] as num?,
-      averageTransactionValue: json['averageTransactionValue'] as num?,
+      transactionCount: const LenientInt().fromJson(json['transactionCount']),
+      totalAmount: const LenientNum().fromJson(json['totalAmount']),
+      totalSales: const LenientNum().fromJson(json['totalSales']),
+      totalFees: const LenientNum().fromJson(json['totalFees']),
+      fees: const LenientNum().fromJson(json['fees']),
+      netAmount: const LenientNum().fromJson(json['netAmount']),
+      averageTransactionValue: const LenientNum().fromJson(
+        json['averageTransactionValue'],
+      ),
     );
 
 Map<String, dynamic> _$CardSchemeSummaryToJson(_CardSchemeSummary instance) =>
     <String, dynamic>{
       'cardScheme': instance.cardScheme,
-      'transactionCount': instance.transactionCount,
-      'totalAmount': instance.totalAmount,
-      'totalSales': instance.totalSales,
-      'totalFees': instance.totalFees,
-      'fees': instance.fees,
-      'netAmount': instance.netAmount,
-      'averageTransactionValue': instance.averageTransactionValue,
+      'transactionCount': const LenientInt().toJson(instance.transactionCount),
+      'totalAmount': const LenientNum().toJson(instance.totalAmount),
+      'totalSales': const LenientNum().toJson(instance.totalSales),
+      'totalFees': const LenientNum().toJson(instance.totalFees),
+      'fees': const LenientNum().toJson(instance.fees),
+      'netAmount': const LenientNum().toJson(instance.netAmount),
+      'averageTransactionValue': const LenientNum().toJson(
+        instance.averageTransactionValue,
+      ),
     };
 
 _DailyBreakdown _$DailyBreakdownFromJson(Map<String, dynamic> json) =>
     _DailyBreakdown(
       date: json['date'] as String?,
-      transactionCount: (json['transactionCount'] as num?)?.toInt(),
-      totalAmount: json['totalAmount'] as num?,
-      totalFees: json['totalFees'] as num?,
-      netAmount: json['netAmount'] as num?,
+      transactionCount: const LenientInt().fromJson(json['transactionCount']),
+      totalAmount: const LenientNum().fromJson(json['totalAmount']),
+      totalFees: const LenientNum().fromJson(json['totalFees']),
+      netAmount: const LenientNum().fromJson(json['netAmount']),
     );
 
 Map<String, dynamic> _$DailyBreakdownToJson(_DailyBreakdown instance) =>
     <String, dynamic>{
       'date': instance.date,
-      'transactionCount': instance.transactionCount,
-      'totalAmount': instance.totalAmount,
-      'totalFees': instance.totalFees,
-      'netAmount': instance.netAmount,
+      'transactionCount': const LenientInt().toJson(instance.transactionCount),
+      'totalAmount': const LenientNum().toJson(instance.totalAmount),
+      'totalFees': const LenientNum().toJson(instance.totalFees),
+      'netAmount': const LenientNum().toJson(instance.netAmount),
     };
 
 _MerchantSalesReportResponse _$MerchantSalesReportResponseFromJson(
@@ -178,10 +194,12 @@ _MerchantSalesReportResponse _$MerchantSalesReportResponseFromJson(
   startDate: json['startDate'] as String?,
   endDate: json['endDate'] as String?,
   reportPeriod: json['reportPeriod'] as String?,
-  totalSales: json['totalSales'] as num?,
-  totalTransactionCount: (json['totalTransactionCount'] as num?)?.toInt(),
-  totalFees: json['totalFees'] as num?,
-  netAmount: json['netAmount'] as num?,
+  totalSales: const LenientNum().fromJson(json['totalSales']),
+  totalTransactionCount: const LenientInt().fromJson(
+    json['totalTransactionCount'],
+  ),
+  totalFees: const LenientNum().fromJson(json['totalFees']),
+  netAmount: const LenientNum().fromJson(json['netAmount']),
   cardSchemeBreakdown:
       (json['cardSchemeBreakdown'] as List<dynamic>?)
           ?.map((e) => CardSchemeSummary.fromJson(e as Map<String, dynamic>))
@@ -211,9 +229,9 @@ _MerchantSalesReportResponse _$MerchantSalesReportResponseFromJson(
   chargebacks: json['chargebacks'] == null
       ? null
       : CountAmount.fromJson(json['chargebacks'] as Map<String, dynamic>),
-  totalSettled: json['totalSettled'] as num?,
-  pendingSettlement: json['pendingSettlement'] as num?,
-  settlementCount: (json['settlementCount'] as num?)?.toInt(),
+  totalSettled: const LenientNum().fromJson(json['totalSettled']),
+  pendingSettlement: const LenientNum().fromJson(json['pendingSettlement']),
+  settlementCount: const LenientInt().fromJson(json['settlementCount']),
   generatedAt: json['generatedAt'] as String?,
 );
 
@@ -229,10 +247,12 @@ Map<String, dynamic> _$MerchantSalesReportResponseToJson(
   'startDate': instance.startDate,
   'endDate': instance.endDate,
   'reportPeriod': instance.reportPeriod,
-  'totalSales': instance.totalSales,
-  'totalTransactionCount': instance.totalTransactionCount,
-  'totalFees': instance.totalFees,
-  'netAmount': instance.netAmount,
+  'totalSales': const LenientNum().toJson(instance.totalSales),
+  'totalTransactionCount': const LenientInt().toJson(
+    instance.totalTransactionCount,
+  ),
+  'totalFees': const LenientNum().toJson(instance.totalFees),
+  'netAmount': const LenientNum().toJson(instance.netAmount),
   'cardSchemeBreakdown': instance.cardSchemeBreakdown,
   'dailyBreakdown': instance.dailyBreakdown,
   'previousPeriod': instance.previousPeriod,
@@ -240,9 +260,9 @@ Map<String, dynamic> _$MerchantSalesReportResponseToJson(
   'terminalBreakdown': instance.terminalBreakdown,
   'refunds': instance.refunds,
   'chargebacks': instance.chargebacks,
-  'totalSettled': instance.totalSettled,
-  'pendingSettlement': instance.pendingSettlement,
-  'settlementCount': instance.settlementCount,
+  'totalSettled': const LenientNum().toJson(instance.totalSettled),
+  'pendingSettlement': const LenientNum().toJson(instance.pendingSettlement),
+  'settlementCount': const LenientInt().toJson(instance.settlementCount),
   'generatedAt': instance.generatedAt,
 };
 
@@ -254,12 +274,16 @@ _SettlementResponse _$SettlementResponseFromJson(Map<String, dynamic> json) =>
       mid: json['mid'] as String?,
       merchantName: json['merchantName'] as String?,
       settlementDate: json['settlementDate'] as String?,
-      transactionCount: (json['transactionCount'] as num?)?.toInt(),
-      totalTransactionAmount: json['totalTransactionAmount'] as num?,
-      totalTransactionFees: json['totalTransactionFees'] as num?,
-      grossAmount: json['grossAmount'] as num?,
-      settlementFee: json['settlementFee'] as num?,
-      netAmount: json['netAmount'] as num?,
+      transactionCount: const LenientInt().fromJson(json['transactionCount']),
+      totalTransactionAmount: const LenientNum().fromJson(
+        json['totalTransactionAmount'],
+      ),
+      totalTransactionFees: const LenientNum().fromJson(
+        json['totalTransactionFees'],
+      ),
+      grossAmount: const LenientNum().fromJson(json['grossAmount']),
+      settlementFee: const LenientNum().fromJson(json['settlementFee']),
+      netAmount: const LenientNum().fromJson(json['netAmount']),
       accountNumber: json['accountNumber'] as String?,
       accountName: json['accountName'] as String?,
       bankName: json['bankName'] as String?,
@@ -277,12 +301,16 @@ Map<String, dynamic> _$SettlementResponseToJson(_SettlementResponse instance) =>
       'mid': instance.mid,
       'merchantName': instance.merchantName,
       'settlementDate': instance.settlementDate,
-      'transactionCount': instance.transactionCount,
-      'totalTransactionAmount': instance.totalTransactionAmount,
-      'totalTransactionFees': instance.totalTransactionFees,
-      'grossAmount': instance.grossAmount,
-      'settlementFee': instance.settlementFee,
-      'netAmount': instance.netAmount,
+      'transactionCount': const LenientInt().toJson(instance.transactionCount),
+      'totalTransactionAmount': const LenientNum().toJson(
+        instance.totalTransactionAmount,
+      ),
+      'totalTransactionFees': const LenientNum().toJson(
+        instance.totalTransactionFees,
+      ),
+      'grossAmount': const LenientNum().toJson(instance.grossAmount),
+      'settlementFee': const LenientNum().toJson(instance.settlementFee),
+      'netAmount': const LenientNum().toJson(instance.netAmount),
       'accountNumber': instance.accountNumber,
       'accountName': instance.accountName,
       'bankName': instance.bankName,
@@ -300,22 +328,22 @@ _PageSettlementResponse _$PageSettlementResponseFromJson(
           ?.map((e) => SettlementResponse.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const <SettlementResponse>[],
-  totalElements: (json['totalElements'] as num?)?.toInt(),
-  totalPages: (json['totalPages'] as num?)?.toInt(),
-  number: (json['number'] as num?)?.toInt(),
-  size: (json['size'] as num?)?.toInt(),
-  first: json['first'] as bool?,
-  last: json['last'] as bool?,
+  totalElements: const LenientInt().fromJson(json['totalElements']),
+  totalPages: const LenientInt().fromJson(json['totalPages']),
+  number: const LenientInt().fromJson(json['number']),
+  size: const LenientInt().fromJson(json['size']),
+  first: const LenientBool().fromJson(json['first']),
+  last: const LenientBool().fromJson(json['last']),
 );
 
 Map<String, dynamic> _$PageSettlementResponseToJson(
   _PageSettlementResponse instance,
 ) => <String, dynamic>{
   'content': instance.content,
-  'totalElements': instance.totalElements,
-  'totalPages': instance.totalPages,
-  'number': instance.number,
-  'size': instance.size,
-  'first': instance.first,
-  'last': instance.last,
+  'totalElements': const LenientInt().toJson(instance.totalElements),
+  'totalPages': const LenientInt().toJson(instance.totalPages),
+  'number': const LenientInt().toJson(instance.number),
+  'size': const LenientInt().toJson(instance.size),
+  'first': const LenientBool().toJson(instance.first),
+  'last': const LenientBool().toJson(instance.last),
 };

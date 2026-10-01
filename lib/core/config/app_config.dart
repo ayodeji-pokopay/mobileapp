@@ -114,6 +114,12 @@ class FeatureFlags {
 
 /// Device and session policy. Defaults are the strict-but-usable choice;
 /// the backend can loosen or tighten them per release.
+int _minutes(Object? raw, int fallback, {required int max}) {
+  final v = raw is num ? raw : num.tryParse(raw?.toString() ?? '');
+  if (v == null || !v.isFinite) return fallback;
+  return v.round().clamp(0, max);
+}
+
 class SecurityInfo {
   const SecurityInfo({
     this.blockCompromisedDevices = false,
@@ -132,9 +138,12 @@ class SecurityInfo {
 
   factory SecurityInfo.fromJson(Map<String, dynamic> json) => SecurityInfo(
     blockCompromisedDevices: json['blockCompromisedDevices'] == true,
-    lockTimeoutMinutes: (json['lockTimeoutMinutes'] as num?)?.toInt() ?? 15,
-    sessionTimeoutMinutes:
-        (json['sessionTimeoutMinutes'] as num?)?.toInt() ?? 60,
+    lockTimeoutMinutes: _minutes(json['lockTimeoutMinutes'], 15, max: 24 * 60),
+    sessionTimeoutMinutes: _minutes(
+      json['sessionTimeoutMinutes'],
+      60,
+      max: 30 * 24 * 60,
+    ),
   );
 }
 
