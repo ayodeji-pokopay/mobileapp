@@ -83,6 +83,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     setState(() => _submitting = false);
     if (!ok) {
       final auth = ref.read(authControllerProvider);
+      if (auth.errorCode == AuthException.mfaRequired) {
+        // Password accepted: finish with the second factor (2FA is required
+        // for every account).
+        context.push(AppRoutes.twoFactor);
+        return;
+      }
       final l10n = AppLocalizations.of(context);
       // Prefer localised copy keyed on the error code; the backend message
       // is the fallback for codes we don't know.

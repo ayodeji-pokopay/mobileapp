@@ -767,5 +767,30 @@
       }
     }
   },
-  "validationPasswordComplexity": "Lo lẹ́tà ńlá àti kékeré, nọ́mbà kan àti àmì kan."
+  "validationPasswordComplexity": "Lo lẹ́tà ńlá àti kékeré, nọ́mbà kan àti àmì kan.",
+  "twoFactorTitle": "Ìjẹ́rìísí ìgbésẹ̀ méjì",
+  "twoFactorSubtitle": "Tẹ kóòdù oní-nọ́ńbà 6 láti inú áàpù authenticator rẹ.",
+  "twoFactorRecoverySubtitle": "Tẹ ọ̀kan nínú àwọn kóòdù ìgbàpadà tí o fipamọ́ nígbà tí o ṣètò ìjẹ́rìísí ìgbésẹ̀ méjì.",
+  "twoFactorCodeLabel": "Kóòdù authenticator",
+  "twoFactorRecoveryLabel": "Kóòdù ìgbàpadà",
+  "twoFactorVerifyButton": "Jẹ́rìísí",
+  "twoFactorUseRecovery": "Lo kóòdù ìgbàpadà dípò",
+  "twoFactorUseApp": "Lo áàpù authenticator mi",
+  "twoFactorCodeWrong": "Kóòdù yẹn kò ṣiṣẹ́. Ṣàyẹ̀wò àkókò fóònù rẹ kí o sì gbìyànjú kóòdù tuntun jùlọ.",
+  "twoFactorCodeInvalidFormat": "Tẹ kóòdù oní-nọ́ńbà 6.",
+  "twoFactorExpired": "Ìwọlé náà pẹ́ jù. Jọ̀wọ́ wọlé lẹ́ẹ̀kansí.",
+  "twoFactorSetupTitle": "Ṣètò ìjẹ́rìísí ìgbésẹ̀ méjì",
+  "twoFactorSetupSubtitle": "Gbogbo àkáǹtì Pokopay ló nílò kóòdù láti inú áàpù authenticator báyìí nígbà ìwọlé.",
+  "twoFactorSetupStep1": "1. Ṣàfikún Pokopay sí áàpù authenticator bíi Google Authenticator tàbí Microsoft Authenticator.",
+  "twoFactorOpenAuthenticator": "Ṣí áàpù authenticator",
+  "twoFactorSetupKeyHint": "Tàbí ṣàfikún àkáǹtì nínú áàpù náà kí o sì tẹ kọ́kọ́rọ́ ìṣètò yìí:",
+  "twoFactorSetupStep2": "2. Tẹ kóòdù oní-nọ́ńbà 6 tí áàpù náà fihàn fún Pokopay.",
+  "twoFactorConfirmButton": "Jẹ́rìísí kí o sì tẹ̀síwájú",
+  "twoFactorNoAuthenticatorApp": "A kò rí áàpù authenticator. Fi ọ̀kan sórí fóònù, tàbí tẹ kọ́kọ́rọ́ ìṣètò sínú rẹ̀.",
+  "twoFactorCopy": "Ṣàdàkọ",
+  "twoFactorCopied": "A ti ṣàdàkọ",
+  "twoFactorRecoveryCodesTitle": "Fi àwọn kóòdù ìgbàpadà rẹ pamọ́",
+  "twoFactorRecoveryCodesSubtitle": "Kóòdù kọ̀ọ̀kan máa ń jẹ́ kí o wọlé lẹ́ẹ̀kan tí fóònù rẹ bá sọnù. Fi wọ́n pamọ́ sí ibi ààbò. A kò ní fi wọ́n hàn mọ́.",
+  "twoFactorCopyAll": "Ṣàdàkọ gbogbo kóòdù",
+  "twoFactorSavedCodesButton": "Mo ti fi wọ́n pamọ́"
 }

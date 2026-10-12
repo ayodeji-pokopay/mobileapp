@@ -767,5 +767,30 @@
       }
     }
   },
-  "validationPasswordComplexity": "Jiri mkpụrụedemede ukwu na obere, ọnụọgụ na akara."
+  "validationPasswordComplexity": "Jiri mkpụrụedemede ukwu na obere, ọnụọgụ na akara.",
+  "twoFactorTitle": "Nkwenye nzọụkwụ abụọ",
+  "twoFactorSubtitle": "Tinye koodu ọnụọgụ 6 sitere na ngwa authenticator gị.",
+  "twoFactorRecoverySubtitle": "Tinye otu n'ime koodu mgbake ị chekwara mgbe ị hiwere nkwenye nzọụkwụ abụọ.",
+  "twoFactorCodeLabel": "Koodu authenticator",
+  "twoFactorRecoveryLabel": "Koodu mgbake",
+  "twoFactorVerifyButton": "Kwenye",
+  "twoFactorUseRecovery": "Jiri koodu mgbake kama",
+  "twoFactorUseApp": "Jiri ngwa authenticator m",
+  "twoFactorCodeWrong": "Koodu ahụ arụghị ọrụ. Lelee oge ekwentị gị ma nwaa koodu kachasị ọhụrụ.",
+  "twoFactorCodeInvalidFormat": "Tinye koodu ọnụọgụ 6.",
+  "twoFactorExpired": "Ịbanye ahụ were oge dị ukwuu. Biko banye ọzọ.",
+  "twoFactorSetupTitle": "Hiwe nkwenye nzọụkwụ abụọ",
+  "twoFactorSetupSubtitle": "Akaụntụ Pokopay ọ bụla chọrọ ugbu a koodu sitere na ngwa authenticator mgbe ị na-abanye.",
+  "twoFactorSetupStep1": "1. Tinye Pokopay na ngwa authenticator dịka Google Authenticator ma ọ bụ Microsoft Authenticator.",
+  "twoFactorOpenAuthenticator": "Mepee ngwa authenticator",
+  "twoFactorSetupKeyHint": "Ma ọ bụ tinye akaụntụ na ngwa ahụ ma pịnye igodo nhazi a:",
+  "twoFactorSetupStep2": "2. Tinye koodu ọnụọgụ 6 ngwa ahụ na-egosi maka Pokopay.",
+  "twoFactorConfirmButton": "Kwenye ma gaa n'ihu",
+  "twoFactorNoAuthenticatorApp": "Ahụghị ngwa authenticator. Wụnye otu, ma ọ bụ pịnye igodo nhazi n'ime ya.",
+  "twoFactorCopy": "Detuo",
+  "twoFactorCopied": "E detuola",
+  "twoFactorRecoveryCodesTitle": "Chekwaa koodu mgbake gị",
+  "twoFactorRecoveryCodesSubtitle": "Koodu ọ bụla na-abanye gị otu ugboro ma ọ bụrụ na ekwentị gị efuo. Chekwaa ha n'ebe nchekwa. A gaghị egosi ha ọzọ.",
+  "twoFactorCopyAll": "Detuo koodu niile",
+  "twoFactorSavedCodesButton": "Echekwala m ha"
 }

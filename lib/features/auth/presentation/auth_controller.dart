@@ -236,6 +236,15 @@ class AuthController extends Notifier<AuthState> {
     try {
       await _repo.login(email: email, password: password);
       return _finishLogin(enableBiometric: enableBiometric);
+    } on MfaStepRequired catch (step) {
+      // Password accepted; the account needs its second factor. The login
+      // screen sends the user to the 2FA screen, which finishes sign-in.
+      ref.read(pendingMfaProvider.notifier).set(step);
+      state = const AuthState(
+        status: AuthStatus.unauthenticated,
+        errorCode: AuthException.mfaRequired,
+      );
+      return false;
     } on AuthException catch (e) {
       state = AuthState(
         status: AuthStatus.unauthenticated,
@@ -245,6 +254,51 @@ class AuthController extends Notifier<AuthState> {
       return false;
     }
   }
+
+  /// Second step of sign-in with an authenticator [code] or a [recoveryCode].
+  /// Throws [AuthException] (codes [AuthException.mfaInvalidCode] /
+  /// [AuthException.mfaExpired]) so the 2FA screen can say what went wrong.
+  Future<bool> completeMfa({String? code, String? recoveryCode}) async {
+    final step = ref.read(pendingMfaProvider);
+    if (step == null || step.setup) {
+      throw AuthException('Sign in again', code: AuthException.mfaExpired);
+    }
+    await _repo.verifyMfa(
+      mfaToken: step.token,
+      code: code,
+      recoveryCode: recoveryCode,
+    );
+    ref.read(pendingMfaProvider.notifier).set(null);
+    return _finishLogin();
+  }
+
+  /// Forced enrolment: the secret to add to an authenticator app.
+  Future<MfaSetupInfo> startMfaSetup() {
+    final step = ref.read(pendingMfaProvider);
+    if (step == null || !step.setup) {
+      throw AuthException('Sign in again', code: AuthException.mfaExpired);
+    }
+    return _repo.startMfaSetup(step.token);
+  }
+
+  /// Forced enrolment: confirm the first code. Returns the recovery codes;
+  /// the session is stored but the app stays on the 2FA screen until the
+  /// user has saved them and calls [finishMfaSetup].
+  Future<List<String>> confirmMfaSetup(String code) async {
+    final step = ref.read(pendingMfaProvider);
+    if (step == null || !step.setup) {
+      throw AuthException('Sign in again', code: AuthException.mfaExpired);
+    }
+    return _repo.confirmMfaSetup(setupToken: step.token, code: code);
+  }
+
+  Future<bool> finishMfaSetup() async {
+    ref.read(pendingMfaProvider.notifier).set(null);
+    return _finishLogin();
+  }
+
+  /// Back to the login form (step expired or the user gave up).
+  void cancelMfa() => ref.read(pendingMfaProvider.notifier).set(null);
 
   /// Signs in with the enrolled device token. The caller must have passed
   /// the OS biometric prompt first.
@@ -296,6 +350,19 @@ class AuthController extends Notifier<AuthState> {
     state = AuthState(status: AuthStatus.unauthenticated, idleSignedOut: idle);
   }
 }
+
+/// The second-factor step a password login is waiting on, if any.
+class PendingMfaNotifier extends Notifier<MfaStepRequired?> {
+  @override
+  MfaStepRequired? build() => null;
+
+  void set(MfaStepRequired? step) => state = step;
+}
+
+final pendingMfaProvider =
+    NotifierProvider<PendingMfaNotifier, MfaStepRequired?>(
+      PendingMfaNotifier.new,
+    );
 
 final authControllerProvider = NotifierProvider<AuthController, AuthState>(
   AuthController.new,

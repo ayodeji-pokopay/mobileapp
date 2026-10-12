@@ -767,5 +767,30 @@
       }
     }
   },
-  "validationPasswordComplexity": "Yi amfani da manyan da ƙananan haruffa, lamba da alama."
+  "validationPasswordComplexity": "Yi amfani da manyan da ƙananan haruffa, lamba da alama.",
+  "twoFactorTitle": "Tabbatarwa mataki biyu",
+  "twoFactorSubtitle": "Shigar da lambar lambobi 6 daga manhajar authenticator ɗinka.",
+  "twoFactorRecoverySubtitle": "Shigar da ɗaya daga cikin lambobin dawo da shiga da ka ajiye lokacin da ka saita tabbatarwa mataki biyu.",
+  "twoFactorCodeLabel": "Lambar authenticator",
+  "twoFactorRecoveryLabel": "Lambar dawo da shiga",
+  "twoFactorVerifyButton": "Tabbatar",
+  "twoFactorUseRecovery": "Yi amfani da lambar dawo da shiga",
+  "twoFactorUseApp": "Yi amfani da manhajar authenticator",
+  "twoFactorCodeWrong": "Lambar ba ta yi aiki ba. Duba lokacin wayarka ka gwada sabuwar lamba.",
+  "twoFactorCodeInvalidFormat": "Shigar da lambar lambobi 6.",
+  "twoFactorExpired": "Shigarka ta ɗauki lokaci da yawa. Don Allah sake shiga.",
+  "twoFactorSetupTitle": "Saita tabbatarwa mataki biyu",
+  "twoFactorSetupSubtitle": "Duk asusun Pokopay yanzu na buƙatar lamba daga manhajar authenticator lokacin shiga.",
+  "twoFactorSetupStep1": "1. Ƙara Pokopay a manhajar authenticator kamar Google Authenticator ko Microsoft Authenticator.",
+  "twoFactorOpenAuthenticator": "Buɗe manhajar authenticator",
+  "twoFactorSetupKeyHint": "Ko ka ƙara asusu a manhajar ka rubuta wannan maɓallin saitawa:",
+  "twoFactorSetupStep2": "2. Shigar da lambar lambobi 6 da manhajar ke nunawa don Pokopay.",
+  "twoFactorConfirmButton": "Tabbatar ka ci gaba",
+  "twoFactorNoAuthenticatorApp": "Ba a sami manhajar authenticator ba. Sanya ɗaya, ko ka rubuta maɓallin saitawa a ciki.",
+  "twoFactorCopy": "Kwafi",
+  "twoFactorCopied": "An kwafa",
+  "twoFactorRecoveryCodesTitle": "Ajiye lambobin dawo da shiga",
+  "twoFactorRecoveryCodesSubtitle": "Kowace lamba tana shigar da kai sau ɗaya idan ka rasa wayarka. Ajiye su a wuri mai aminci. Ba za a sake nuna su ba.",
+  "twoFactorCopyAll": "Kwafi duka lambobin",
+  "twoFactorSavedCodesButton": "Na ajiye su"
 }

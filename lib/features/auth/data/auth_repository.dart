@@ -87,9 +87,35 @@ class AuthException implements Exception {
   static const accountLocked = 'ACCOUNT_LOCKED';
   static const rateLimited = 'RATE_LIMITED';
   static const invalidRequest = 'INVALID_REQUEST';
+  static const mfaRequired = 'MFA_REQUIRED';
+  static const mfaInvalidCode = 'MFA_INVALID_CODE';
+  static const mfaExpired = 'MFA_EXPIRED';
 
   @override
   String toString() => message;
+}
+
+/// Thrown by [AuthRepository.login] when the password was right but the
+/// account needs its second factor first: a code from the authenticator app
+/// ([setup] false), or first-time enrolment because 2FA is required for
+/// everyone ([setup] true). [token] is short-lived and single-use; it is not
+/// a session.
+class MfaStepRequired implements Exception {
+  const MfaStepRequired({required this.setup, required this.token, this.email});
+  final bool setup;
+  final String token;
+  final String? email;
+
+  @override
+  String toString() =>
+      setup ? 'Two-factor setup required' : 'Two-factor code required';
+}
+
+/// What the app needs to add Pokopay to an authenticator app.
+class MfaSetupInfo {
+  const MfaSetupInfo({required this.secret, required this.otpauthUri});
+  final String secret;
+  final String otpauthUri;
 }
 
 class AuthRepository {
@@ -110,10 +136,111 @@ class AuthRepository {
         data: LoginRequest(email: email, password: password).toJson(),
         options: Options(extra: const {'skipAuth': true}),
       );
-      return _storeSession(AuthResponse.fromJson(res.data ?? const {}));
+      final data = res.data ?? const <String, dynamic>{};
+      _throwIfMfaStep(data);
+      return _storeSession(AuthResponse.fromJson(data));
     } on DioException catch (e) {
       throw AuthException(_extractError(e), code: _extractCode(e));
     }
+  }
+
+  /// The backend answers a correct password with a second-factor step instead
+  /// of tokens when the account has (or must set up) 2FA.
+  void _throwIfMfaStep(Map<String, dynamic> data) {
+    final email = data['email']?.toString();
+    if (data['mfaRequired'] == true) {
+      throw MfaStepRequired(
+        setup: false,
+        token: data['mfaToken']?.toString() ?? '',
+        email: email,
+      );
+    }
+    if (data['mfaSetupRequired'] == true) {
+      throw MfaStepRequired(
+        setup: true,
+        token: data['setupToken']?.toString() ?? '',
+        email: email,
+      );
+    }
+  }
+
+  /// Second step of sign-in: a 6-digit authenticator [code], or one of the
+  /// one-time [recoveryCode]s. Stores the session on success.
+  Future<AuthResponse> verifyMfa({
+    required String mfaToken,
+    String? code,
+    String? recoveryCode,
+  }) async {
+    try {
+      final res = await _api.dio.post<Map<String, dynamic>>(
+        '/api/v1/auth/mfa/verify',
+        data: {
+          'mfaToken': mfaToken,
+          if (code != null && code.isNotEmpty) 'code': code,
+          if (recoveryCode != null && recoveryCode.isNotEmpty)
+            'recoveryCode': recoveryCode,
+        },
+        options: Options(extra: const {'skipAuth': true}),
+      );
+      return _storeSession(AuthResponse.fromJson(res.data ?? const {}));
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e), code: _mfaCode(e));
+    }
+  }
+
+  /// Forced enrolment, step 1: get the secret to add to an authenticator app.
+  Future<MfaSetupInfo> startMfaSetup(String setupToken) async {
+    try {
+      final res = await _api.dio.post<Map<String, dynamic>>(
+        '/api/v1/auth/mfa/setup',
+        data: {'setupToken': setupToken},
+        options: Options(extra: const {'skipAuth': true}),
+      );
+      final data = res.data ?? const <String, dynamic>{};
+      return MfaSetupInfo(
+        secret: data['secret']?.toString() ?? '',
+        otpauthUri: data['otpauthUri']?.toString() ?? '',
+      );
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e), code: _mfaCode(e));
+    }
+  }
+
+  /// Forced enrolment, step 2: prove the app works with its first [code].
+  /// Stores the session and returns the one-time recovery codes, which the
+  /// user must save now; they are never shown again.
+  Future<List<String>> confirmMfaSetup({
+    required String setupToken,
+    required String code,
+  }) async {
+    try {
+      final res = await _api.dio.post<Map<String, dynamic>>(
+        '/api/v1/auth/mfa/confirm',
+        data: {'setupToken': setupToken, 'code': code},
+        options: Options(extra: const {'skipAuth': true}),
+      );
+      final data = res.data ?? const <String, dynamic>{};
+      final session = data['session'];
+      if (session is Map<String, dynamic>) {
+        await _storeSession(AuthResponse.fromJson(session));
+      } else {
+        throw AuthException('Missing session');
+      }
+      return [
+        for (final c in (data['recoveryCodes'] as List?) ?? const [])
+          c.toString(),
+      ];
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e), code: _mfaCode(e));
+    }
+  }
+
+  /// 400 = wrong code, 401 = the step expired or was used up (sign in again).
+  String? _mfaCode(DioException e) {
+    final status = e.response?.statusCode;
+    if (status == 400) return AuthException.mfaInvalidCode;
+    if (status == 401) return AuthException.mfaExpired;
+    return _extractCode(e);
   }
 
   Future<AuthResponse> _storeSession(AuthResponse auth) async {

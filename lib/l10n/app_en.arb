@@ -1050,5 +1050,30 @@
       }
     }
   },
-  "validationPasswordComplexity": "Use upper and lower case letters, a number and a symbol."
+  "validationPasswordComplexity": "Use upper and lower case letters, a number and a symbol.",
+  "twoFactorTitle": "Two-step verification",
+  "twoFactorSubtitle": "Enter the 6-digit code from your authenticator app.",
+  "twoFactorRecoverySubtitle": "Enter one of the recovery codes you saved when you set up two-step verification.",
+  "twoFactorCodeLabel": "Authenticator code",
+  "twoFactorRecoveryLabel": "Recovery code",
+  "twoFactorVerifyButton": "Verify",
+  "twoFactorUseRecovery": "Use a recovery code instead",
+  "twoFactorUseApp": "Use my authenticator app",
+  "twoFactorCodeWrong": "That code didn't work. Check the time on your phone and try the newest code.",
+  "twoFactorCodeInvalidFormat": "Enter the 6-digit code.",
+  "twoFactorExpired": "That sign-in took too long. Please sign in again.",
+  "twoFactorSetupTitle": "Set up two-step verification",
+  "twoFactorSetupSubtitle": "Every Pokopay account now needs a code from an authenticator app when signing in.",
+  "twoFactorSetupStep1": "1. Add Pokopay to an authenticator app such as Google Authenticator or Microsoft Authenticator.",
+  "twoFactorOpenAuthenticator": "Open authenticator app",
+  "twoFactorSetupKeyHint": "Or add an account in the app and type this setup key:",
+  "twoFactorSetupStep2": "2. Enter the 6-digit code the app shows for Pokopay.",
+  "twoFactorConfirmButton": "Confirm and continue",
+  "twoFactorNoAuthenticatorApp": "No authenticator app found. Install one, or type the setup key into it.",
+  "twoFactorCopy": "Copy",
+  "twoFactorCopied": "Copied",
+  "twoFactorRecoveryCodesTitle": "Save your recovery codes",
+  "twoFactorRecoveryCodesSubtitle": "Each code signs you in once if you lose your phone. Store them somewhere safe. They won't be shown again.",
+  "twoFactorCopyAll": "Copy all codes",
+  "twoFactorSavedCodesButton": "I've saved them"
 }

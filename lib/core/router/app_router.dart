@@ -7,6 +7,7 @@ import '../../features/auth/presentation/accept_invite_screen.dart';
 import '../../features/auth/presentation/change_password_screen.dart';
 import '../../features/auth/presentation/forgot_password_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
+import '../../features/auth/presentation/two_factor_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/insights/presentation/insights_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
@@ -30,6 +31,7 @@ class AppRoutes {
   static const forgotPassword = '/forgot-password';
   static const resetPassword = '/reset-password';
   static const acceptInvite = '/accept-invite';
+  static const twoFactor = '/login/2fa';
   static const dashboard = '/dashboard';
   static const reports = '/reports';
   static const settlements = '/settlements';
@@ -68,6 +70,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         AppRoutes.forgotPassword,
         AppRoutes.resetPassword,
         AppRoutes.acceptInvite,
+        AppRoutes.twoFactor,
       };
       if (isUnauthed && !public.contains(loc)) return AppRoutes.login;
       if (isAuthed && (loc == AppRoutes.login || loc == AppRoutes.splash)) {
@@ -88,6 +91,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: AppRoutes.splash, builder: (_, _) => const SplashScreen()),
       GoRoute(path: AppRoutes.login, builder: (_, _) => const LoginScreen()),
+      GoRoute(
+        path: AppRoutes.twoFactor,
+        builder: (_, _) => const TwoFactorScreen(),
+      ),
       GoRoute(
         path: AppRoutes.forgotPassword,
         builder: (_, state) => ForgotPasswordScreen(
