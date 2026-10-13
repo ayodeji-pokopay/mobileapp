@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +19,12 @@ import 'auth_controller.dart';
 /// Pokopay account, so after a correct password the user either enters the
 /// code from their authenticator app, or — the first time — adds Pokopay to an
 /// authenticator app, confirms a code and saves their recovery codes.
+/// Store pages for Microsoft Authenticator, the app we point users to.
+const _msAuthenticatorIos =
+    'https://apps.apple.com/app/microsoft-authenticator/id983156458';
+const _msAuthenticatorAndroid =
+    'https://play.google.com/store/apps/details?id=com.azure.authenticator';
+
 class TwoFactorScreen extends ConsumerStatefulWidget {
   const TwoFactorScreen({super.key});
 
@@ -129,7 +136,18 @@ class _TwoFactorScreenState extends ConsumerState<TwoFactorScreen> {
         ).catchError((_) => false);
     if (!opened && mounted) {
       _snack(AppLocalizations.of(context).twoFactorNoAuthenticatorApp);
+      await _getAuthenticator();
     }
+  }
+
+  Future<void> _getAuthenticator() async {
+    final store = defaultTargetPlatform == TargetPlatform.iOS
+        ? _msAuthenticatorIos
+        : _msAuthenticatorAndroid;
+    await launchUrl(
+      Uri.parse(store),
+      mode: LaunchMode.externalApplication,
+    ).catchError((_) => false);
   }
 
   Future<void> _copy(String text) async {
@@ -249,6 +267,11 @@ class _TwoFactorScreenState extends ConsumerState<TwoFactorScreen> {
         onPressed: _openAuthenticator,
         icon: const Icon(LucideIcons.externalLink, size: 18),
         label: Text(l10n.twoFactorOpenAuthenticator),
+      ),
+      TextButton.icon(
+        onPressed: _getAuthenticator,
+        icon: const Icon(LucideIcons.download, size: 18),
+        label: Text(l10n.twoFactorGetAuthenticator),
       ),
       const SizedBox(height: 16),
       Text(
